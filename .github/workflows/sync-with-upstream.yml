@@ -1,0 +1,35 @@
+#
+name: Sync with upstream
+
+on:
+  workflow_dispatch:
+  #schedule:
+  #  # Run the workflow every day at 00:00 UTC
+  #  - cron: '0 0 * * *'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout template repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PAT }}
+          repository: "codingones-github-templates/UPSTREAM"
+
+      - name: Fetch current repos and rebase main to the upstream branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git remote -v
+          git remote add downstream https://github.com/${{ github.repository }}.git
+          git fetch downstream
+          git checkout main
+          git rebase downstream/main
+          git checkout -B rebase-main-on-upstream
+          git push downstream rebase-main-on-upstream --force
+          gh pr create --head rebase-main-on-upstream --base main --repo ${{ github.repository }} --title "Sync with Upstream" --body "This PR was automatically created to sync this repository with the upstream repository using the rebase strategy."
