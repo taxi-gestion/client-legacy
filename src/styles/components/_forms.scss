@@ -1,0 +1,12 @@
+.input-group.is-invalid {
+  .form-control,
+  .input-group-text,
+  .btn {
+    color: $danger;
+    border-color: $danger !important;
+  }
+
+  .invalid-feedback {
+    display: block;
+  }
+}

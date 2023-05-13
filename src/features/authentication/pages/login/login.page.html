@@ -1,0 +1,47 @@
+<div class="px-lg-5 px-2 w-100">
+  <h1 class="text-primary mb-4">Connexion</h1>
+  <p class="text-secondary mb-5">
+    Ravis de vous revoir 👋
+    <br />
+    Vous pourrez continuer là où vous en étiez après vous être connecté.
+  </p>
+  <form class="mb-4" [formGroup]="loginForm" (ngSubmit)="onLogin()">
+    <app-username-field
+      [usernameControl]="username"
+      [touched]="username.touched"
+      [errors]="username.errors"></app-username-field>
+    <app-password-field
+      [passwordControl]="password"
+      [touched]="password.touched"
+      [errors]="password.errors"></app-password-field>
+    <div class="text-end mt-1">
+      <a
+        class="text-decoration-none"
+        (click)="loginForm.reset()"
+        routerLink="/forgot-password"
+        [queryParams]="username.value ? { username: username.value } : null">
+        Mot de passe oublié ?
+      </a>
+    </div>
+    <div class="text-danger mt-2" *ngIf="loginForm.errors?.['unknown']">
+      Une erreur inconnue est survenue pendant la connexion à votre compte.
+    </div>
+    <div class="text-danger mt-2" *ngIf="loginForm.errors?.['invalidUsernameOrPasswordError']">
+      L'identifiant ou le mot de passe est invalide.
+    </div>
+    <app-submit [isLoading]="(isLoading$ | async) ?? false">
+      Se connecter
+      <ng-container slot="loading-text">Connexion en cours...</ng-container>
+    </app-submit>
+  </form>
+  <p class="mt-5 text-center">
+    Pas encore de compte&nbsp;?
+    <a
+      class="text-decoration-none ms-1"
+      (click)="loginForm.reset()"
+      routerLink="/register"
+      [queryParams]="username.value ? { username: username.value } : null">
+      Créez le dès à présent&nbsp;!
+    </a>
+  </p>
+</div>

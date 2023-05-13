@@ -1,0 +1,50 @@
+<div class="px-lg-5 px-2 w-100">
+  <h1 class="text-primary mb-4">Activez votre compte</h1>
+  <p class="text-secondary mb-5">
+    Vous y êtes presque 🤏
+    <br />
+    Il vous suffit
+    <span *ngIf="defaultCode === null">
+      de saisir le code que vous avez reçu par
+      <span *ngIf="defaultUsername | isPhone; else isEmail">SMS.</span>
+      <ng-template #isEmail>mail.</ng-template>
+    </span>
+    <span *ngIf="defaultUsername === null && defaultCode === null">
+      <br />
+      Et
+    </span>
+    <span *ngIf="defaultUsername === null">de saisir le mail ou le numéro de téléphone associé à votre compte.</span>
+  </p>
+  <form class="mb-4" [formGroup]="activateForm" (ngSubmit)="onActivate()">
+    <app-username-field
+      *ngIf="defaultUsername === null"
+      [usernameControl]="username"
+      [touched]="username.touched"
+      [errors]="username.errors"></app-username-field>
+    <app-code-field
+      *ngIf="defaultCode === null"
+      [codeControl]="code"
+      [touched]="code.touched"
+      [errors]="code.errors"></app-code-field>
+    <div class="text-danger" *ngIf="activateForm.errors?.['unknown']">
+      Une erreur inconnue est survenue pendant l'activation de votre compte.
+    </div>
+    <app-submit [isLoading]="(isActivating$ | async) ?? false">
+      Activer mon compte
+      <ng-container slot="loading-text">Activation en cours...</ng-container>
+    </app-submit>
+  </form>
+  <p class="mt-5 text-center">
+    <span *ngIf="isSendingActivationCode$ | async; else resendActivationCode">
+      <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+      Envoi d'un nouveau code en cours...
+    </span>
+    <ng-template #resendActivationCode>
+      Besoin d'un code&nbsp;?
+      <button class="btn btn-link ms-1 mb-1 p-0 text-decoration-none" (click)="onResendActivationCode()">
+        Demandez-en un autre
+      </button>
+    </ng-template>
+  </p>
+  <small class="text-danger text-center d-block">{{ resendActivationCodeErrorMessage$ | async }}</small>
+</div>

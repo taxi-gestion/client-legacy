@@ -1,0 +1,8 @@
+{
+  "/api": {
+    "target": "https://taxi-gestion.com",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  }
+}

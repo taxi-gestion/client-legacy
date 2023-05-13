@@ -1,0 +1,43 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  release:
+    uses: codingones/github-actions-workflows/.github/workflows/semantic-release.yml@main
+    with:
+      package-manager: 'yarn'
+      install-dependencies-command: 'yarn install --frozen-lockfile'
+      cache-dependency-path: 'yarn.lock'
+    secrets:
+      PAT: ${{ secrets.PAT }}
+
+  notify-on-error:
+    needs:
+      - release
+    if: ${{ always() && (contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')) }}
+    uses: codingones/github-actions-workflows/.github/workflows/notify-discord.yml@main
+    with:
+      bot-username: Failures Bot
+      notification-content: 'A release has failed for ${{ github.repository }} this should not happen, invest some time in your CI/CD ?'
+      embed-title: Go to the workflow
+      embed-url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    secrets:
+      DISCORD_WEBHOOK: ${{ secrets.DISCORD_FAILURES_WEBHOOK }}
+
+  notify-on-success:
+    needs:
+      - release
+    if: ${{ always() && needs.release.result == 'success' }}
+    uses: codingones/github-actions-workflows/.github/workflows/notify-discord.yml@main
+    with:
+      bot-username: Releases Bot
+      notification-content: 'A new ${{ github.repository }} version: ${{ needs.release.outputs.version }} has been released ! :tada:'
+      embed-title: Go to the changelog
+      embed-url: https://github.com/${{ github.repository }}/blob/main/docs/CHANGELOG.md
+    secrets:
+      DISCORD_WEBHOOK: ${{ secrets.DISCORD_RELEASES_WEBHOOK }}

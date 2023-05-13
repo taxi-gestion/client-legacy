@@ -1,0 +1,9 @@
+<button type="submit" class="btn btn-primary mt-5 p-3 w-100" [disabled]="isLoading">
+  <ng-container *ngIf="isLoading; else defaultText">
+    <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+    <ng-content select="[slot=loading-text]"></ng-content>
+  </ng-container>
+  <ng-template #defaultText>
+    <ng-content></ng-content>
+  </ng-template>
+</button>

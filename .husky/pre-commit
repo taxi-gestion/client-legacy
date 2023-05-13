@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+FILE_TO_FORMAT="docs/CHANGELOG.md"
+
+# Store the original hash of the file
+ORIGINAL_HASH=$(git hash-object "$FILE_TO_FORMAT")
+
+# Run Prettier
+npx prettier --write "$FILE_TO_FORMAT"
+
+# Compute the new hash
+NEW_HASH=$(git hash-object "$FILE_TO_FORMAT")
+
+# If the hashes are different, the file has been modified
+if [ "$ORIGINAL_HASH" != "$NEW_HASH" ]; then
+    git add "$FILE_TO_FORMAT"
+fi

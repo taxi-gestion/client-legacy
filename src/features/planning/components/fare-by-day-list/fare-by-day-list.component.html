@@ -1,0 +1,5 @@
+<ul>
+  <li *ngFor="let fare of fares; trackBy: trackByFareId">
+    {{ fare.startTime }} - {{ fare.status }} - {{ fare.duration }} - {{ fare.distance }}
+  </li>
+</ul>

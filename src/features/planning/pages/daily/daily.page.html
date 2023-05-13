@@ -1,0 +1,4 @@
+<ng-container *ngIf="faresByDay$ | async as faresByDay">
+  <h1>Courses de la journée ({{ today }})</h1>
+  <app-fare-by-day-list [fares]="faresByDay"></app-fare-by-day-list>
+</ng-container>

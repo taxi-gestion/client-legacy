@@ -1,0 +1,33 @@
+<nav class="navbar navbar-expand-lg bg-white">
+  <div class="container-fluid">
+    <ng-content select="[slot=brand]"></ng-content>
+    <button
+      class="navbar-toggler"
+      [class.collapsed]="(expanded$ | async) === false"
+      type="button"
+      aria-controls="offcanvasNavbar"
+      [attr.aria-expanded]="expanded$ | async"
+      aria-label="Basculer le menu de navigation"
+      (click)="toggle()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div
+      class="offcanvas offcanvas-end"
+      [class.showing]="showing$ | async"
+      [class.show]="((expanded$ | async) || (hiding$ | async)) && (showing$ | async) === false"
+      [class.hiding]="hiding$ | async"
+      tabindex="-1"
+      id="offcanvasNavbar"
+      aria-labelledby="offcanvasNavbarLabel"
+      [attr.aria-modal]="(expanded$ | async) ? 'true' : null"
+      [attr.role]="(expanded$ | async) ? 'dialog' : null">
+      <div class="offcanvas-header">
+        <h5 id="offcanvasNavbarLabel">Menu</h5>
+        <button type="button" class="ms-auto btn-close" aria-label="Close" (click)="toggle()"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+</nav>

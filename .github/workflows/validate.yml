@@ -1,0 +1,63 @@
+name: Validate on push, create PR
+
+on:
+  push:
+    branches:
+      - 'build/*'
+      - 'chore/*'
+      - 'ci/*'
+      - 'docs/*'
+      - 'feat/*'
+      - 'fix/*'
+      - 'perf/*'
+      - 'refactor/*'
+      - 'revert/*'
+      - 'style/*'
+      - 'test/*'
+
+jobs:
+  pull-request:
+    name: Pull Request
+    uses: codingones/github-actions-workflows/.github/workflows/create-or-update-pull-request.yml@main
+    with:
+      branch: ${{ github.ref_name }}
+    secrets:
+      PAT: ${{ secrets.PAT }}
+
+  validation:
+    name: Validation
+    uses: codingones/github-actions-workflows/.github/workflows/node-validation-matrix.yml@main
+    with:
+      validation-commands: '["yarn build", "yarn lint.commit", "yarn prettier.check"]'
+      fail-fast: false
+      package-manager: 'yarn'
+      install-dependencies-command: 'yarn install --frozen-lockfile'
+      cache-dependency-path: 'yarn.lock'
+
+  notify-on-error:
+    needs:
+      - pull-request
+      - validation
+    if: ${{ always() && (contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')) }}
+    uses: codingones/github-actions-workflows/.github/workflows/notify-discord.yml@main
+    with:
+      bot-username: Failures Bot
+      notification-content: Some validation checks have failed for branch **${{ github.ref_name }}**
+      embed-title: Go to the workflow
+      embed-url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    secrets:
+      DISCORD_WEBHOOK: ${{ secrets.DISCORD_FAILURES_WEBHOOK }}
+
+  notify-on-success:
+    needs:
+      - pull-request
+      - validation
+    if: ${{ always() && needs.pull-request.result == 'success' && needs.validation.result == 'success' }}
+    uses: codingones/github-actions-workflows/.github/workflows/notify-discord.yml@main
+    with:
+      bot-username: Successes Bot
+      notification-content: All checks have passed for branch **${{ github.ref_name }}** !
+      embed-title: Go to the ${{ github.ref_name }} pull request
+      embed-url: ${{ needs.pull-request.outputs.pull-request-url }}
+    secrets:
+      DISCORD_WEBHOOK: ${{ secrets.DISCORD_SUCCESSES_WEBHOOK }}

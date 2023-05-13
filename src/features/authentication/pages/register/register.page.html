@@ -1,0 +1,41 @@
+<div class="px-lg-5 px-2 w-100">
+  <h1 class="text-primary mb-4">Créez votre compte</h1>
+  <p class="text-secondary mb-5">
+    Bienvenue chez __PROJECT 👋
+    <br />
+    Vous pourrez commencer à utiliser l'application après avoir créé votre compte.
+  </p>
+  <form class="mb-4" [formGroup]="registerForm" (ngSubmit)="onRegister()">
+    <app-username-field
+      [usernameControl]="registerForm.controls.username"
+      [touched]="registerForm.controls.username.touched"
+      [errors]="registerForm.controls.username.errors"></app-username-field>
+    <app-password-field
+      [passwordControl]="registerForm.controls.password"
+      [touched]="registerForm.controls.password.touched"
+      [errors]="registerForm.controls.password.errors"
+      [displayAllErrors]="true">
+      <ng-container slot="hint">Doit contenir minuscule, majuscule, chiffre et caractère spécial</ng-container>
+    </app-password-field>
+    <app-terms-field
+      [termsControl]="registerForm.controls.terms"
+      [touched]="registerForm.controls.terms.touched"></app-terms-field>
+    <div class="text-danger" *ngIf="registerForm.errors?.['unknown']">
+      Une erreur inconnue est survenue pendant la création de votre compte.
+    </div>
+    <app-submit [isLoading]="(isLoading$ | async) ?? false">
+      Créer mon compte
+      <ng-container slot="loading-text">Création en cours...</ng-container>
+    </app-submit>
+  </form>
+  <p class="mt-5 text-center">
+    Vous avez déjà un compte&nbsp;?
+    <a
+      class="text-decoration-none ms-1"
+      (click)="registerForm.reset()"
+      routerLink="/login"
+      [queryParams]="username.value ? { username: username.value } : null">
+      Connectez-vous
+    </a>
+  </p>
+</div>

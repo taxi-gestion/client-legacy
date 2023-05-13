@@ -1,0 +1,11 @@
+<div class="mb-3 form-check">
+  <input
+    type="checkbox"
+    class="form-check-input"
+    id="terms"
+    [formControl]="termsControl"
+    [class.is-invalid]="termsControl.touched && termsControl.invalid" />
+  <label class="form-check-label" for="terms">J'accepte les</label>
+  <a class="text-decoration-none ms-1" routerLink="terms" target="_blank" rel="noopener">conditions d'utilisation</a>
+  <div class="invalid-feedback">Vous devez accepter les conditions d'utilisation</div>
+</div>

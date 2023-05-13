@@ -1,0 +1,10 @@
+<ng-container *ngIf="codeControl">
+  <label for="code" class="form-label">Code d'activation</label>
+  <div class="input-group mb-3 has-validation" [class.is-invalid]="codeControl.touched && codeControl.invalid">
+    <i class="input-group-text ri-shield-check-line" aria-hidden="true"></i>
+    <input id="code" type="text" class="form-control form-control-lg border-start-0" [formControl]="codeControl" />
+    <div class="invalid-feedback" *ngIf="errors | fieldErrorMessages : 'code' as errorMessages">
+      {{ errorMessages.at(0) }}
+    </div>
+  </div>
+</ng-container>

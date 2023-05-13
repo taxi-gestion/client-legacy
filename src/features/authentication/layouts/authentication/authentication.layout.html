@@ -1,0 +1,22 @@
+<div class="container-fluid vh-100">
+  <div class="row h-100">
+    <div class="col-xxl-4 col-xl-5 col-md-6 py-5 d-flex flex-column justify-content-between overflow-hidden">
+      <img
+        class="mb-5 px-lg-5 px-2 me-auto"
+        style="max-width: 75%; max-height: 50px"
+        alt="__PROJECT"
+        src="/assets/logo/logo-brand.svg" />
+      <div [@routeAnimations]="getRouteAnimationData()">
+        <router-outlet></router-outlet>
+      </div>
+      <small class="mt-5 px-lg-5 px-2 text-muted">
+        <i class="ri-copyright-line align-bottom" aria-hidden="true"></i>
+        <span class="visually-hidden">copyright</span>
+        {{ currentYear }} Red Green Refactor
+      </small>
+    </div>
+    <div class="col d-none d-md-flex h-100 bg-city flex-column justify-content-between">
+      <img class="w-75 mb-5 flex-grow-1 m-auto img-white" alt="" src="/assets/logo/logo-brand.svg" />
+    </div>
+  </div>
+</div>
