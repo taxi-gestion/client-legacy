@@ -1,3 +1,9 @@
+# [1.1.0](https://github.com/codingones-github-templates/angular-client/compare/v1.0.0...v1.1.0) (2023-05-17)
+
+### Features
+
+- add renovate.json ([#2](https://github.com/codingones-github-templates/angular-client/issues/2)) ([362d53f](https://github.com/codingones-github-templates/angular-client/commit/362d53f796820f769c8fb0bdc75bec5aa286f6fb))
+
 # 1.0.0 (2023-05-17)
 
 ### Features
