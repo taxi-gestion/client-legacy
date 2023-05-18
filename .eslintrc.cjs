@@ -30,7 +30,7 @@ const lintProjects = () => {
       rules: {
         ...require('./.eslint-rules/eslint.rules.cjs'),
         ...require('./.eslint-rules/typescript-eslint.rules.cjs'),
-        ...require('./.eslint-rules/angular-eslint.rules.cjs'),
+        ...require('./.eslint-rules/angular.rules.cjs'),
         ...require('./.eslint-rules/to-review.rules.cjs')
       }
     },
@@ -54,7 +54,7 @@ const lintTests = () => {
   return [
     {
       env: {
-        //"jest/globals": true,
+        'jest/globals': true
       },
       parser: '@typescript-eslint/parser',
       parserOptions: {
@@ -64,14 +64,14 @@ const lintTests = () => {
         sourceType: 'module'
       },
       files: ['src/**/*.spec.ts'],
-      //extends: ["plugin:jest/recommended", "plugin:jest/style"],
-      plugins: [/*"jest",*/ '@typescript-eslint'],
+      extends: ['plugin:jest/recommended', 'plugin:jest/style'],
+      plugins: ['jest', '@typescript-eslint'],
       rules: {
         ...require('./.eslint-rules/eslint.rules.cjs'),
-        //...require("./.eslint-rules/eslint-test.rules.cjs"),
+        ...require('./.eslint-rules/eslint.test.rules.cjs'),
         ...require('./.eslint-rules/typescript-eslint.rules.cjs'),
-        //...require("./.eslint-rules/typescript-eslint-test.rules.cjs"),
-        //...require("./.eslint-rules/jest-eslint.rules.cjs"),
+        ...require('./.eslint-rules/typescript-eslint.test.rules.cjs'),
+        ...require('./.eslint-rules/jest.rules.cjs'),
         ...require('./.eslint-rules/to-review.test.rules.cjs')
       }
     }

@@ -10,7 +10,7 @@ describe('in memory forgot-password action', (): void => {
 
     await firstValueFrom(inMemoryForgotPasswordAction$(accounts)(account.username, '7868965'));
 
-    expect(account.resetPasswordCode).toStrictEqual('7868965');
+    expect(account.resetPasswordCode).toBe('7868965');
   });
 
   it('should not set reset password code to unknown account', async (): Promise<void> => {
@@ -19,6 +19,6 @@ describe('in memory forgot-password action', (): void => {
 
     await expect(
       firstValueFrom(inMemoryForgotPasswordAction$(accounts)('unknown@taxi-gestion.com', '7868965'))
-    ).rejects.toEqual(new UnknownAccountError('unknown@taxi-gestion.com'));
+    ).rejects.toStrictEqual(new UnknownAccountError('unknown@taxi-gestion.com'));
   });
 });

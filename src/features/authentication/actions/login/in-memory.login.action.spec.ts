@@ -11,7 +11,7 @@ describe('in memory login action', (): void => {
 
     await firstValueFrom(inMemoryLoginAction$(accounts, session)(account.username, account.password));
 
-    expect(session.isLoggedIn).toStrictEqual(true);
+    expect(session.isLoggedIn).toBe(true);
   });
 
   it('should not login with unknown account', async (): Promise<void> => {
@@ -21,7 +21,7 @@ describe('in memory login action', (): void => {
 
     await expect(
       firstValueFrom(inMemoryLoginAction$(accounts, session)('unknown@taxi-gestion.com', account.password))
-    ).rejects.toEqual(new UnknownAccountError('unknown@taxi-gestion.com'));
+    ).rejects.toStrictEqual(new UnknownAccountError('unknown@taxi-gestion.com'));
   });
 
   it('should not login with wrong password', async (): Promise<void> => {
@@ -31,7 +31,7 @@ describe('in memory login action', (): void => {
 
     await firstValueFrom(inMemoryLoginAction$(accounts, session)(account.username, account.password));
 
-    await expect(firstValueFrom(inMemoryLoginAction$(accounts, session)(account.username, 'wrong'))).rejects.toEqual(
+    await expect(firstValueFrom(inMemoryLoginAction$(accounts, session)(account.username, 'wrong'))).rejects.toStrictEqual(
       new WrongPasswordError(account.username)
     );
   });

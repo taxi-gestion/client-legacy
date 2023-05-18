@@ -6,6 +6,6 @@ describe('daily presenter', (): void => {
 
     const formattedDate = formatDate(date);
 
-    expect(formattedDate).toStrictEqual('05/03/2019');
+    expect(formattedDate).toBe('05/03/2019');
   });
 });

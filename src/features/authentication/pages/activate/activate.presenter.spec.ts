@@ -32,7 +32,7 @@ describe('activate presenter', (): void => {
 
     const errorMessage: string = activationCodeErrorMessageFrom(error);
 
-    expect(errorMessage).toStrictEqual("Il n'existe aucun compte associé à l'identifiant test@taxi-driver.com");
+    expect(errorMessage).toBe("Il n'existe aucun compte associé à l'identifiant test@taxi-driver.com");
   });
 
   it('should format resend activation code invalid parameter error', (): void => {
@@ -40,7 +40,7 @@ describe('activate presenter', (): void => {
 
     const errorMessage: string = activationCodeErrorMessageFrom(error);
 
-    expect(errorMessage).toStrictEqual("Saisissez l'email ou le numéro téléphone portable associé à votre compte");
+    expect(errorMessage).toBe("Saisissez l'email ou le numéro téléphone portable associé à votre compte");
   });
 
   it('should format resend activation code unknown error', (): void => {
@@ -48,6 +48,6 @@ describe('activate presenter', (): void => {
 
     const errorMessage: string = activationCodeErrorMessageFrom(error);
 
-    expect(errorMessage).toStrictEqual('Une erreur inconnue est survenue');
+    expect(errorMessage).toBe('Une erreur inconnue est survenue');
   });
 });

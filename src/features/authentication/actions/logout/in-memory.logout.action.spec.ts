@@ -7,6 +7,6 @@ describe('in memory logout action', (): void => {
 
     inMemoryLogoutAction(session)();
 
-    expect(session.isLoggedIn).toStrictEqual(false);
+    expect(session.isLoggedIn).toBe(false);
   });
 });

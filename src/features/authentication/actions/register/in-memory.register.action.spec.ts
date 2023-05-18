@@ -17,7 +17,7 @@ describe('in memory register action', (): void => {
     const account: Account = { username: 'test@taxi-gestion.com', password: '5Hx$M8/y' };
     const accounts: Account[] = [account];
 
-    await expect(firstValueFrom(inMemoryRegisterAction$(accounts)(account.username, account.password))).rejects.toEqual(
+    await expect(firstValueFrom(inMemoryRegisterAction$(accounts)(account.username, account.password))).rejects.toStrictEqual(
       new AccountAlreadyExistError(account.username)
     );
   });

@@ -16,5 +16,6 @@ it('should not execute action while not loading', async (): Promise<void> => {
 
   const actionWhileLoading$: Observable<string> = whileLoading(() => action$.asObservable())(STOP_LOADING);
 
+  // eslint-disable-next-line jest/prefer-strict-equal
   await expect(firstValueFrom(actionWhileLoading$)).rejects.toEqual(new Error('no elements in sequence'));
 });
