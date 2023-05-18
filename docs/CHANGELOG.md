@@ -1,3 +1,9 @@
+# [1.3.0](https://github.com/codingones-github-templates/angular-client/compare/v1.2.0...v1.3.0) (2023-05-18)
+
+### Features
+
+- added jest and fixed common errors ([#5](https://github.com/codingones-github-templates/angular-client/issues/5)) ([2585ff6](https://github.com/codingones-github-templates/angular-client/commit/2585ff6061d59e54bee212adae1defd011b15c3b))
+
 # [1.2.0](https://github.com/codingones-github-templates/angular-client/compare/v1.1.0...v1.2.0) (2023-05-18)
 
 ### Features
