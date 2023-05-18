@@ -1,6 +1,7 @@
 // Do not move / rename this file, it works for IDE automatic setting.
 // Lint the files included in each typescript project with common rules
-const projects = ['./tsconfig.json'];
+const projects = ['./tsconfig.app.json'];
+const tests = ['./tsconfig.spec.json'];
 
 // Lint project using its tsconfig.json.
 const lintProjects = () => {
@@ -10,12 +11,14 @@ const lintProjects = () => {
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended',
         'plugin:@typescript-eslint/recommended-requiring-type-checking',
-        'prettier'
+        'prettier',
+        'plugin:@angular-eslint/recommended',
+        'plugin:@angular-eslint/template/process-inline-templates'
       ],
       env: {
         node: true
       },
-      files: ['**/*.ts', '**/*.tsx'],
+      files: ['**/*.ts'],
       parser: '@typescript-eslint/parser',
       parserOptions: {
         tsconfigRootDir: __dirname,
@@ -26,7 +29,50 @@ const lintProjects = () => {
       plugins: ['@typescript-eslint'],
       rules: {
         ...require('./.eslint-rules/eslint.rules.cjs'),
-        ...require('./.eslint-rules/typescript-eslint.rules.cjs')
+        ...require('./.eslint-rules/typescript-eslint.rules.cjs'),
+        ...require('./.eslint-rules/angular-eslint.rules.cjs'),
+        ...require('./.eslint-rules/to-review.rules.cjs')
+      }
+    },
+    {
+      files: ['*.html'],
+      extends: ['plugin:@angular-eslint/template/recommended'],
+      rules: {}
+    }
+    //{
+    //  "files": ["*.html"],
+    //  "excludedFiles": ["*inline-template-*.component.html"],
+    //  "extends": ["plugin:prettier/recommended"],
+    //  "rules": {
+    //    "prettier/prettier": ["error", { "parser": "angular" }]
+    //  }
+    //}
+  ];
+};
+
+const lintTests = () => {
+  return [
+    {
+      env: {
+        //"jest/globals": true,
+      },
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        tsconfigRootDir: __dirname,
+        project: tests,
+        ecmaVersion: 'latest',
+        sourceType: 'module'
+      },
+      files: ['src/**/*.spec.ts'],
+      //extends: ["plugin:jest/recommended", "plugin:jest/style"],
+      plugins: [/*"jest",*/ '@typescript-eslint'],
+      rules: {
+        ...require('./.eslint-rules/eslint.rules.cjs'),
+        //...require("./.eslint-rules/eslint-test.rules.cjs"),
+        ...require('./.eslint-rules/typescript-eslint.rules.cjs'),
+        //...require("./.eslint-rules/typescript-eslint-test.rules.cjs"),
+        //...require("./.eslint-rules/jest-eslint.rules.cjs"),
+        ...require('./.eslint-rules/to-review.test.rules.cjs')
       }
     }
   ];
@@ -34,5 +80,5 @@ const lintProjects = () => {
 
 module.exports = {
   root: true,
-  overrides: [...lintProjects()]
+  overrides: [...lintProjects(), ...lintTests()]
 };
