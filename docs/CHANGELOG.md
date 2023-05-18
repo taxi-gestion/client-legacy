@@ -1,3 +1,9 @@
+# [1.2.0](https://github.com/codingones-github-templates/angular-client/compare/v1.1.0...v1.2.0) (2023-05-18)
+
+### Features
+
+- added jest and using angular jest runner ([#4](https://github.com/codingones-github-templates/angular-client/issues/4)) ([30e173b](https://github.com/codingones-github-templates/angular-client/commit/30e173b26b7a6cbfbbb9f5f1707860e23a0dea28))
+
 # [1.1.0](https://github.com/codingones-github-templates/angular-client/compare/v1.0.0...v1.1.0) (2023-05-17)
 
 ### Features
