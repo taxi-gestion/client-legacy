@@ -1,3 +1,13 @@
+# [1.4.0](https://github.com/codingones-github-templates/angular-client/compare/v1.3.0...v1.4.0) (2023-05-20)
+
+### Features
+
+- adding service template file ([656b5db](https://github.com/codingones-github-templates/angular-client/commit/656b5db65588754b4c9006c5a5fac1eb09d61225))
+- adding service template file ([7177fa1](https://github.com/codingones-github-templates/angular-client/commit/7177fa1d526466ac0eac2ab25805dae24b7d1e5d))
+- adding service template file ([6643e9a](https://github.com/codingones-github-templates/angular-client/commit/6643e9afa0ff209e6b05a2b75b0e55ece7729d50))
+- adding service template file ([7c88888](https://github.com/codingones-github-templates/angular-client/commit/7c8888885565516e1c63ae418e31c89760d4daed))
+- adding service template file ([8baf8f9](https://github.com/codingones-github-templates/angular-client/commit/8baf8f9d7451b501ee835073df8e898ce10baa69))
+
 # [1.3.0](https://github.com/codingones-github-templates/angular-client/compare/v1.2.0...v1.3.0) (2023-05-18)
 
 ### Features
