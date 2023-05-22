@@ -1,5 +1,5 @@
-import { Session } from '../../providers';
+import { logout, Session } from '../../providers';
 
 export const inMemoryLogoutAction = (session: Session) => (): void => {
-  session.isLoggedIn = false;
+  logout(session);
 };

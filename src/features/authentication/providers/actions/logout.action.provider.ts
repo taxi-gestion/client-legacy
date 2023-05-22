@@ -2,7 +2,7 @@ import { FactoryProvider } from '@angular/core';
 
 export type LogoutAction = () => void;
 
-export const LOGOUT_ACTION = 'authentication.logout.action' as const;
+export const LOGOUT_ACTION: symbol = Symbol('authentication.logout.action');
 
 export const logoutActionProvider = <TDependencies>(
   useFactory: (...providers: never[]) => LogoutAction,

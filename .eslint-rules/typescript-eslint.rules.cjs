@@ -65,7 +65,7 @@ module.exports = {
       accessibility: 'explicit',
       overrides: {
         accessors: 'explicit',
-        constructors: 'no-public',
+        constructors: 'explicit',
         methods: 'explicit',
         properties: 'explicit',
         parameterProperties: 'explicit'
@@ -340,7 +340,8 @@ module.exports = {
   ],
   '@typescript-eslint/no-shadow': ['error', { builtinGlobals: true, hoist: 'all' }],
   '@typescript-eslint/no-throw-literal': 'error',
-  '@typescript-eslint/no-unused-expressions': ['error', { allowShortCircuit: true }],
+  '@typescript-eslint/no-unused-expressions': ['error', { allowShortCircuit: true, allowTernary: true }],
   '@typescript-eslint/no-use-before-define': 'off',
-  '@typescript-eslint/no-useless-constructor': 'error'
+  '@typescript-eslint/no-useless-constructor': 'error',
+  '@typescript-eslint/unbound-method': ['error', { ignoreStatic: true }]
 };

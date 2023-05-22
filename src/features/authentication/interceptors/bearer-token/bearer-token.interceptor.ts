@@ -6,6 +6,7 @@ import { SESSION_PERSISTENCE, TokenSession } from '../../providers';
 const requestWithBearerToken = (request: HttpRequest<unknown>, token: string): HttpRequest<unknown> =>
   request.clone({
     setHeaders: {
+      /* eslint-disable-next-line @typescript-eslint/naming-convention */
       Authorization: `Bearer ${token}`
     }
   });
@@ -13,21 +14,22 @@ const requestWithBearerToken = (request: HttpRequest<unknown>, token: string): H
 export const authorizedRouteMatchPattern =
   (pattern: RegExp) =>
   (route: string): boolean =>
-    !!route.match(pattern);
+    route.match(pattern) != null;
 
-export const isValidToken = (token: string | null): token is string => !!token;
+export const isValidToken = (token: string | null): token is string => token != null;
 
 @Injectable()
 export class BearerTokenInterceptor implements HttpInterceptor {
-  private authorizedRoutePattern: RegExp = /\/api/u;
+  private readonly _authorizedRoutePattern: RegExp = /\/api/u;
 
   public constructor(@Inject(SESSION_PERSISTENCE) private readonly _tokenSession: TokenSession) {}
 
-  private shouldForwardBearerToken = (request: HttpRequest<unknown>, token: string | null): token is string =>
-    isValidToken(token) && authorizedRouteMatchPattern(this.authorizedRoutePattern)(request.url);
+  private shouldForwardBearerToken(request: HttpRequest<unknown>, token: string | null): token is string {
+    return isValidToken(token) && authorizedRouteMatchPattern(this._authorizedRoutePattern)(request.url);
+  }
 
-  public intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  public intercept = (request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> => {
     const token: string | null = this._tokenSession.getAccess();
     return next.handle(this.shouldForwardBearerToken(request, token) ? requestWithBearerToken(request, token) : request);
-  }
+  };
 }

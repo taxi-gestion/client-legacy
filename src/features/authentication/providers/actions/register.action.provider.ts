@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 
 export type RegisterAction<T> = (username: string, password: string) => Observable<T>;
 
-export const REGISTER_ACTION = 'authentication.register.action' as const;
+export const REGISTER_ACTION: symbol = Symbol('authentication.register.action');
 
 export const registerActionProvider = <TDependencies, TResult>(
   useFactory: (...providers: never[]) => RegisterAction<TResult>,

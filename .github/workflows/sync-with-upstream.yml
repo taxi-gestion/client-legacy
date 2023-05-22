@@ -17,7 +17,7 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.PAT }}
-          repository: "codingones-github-templates/UPSTREAM"
+          repository: 'codingones-github-templates/UPSTREAM'
 
       - name: Fetch current repos and rebase main to the upstream branch
         env:

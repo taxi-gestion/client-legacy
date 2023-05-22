@@ -22,14 +22,14 @@ export class CanMatchRefreshTokenGuard {
     private readonly _router: Router
   ) {}
 
-  public canMatch = (): boolean | Observable<boolean> =>
+  public canMatch = (): Observable<boolean> | boolean =>
     this._session.isLoggedIn || this._session.getRefresh() == null
       ? true
       : this._refreshTokenAction$().pipe(
-          catchError(() => {
+          catchError((): Observable<boolean> => {
             this.logoutAction();
-            return from(this._router.navigate([this._toRoutes.get('session-expired')])).pipe(map(() => true));
+            return from(this._router.navigate([this._toRoutes.get('session-expired')])).pipe(map((): true => true));
           }),
-          map(() => true)
+          map((): true => true)
         );
 }

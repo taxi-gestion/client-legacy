@@ -1,4 +1,5 @@
 import { HttpClient } from '@angular/common/http';
+import { FactoryProvider } from '@angular/core';
 import {
   activateActionProvider,
   forgotPasswordActionProvider,
@@ -18,7 +19,7 @@ import {
   cognitoResetPasswordAction$
 } from '@features/aws';
 
-export const AUTHENTICATION_PROVIDERS = [
+export const AUTHENTICATION_PROVIDERS: FactoryProvider[] = [
   forgotPasswordActionProvider(cognitoForgotPasswordAction$, [HttpClient, COGNITO_PERSISTENCE]),
   activateActionProvider(cognitoActivateAction$, [HttpClient, COGNITO_PERSISTENCE]),
   loginActionProvider(cognitoLoginAction$, [HttpClient, COGNITO_PERSISTENCE, SESSION_PERSISTENCE]),

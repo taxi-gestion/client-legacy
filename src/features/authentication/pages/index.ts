@@ -10,4 +10,5 @@ export * from './login/login.page';
 export * from './register/register.page';
 export * from './reset-password/reset-password.page';
 
+// eslint-disable-next-line @typescript-eslint/typedef
 export const PAGES = [ActivatePage, ForgotPasswordPage, LoginPage, RegisterPage, ResetPasswordPage];

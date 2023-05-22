@@ -7,5 +7,8 @@ import { Directive } from '@angular/core';
 export class PasswordDisplayDirective {
   public isDisplayed: boolean = false;
 
-  public toggleDisplay = () => (this.isDisplayed = !this.isDisplayed);
+  public toggleDisplay = (): boolean => {
+    this.isDisplayed = !this.isDisplayed;
+    return this.isDisplayed;
+  };
 }

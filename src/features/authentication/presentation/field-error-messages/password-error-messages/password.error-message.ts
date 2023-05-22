@@ -1,26 +1,26 @@
 import { WRONG_PASSWORD_ERROR_NAME } from '../../../errors';
 
-export type PasswordErrors = {
+export type PasswordError = {
   required?: boolean;
   minlength?: {
     requiredLength: number;
     actualLength: number;
   };
-  missingSpecialChar?: { value: string };
-  missingNumber?: { value: string };
-  missingUppercaseChar?: { value: string };
-  missingLowercaseChar?: { value: string };
-  forbiddenLeadingSpace?: { value: string };
-  forbiddenTrailingSpace?: { value: string };
+  missingSpecialChar?: object;
+  missingNumber?: object;
+  missingUppercaseChar?: object;
+  missingLowercaseChar?: object;
+  forbiddenLeadingSpace?: object;
+  forbiddenTrailingSpace?: object;
   wrongPasswordError?: { username: string };
 } | null;
 
-export const PASSWORD_ERROR_MESSAGES: Map<string, (errors: PasswordErrors) => string> = new Map([
+export const PASSWORD_ERROR_MESSAGES: Map<string, (errors: PasswordError) => string> = new Map([
   ['required', (): string => 'Saisissez le mot de passe de votre compte'],
   [
     'minlength',
-    (passwordErrors: PasswordErrors): string =>
-      `Le mot de passe doit contenir ${passwordErrors?.minlength?.requiredLength} caractères au minimum`
+    (passwordError: PasswordError): string =>
+      `Le mot de passe doit contenir ${passwordError?.minlength?.requiredLength} caractères au minimum`
   ],
   [
     'missingSpecialChar',
@@ -33,7 +33,7 @@ export const PASSWORD_ERROR_MESSAGES: Map<string, (errors: PasswordErrors) => st
   ['forbiddenTrailingSpace', (): string => 'Le mot de passe ne doit pas se terminer avec un espace'],
   [
     WRONG_PASSWORD_ERROR_NAME,
-    (passwordErrors: PasswordErrors): string =>
-      `Ce mot de passe ne correspond pas à l'identifiant ${passwordErrors?.wrongPasswordError?.username}`
+    (passwordError: PasswordError): string =>
+      `Ce mot de passe ne correspond pas à l'identifiant ${passwordError?.wrongPasswordError?.username}`
   ]
 ]);

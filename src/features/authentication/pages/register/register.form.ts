@@ -19,8 +19,7 @@ export const REGISTER_FORM: FormGroup<Record<keyof RegisterFormValues, FormContr
   terms: new FormControl<RegisterFormValues['terms']>(false, [Validators.requiredTrue])
 });
 
-export const setRegisterErrorToForm = (handledError: { field?: string; errors: Record<string, unknown> }): void => {
-  handledError.field
-    ? REGISTER_FORM.get(handledError.field)?.setErrors(handledError.errors)
-    : REGISTER_FORM.setErrors(handledError.errors);
-};
+export const setRegisterErrorToForm = (handledError: { field?: string; errors: Record<string, unknown> }): void =>
+  handledError.field == null
+    ? REGISTER_FORM.setErrors(handledError.errors)
+    : REGISTER_FORM.get(handledError.field)?.setErrors(handledError.errors);

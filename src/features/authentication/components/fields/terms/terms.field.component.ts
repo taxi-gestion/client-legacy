@@ -9,7 +9,7 @@ import { FormControl } from '@angular/forms';
 export class TermsFieldComponent {
   @Input() public termsControl!: FormControl<boolean>;
 
-  @Input() set touched(isTouched: boolean) {
+  @Input() public set touched(isTouched: boolean) {
     isTouched && this.termsControl.markAsTouched();
   }
 }

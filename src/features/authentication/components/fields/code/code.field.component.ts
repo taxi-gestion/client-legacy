@@ -11,7 +11,7 @@ export class CodeFieldComponent {
 
   @Input() public errors?: ValidationErrors | null;
 
-  @Input() set touched(isTouched: boolean) {
+  @Input() public set touched(isTouched: boolean) {
     isTouched && this.codeControl?.markAsTouched();
   }
 }

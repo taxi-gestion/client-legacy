@@ -5,7 +5,7 @@ export type FormattedRegisterError = { field?: string; errors: Record<string, un
 const registerErrorFormatMap: Map<string, (error: Error) => FormattedRegisterError> = new Map([
   [
     ACCOUNT_ALREADY_EXIST_ERROR_NAME,
-    (error: Error) => ({
+    (error: Error): FormattedRegisterError => ({
       field: 'username',
       errors: {
         [ACCOUNT_ALREADY_EXIST_ERROR_NAME]: error

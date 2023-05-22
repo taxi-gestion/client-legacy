@@ -5,7 +5,7 @@ describe('username validator', (): void => {
   it('should get invalidUsername error', (): void => {
     const errors: ValidationErrors | null = usernameValidator(new FormControl('hello'));
 
-    expect(errors).toStrictEqual({ invalidUsername: { value: 'hello' } });
+    expect(errors).toStrictEqual({ invalidUsername: { username: 'hello' } });
   });
 
   it('should not get error with valid phone', (): void => {

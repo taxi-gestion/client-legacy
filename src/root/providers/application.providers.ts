@@ -1,3 +1,5 @@
+import { HttpClient } from '@angular/common/http';
+import { ClassProvider, FactoryProvider, ValueProvider } from '@angular/core';
 import {
   bearerTokenInterceptorProvider,
   logoutActionProvider,
@@ -8,7 +10,6 @@ import {
   SESSION_PERSISTENCE,
   sessionValueProvider
 } from '@features/authentication';
-import { HttpClient } from '@angular/common/http';
 import {
   COGNITO_PERSISTENCE,
   cognitoLogoutAction,
@@ -29,7 +30,7 @@ const redirectToRoutes: Map<RedirectRoutesKeys, string> = new Map<RedirectRoutes
   ['reset-password', '/login']
 ]);
 
-export const APPLICATION_PROVIDERS = [
+export const APPLICATION_PROVIDERS: (ClassProvider | FactoryProvider | ValueProvider)[] = [
   cognitoValueProvider({ clientId: ENV.auth.clientId, region: 'us-east-1' }),
   sessionValueProvider(cognitoTokenSession()),
   redirectRoutesValueProvider(redirectToRoutes),

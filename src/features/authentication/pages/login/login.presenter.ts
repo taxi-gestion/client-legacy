@@ -5,7 +5,7 @@ export type FormattedLoginError = { field?: string; errors: Record<string, unkno
 const loginErrorFormatMap: Map<string, (error: Error) => FormattedLoginError> = new Map([
   [
     UNKNOWN_ACCOUNT_ERROR_NAME,
-    (error: Error) => ({
+    (error: Error): FormattedLoginError => ({
       field: 'username',
       errors: {
         [UNKNOWN_ACCOUNT_ERROR_NAME]: error
@@ -14,7 +14,7 @@ const loginErrorFormatMap: Map<string, (error: Error) => FormattedLoginError> = 
   ],
   [
     WRONG_PASSWORD_ERROR_NAME,
-    (error: Error) => ({
+    (error: Error): FormattedLoginError => ({
       field: 'password',
       errors: {
         [WRONG_PASSWORD_ERROR_NAME]: error
@@ -23,7 +23,7 @@ const loginErrorFormatMap: Map<string, (error: Error) => FormattedLoginError> = 
   ],
   [
     INVALID_USERNAME_OR_PASSWORD_ERROR_NAME,
-    (error: Error) => ({
+    (error: Error): FormattedLoginError => ({
       errors: {
         [INVALID_USERNAME_OR_PASSWORD_ERROR_NAME]: error
       }

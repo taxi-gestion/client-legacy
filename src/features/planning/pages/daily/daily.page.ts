@@ -9,7 +9,7 @@ import { formatDate } from './daily.presenter';
   templateUrl: './daily.page.html'
 })
 export class DailyPage {
-  private _today: Date = new Date('2019-03-05');
+  private readonly _today: Date = new Date('2019-03-05');
 
   public today: string = formatDate(this._today);
 

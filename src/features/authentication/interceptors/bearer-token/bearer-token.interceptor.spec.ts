@@ -1,7 +1,7 @@
 import { authorizedRouteMatchPattern, isValidToken } from './bearer-token.interceptor';
 
 describe('bearer token forward on regex match', (): void => {
-  const matchApiRegex: RegExp = /\/api/;
+  const matchApiRegex: RegExp = /\/api/u;
   it('should not forward bearer token if token is null', (): void => {
     expect(isValidToken(null) && authorizedRouteMatchPattern(matchApiRegex)('https://google.com/api/lol')).toBeFalsy();
   });

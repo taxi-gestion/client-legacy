@@ -29,14 +29,16 @@ export type FareTransfer = {
 };
 
 const toFareByDayPresentation = (fares: FareTransfer[]): FareByDayPresentation[] =>
-  fares.map((fare: FareTransfer) => ({
-    id: fare.rid,
-    date: fare.date,
-    distance: fare.driveDistanceInMeters,
-    duration: fare.duration,
-    status: fare.status as FareStatus,
-    startTime: fare.startTime
-  }));
+  fares.map(
+    (fare: FareTransfer): FareByDayPresentation => ({
+      id: fare.rid,
+      date: fare.date,
+      distance: fare.driveDistanceInMeters,
+      duration: fare.duration,
+      status: fare.status as FareStatus,
+      startTime: fare.startTime
+    })
+  );
 
 export const faresByDayRead$ = (httpClient: HttpClient) => (): Observable<FareByDayPresentation[]> =>
   httpClient.get<FareTransfer[]>('/api/fares/2019-03-05').pipe(map(toFareByDayPresentation));

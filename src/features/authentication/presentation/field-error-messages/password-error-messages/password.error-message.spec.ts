@@ -1,10 +1,10 @@
 import { WRONG_PASSWORD_ERROR_NAME, WrongPasswordError } from '../../../errors';
 import { fieldErrorMessagesPresentation } from '../field-error-messages.presentation';
-import { PASSWORD_ERROR_MESSAGES, PasswordErrors } from './password.error-message';
+import { PASSWORD_ERROR_MESSAGES, PasswordError } from './password.error-message';
 
 describe('password error messages', (): void => {
   it('should not get any password error message', (): void => {
-    const errors: PasswordErrors = null;
+    const errors: PasswordError = null;
 
     const errorMessage: string[] = fieldErrorMessagesPresentation(errors, PASSWORD_ERROR_MESSAGES);
 
@@ -12,7 +12,7 @@ describe('password error messages', (): void => {
   });
 
   it('should get required error message', (): void => {
-    const errors: PasswordErrors = { required: true };
+    const errors: PasswordError = { required: true };
 
     const errorMessage: string[] = fieldErrorMessagesPresentation(errors, PASSWORD_ERROR_MESSAGES);
 
@@ -20,7 +20,7 @@ describe('password error messages', (): void => {
   });
 
   it('should get password min length error message', (): void => {
-    const errors: PasswordErrors = { minlength: { requiredLength: 8, actualLength: 3 } };
+    const errors: PasswordError = { minlength: { requiredLength: 8, actualLength: 3 } };
 
     const errorMessage: string[] = fieldErrorMessagesPresentation(errors, PASSWORD_ERROR_MESSAGES);
 
@@ -28,13 +28,13 @@ describe('password error messages', (): void => {
   });
 
   it('should get password required chars error messages', (): void => {
-    const errors: PasswordErrors = {
-      missingSpecialChar: { value: ' ££££££££ ' },
-      missingNumber: { value: ' ££££££££ ' },
-      missingUppercaseChar: { value: ' ££££££££ ' },
-      missingLowercaseChar: { value: ' ££££££££ ' },
-      forbiddenLeadingSpace: { value: ' ££££££££ ' },
-      forbiddenTrailingSpace: { value: ' ££££££££ ' }
+    const errors: PasswordError = {
+      missingSpecialChar: {},
+      missingNumber: {},
+      missingUppercaseChar: {},
+      missingLowercaseChar: {},
+      forbiddenLeadingSpace: {},
+      forbiddenTrailingSpace: {}
     };
 
     const errorMessage: string[] = fieldErrorMessagesPresentation(errors, PASSWORD_ERROR_MESSAGES);
@@ -50,7 +50,7 @@ describe('password error messages', (): void => {
   });
 
   it('should get wrong password error message', (): void => {
-    const errors: PasswordErrors = { [WRONG_PASSWORD_ERROR_NAME]: new WrongPasswordError('0621369798') };
+    const errors: PasswordError = { [WRONG_PASSWORD_ERROR_NAME]: new WrongPasswordError('0621369798') };
 
     const errorMessage: string[] = fieldErrorMessagesPresentation(errors, PASSWORD_ERROR_MESSAGES);
 

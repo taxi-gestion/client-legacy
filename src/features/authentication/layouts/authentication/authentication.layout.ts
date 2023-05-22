@@ -25,6 +25,6 @@ export class AuthenticationLayout {
   public constructor(private readonly _contexts: ChildrenOutletContexts) {}
 
   public getRouteAnimationData(): string {
-    return this._contexts.getContext('primary')?.route?.snapshot.data?.['animation'];
+    return this._contexts.getContext('primary')?.route?.snapshot.data['animation'] as string;
   }
 }

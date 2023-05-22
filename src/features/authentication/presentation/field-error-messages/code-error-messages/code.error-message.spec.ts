@@ -1,10 +1,10 @@
 import { INVALID_CODE_ERROR_NAME, InvalidCodeError } from '../../../errors';
 import { fieldErrorMessagesPresentation } from '../field-error-messages.presentation';
-import { CODE_ERROR_MESSAGES, CodeErrors } from './code.error-message';
+import { CODE_ERROR_MESSAGES, CodeError } from './code.error-message';
 
 describe('code error messages', (): void => {
   it('should not get any code error message', (): void => {
-    const errors: CodeErrors = null;
+    const errors: CodeError = null;
 
     const errorMessage: string[] = fieldErrorMessagesPresentation(errors, CODE_ERROR_MESSAGES);
 
@@ -12,7 +12,7 @@ describe('code error messages', (): void => {
   });
 
   it('should get required code error message', (): void => {
-    const errors: CodeErrors = { required: true };
+    const errors: CodeError = { required: true };
 
     const errorMessage: string[] = fieldErrorMessagesPresentation(errors, CODE_ERROR_MESSAGES);
 
@@ -20,7 +20,7 @@ describe('code error messages', (): void => {
   });
 
   it('should get invalid code error message', (): void => {
-    const errors: CodeErrors = { [INVALID_CODE_ERROR_NAME]: new InvalidCodeError('19561') };
+    const errors: CodeError = { [INVALID_CODE_ERROR_NAME]: new InvalidCodeError('19561') };
 
     const errorMessage: string[] = fieldErrorMessagesPresentation(errors, CODE_ERROR_MESSAGES);
 

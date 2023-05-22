@@ -5,7 +5,7 @@ export type FormattedResetPasswordError = { field?: string; errors: Record<strin
 const resetPasswordFormatMap: Map<string, (error: Error) => FormattedResetPasswordError> = new Map([
   [
     UNKNOWN_ACCOUNT_ERROR_NAME,
-    (error: Error) => ({
+    (error: Error): FormattedResetPasswordError => ({
       field: 'username',
       errors: {
         [UNKNOWN_ACCOUNT_ERROR_NAME]: error
@@ -14,7 +14,7 @@ const resetPasswordFormatMap: Map<string, (error: Error) => FormattedResetPasswo
   ],
   [
     INVALID_CODE_ERROR_NAME,
-    (error: Error) => ({
+    (error: Error): FormattedResetPasswordError => ({
       field: 'code',
       errors: {
         [INVALID_CODE_ERROR_NAME]: error
@@ -23,7 +23,7 @@ const resetPasswordFormatMap: Map<string, (error: Error) => FormattedResetPasswo
   ],
   [
     LIMIT_EXCEEDED_ERROR_NAME,
-    (error: Error) => ({
+    (error: Error): FormattedResetPasswordError => ({
       errors: {
         [LIMIT_EXCEEDED_ERROR_NAME]: error
       }

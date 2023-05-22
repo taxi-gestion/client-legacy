@@ -16,17 +16,17 @@ import { Router } from '@angular/router';
 export const authorizedRouteMatchPattern =
   (pattern: RegExp) =>
   (route: string): boolean =>
-    !!route.match(pattern);
+    route.match(pattern) != null;
 
-const EXPIRED = 0 as const;
+const EXPIRED: 0 = 0 as const;
 
-const EXPIER_SOON_INTERVAL = 60000 as const;
+const EXPIRE_SOON_INTERVAL: 60000 = 60000 as const;
 
 @Injectable()
 export class RefreshTokenInterceptor implements HttpInterceptor {
-  private authorizedRoutePattern: RegExp = /\/api/u;
+  private readonly _authorizedRoutePattern: RegExp = /\/api/u;
 
-  constructor(
+  public constructor(
     @Inject(SESSION_PERSISTENCE) private readonly _tokenSession: TokenSession,
     @Inject(REFRESH_TOKEN_ACTION) private readonly _refreshTokenAction: RefreshTokenAction<void>,
     @Inject(LOGOUT_ACTION) private readonly _logoutAction: LogoutAction,
@@ -34,29 +34,32 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
     private readonly _router: Router
   ) {}
 
-  private logout = (): ObservableInput<void> => {
+  private logout(): ObservableInput<void> {
     this._logoutAction();
-    return from(this._router.navigate([this._toRoutes.get('session-expired')])).pipe(switchMap(() => EMPTY));
-  };
+    return from(this._router.navigate([this._toRoutes.get('session-expired')])).pipe(switchMap((): Observable<void> => EMPTY));
+  }
 
-  private bearerTokenExpired = (): boolean => this._tokenSession.getRemainingTime() < EXPIRED;
+  private bearerTokenExpired(): boolean {
+    return this._tokenSession.getRemainingTime() < EXPIRED;
+  }
 
-  private bearerTokenExpiresSoon = (): boolean => this._tokenSession.getRemainingTime() < EXPIER_SOON_INTERVAL;
+  private bearerTokenExpiresSoon(): boolean {
+    return this._tokenSession.getRemainingTime() < EXPIRE_SOON_INTERVAL;
+  }
 
-  private refreshBearerTokenThenHandleRequest = (
+  private refreshBearerTokenThenHandleRequest(
     next: HttpHandler,
     request: HttpRequest<unknown>
-  ): Observable<HttpEvent<unknown>> =>
-    this._refreshTokenAction().pipe(
-      catchError(this.logout),
-      switchMap(() => next.handle(request))
+  ): Observable<HttpEvent<unknown>> {
+    return this._refreshTokenAction().pipe(
+      catchError(this.logout.bind(this)),
+      switchMap((): Observable<HttpEvent<unknown>> => next.handle(request))
     );
+  }
 
-  private refreshBearerTokenAndHandleRequest = (
-    next: HttpHandler,
-    request: HttpRequest<unknown>
-  ): Observable<HttpEvent<unknown>> =>
-    next.handle(request).pipe(tap((): Subscription => this._refreshTokenAction().pipe(take(1)).subscribe()));
+  private refreshBearerTokenAndHandleRequest(next: HttpHandler, request: HttpRequest<unknown>): Observable<HttpEvent<unknown>> {
+    return next.handle(request).pipe(tap((): Subscription => this._refreshTokenAction().pipe(take(1)).subscribe()));
+  }
 
   private handleBearerTokenExpiration(next: HttpHandler, request: HttpRequest<unknown>): Observable<HttpEvent<unknown>> {
     if (this.bearerTokenExpiresSoon()) {
@@ -71,7 +74,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
   }
 
   public intercept = (request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> =>
-    authorizedRouteMatchPattern(this.authorizedRoutePattern)(request.url)
+    authorizedRouteMatchPattern(this._authorizedRoutePattern)(request.url)
       ? this.handleBearerTokenExpiration(next, request)
       : next.handle(request);
 }

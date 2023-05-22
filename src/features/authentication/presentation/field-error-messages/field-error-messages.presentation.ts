@@ -1,8 +1,10 @@
+import { ErrorMessages } from '@features/authentication/presentation/message.error';
+
 const onlyDefined = (message?: string): message is string => message != null;
 
-export const fieldErrorMessagesPresentation = <T>(errors: T, errorMessages?: Map<string, (errors: T) => string>): string[] =>
-  errors == null
+export const fieldErrorMessagesPresentation = <T>(error: T, errorMessages?: ErrorMessages<T>): string[] =>
+  error == null
     ? []
-    : Object.keys(errors ?? {})
-        .map((errorKey: string) => errorMessages?.get(errorKey)?.(errors))
+    : Object.keys(error)
+        .map((errorKey: string): string | undefined => errorMessages?.get(errorKey)?.(error))
         .filter(onlyDefined);

@@ -16,7 +16,8 @@ const lintProjects = () => {
         'plugin:@angular-eslint/template/process-inline-templates'
       ],
       env: {
-        node: true
+        node: true,
+        browser: true
       },
       files: ['**/*.ts'],
       parser: '@typescript-eslint/parser',
@@ -30,8 +31,7 @@ const lintProjects = () => {
       rules: {
         ...require('./.eslint-rules/eslint.rules.cjs'),
         ...require('./.eslint-rules/typescript-eslint.rules.cjs'),
-        ...require('./.eslint-rules/angular.rules.cjs'),
-        ...require('./.eslint-rules/to-review.rules.cjs')
+        ...require('./.eslint-rules/angular.rules.cjs')
       }
     },
     {
@@ -71,8 +71,7 @@ const lintTests = () => {
         ...require('./.eslint-rules/eslint.test.rules.cjs'),
         ...require('./.eslint-rules/typescript-eslint.rules.cjs'),
         ...require('./.eslint-rules/typescript-eslint.test.rules.cjs'),
-        ...require('./.eslint-rules/jest.rules.cjs'),
-        ...require('./.eslint-rules/to-review.test.rules.cjs')
+        ...require('./.eslint-rules/jest.rules.cjs')
       }
     }
   ];

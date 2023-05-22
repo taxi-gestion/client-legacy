@@ -13,8 +13,8 @@ export class MainLayout {
     private readonly _router: Router
   ) {}
 
-  public onLogout(): void {
+  public async onLogout(): Promise<void> {
     this.logoutAction();
-    this._router.navigate([this._toRoutes.get('logout')], { onSameUrlNavigation: 'reload' });
+    await this._router.navigate([this._toRoutes.get('logout')], { onSameUrlNavigation: 'reload' });
   }
 }

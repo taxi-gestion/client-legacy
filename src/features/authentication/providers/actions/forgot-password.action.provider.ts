@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 
 export type ForgotPasswordAction = (username: string) => Observable<void>;
 
-export const FORGOT_PASSWORD_ACTION = 'authentication.forgot-password.action' as const;
+export const FORGOT_PASSWORD_ACTION: symbol = Symbol('authentication.forgot-password.action');
 
 export const forgotPasswordActionProvider = <TDependencies>(
   useFactory: (...providers: never[]) => ForgotPasswordAction,

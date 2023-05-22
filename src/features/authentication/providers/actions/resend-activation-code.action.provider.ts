@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 
 export type ResendActivationCodeAction = (username: string) => Observable<void>;
 
-export const RESEND_ACTIVATION_CODE_ACTION = 'resend-activation-code.action' as const;
+export const RESEND_ACTIVATION_CODE_ACTION: symbol = Symbol('authentication.resend-activation-code.action');
 
 export const resendActivationCodeActionProvider = <TDependencies>(
   useFactory: (...providers: never[]) => ResendActivationCodeAction,

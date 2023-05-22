@@ -5,28 +5,28 @@ import {
   UnknownAccountError
 } from '../../../errors';
 
-export type UsernameErrors = {
+export type UsernameError = {
   required?: boolean;
-  invalidUsername?: { value: string };
+  invalidUsername?: { username: string };
   accountAlreadyExistError?: AccountAlreadyExistError;
   unknownAccountError?: UnknownAccountError;
 } | null;
 
-export const USERNAME_ERROR_MESSAGES: Map<string, (errors: UsernameErrors) => string> = new Map([
+export const USERNAME_ERROR_MESSAGES: Map<string, (errors: UsernameError) => string> = new Map([
   ['required', (): string => 'Saisissez votre adresse électronique ou numéro de téléphone portable'],
   [
     'invalidUsername',
-    (usernameErrors: UsernameErrors): string =>
-      `${usernameErrors?.invalidUsername?.value} n'est pas une adresse électronique ou un numéro de téléphone valide`
+    (usernameError: UsernameError): string =>
+      `${usernameError?.invalidUsername?.username} n'est pas une adresse électronique ou un numéro de téléphone valide`
   ],
   [
     ACCOUNT_ALREADY_EXIST_ERROR_NAME,
-    (usernameErrors: UsernameErrors): string =>
-      `Il existe déjà un compte associé à l'identifiant ${usernameErrors?.accountAlreadyExistError?.username}`
+    (usernameError: UsernameError): string =>
+      `Il existe déjà un compte associé à l'identifiant ${usernameError?.accountAlreadyExistError?.username}`
   ],
   [
     UNKNOWN_ACCOUNT_ERROR_NAME,
-    (usernameErrors: UsernameErrors): string =>
-      `Il n'existe aucun compte associé à l'identifiant ${usernameErrors?.unknownAccountError?.username}`
+    (usernameError: UsernameError): string =>
+      `Il n'existe aucun compte associé à l'identifiant ${usernameError?.unknownAccountError?.username}`
   ]
 ]);

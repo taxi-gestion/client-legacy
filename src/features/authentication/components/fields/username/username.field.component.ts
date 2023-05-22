@@ -11,7 +11,7 @@ export class UsernameFieldComponent {
 
   @Input() public errors?: ValidationErrors | null;
 
-  @Input() set touched(isTouched: boolean) {
+  @Input() public set touched(isTouched: boolean) {
     isTouched && this.usernameControl?.markAsTouched();
   }
 }

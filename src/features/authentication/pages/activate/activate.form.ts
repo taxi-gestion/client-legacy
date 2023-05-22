@@ -12,8 +12,7 @@ export const ACTIVATE_FORM: FormGroup<Record<keyof ActivateFormValues, FormContr
   code: new FormControl<ActivateFormValues['code']>('', [Validators.required])
 });
 
-export const setActivateErrorToForm = (handledError: { field?: string; errors: Record<string, unknown> }): void => {
-  handledError.field
-    ? ACTIVATE_FORM.get(handledError.field)?.setErrors(handledError.errors)
-    : ACTIVATE_FORM.setErrors(handledError.errors);
-};
+export const setActivateErrorToForm = (handledError: { field?: string; errors: Record<string, unknown> }): void =>
+  handledError.field == null
+    ? ACTIVATE_FORM.setErrors(handledError.errors)
+    : ACTIVATE_FORM.get(handledError.field)?.setErrors(handledError.errors);

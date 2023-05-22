@@ -13,7 +13,7 @@ export class PasswordFieldComponent {
 
   @Input() public displayAllErrors: boolean = false;
 
-  @Input() set touched(isTouched: boolean) {
-    isTouched && this.passwordControl?.markAsTouched();
+  @Input() public set touched(isTouched: boolean) {
+    isTouched && this.passwordControl.markAsTouched();
   }
 }

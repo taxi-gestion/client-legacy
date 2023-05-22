@@ -1,12 +1,12 @@
-import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormControl, ValidationErrors } from '@angular/forms';
 
 type PasswordValidationError =
-  | 'missingSpecialChar'
-  | 'missingNumber'
-  | 'missingUppercaseChar'
-  | 'missingLowercaseChar'
   | 'forbiddenLeadingSpace'
-  | 'forbiddenTrailingSpace';
+  | 'forbiddenTrailingSpace'
+  | 'missingLowercaseChar'
+  | 'missingNumber'
+  | 'missingSpecialChar'
+  | 'missingUppercaseChar';
 
 type PasswordValidationCheck = {
   regexp: RegExp;
@@ -54,20 +54,20 @@ const PASSWORD_REGEXPS: PasswordValidationCheck[] = [
 
 const appendValidationError =
   (validationErrors: ValidationErrors) =>
-  (passwordValidationCheck: PasswordValidationCheck, control: AbstractControl): ValidationErrors => ({
+  (passwordValidationCheck: PasswordValidationCheck, control: FormControl<string | null>): ValidationErrors => ({
     ...validationErrors,
-    [passwordValidationCheck.passwordValidationError]: { value: control.value }
+    [passwordValidationCheck.passwordValidationError]: { password: control.value }
   });
 
 const toPasswordValidationErrors =
-  (control: AbstractControl) =>
+  (control: FormControl<string | null>) =>
   (validationErrors: ValidationErrors, passwordValidationCheck: PasswordValidationCheck): ValidationErrors =>
-    passwordValidationCheck.regexp.test(control.value)
+    passwordValidationCheck.regexp.test(control.value ?? '')
       ? validationErrors
       : appendValidationError(validationErrors)(passwordValidationCheck, control);
 
 const validationErrorsOrNull = (validationErrors: ValidationErrors): ValidationErrors | null =>
-  Object.keys(validationErrors).length == 0 ? null : validationErrors;
+  Object.keys(validationErrors).length === 0 ? null : validationErrors;
 
-export const passwordValidator = (control: AbstractControl): ValidationErrors | null =>
+export const passwordValidator = (control: FormControl<string | null>): ValidationErrors | null =>
   validationErrorsOrNull(PASSWORD_REGEXPS.reduce(toPasswordValidationErrors(control), {}));

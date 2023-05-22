@@ -1,21 +1,27 @@
 import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { START_LOADING, STOP_LOADING, whileLoading } from './loading.presentation';
 
-it('should execute action while loading', async (): Promise<void> => {
-  const action$: BehaviorSubject<string> = new BehaviorSubject<string>('execute action');
+describe('loading presentation', (): void => {
+  it('should execute action while loading', async (): Promise<void> => {
+    const action$: BehaviorSubject<string> = new BehaviorSubject<string>('execute action');
 
-  const actionWhileLoading$: Observable<string> = whileLoading(() => action$.asObservable())(START_LOADING);
+    const actionWhileLoading$: Observable<string> = whileLoading((): Observable<string> => action$.asObservable())(
+      START_LOADING
+    );
 
-  const actionResult: string = await firstValueFrom(actionWhileLoading$);
+    const actionResult: string = await firstValueFrom(actionWhileLoading$);
 
-  expect(actionResult).toBe('execute action');
-});
+    expect(actionResult).toBe('execute action');
+  });
 
-it('should not execute action while not loading', async (): Promise<void> => {
-  const action$: BehaviorSubject<string> = new BehaviorSubject<string>('execute action');
+  it('should not execute action while not loading', async (): Promise<void> => {
+    const action$: BehaviorSubject<string> = new BehaviorSubject<string>('execute action');
 
-  const actionWhileLoading$: Observable<string> = whileLoading(() => action$.asObservable())(STOP_LOADING);
+    const actionWhileLoading$: Observable<string> = whileLoading((): Observable<string> => action$.asObservable())(
+      STOP_LOADING
+    );
 
-  // eslint-disable-next-line jest/prefer-strict-equal
-  await expect(firstValueFrom(actionWhileLoading$)).rejects.toEqual(new Error('no elements in sequence'));
+    // eslint-disable-next-line jest/prefer-strict-equal
+    await expect(firstValueFrom(actionWhileLoading$)).rejects.toEqual(new Error('no elements in sequence'));
+  });
 });

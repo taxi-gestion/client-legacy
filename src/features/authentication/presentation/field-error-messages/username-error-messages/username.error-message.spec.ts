@@ -5,11 +5,11 @@ import {
   UnknownAccountError
 } from '../../../errors';
 import { fieldErrorMessagesPresentation } from '../field-error-messages.presentation';
-import { USERNAME_ERROR_MESSAGES, UsernameErrors } from './username.error-message';
+import { USERNAME_ERROR_MESSAGES, UsernameError } from './username.error-message';
 
 describe('username error messages', (): void => {
   it('should not get any username error message', (): void => {
-    const errors: UsernameErrors = null;
+    const errors: UsernameError = null;
 
     const errorMessage: string[] = fieldErrorMessagesPresentation(errors, USERNAME_ERROR_MESSAGES);
 
@@ -17,7 +17,7 @@ describe('username error messages', (): void => {
   });
 
   it('should get required username error message', (): void => {
-    const errors: UsernameErrors = { required: true };
+    const errors: UsernameError = { required: true };
 
     const errorMessage: string[] = fieldErrorMessagesPresentation(errors, USERNAME_ERROR_MESSAGES);
 
@@ -25,7 +25,7 @@ describe('username error messages', (): void => {
   });
 
   it('should get invalid username error message', (): void => {
-    const errors: UsernameErrors = { invalidUsername: { value: '06213697' } };
+    const errors: UsernameError = { invalidUsername: { username: '06213697' } };
 
     const errorMessage: string[] = fieldErrorMessagesPresentation(errors, USERNAME_ERROR_MESSAGES);
 
@@ -33,7 +33,7 @@ describe('username error messages', (): void => {
   });
 
   it('should get already exist username error message', (): void => {
-    const errors: UsernameErrors = { [ACCOUNT_ALREADY_EXIST_ERROR_NAME]: new AccountAlreadyExistError('0621369798') };
+    const errors: UsernameError = { [ACCOUNT_ALREADY_EXIST_ERROR_NAME]: new AccountAlreadyExistError('0621369798') };
 
     const errorMessage: string[] = fieldErrorMessagesPresentation(errors, USERNAME_ERROR_MESSAGES);
 
@@ -41,7 +41,7 @@ describe('username error messages', (): void => {
   });
 
   it('should get unknown account error message', (): void => {
-    const errors: UsernameErrors = { [UNKNOWN_ACCOUNT_ERROR_NAME]: new UnknownAccountError('0621369798') };
+    const errors: UsernameError = { [UNKNOWN_ACCOUNT_ERROR_NAME]: new UnknownAccountError('0621369798') };
 
     const errorMessage: string[] = fieldErrorMessagesPresentation(errors, USERNAME_ERROR_MESSAGES);
 

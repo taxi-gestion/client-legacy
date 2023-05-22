@@ -1,18 +1,19 @@
 import { ValueProvider } from '@angular/core';
 
 export type RedirectRoutesKeys =
-  | 'register'
+  | 'activate'
+  | 'forgot-password'
   | 'login'
   | 'logout'
-  | 'activate'
-  | 'session-expired'
   | 'not-activated'
-  | 'forgot-password'
-  | 'reset-password';
+  | 'register'
+  | 'reset-password'
+  | 'session-expired';
 
 export type RedirectRoutes = Map<RedirectRoutesKeys, string>;
 
-export const REDIRECT_ROUTES_PERSISTENCE = 'authentication.redirect-routes.persistence' as const;
+export const REDIRECT_ROUTES_PERSISTENCE: 'authentication.redirect-routes.persistence' =
+  'authentication.redirect-routes.persistence' as const;
 
 export const redirectRoutesValueProvider = (useValue: RedirectRoutes): ValueProvider => ({
   useValue,

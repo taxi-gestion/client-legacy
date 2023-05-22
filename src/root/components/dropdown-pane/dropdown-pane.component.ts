@@ -44,7 +44,7 @@ export class DropdownPaneComponent {
   }
 
   public toggle(): void {
-    this._expanded ? this.reduce() : this.expand();
+    return this._expanded ? this.reduce() : this.expand();
   }
 
   public setIndex(index: number): void {

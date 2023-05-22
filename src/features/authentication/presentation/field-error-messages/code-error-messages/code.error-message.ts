@@ -1,14 +1,11 @@
 import { INVALID_CODE_ERROR_NAME, InvalidCodeError } from '../../../errors';
 
-export type CodeErrors = {
+export type CodeError = {
   required?: boolean;
   invalidCodeError?: InvalidCodeError;
 } | null;
 
-export const CODE_ERROR_MESSAGES: Map<string, (errors: CodeErrors) => string> = new Map([
-  [
-    INVALID_CODE_ERROR_NAME,
-    (codeErrors: CodeErrors): string => `Le code ${codeErrors?.invalidCodeError?.code} n'est pas valide`
-  ],
+export const CODE_ERROR_MESSAGES: Map<string, (error: CodeError) => string> = new Map([
+  [INVALID_CODE_ERROR_NAME, (codeError: CodeError): string => `Le code ${codeError?.invalidCodeError?.code} n'est pas valide`],
   ['required', (): string => "Saisissez le code d'activation"]
 ]);

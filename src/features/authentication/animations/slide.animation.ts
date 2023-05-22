@@ -1,10 +1,21 @@
-import { animate, group, query, style, transition, trigger } from '@angular/animations';
+/* eslint-disable @typescript-eslint/naming-convention, max-lines-per-function */
 
-export const slideInAnimation = (pages: [string, string][]) =>
+import {
+  animate,
+  AnimationMetadata,
+  AnimationTriggerMetadata,
+  group,
+  query,
+  style,
+  transition,
+  trigger
+} from '@angular/animations';
+
+export const slideInAnimation = (pages: [string, string][]): AnimationTriggerMetadata =>
   trigger(
     'routeAnimations',
-    pages.flatMap(([origin, destination]: [string, string]) => [
-      transition(`${origin} => ${destination}`, [
+    pages.flatMap(([start, end]: [string, string]): AnimationMetadata[] => [
+      transition(`${start} => ${end}`, [
         style({ position: 'relative' }),
         query(':enter, :leave', [
           style({
@@ -23,7 +34,7 @@ export const slideInAnimation = (pages: [string, string][]) =>
           query(':enter', [animate('300ms ease-out', style({ left: '0%', opacity: 1 }))])
         ])
       ]),
-      transition(`${destination} => ${origin}`, [
+      transition(`${end} => ${start}`, [
         style({ position: 'relative' }),
         query(':enter, :leave', [
           style({

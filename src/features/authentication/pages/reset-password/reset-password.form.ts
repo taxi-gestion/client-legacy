@@ -1,7 +1,7 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { passwordValidator } from '@features/authentication/validators';
 
-export type ResetPasswordForm = {
+type ResetPasswordForm = {
   username: string;
   password: string;
   code: string;
@@ -19,8 +19,7 @@ export const RESET_PASSWORD_FORM: FormGroup<Record<keyof ResetPasswordForm, Form
   code: new FormControl<ResetPasswordForm['code']>('', [Validators.required])
 });
 
-export const setResetPasswordErrorToForm = (handledError: { field?: string; errors: Record<string, unknown> }): void => {
-  handledError.field
-    ? RESET_PASSWORD_FORM.get(handledError.field)?.setErrors(handledError.errors)
-    : RESET_PASSWORD_FORM.setErrors(handledError.errors);
-};
+export const setResetPasswordErrorToForm = (handledError: { field?: string; errors: Record<string, unknown> }): void =>
+  handledError.field == null
+    ? RESET_PASSWORD_FORM.setErrors(handledError.errors)
+    : RESET_PASSWORD_FORM.get(handledError.field)?.setErrors(handledError.errors);
