@@ -15,9 +15,6 @@
           "assets": ["docs/CHANGELOG.md"]
         }
       ],
-      ["@semantic-release/github", {
-            "assets": []
-        }
-      ]
+      "@semantic-release/github"
     ]
 }
