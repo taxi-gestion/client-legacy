@@ -1,3 +1,13 @@
+# [1.1.0](https://github.com/codingones-github-templates/angular-client/compare/v1.0.0...v1.1.0) (2023-05-22)
+
+### Bug Fixes
+
+- workflow path and delete readme ([145a714](https://github.com/codingones-github-templates/angular-client/commit/145a714d714aae976cae9aee88e35eb8b674ea5e))
+
+### Features
+
+- initial commit with new logic ([f75057c](https://github.com/codingones-github-templates/angular-client/commit/f75057cd21add092d99113cdd5c72ba831972932))
+
 # 1.0.0 (2023-05-22)
 
 ### Bug Fixes
