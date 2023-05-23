@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/codingones-github-templates/angular-client/compare/v1.1.0...v1.2.0) (2023-05-23)
+
+
+### Features
+
+* templated files with placeholders ([#2](https://github.com/codingones-github-templates/angular-client/issues/2)) ([fdae1de](https://github.com/codingones-github-templates/angular-client/commit/fdae1de7e79338ba06e974c4a27f642522b43833))
+
 # [1.1.0](https://github.com/codingones-github-templates/__PROJECT/compare/v1.0.0...v1.1.0) (2023-05-22)
 
 ### Bug Fixes
