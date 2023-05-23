@@ -1,5 +1,5 @@
 {
-    "repositoryUrl": "https://github.com/codingones-github-templates/angular-client.git"
+    "repositoryUrl": "https://github.com/codingones-github-templates/angular-client.git",
     "branches": ["main"],
     "plugins": [
       "@semantic-release/commit-analyzer",
