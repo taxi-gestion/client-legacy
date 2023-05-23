@@ -1,5 +1,5 @@
 {
   "*.(js|ts)": "eslint",
-  "*.(md|json|xml|html|css|scss|js|ts|sh|yml)": "prettier --write --ignore-unknown",
+  "*.(json|xml|html|css|scss|js|ts|sh|yml)": "prettier --write --ignore-unknown",
   "*.(scss)": "stylelint ./**/*.scss --fix"
 }

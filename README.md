@@ -1,35 +1,30 @@
-# angular-client
+# __PROJECT client
 
-A ready to deploy application for quick prototyping
+__ABOUT
 
-> Ce dépot est responsable de la partie applicative client.
+## Table of Contents
 
-## Table des matières
-
-- 🪧 [À propos](#à-propos)
-- 📦 [Prérequis](#prérequis)
+- 🪧 [About](#about)
+- 📦 [Prerequisites](#prerequisites)
 - 🚀 [Installation](#installation)
-- 🛠️ [Utilisation](#utilisation)
+- 🛠️ [Usage](#usage)
 - 🤝 [Contribution](#contribution)
+- 🏗️ [Built with](#built-with)
+- 📝 [License](#license)
 
-## Prérequis
+## Prerequisites
 
-- [Git](https://git-scm.com/) : Système de contrôle de versions distribué d'un ensemble de fichiers
-- [Node](https://nodejs.org/) : Environnement d'exécution pour Javascript
+- [Git](https://git-scm.com/): Distributed version control system for a set of files
+- [Node](https://nodejs.org/): Runtime environment for Javascript
+- [Yarn](https://classic.yarnpkg.com/lang/en/docs/install/#windows-stable): Package Manager
 
-> Node peut être installés via [nvm](https://github.com/nvm-sh/nvm) qui permet d'obtenir et d'utiliser rapidement différentes versions de Node via la ligne de commande.
+> Node can be installed via [nvm](https://github.com/nvm-sh/nvm), which allows you to quickly get and use different versions of Node via the command line.
 
 ## Installation
 
-### Mise en place des sources
+Clone the project
 
-Cloner le projet
-
-## Utilisation
-
-Ces commandes servent dans un contexte de développement de l'application et doivent être exécutées depuis la racine de l'espace de travail.
-
-### Mise en place des prérequis
+### Setting up the prerequisites
 
 ```bash
 yarn install
@@ -41,12 +36,17 @@ yarn install
 yarn start
 ```
 
-Puis naviguer vers `http://localhost:4200/`.
+Then navigate to `http://localhost:4200/`.
 
-### Développement
+## Usage
 
-Les commandes communes de développement se trouvent dans le champ scripts du package.json
+These commands are used in the context of application development and should be run from the root of the workspace.
+
 
 ### Contribution
 
-Le projet n'est actuellement pas ouvert à la contribution
+The project is currently not open to contributions.
+
+## License
+
+See the [LICENSE.md](./LICENSE.md) file in the repository.
