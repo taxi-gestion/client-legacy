@@ -22,7 +22,6 @@ jobs:
 
   notify-on-error:
     needs:
-      - deploy-artifact-to-s3
       - release
     if: ${{ always() && (contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')) }}
     uses: codingones/github-actions-workflows/.github/workflows/notify-discord.yml@main
@@ -36,9 +35,8 @@ jobs:
 
   notify-on-success:
     needs:
-      - deploy-artifact-to-s3
       - release
-    if: ${{ always() && needs.release.result == 'success' && needs.deploy-artifact-to-s3.result == 'success'  }}
+    if: ${{ always() && needs.release.result == 'success' }}
     uses: codingones/github-actions-workflows/.github/workflows/notify-discord.yml@main
     with:
       bot-username: Releases Bot
