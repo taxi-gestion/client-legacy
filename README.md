@@ -1,6 +1,6 @@
-# __PROJECT client
+# taxi-gestion client
 
-__ABOUT
+Description
 
 ## Table of Contents
 

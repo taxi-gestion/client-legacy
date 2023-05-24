@@ -1,7 +1,7 @@
 {
-  "name": "__PROJECT-client",
+  "name": "taxi-gestion-client",
   "version": "1.0.0",
-  "description": "__ABOUT",
+  "description": "Description",
   "main": "build/index.js",
   "scripts": {
     "build": "ng build",
@@ -19,18 +19,18 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/__ORGANIZATION/__REPOSITORY.git"
+    "url": "https://github.com/taxi-gestion/client.git"
   },
   "keywords": [
-    "__PROJECT",
+    "taxi-gestion",
     "api"
   ],
-  "author": "__ORGANIZATION",
+  "author": "taxi-gestion",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/__ORGANIZATION/__REPOSITORY/issues"
+    "url": "https://github.com/taxi-gestion/client/issues"
   },
-  "homepage": "https://github.com/__ORGANIZATION/__REPOSITORY#readme",
+  "homepage": "https://github.com/taxi-gestion/client#readme",
   "dependencies": {
     "@angular/animations": "^16.0.1",
     "@angular/common": "^16.0.1",
