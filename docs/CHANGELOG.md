@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/codingones-github-templates/angular-client/compare/v1.2.0...v1.2.1) (2023-05-24)
+
+
+### Bug Fixes
+
+* repository url ([#6](https://github.com/codingones-github-templates/angular-client/issues/6)) ([abd0f32](https://github.com/codingones-github-templates/angular-client/commit/abd0f32acf745db7419f33402db133f9d7c2f472))
+
 # [1.2.0](https://github.com/codingones-github-templates/angular-client/compare/v1.1.0...v1.2.0) (2023-05-23)
 
 
