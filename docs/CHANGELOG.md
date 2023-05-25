@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/taxi-gestion/client/compare/v1.1.0...v1.2.0) (2023-05-25)
+
+
+### Features
+
+* logo and pretty project name where relevant ([0b7be18](https://github.com/taxi-gestion/client/commit/0b7be18180a5f0cdc5399c7d6b3cf2ae93661042))
+
 # [1.1.0](https://github.com/taxi-gestion/client/compare/v1.0.0...v1.1.0) (2023-05-25)
 
 
