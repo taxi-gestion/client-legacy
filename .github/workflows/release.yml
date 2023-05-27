@@ -37,7 +37,7 @@ jobs:
             auth: {
               clientId: '${{ vars.COGNITO_APP_INTEGRATION_ID }}'
             }
-          };" > src/environment.ts
+          };" > src/environments/environment.ts
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -52,22 +52,6 @@ jobs:
       - name: Build
         run: |
           yarn build client
-          ls -la dist
-
-      #      - name: Upload build artifact
-      #        uses: actions/upload-artifact@v3
-      #        with:
-      #          name: build
-      #          path: dist
-      #
-      #  deploy:
-      #    runs-on: ubuntu-latest
-      #    needs: build
-      #    steps:
-      #      - name: Download build
-      #        uses: actions/download-artifact@v3
-      #        with:
-      #          name: build
 
       # TODO Convert this into a semantic-release step one day
       - name: Deploy
