@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/taxi-gestion/client/compare/v1.2.0...v1.2.1) (2023-05-27)
+
+
+### Bug Fixes
+
+* environment path in release workflow ([#2](https://github.com/taxi-gestion/client/issues/2)) ([58e04d8](https://github.com/taxi-gestion/client/commit/58e04d887df881a37ae468a330c2084811984386))
+
 # [1.2.0](https://github.com/taxi-gestion/client/compare/v1.1.0...v1.2.0) (2023-05-25)
 
 
