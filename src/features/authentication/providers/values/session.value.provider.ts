@@ -14,12 +14,13 @@ type Literal = boolean | number | string | null;
 export type Serializable = Literal | Serializable[] | { [key: string]: Serializable };
 
 export type TokenSession = Session & {
-  getAccess: () => string | null;
-  getId: () => string | null;
-  getRefresh: () => string | null;
-  getExpiresIn: () => number;
-  getRemainingTime: () => number;
-  getFromPayload: (key: string) => Serializable | null;
+  accessToken: () => string | null;
+  accessTokenPayload: (key: string) => Serializable | null;
+  expiresIn: () => number;
+  idToken: () => string | null;
+  idTokenPayload: (key: string) => Serializable | null;
+  refresh: () => string | null;
+  remainingTime: () => number;
 };
 
 export const SESSION_PERSISTENCE: 'authentication.session.persistence' = 'authentication.session.persistence' as const;

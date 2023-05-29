@@ -11,5 +11,5 @@ type User = {
   templateUrl: './user-card.component.html'
 })
 export class UserCardComponent {
-  @Input() public user?: User | null;
+  @Input({ required: true }) public user!: User;
 }

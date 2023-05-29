@@ -40,11 +40,11 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
   }
 
   private bearerTokenExpired(): boolean {
-    return this._tokenSession.getRemainingTime() < EXPIRED;
+    return this._tokenSession.remainingTime() < EXPIRED;
   }
 
   private bearerTokenExpiresSoon(): boolean {
-    return this._tokenSession.getRemainingTime() < EXPIRE_SOON_INTERVAL;
+    return this._tokenSession.remainingTime() < EXPIRE_SOON_INTERVAL;
   }
 
   private refreshBearerTokenThenHandleRequest(

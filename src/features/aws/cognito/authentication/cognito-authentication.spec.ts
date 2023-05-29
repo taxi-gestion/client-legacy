@@ -22,7 +22,6 @@ describe('cognito authentication', (): void => {
 });
 
 describe('cognito token payload', (): void => {
-  // token that contains a { 'cognito:groups': 'developer' } payload.
   const accessTokenWithPayload: string =
     'plip.eyJzdWIiOiI1YjliMDNmNC00YTc2LTQ3MmUtYjg0NC04ZmI3ZDQ4YjFjNDEiLCJjb2duaXRvOmdyb3VwcyI6WyJkZXZlbG9wZXIiXSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLnVzLWVhc3QtMS5hbWF6b25hd3MuY29tXC91cy1lYXN0LTFfNXhFQTZzRG91IiwiY2xpZW50X2lkIjoiNTMwdGFiajY3NjVwbnByOTU4OG9ybms4ZGIiLCJvcmlnaW5fanRpIjoiMDZjNDU3MTktN2QwZi00NWIzLWI0ZDItZTZhNThjODkyMzFiIiwiZXZlbnRfaWQiOiI1OWIzZGUyYS02Mjg0LTQzODktOGQzMy1kZDA5MmVmNTE5ZTYiLCJ0b2tlbl91c2UiOiJhY2Nlc3MiLCJzY29wZSI6ImF3cy5jb2duaXRvLnNpZ25pbi51c2VyLmFkbWluIiwiYXV0aF90aW1lIjoxNjg1MzQyNTY5LCJleHAiOjE2ODUzNDM3ODUsImlhdCI6MTY4NTM0MzQ4NSwianRpIjoiODZlNjBiZDMtY2I3Ny00NTRlLTkwYzUtNjBiZThlMDMyOTdhIiwidXNlcm5hbWUiOiI1YjliMDNmNC00YTc2LTQ3MmUtYjg0NC04ZmI3ZDQ4YjFjNDEifQ.plop';
 
@@ -46,6 +45,7 @@ describe('cognito token payload', (): void => {
 
     expect(payload).toBeNull();
   });
+
   it('should retreive the iss string value', (): void => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
     const retreived: Serializable | null = getFromJWTPayload(accessTokenWithPayload, 'iss');
