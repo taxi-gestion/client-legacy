@@ -1,4 +1,4 @@
-import { TokenSession } from '@features/authentication';
+import type { TokenSession, Serializable } from '@features/authentication';
 
 const COGNITO_STORAGE_KEY: string = 'aws.cognito';
 export const ACCESS_TOKEN_STORAGE_KEY: string = `${COGNITO_STORAGE_KEY}.access-token`;
@@ -27,6 +27,29 @@ const tokenExpirationTime = (payload?: string): number => (payload == null ? 0 :
 const substractTimeToTokenExpiration = (token: string, now: Date): number =>
   tokenExpirationTime(getPayload(token)) - now.getTime();
 
+export const getFromJWTPayload = (token: string | null, key: string): Serializable | null => {
+  if (token == null) return null;
+
+  const urlEncodedPayload: string | undefined = token.split('.').at(1);
+  if (typeof urlEncodedPayload !== 'string') return null;
+
+  const base64Payload: string = urlEncodedPayload.replace(/-/gu, '+').replace(/_/gu, '/');
+
+  const jsonPayload: string = decodeURIComponent(
+    atob(base64Payload)
+      .split('')
+      .map((char: string): string => `%${`00${char.charCodeAt(0).toString(16)}`.slice(-2)}`)
+      .join('')
+  );
+
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return JSON.parse(jsonPayload)[key];
+  } catch (_: unknown) {
+    return null;
+  }
+};
+
 export const isCognitoTokenExpired = (token: string, now: Date): boolean => substractTimeToTokenExpiration(token, now) < 0;
 
 const isCognitoAuthenticationActive: boolean = ((idToken: string | null): boolean =>
@@ -39,7 +62,8 @@ export const cognitoTokenSession = (): TokenSession => ({
   getRefresh: (): string | null => localStorage.getItem(REFRESH_TOKEN_STORAGE_KEY),
   getExpiresIn: (): number => +(localStorage.getItem(EXPIRES_IN_STORAGE_KEY) ?? NaN),
   getRemainingTime: (): number =>
-    substractTimeToTokenExpiration(localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY) ?? '', new Date())
+    substractTimeToTokenExpiration(localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY) ?? '', new Date()),
+  getFromPayload: (key: string): Serializable | null => getFromJWTPayload(localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY), key)
 });
 
 export const setCognitoAuthenticationToLocalStorage = (cognitoAuthentication: CognitoAuthentication): void => {
