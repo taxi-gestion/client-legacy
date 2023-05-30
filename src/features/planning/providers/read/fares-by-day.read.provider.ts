@@ -1,12 +1,13 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
-
-export type FaresByDayRead<T> = () => Observable<T>;
+import { FareByDayPresentation } from '../../presentation';
 
 export const FARES_BY_DAY_READ: 'planning.fares-by-day.read' = 'planning.fares-by-day.read' as const;
 
-export const faresByDayReadProvider = <TDependencies, TResult>(
-  useFactory: (...providers: never[]) => FaresByDayRead<TResult>,
+export type FaresByDayRead = (date: Date) => Observable<FareByDayPresentation[]>;
+
+export const faresByDayReadProvider = <TDependencies>(
+  useFactory: (...providers: never[]) => FaresByDayRead,
   deps: TDependencies[] = []
 ): FactoryProvider => ({
   provide: FARES_BY_DAY_READ,
