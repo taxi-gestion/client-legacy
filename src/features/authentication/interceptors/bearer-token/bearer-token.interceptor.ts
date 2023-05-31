@@ -29,7 +29,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
   }
 
   public intercept = (request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> => {
-    const token: string | null = this._tokenSession.getAccess();
+    const token: string | null = this._tokenSession.accessToken();
     return next.handle(this.shouldForwardBearerToken(request, token) ? requestWithBearerToken(request, token) : request);
   };
 }

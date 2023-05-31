@@ -30,7 +30,7 @@ export const cognitoRefreshTokenAction$ =
       .post<RefreshTokenResponse>(
         refreshTokenUrl(cognito),
         /* eslint-disable-next-line @typescript-eslint/naming-convention */
-        { AuthParameters: { REFRESH_TOKEN: session.getRefresh() }, AuthFlow: 'REFRESH_TOKEN_AUTH', ClientId: cognito.clientId },
+        { AuthParameters: { REFRESH_TOKEN: session.refresh() }, AuthFlow: 'REFRESH_TOKEN_AUTH', ClientId: cognito.clientId },
         { headers: REFRESH_TOKEN_HEADERS }
       )
       .pipe(

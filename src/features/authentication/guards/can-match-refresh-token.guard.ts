@@ -23,7 +23,7 @@ export class CanMatchRefreshTokenGuard {
   ) {}
 
   public canMatch = (): Observable<boolean> | boolean =>
-    this._session.isLoggedIn || this._session.getRefresh() == null
+    this._session.isLoggedIn || this._session.refresh() == null
       ? true
       : this._refreshTokenAction$().pipe(
           catchError((): Observable<boolean> => {
