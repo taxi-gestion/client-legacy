@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FareByDayPresentation } from '../../presentation';
-import { FARES_BY_DAY_READ, FaresByDayRead } from '../../providers';
+import { FareByDay, FARES_BY_DAY_QUERY, FaresByDayQuery } from '../../providers';
 import { formatDate } from './daily.presenter';
 
 @Component({
@@ -13,7 +12,7 @@ export class DailyPage {
 
   public today: string = formatDate(this._today);
 
-  public constructor(@Inject(FARES_BY_DAY_READ) private readonly _faresByDayRead$: FaresByDayRead) {}
+  public constructor(@Inject(FARES_BY_DAY_QUERY) private readonly _faresByDayQuery$: FaresByDayQuery) {}
 
-  public readonly faresByDay$: Observable<FareByDayPresentation[]> = this._faresByDayRead$(this._today);
+  public readonly faresByDay$: Observable<FareByDay[]> = this._faresByDayQuery$(this._today);
 }

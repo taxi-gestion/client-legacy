@@ -1,1 +1,1 @@
-export * from './read';
+export * from './queries';

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { FareByDayPresentation } from '../../presentation';
+import { FareByDay } from '../../providers';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -7,7 +7,7 @@ import { FareByDayPresentation } from '../../presentation';
   templateUrl: './fare-by-day-list.component.html'
 })
 export class FareByDayListComponent {
-  @Input() public fares: FareByDayPresentation[] = [];
+  @Input() public fares: FareByDay[] = [];
 
-  public trackByFareId = (_: number, fare: FareByDayPresentation): string => fare.id;
+  public trackByFareId = (_: number, fare: FareByDay): string => fare.id;
 }

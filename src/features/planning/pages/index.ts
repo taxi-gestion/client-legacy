@@ -1,8 +1,8 @@
 import { DailyPage } from './daily/daily.page';
-import { DailyExperimentalPage } from './daily-experimental/daily-experimental.page';
+import { AddFareToPlanningExperimentalPage } from './add-fare-to-planning/add-fare-to-planning.page';
 
 export * from './daily/daily.page';
-export * from './daily-experimental/daily-experimental.page';
+export * from './add-fare-to-planning/add-fare-to-planning.page';
 
 // eslint-disable-next-line @typescript-eslint/typedef
-export const PAGES = [DailyPage, DailyExperimentalPage];
+export const PAGES = [DailyPage, AddFareToPlanningExperimentalPage];
