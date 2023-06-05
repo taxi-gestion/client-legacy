@@ -5,7 +5,7 @@ export const FARES_BY_DAY_QUERY: 'planning.fares-by-day.query' = 'planning.fares
 
 export type FaresByDayQuery = (date: Date) => Observable<FareByDay[]>;
 
-export const faresByDayProvider = <TDependencies>(
+export const faresByDayQueryProvider = <TDependencies>(
   useFactory: (...providers: never[]) => FaresByDayQuery,
   deps: TDependencies[] = []
 ): FactoryProvider => ({

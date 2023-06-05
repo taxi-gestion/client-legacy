@@ -41,7 +41,7 @@ const toFareByDay = (fares: FareTransfer[]): FareByDay[] =>
     })
   );
 
-export const faresByDay$ =
+export const faresByDayQuery$ =
   (httpClient: HttpClient): FaresByDayQuery =>
   (date: Date): Observable<FareByDay[]> =>
     httpClient.get<FareTransfer[]>(`/api/fares/${formatISO(date, { representation: 'date' })}`).pipe(map(toFareByDay));
