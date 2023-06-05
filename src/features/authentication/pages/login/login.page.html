@@ -29,10 +29,13 @@
     <div class="text-danger mt-2" *ngIf="loginForm.errors?.['invalidUsernameOrPasswordError']">
       L'identifiant ou le mot de passe est invalide.
     </div>
-    <app-submit [isLoading]="(isLoading$ | async) ?? false">
-      Se connecter
-      <ng-container slot="loading-text">Connexion en cours...</ng-container>
-    </app-submit>
+    <button type="submit" class="btn btn-primary mt-5 p-3 w-100" [disabled]="(isLoading$ | async) ?? false">
+      <ng-container *ngIf="(isLoading$ | async) ?? false; else defaultText">
+        <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+        Connexion en cours...
+      </ng-container>
+      <ng-template #defaultText>Se connecter</ng-template>
+    </button>
   </form>
   <p class="mt-5 text-center">
     Pas encore de compte&nbsp;?

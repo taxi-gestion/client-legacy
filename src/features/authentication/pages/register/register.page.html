@@ -23,10 +23,13 @@
     <div class="text-danger" *ngIf="registerForm.errors?.['unknown']">
       Une erreur inconnue est survenue pendant la création de votre compte.
     </div>
-    <app-submit [isLoading]="(isLoading$ | async) ?? false">
-      Créer mon compte
-      <ng-container slot="loading-text">Création en cours...</ng-container>
-    </app-submit>
+    <button type="submit" class="btn btn-primary mt-5 p-3 w-100" [disabled]="(isLoading$ | async) ?? false">
+      <ng-container *ngIf="(isLoading$ | async) ?? false; else defaultText">
+        <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+        Création en cours...
+      </ng-container>
+      <ng-template #defaultText>Créer mon compte</ng-template>
+    </button>
   </form>
   <p class="mt-5 text-center">
     Vous avez déjà un compte&nbsp;?
