@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { catchError, map, mergeWith, Observable, Subject, switchMap, tap } from 'rxjs';
-import { FareByDayPresentation } from '../../presentation';
-import { FARES_BY_DAY_READ, FaresByDayRead } from '../../providers';
+import { FareByDay, FARES_BY_DAY_QUERY, FaresByDayQuery } from '../../providers';
 import { formatAddFaresToPlanningError, formatDate } from './add-fare-to-planning.presenter';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ADD_FARE_TO_PLANNING_FORM, setAddFareToPlanningErrorToForm } from './add-fare-to-planning.form';
@@ -50,13 +49,13 @@ export class AddFareToPlanningExperimentalPage {
   private readonly _today: Date = new Date();
 
   public constructor(
-    @Inject(FARES_BY_DAY_READ) private readonly _faresByDayRead$: FaresByDayRead,
+    @Inject(FARES_BY_DAY_QUERY) private readonly _faresByDayQuery$: FaresByDayQuery,
     @Inject(ADD_FARE_TO_PLANNING_ACTION) private readonly _addFareToPlanningAction$: AddFareToPlanningAction
   ) {}
 
   public addFareToPlanningForm: FormGroup<AddFareToPlanningFields> = ADD_FARE_TO_PLANNING_FORM;
 
-  public readonly faresByDay$: Observable<FareByDayPresentation[]> = this._faresByDayRead$(this._today);
+  public readonly faresByDay$: Observable<FareByDay[]> = this._faresByDayQuery$(this._today);
 
   public today: string = formatDate(this._today);
 
