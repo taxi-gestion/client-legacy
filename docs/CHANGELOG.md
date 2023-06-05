@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/taxi-gestion/client/compare/v1.2.1...v1.3.0) (2023-06-05)
+
+
+### Features
+
+* fare-by-day use date input ([#4](https://github.com/taxi-gestion/client/issues/4)) ([86a6809](https://github.com/taxi-gestion/client/commit/86a680916f94700d73fa96a20dce53f1d4f94853))
+
 ## [1.2.1](https://github.com/taxi-gestion/client/compare/v1.2.0...v1.2.1) (2023-05-27)
 
 
