@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
+import { formatISO } from 'date-fns';
 import { Observable, map } from 'rxjs';
 import { FareByDayPresentation, FareStatus } from '../../presentation';
+import { FaresByDayRead } from '../../providers';
 
 export type FareTransfer = {
   clientComment: string | undefined;
@@ -40,5 +42,9 @@ const toFareByDayPresentation = (fares: FareTransfer[]): FareByDayPresentation[]
     })
   );
 
-export const faresByDayRead$ = (httpClient: HttpClient) => (): Observable<FareByDayPresentation[]> =>
-  httpClient.get<FareTransfer[]>('/api/fares/2019-03-05').pipe(map(toFareByDayPresentation));
+export const faresByDayRead$ =
+  (httpClient: HttpClient): FaresByDayRead =>
+  (date: Date): Observable<FareByDayPresentation[]> =>
+    httpClient
+      .get<FareTransfer[]>(`/api/fares/${formatISO(date, { representation: 'date' })}`)
+      .pipe(map(toFareByDayPresentation));

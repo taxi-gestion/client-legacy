@@ -2,13 +2,13 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FareByDayPresentation } from '../../presentation';
 import { FARES_BY_DAY_READ, FaresByDayRead } from '../../providers';
-import { formatDate } from './daily.presenter';
+import { formatDate } from './daily-experimental.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './daily.page.html'
+  templateUrl: './daily-experimental.page.html'
 })
-export class DailyPage {
+export class DailyExperimentalPage {
   private readonly _today: Date = new Date();
 
   public today: string = formatDate(this._today);
