@@ -1,5 +1,5 @@
 import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
-import { START_LOADING, STOP_LOADING, whileLoading } from './loading.presentation';
+import { START_LOADING, STOP_LOADING, whileLoading } from './load.presentation';
 
 describe('loading presentation', (): void => {
   it('should execute action while loading', async (): Promise<void> => {

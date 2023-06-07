@@ -2,8 +2,9 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, from, map, mergeWith, Observable, Subject, switchMap, tap } from 'rxjs';
+import { START_LOADING, STOP_LOADING, whileLoading } from '@features/common';
 import { RegisterAction, REGISTER_ACTION, REDIRECT_ROUTES_PERSISTENCE, RedirectRoutesKeys } from '../../providers';
-import { START_LOADING, STOP_LOADING, toInternationalFormat, whileLoading } from '../../presentation';
+import { toInternationalFormat } from '../../presentation';
 import { formatRegisterError } from './register.presenter';
 import { REGISTER_FORM, setRegisterErrorToForm } from './register.form';
 

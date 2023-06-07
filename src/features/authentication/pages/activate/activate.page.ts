@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, from, map, mergeWith, Observable, Subject, switchMap, tap } from 'rxjs';
-import { START_LOADING, STOP_LOADING, toInternationalFormat, whileLoading } from '../../presentation';
+import { START_LOADING, STOP_LOADING, whileLoading } from '@features/common';
+import { toInternationalFormat } from '../../presentation';
 import {
   ACTIVATE_ACTION,
   ActivateAction,

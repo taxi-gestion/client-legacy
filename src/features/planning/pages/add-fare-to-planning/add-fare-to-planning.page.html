@@ -2,42 +2,41 @@
   <div class="row h-100">
     <div class="col-md-6 p-0">
       <h1>Créer une course</h1>
-      <form [formGroup]="addFareToPlanningForm" (ngSubmit)="onAddFareToPlanning()">
+      <form
+        [formGroup]="addFareToPlanningForm"
+        [appLoadAction]="addFareToPlanning$"
+        #loadAction="loadAction"
+        (actionSuccess)="onAddFareToPlanningActionSuccess()"
+        (actionError)="onAddFareToPlanningActionError($event)"
+        (ngSubmit)="onSubmitFareToAddToPlanning(loadAction.start)">
         <div>
           <label for="clientIdentity">Client:</label>
           <input id="clientIdentity" type="text" formControlName="clientIdentity" />
         </div>
-
         <div>
           <label for="clientPhone">Téléphone:</label>
           <input id="clientPhone" type="text" formControlName="clientPhone" />
         </div>
-
         <div>
           <label for="date">Le:</label>
           <input id="date" type="date" formControlName="date" />
         </div>
-
         <div>
           <label for="startTime">A:</label>
           <input id="startTime" type="time" formControlName="startTime" />
         </div>
-
         <div>
           <label for="driveFrom">Départ de:</label>
           <input id="driveFrom" type="text" formControlName="driveFrom" />
         </div>
-
         <div>
           <label for="driveTo">Arrivée:</label>
           <input id="driveTo" type="text" formControlName="driveTo" />
         </div>
-
         <div>
           <label for="driverIdentity">Chauffeur:</label>
           <input id="driverIdentity" type="text" formControlName="driverIdentity" />
         </div>
-
         <div>
           <label for="driveKind">Type de trajet:</label>
           <select id="driveKind" formControlName="driveKind">
@@ -46,7 +45,6 @@
             <option value="return">Retour</option>
           </select>
         </div>
-
         <div>
           <label for="driveNature">Nature du trajet:</label>
           <select id="driveNature" formControlName="driveNature">
@@ -54,9 +52,8 @@
             <option value="standard">Non médical</option>
           </select>
         </div>
-
-        <button type="submit" class="btn btn-primary mt-5 p-3 w-100" [disabled]="(isAddingFareToPlanning$ | async) ?? false">
-          <ng-container *ngIf="(isAddingFareToPlanning$ | async) ?? false; else defaultText">
+        <button type="submit" class="btn btn-primary mt-5 p-3 w-100" [disabled]="(loadAction.isLoading$ | async) ?? false">
+          <ng-container *ngIf="(loadAction.isLoading$ | async) ?? false; else defaultText">
             <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
             Création en cours...
           </ng-container>
