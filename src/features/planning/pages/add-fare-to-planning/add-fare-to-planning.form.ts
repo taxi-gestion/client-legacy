@@ -1,5 +1,17 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { FareToAddToPlanning } from '../../providers/actions/add-fare-to-planning.action.provider';
+import { FareToAddToPlanning } from '../../providers';
+
+export type AddFareToPlanningFields = {
+  clientIdentity: FormControl<string>;
+  clientPhone: FormControl<string>;
+  date: FormControl<Date>;
+  driveFrom: FormControl<string>;
+  driveKind: FormControl<'one-way' | 'outward' | 'return'>;
+  driveNature: FormControl<'medical' | 'standard'>;
+  driverIdentity: FormControl<string>;
+  driveTo: FormControl<string>;
+  startTime: FormControl<string>;
+};
 
 export const ADD_FARE_TO_PLANNING_FORM: FormGroup<Record<keyof FareToAddToPlanning, FormControl>> = new FormGroup<
   Record<keyof FareToAddToPlanning, FormControl>
