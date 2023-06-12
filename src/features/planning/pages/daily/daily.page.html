@@ -1,4 +1,23 @@
-<ng-container *ngIf="faresForDate$ | async as faresForDate">
-  <h1>Courses de la journée ({{ today }})</h1>
-  <app-fares-for-date-list [fares]="faresForDate"></app-fares-for-date-list>
+<ng-container *ngIf="faresByDay$ | async as faresByDay">
+  <app-fare-by-day-list [fares]="faresByDay"></app-fare-by-day-list>
 </ng-container>
+
+<h1 class="mb-5">Courses de la journée ({{ today }})</h1>
+
+<app-planning [start]="7 * 60" [end]="19 * 60">
+  <b slot="title">Chauffeurs</b>
+  <app-planning-row *ngFor="let fareByDriver of faresByDriver" [sessions]="fareByDriver.fares" [template]="fare">
+    <ng-container slot="header">{{ fareByDriver.driver }}</ng-container>
+    <ng-template #fare let-fare="session">
+      <b>{{ fare.client }}</b>
+      <br />
+      {{ fare.phone}}
+      <br />
+      {{ fare.departure}}
+      <br />
+      {{ fare.arrival}}
+      <br />
+      {{ fare.distance / 1000 }} km
+    </ng-template>
+  </app-planning-row>
+</app-planning>
