@@ -3,12 +3,12 @@
     <div class="col-md-6 p-0">
       <h1>Créer une course</h1>
       <form
-        [formGroup]="addFareToPlanningForm"
-        [appLoadAction]="addFareToPlanning$"
+        [formGroup]="scheduleFareForm"
+        [appLoadAction]="scheduleFare$"
         #loadAction="loadAction"
-        (actionSuccess)="onAddFareToPlanningActionSuccess()"
-        (actionError)="onAddFareToPlanningActionError($event)"
-        (ngSubmit)="onSubmitFareToAddToPlanning(loadAction.start)">
+        (actionSuccess)="onScheduleFareActionSuccess()"
+        (actionError)="onScheduleFareActionError($event)"
+        (ngSubmit)="onSubmitFareToSchedule(loadAction.start)">
         <div>
           <label for="clientIdentity">Client:</label>
           <input id="clientIdentity" type="text" formControlName="clientIdentity" />
@@ -62,9 +62,9 @@
       </form>
     </div>
     <div class="col-md-6 p-0">
-      <ng-container *ngIf="faresByDay$ | async as faresByDay">
+      <ng-container *ngIf="faresForDate$ | async as faresForDate">
         <h1>Courses de la journée ({{ today }})</h1>
-        <app-fare-by-day-list [fares]="faresByDay"></app-fare-by-day-list>
+        <app-fares-for-date-list [fares]="faresForDate"></app-fares-for-date-list>
       </ng-container>
     </div>
   </div>

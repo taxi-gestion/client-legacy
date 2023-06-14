@@ -1,1 +1,1 @@
-export * from './create-fare/add-fare-to-planning.action';
+export * from './schedule-fare/schedule-fare.action';

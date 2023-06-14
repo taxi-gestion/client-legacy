@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { formatISO } from 'date-fns';
-import { Observable, map } from 'rxjs';
-import { FareByDay, FaresByDayQuery, FareStatus } from '../../providers';
+import { map, Observable } from 'rxjs';
+import { FareForDate, FaresForDate, FaresForDateQuery, FareStatus } from '../../providers';
 
 export type FareTransfer = {
   clientComment: string | undefined;
@@ -29,9 +28,9 @@ export type FareTransfer = {
   weeklyRecurrence: string;
 };
 
-const toFareByDay = (fares: FareTransfer[]): FareByDay[] =>
+const toFaresForDate = (fares: FareTransfer[]): FaresForDate =>
   fares.map(
-    (fare: FareTransfer): FareByDay => ({
+    (fare: FareTransfer): FareForDate => ({
       id: fare.rid,
       date: fare.date,
       distance: fare.driveDistanceInMeters,
@@ -41,7 +40,9 @@ const toFareByDay = (fares: FareTransfer[]): FareByDay[] =>
     })
   );
 
-export const faresByDayQuery$ =
-  (httpClient: HttpClient): FaresByDayQuery =>
-  (date: Date): Observable<FareByDay[]> =>
-    httpClient.get<FareTransfer[]>(`/api/fares/${formatISO(date, { representation: 'date' })}`).pipe(map(toFareByDay));
+export const faresForDateQuery$ =
+  (httpClient: HttpClient): FaresForDateQuery =>
+  (date: Date): Observable<FaresForDate> => {
+    date.setHours(0, 0, 0, 0);
+    return httpClient.get<FareTransfer[]>(`/api/fares-for-date/${date.toISOString()}`).pipe(map(toFaresForDate));
+  };

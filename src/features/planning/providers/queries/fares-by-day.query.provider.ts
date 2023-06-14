@@ -3,10 +3,10 @@ import { Observable } from 'rxjs';
 
 export const FARES_BY_DAY_QUERY: 'planning.fares-by-day.query' = 'planning.fares-by-day.query' as const;
 
-export type FaresByDayQuery = (date: Date) => Observable<FareByDay[]>;
+export type FaresForDateQuery = (date: Date) => Observable<FaresForDate>;
 
-export const faresByDayQueryProvider = <TDependencies>(
-  useFactory: (...providers: never[]) => FaresByDayQuery,
+export const faresForDateQueryProvider = <TDependencies>(
+  useFactory: (...providers: never[]) => FaresForDateQuery,
   deps: TDependencies[] = []
 ): FactoryProvider => ({
   provide: FARES_BY_DAY_QUERY,
@@ -16,7 +16,8 @@ export const faresByDayQueryProvider = <TDependencies>(
 
 export type FareStatus = 'finished' | 'subcontracted';
 
-export type FareByDay = {
+export type FaresForDate = FareForDate[];
+export type FareForDate = {
   id: string;
   date: string;
   distance: string;
