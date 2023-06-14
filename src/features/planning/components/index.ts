@@ -1,4 +1,4 @@
-import { FareByDayListComponent } from './fare-by-day-list/fare-by-day-list.component';
+import { FaresForDateListComponent } from './fares-for-date-list/fares-for-date-list.component';
 
 // eslint-disable-next-line @typescript-eslint/typedef
-export const COMPONENTS = [FareByDayListComponent];
+export const COMPONENTS = [FaresForDateListComponent];
