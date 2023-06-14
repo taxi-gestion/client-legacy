@@ -1,7 +1,7 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
 
-export type FareToAddToPlanning = {
+export type FareToSchedule = {
   clientIdentity: string;
   clientPhone: string;
   date: Date;
@@ -13,15 +13,15 @@ export type FareToAddToPlanning = {
   startTime: string;
 };
 
-export type AddFareToPlanningAction = (fareToAddToPlanning: FareToAddToPlanning) => Observable<object>;
+export type ScheduleFareAction = (fareToSchedule: FareToSchedule) => Observable<object>;
 
-export const ADD_FARE_TO_PLANNING_ACTION: symbol = Symbol('planning.add-fare-to-planning.action');
+export const SCHEDULE_FARE_ACTION: symbol = Symbol('planning.schedule-fare.action');
 
-export const addFareToPlanningActionProvider = <TDependencies>(
-  useFactory: (...providers: never[]) => AddFareToPlanningAction,
+export const scheduleFareActionProvider = <TDependencies>(
+  useFactory: (...providers: never[]) => ScheduleFareAction,
   deps: TDependencies[] = []
 ): FactoryProvider => ({
-  provide: ADD_FARE_TO_PLANNING_ACTION,
+  provide: SCHEDULE_FARE_ACTION,
   useFactory,
   deps
 });

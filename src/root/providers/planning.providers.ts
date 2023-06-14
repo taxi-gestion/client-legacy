@@ -1,13 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { FactoryProvider } from '@angular/core';
-import {
-  addFareToPlanningAction$,
-  addFareToPlanningActionProvider,
-  faresByDayQuery$,
-  faresByDayQueryProvider
-} from '@features/planning';
+import { scheduleFareAction$, scheduleFareActionProvider, faresByDayQuery$, faresByDayQueryProvider } from '@features/planning';
 
 export const PLANNING_PROVIDERS: FactoryProvider[] = [
-  addFareToPlanningActionProvider(addFareToPlanningAction$, [HttpClient]),
+  scheduleFareActionProvider(scheduleFareAction$, [HttpClient]),
   faresByDayQueryProvider(faresByDayQuery$, [HttpClient])
 ];

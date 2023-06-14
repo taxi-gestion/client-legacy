@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AddFareToPlanningExperimentalPage, DailyPage } from '../pages';
+import { ScheduleFareExperimentalPage, DailyPage } from '../pages';
 
 const ROUTES: Routes = [
   {
-    component: AddFareToPlanningExperimentalPage,
+    component: ScheduleFareExperimentalPage,
     path: 'experimental'
   },
   {
