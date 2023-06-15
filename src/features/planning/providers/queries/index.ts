@@ -1,1 +1,1 @@
-export * from './fares-by-day.query.provider';
+export * from './fares-for-date.query.provider';

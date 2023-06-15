@@ -9,5 +9,6 @@ import { FareForDate, FaresForDate } from '../../providers';
 export class FaresForDateListComponent {
   @Input() public fares: FaresForDate = [];
 
-  public trackByFareId = (_: number, fare: FareForDate): string => fare.id;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  public trackByFarePhone = (_: number, fare: FareForDate): string => fare.phone;
 }
