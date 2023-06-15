@@ -14,14 +14,21 @@ export const faresForDateQueryProvider = <TDependencies>(
   deps
 });
 
-export type FareStatus = 'finished' | 'subcontracted';
+export type FareStatus = 'scheduled' /*| 'finished' | 'subcontracted'*/;
 
 export type FaresForDate = FareForDate[];
 export type FareForDate = {
-  id: string;
+  client: string;
+  creator: string;
   date: string;
+  departure: string;
+  destination: string;
   distance: string;
+  planning: string;
   duration: string;
+  kind: 'go-back' | 'one-way' | 'outward';
+  nature: 'medical' | 'standard';
+  phone: string;
   status: FareStatus;
-  startTime: string;
+  time: string;
 };

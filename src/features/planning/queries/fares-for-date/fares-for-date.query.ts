@@ -1,42 +1,40 @@
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { FareForDate, FaresForDate, FaresForDateQuery, FareStatus } from '../../providers';
+import { FareForDate, FaresForDate, FaresForDateQuery } from '../../providers';
 
 export type FareTransfer = {
-  clientComment: string | undefined;
-  clientIdentity: string;
-  clientPhone: string;
-  createdAt: string;
-  creatorIdentity: string;
+  client: string;
+  creator: string;
   date: string;
-  driveDistanceInMeters: string;
-  driveComment: string | undefined;
-  driveDistanceOverride: string | undefined;
-  driveFrom: string;
-  driveKind: 'one-way' | 'outward' | 'return';
-  driveName: string;
-  driveNature: 'medical' | 'standard';
-  driveRid: string;
-  driverIdentity: string | undefined;
-  driveTo: string;
+  departure: string;
+  destination: string;
+  distance: string;
+  planning: string;
   duration: string;
-  rid: string;
-  startTime: string;
-  status: string;
-  subcontractorIdentity: string | undefined;
-  updatedAt: string;
-  weeklyRecurrence: string;
+  kind: 'go-back' | 'one-way' | 'outward';
+  nature: 'medical' | 'standard';
+  phone: string;
+  status: 'scheduled';
+  time: string;
 };
 
 const toFaresForDate = (fares: FareTransfer[]): FaresForDate =>
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   fares.map(
     (fare: FareTransfer): FareForDate => ({
-      id: fare.rid,
+      client: fare.client,
+      creator: fare.creator,
       date: fare.date,
-      distance: fare.driveDistanceInMeters,
+      departure: fare.departure,
+      destination: fare.destination,
+      distance: fare.distance,
       duration: fare.duration,
-      status: fare.status as FareStatus,
-      startTime: fare.startTime
+      kind: fare.kind,
+      nature: fare.nature,
+      phone: fare.phone,
+      planning: fare.planning,
+      status: fare.status,
+      time: fare.time
     })
   );
 
