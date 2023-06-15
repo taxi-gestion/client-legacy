@@ -42,7 +42,14 @@ const toFaresForDate = (fares: FareTransfer[]): FaresForDate =>
 
 export const faresForDateQuery$ =
   (httpClient: HttpClient): FaresForDateQuery =>
-  (date: Date): Observable<FaresForDate> => {
-    date.setHours(0, 0, 0, 0);
-    return httpClient.get<FareTransfer[]>(`/api/fares-for-date/${date.toISOString()}`).pipe(map(toFaresForDate));
-  };
+  (date: Date): Observable<FaresForDate> =>
+    httpClient
+      .get<FareTransfer[]>(
+        `/api/fares-for-date/${new Date(
+          `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(
+            2,
+            '0'
+          )}`
+        ).toISOString()}`
+      )
+      .pipe(map(toFaresForDate));
