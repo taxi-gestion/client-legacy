@@ -1,0 +1,18 @@
+.card {
+  margin: 2em auto;
+  text-align: left;
+}
+
+.card-custom {
+  border: 1px solid #9a9595;
+  border-radius: 10px;
+  background-color: #f8f9fa; /* choose the color you want */
+}
+
+.header-custom {
+  background-color: #9797b5; /* choose the color you want */
+}
+
+.body-custom {
+  background-color: #c7c7d3; /* choose the color you want */
+}
