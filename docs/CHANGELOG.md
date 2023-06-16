@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/taxi-gestion/client/compare/v1.3.0...v1.4.0) (2023-06-16)
+
+
+### Features
+
+* add planning component ([#7](https://github.com/taxi-gestion/client/issues/7)) ([e0ae7af](https://github.com/taxi-gestion/client/commit/e0ae7afc843a5f1695dd0f8fa644f77f7390234b))
+
 # [1.3.0](https://github.com/taxi-gestion/client/compare/v1.2.1...v1.3.0) (2023-06-05)
 
 
