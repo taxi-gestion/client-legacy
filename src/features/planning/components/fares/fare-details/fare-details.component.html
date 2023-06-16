@@ -1,26 +1,27 @@
 <div class="card card-custom">
   <div class="card-header header-custom">
-    <h5 class="card-title">Client: {{ fare.client }}</h5>
-    <h6 class="card-subtitle mb-2 text-muted">Créateur :{{ fare.creator }}</h6>
+    <h5 class="card-title">
+      Client: {{ fare.client }} | Appeler:
+      <a href="tel:{{ fare.phone }}">{{ fare.phone }}</a>
+    </h5>
+    <h6 class="card-subtitle mb-2 text-muted">Créateur: {{ fare.creator }}</h6>
   </div>
   <div class="card-body body-custom">
-    Depart: {{ fare.departure }}
+    <a href="geo:{{ fare.departure }}">Depart GPS:{{ fare.departure }}</a>
     <br />
-    Arrivée: {{ fare.destination }}
+    A : {{ fare.time }}
     <br />
-    Distance: {{ fare.distance }} km
+    <a href="geo:{{ fare.destination }}">Arrivée GPS:{{ fare.destination }}</a>
     <br />
-    Durée: {{ fare.duration }}
+    Distance: {{ fare.distance }} m
+    <br />
+    Durée: {{ fare.duration }} minutes
     <br />
     Kind: {{ fare.kind }}
     <br />
     Nature: {{ fare.nature }}
     <br />
-    Phone: {{ fare.phone }}
-    <br />
     Status: {{ fare.status }}
-    <br />
-    Time: {{ fare.time }}
     <br />
   </div>
 </div>
