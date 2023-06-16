@@ -1,15 +1,24 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ScheduleFareExperimentalPage, DailyPage } from '../pages';
+import { ScheduleFarePage, DailyPage } from '../pages';
 
 const ROUTES: Routes = [
   {
-    component: ScheduleFareExperimentalPage,
-    path: 'experimental'
-  },
-  {
-    component: DailyPage,
-    path: ''
+    path: '',
+    children: [
+      {
+        path: '',
+        component: DailyPage
+      },
+      {
+        path: ':date',
+        component: DailyPage
+      },
+      {
+        path: 'schedule',
+        component: ScheduleFarePage
+      }
+    ]
   }
 ];
 

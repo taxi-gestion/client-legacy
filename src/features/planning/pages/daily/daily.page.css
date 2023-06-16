@@ -1,0 +1,11 @@
+.d-flex {
+  display: flex;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.overflow-auto {
+  overflow-x: auto;
+}

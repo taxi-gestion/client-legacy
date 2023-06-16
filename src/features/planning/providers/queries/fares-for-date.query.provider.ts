@@ -1,7 +1,7 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
 
-export const FARES_BY_DAY_QUERY: 'planning.fares-by-day.query' = 'planning.fares-by-day.query' as const;
+export const FARES_FOR_DATE_QUERY: 'planning.fares-for-date.query' = 'planning.fares-for-date.query' as const;
 
 export type FaresForDateQuery = (date: Date) => Observable<FaresForDate>;
 
@@ -9,7 +9,7 @@ export const faresForDateQueryProvider = <TDependencies>(
   useFactory: (...providers: never[]) => FaresForDateQuery,
   deps: TDependencies[] = []
 ): FactoryProvider => ({
-  provide: FARES_BY_DAY_QUERY,
+  provide: FARES_FOR_DATE_QUERY,
   useFactory,
   deps
 });
@@ -17,6 +17,7 @@ export const faresForDateQueryProvider = <TDependencies>(
 export type FareStatus = 'scheduled' /*| 'finished' | 'subcontracted'*/;
 
 export type FaresForDate = FareForDate[];
+
 export type FareForDate = {
   client: string;
   creator: string;
