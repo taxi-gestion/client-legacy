@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/taxi-gestion/client/compare/v1.4.0...v1.5.0) (2023-06-17)
+
+
+### Features
+
+* adding badges emoji and styles to improve visuals ([#11](https://github.com/taxi-gestion/client/issues/11)) ([475efec](https://github.com/taxi-gestion/client/commit/475efecaf8924a3dcfd8770e47538b747cd33488))
+
 # [1.4.0](https://github.com/taxi-gestion/client/compare/v1.3.0...v1.4.0) (2023-06-16)
 
 
