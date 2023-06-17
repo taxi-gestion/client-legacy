@@ -1,27 +1,24 @@
-<div class="card card-custom">
+<div class="card card-custom mb-4">
   <div class="card-header header-custom">
-    <h5 class="card-title">
-      Client: {{ fare.client }} | Appeler:
+    <h6 class="card-title">
+      🕐{{ fare.time }} 👤{{ fare.client }} 📞
       <a href="tel:{{ fare.phone }}">{{ fare.phone }}</a>
-    </h5>
+    </h6>
     <h6 class="card-subtitle mb-2 text-muted">Créateur: {{ fare.creator }}</h6>
   </div>
   <div class="card-body body-custom">
-    <a href="geo:{{ fare.departure }}">Depart GPS:{{ fare.departure }}</a>
+    <a href="geo:{{ fare.departure }}">Récupérer le passager ici</a>
     <br />
-    A : {{ fare.time }}
-    <br />
-    <a href="geo:{{ fare.destination }}">Arrivée GPS:{{ fare.destination }}</a>
+    <a href="geo:{{ fare.destination }}">Déposer le passager là</a>
     <br />
     Distance: {{ fare.distance }} m
     <br />
     Durée: {{ fare.duration }} minutes
     <br />
-    Kind: {{ fare.kind }}
-    <br />
-    Nature: {{ fare.nature }}
-    <br />
-    Status: {{ fare.status }}
-    <br />
+    <div class="badge-container">
+      <span [ngClass]="getKindBadgeClass(fare.kind)">{{ fare.kind }}</span>
+      <span [ngClass]="getNatureBadgeClass(fare.nature)">{{ fare.nature }}</span>
+      <span [ngClass]="getStatusBadgeClass(fare.status)">{{ fare.status }}</span>
+    </div>
   </div>
 </div>

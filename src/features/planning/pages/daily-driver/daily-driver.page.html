@@ -1,10 +1,8 @@
-<h1 class="mb-5">Courses de la journée ({{ ddMMYYYYtoday }})</h1>
+<h3 class="mb-5">Courses de la journée ({{ ddMMYYYYtoday }})</h3>
 <ng-container *ngIf="faresForOnePlanning$ | async as fares">
-  <div class="container mb-1">
-    <div class="row">
-      <div class="col-md-6 offset-md-1" *ngFor="let fare of fares">
-        <app-fare-details [fare]="fare"></app-fare-details>
-      </div>
+  <div class="row">
+    <div class="col-12" *ngFor="let fare of fares">
+      <app-fare-details [fare]="fare"></app-fare-details>
     </div>
   </div>
 </ng-container>
