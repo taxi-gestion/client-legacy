@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FareForDate } from '../../../providers';
+import { FareForDatePresentation } from '../../../common/fares.presentation';
 
 @Component({
   selector: 'app-fare-details',
@@ -7,7 +7,7 @@ import { FareForDate } from '../../../providers';
   styleUrls: ['./fare-details.component.scss']
 })
 export class FareDetailsComponent {
-  @Input({ required: true }) public fare!: FareForDate;
+  @Input({ required: true }) public fare!: FareForDatePresentation;
 
   public getKindBadgeClass(kind: string): string {
     switch (kind) {

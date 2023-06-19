@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ScheduleFarePage, DailyPage } from '../pages';
-import { DailyDriverPage } from '../pages/daily-driver/daily-driver.page';
+import { DriverAgendaPage } from '../pages/driver-agenda/driver-agenda-page.component';
 
 const ROUTES: Routes = [
   {
@@ -12,20 +12,20 @@ const ROUTES: Routes = [
         component: DailyPage
       },
       {
+        path: 'schedule',
+        component: ScheduleFarePage
+      },
+      {
         path: ':date',
         component: DailyPage
       },
       {
         path: ':planning',
-        component: DailyDriverPage
+        component: DriverAgendaPage
       },
       {
         path: ':planning/:date',
-        component: DailyDriverPage
-      },
-      {
-        path: 'schedule',
-        component: ScheduleFarePage
+        component: DriverAgendaPage
       }
     ]
   }

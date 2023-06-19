@@ -4,16 +4,20 @@
       🕐{{ fare.time }} 👤{{ fare.client }} 📞
       <a href="tel:{{ fare.phone }}">{{ fare.phone }}</a>
     </h6>
-    <h6 class="card-subtitle mb-2 text-muted">Créateur: {{ fare.creator }}</h6>
+    <!--<h6 class="card-subtitle mb-2 text-muted">Créateur: {{ fare.creator }}</h6>-->
   </div>
   <div class="card-body body-custom">
     <a href="geo:{{ fare.departure }}">Récupérer le passager ici</a>
     <br />
     <a href="geo:{{ fare.destination }}">Déposer le passager là</a>
     <br />
-    Distance: {{ fare.distance }} m
+    <a
+      href="https://www.google.com/maps/dir/?api=1&origin={{ fare.departure }}&destination={{ fare.destination }}"
+      target="_blank">
+      Voir l'itinéraire sur maps
+    </a>
     <br />
-    Durée: {{ fare.duration }} minutes
+    {{ fare.distance }} | {{ fare.duration }} minutes
     <br />
     <div class="badge-container">
       <span [ngClass]="getKindBadgeClass(fare.kind)">{{ fare.kind }}</span>

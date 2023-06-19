@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input, TemplateRef } from '@angular/core';
 import { PlanningComponent } from '../planning.component';
 
-type Session = {
-  startTime: number;
+export type PlanningSession = {
+  startTimeInMinutes: number;
   duration: number;
 };
 
@@ -12,9 +12,9 @@ type Session = {
   templateUrl: './planning-row.component.html'
 })
 export class PlanningRowComponent {
-  @Input({ required: true }) public sessions: Session[] = [];
+  @Input({ required: true }) public sessions: PlanningSession[] = [];
 
-  @Input({ required: true }) public template!: TemplateRef<{ session: Session }>;
+  @Input({ required: true }) public template!: TemplateRef<{ session: PlanningSession }>;
 
   public constructor(public readonly planning: PlanningComponent) {}
 }
