@@ -1,8 +1,19 @@
 <div class="card card-custom mb-4">
   <div class="card-header header-custom">
-    <h6 class="card-title">
-      🕐{{ fare.time }} 👤{{ fare.client }} 📞
-      <a href="tel:{{ fare.phone }}">{{ fare.phone }}</a>
+    <h6 class="card-title justify-space-between">
+      <div>
+        🕐{{ fare.time }} 👤{{ fare.client }} 📞
+        <a href="tel:{{ fare.phone }}">{{ fare.phone }}</a>
+      </div>
+      <div style="height: 32px">
+        <img *ngIf="fare.nature === 'medical'" src="assets/icon/prescription2.svg" class="h-100 p-1" alt="medical-fare" />
+        <img *ngIf="fare.kind === 'one-way'" src="assets/icon/arrow-right.svg" class="h-100 p-1" alt="one-way-fare" />
+        <img
+          *ngIf="fare.kind === 'outward' || fare.kind === 'go-back'"
+          src="assets/icon/arrow-left-right.svg"
+          class="h-100 p-1"
+          alt="two-way-fare" />
+      </div>
     </h6>
     <!--<h6 class="card-subtitle mb-2 text-muted">Créateur: {{ fare.creator }}</h6>-->
   </div>
@@ -19,10 +30,5 @@
     <br />
     {{ fare.distance }} | {{ fare.duration }} minutes
     <br />
-    <div class="badge-container">
-      <span [ngClass]="getKindBadgeClass(fare.kind)">{{ fare.kind }}</span>
-      <span [ngClass]="getNatureBadgeClass(fare.nature)">{{ fare.nature }}</span>
-      <span [ngClass]="getStatusBadgeClass(fare.status)">{{ fare.status }}</span>
-    </div>
   </div>
 </div>

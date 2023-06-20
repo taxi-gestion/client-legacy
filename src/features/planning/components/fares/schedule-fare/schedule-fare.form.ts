@@ -6,7 +6,7 @@ export type ScheduleFareFields = {
   clientPhone: FormControl<string>;
   date: FormControl<Date>;
   driveFrom: FormControl<string>;
-  driveKind: FormControl<'one-way' | 'outward' | 'return'>;
+  driveKind: FormControl<'go-back' | 'one-way' | 'outward'>;
   driveNature: FormControl<'medical' | 'standard'>;
   planning: FormControl<string>;
   driveTo: FormControl<string>;

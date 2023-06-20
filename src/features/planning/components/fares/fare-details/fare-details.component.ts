@@ -8,41 +8,4 @@ import { FareForDatePresentation } from '../../../common/fares.presentation';
 })
 export class FareDetailsComponent {
   @Input({ required: true }) public fare!: FareForDatePresentation;
-
-  public getKindBadgeClass(kind: string): string {
-    switch (kind) {
-      case 'go-back':
-        return 'badge rounded-pill text-bg-primary';
-      case 'one-way':
-        return 'badge rounded-pill text-bg-secondary';
-      case 'outward':
-        return 'badge rounded-pill text-bg-success';
-      default:
-        return 'badge';
-    }
-  }
-
-  public getNatureBadgeClass(nature: string): string {
-    switch (nature) {
-      case 'medical':
-        return 'badge rounded-pill text-bg-success';
-      case 'standard':
-        return 'badge rounded-pill text-bg-secondary';
-      default:
-        return 'badge';
-    }
-  }
-
-  public getStatusBadgeClass(fareStatus: string): string {
-    switch (fareStatus) {
-      case 'scheduled':
-        return 'badge rounded-pill text-bg-info';
-      case 'in-progress':
-        return 'badge rounded-pill text-bg-warning';
-      case 'finished':
-        return 'badge rounded-pill text-bg-primary';
-      default:
-        return 'badge';
-    }
-  }
 }
