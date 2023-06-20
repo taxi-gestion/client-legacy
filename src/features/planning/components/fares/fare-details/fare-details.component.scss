@@ -17,11 +17,8 @@
   background-color: #c7c7d3; /* choose the color you want */
 }
 
-.badge-container {
+.justify-space-between {
   display: flex;
-  justify-content: flex-end;
-}
-
-.badge-container .badge {
-  margin: 5px;
+  justify-content: space-between;
+  align-items: center;
 }

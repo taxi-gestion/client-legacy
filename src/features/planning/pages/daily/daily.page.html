@@ -12,6 +12,15 @@
         <br />
         📞
         <a class="text-white" href="tel:{{ fare.phone }}" target="_blank">{{ fare.phone }}</a>
+        <div style="height: 32px">
+          <img *ngIf="fare.nature === 'medical'" src="assets/icon/prescription2.svg" class="h-100 p-1" alt="medical-fare" />
+          <img *ngIf="fare.kind === 'one-way'" src="assets/icon/arrow-right.svg" class="h-100 p-1" alt="one-way-fare" />
+          <img
+            *ngIf="fare.kind === 'outward' || fare.kind === 'go-back'"
+            src="assets/icon/arrow-left-right.svg"
+            class="h-100 p-1"
+            alt="two-way-fare" />
+        </div>
         <br />
         <div style="white-space: nowrap">De: {{fare.departure}}</div>
         <div style="white-space: nowrap">A: {{ fare.destination}}</div>
