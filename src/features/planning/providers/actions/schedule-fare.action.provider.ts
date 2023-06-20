@@ -8,12 +8,24 @@ export type FareToSchedule = {
   driveFrom: string;
   driveKind: 'one-way' | 'outward' | 'return';
   driveNature: 'medical' | 'standard';
-  driverIdentity: string | undefined;
+  planning: string | undefined;
   driveTo: string;
   startTime: string;
 };
 
-export type ScheduleFareAction = (fareToSchedule: FareToSchedule) => Observable<object>;
+export type FareToScheduleTransfer = {
+  clientIdentity: string;
+  clientPhone: string;
+  date: string;
+  driveFrom: string;
+  driveKind: 'one-way' | 'outward' | 'return';
+  driveNature: 'medical' | 'standard';
+  planning: string | undefined;
+  driveTo: string;
+  startTime: string;
+};
+
+export type ScheduleFareAction = (fareToSchedule: FareToScheduleTransfer) => Observable<object>;
 
 export const SCHEDULE_FARE_ACTION: symbol = Symbol('planning.schedule-fare.action');
 

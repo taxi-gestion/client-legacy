@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ScheduleFarePage, DailyPage } from '../pages';
+import { DailyPage } from '../pages';
 import { DriverAgendaPage } from '../pages/driver-agenda/driver-agenda-page.component';
 
 const ROUTES: Routes = [
@@ -10,10 +10,6 @@ const ROUTES: Routes = [
       {
         path: '',
         component: DailyPage
-      },
-      {
-        path: 'schedule',
-        component: ScheduleFarePage
       },
       {
         path: ':date',
