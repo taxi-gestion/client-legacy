@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
-import { FareToSchedule, ScheduleFareAction } from '../../providers';
+import { FareToScheduleTransfer, ScheduleFareAction } from '../../providers';
 
 const scheduleFareUrl = (): string => `https://taxi-gestion.com/api/schedule-fare`;
 
@@ -15,5 +15,5 @@ const handleScheduleFareError$ =
 
 export const scheduleFareAction$ =
   (http: HttpClient): ScheduleFareAction =>
-  (fareToSchedule: FareToSchedule): Observable<object> =>
+  (fareToSchedule: FareToScheduleTransfer): Observable<object> =>
     http.post(scheduleFareUrl(), fareToSchedule).pipe(catchError(handleScheduleFareError$()));

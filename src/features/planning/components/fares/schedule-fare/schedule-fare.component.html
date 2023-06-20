@@ -1,0 +1,59 @@
+<h1>Ajouter une course</h1>
+<form
+  [formGroup]="scheduleFareForm"
+  [appLoadAction]="scheduleFare$"
+  #loadAction="loadAction"
+  (actionSuccess)="onScheduleFareActionSuccess()"
+  (actionError)="onScheduleFareActionError($event)"
+  (ngSubmit)="onSubmitFareToSchedule(loadAction.start)">
+  <div>
+    <label for="clientIdentity">Client:</label>
+    <input id="clientIdentity" type="text" formControlName="clientIdentity" />
+  </div>
+  <div>
+    <label for="clientPhone">Téléphone:</label>
+    <input id="clientPhone" type="text" formControlName="clientPhone" />
+  </div>
+  <div>
+    <label for="date">Le:</label>
+    <input id="date" type="date" formControlName="date" />
+  </div>
+  <div>
+    <label for="startTime">A:</label>
+    <input id="startTime" type="time" formControlName="startTime" />
+  </div>
+  <div>
+    <label for="driveFrom">Départ de:</label>
+    <input id="driveFrom" type="text" formControlName="driveFrom" />
+  </div>
+  <div>
+    <label for="driveTo">Arrivée:</label>
+    <input id="driveTo" type="text" formControlName="driveTo" />
+  </div>
+  <div>
+    <label for="planning">Chauffeur:</label>
+    <input id="planning" type="text" formControlName="planning" />
+  </div>
+  <div>
+    <label for="driveKind">Type de trajet:</label>
+    <select id="driveKind" formControlName="driveKind">
+      <option value="one-way">Aller simple</option>
+      <option value="outward">Aller</option>
+      <option value="return">Retour</option>
+    </select>
+  </div>
+  <div>
+    <label for="driveNature">Nature du trajet:</label>
+    <select id="driveNature" formControlName="driveNature">
+      <option value="medical">Medical</option>
+      <option value="standard">Non médical</option>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary mt-5 p-3 w-100" [disabled]="(loadAction.isLoading$ | async) ?? false">
+    <ng-container *ngIf="(loadAction.isLoading$ | async) ?? false; else defaultText">
+      <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+      Création en cours...
+    </ng-container>
+    <ng-template #defaultText>Créer la course</ng-template>
+  </button>
+</form>

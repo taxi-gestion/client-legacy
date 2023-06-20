@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { FARES_FOR_DATE_QUERY, FaresForDateQuery } from '@features/planning';
+import { FARES_FOR_DATE_QUERY, FaresForDateQuery, FareToSchedule } from '@features/planning';
 import { ActivatedRoute } from '@angular/router';
 import {
   formatDateDDMMYYYY,
@@ -31,4 +31,18 @@ export class DailyPage {
     map(toFaresForDatePlanningSession),
     map(groupByPlanning)
   );
+
+  public showScheduleFareModal: boolean = false;
+
+  public scheduleFareFormInitialValues: Partial<FareToSchedule> = {
+    date: this._selectedDate,
+    driveKind: 'outward',
+    driveNature: 'medical'
+  };
+  public handleScheduleFareModalClose(): void {
+    this.showScheduleFareModal = false;
+  }
+  public openScheduleFareModal(): void {
+    this.showScheduleFareModal = true;
+  }
 }

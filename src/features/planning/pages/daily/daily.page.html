@@ -1,4 +1,7 @@
 <h1 class="mb-5">Plannings: {{ ddMMYYYYtoday }}</h1>
+<h2>
+  <button (click)="openScheduleFareModal()">Ajouter courses</button>
+</h2>
 <ng-container *ngIf="plannings$ | async as plannings">
   <app-planning [start]="7 * 60" [end]="19 * 60">
     <b slot="title">Plannings</b>
@@ -23,7 +26,11 @@
   </app-planning>
 </ng-container>
 
-<h1 class="mb-5">Agendas {{ ddMMYYYYtoday }}</h1>
+<app-experimental-modal *ngIf="showScheduleFareModal" (closeModal)="handleScheduleFareModalClose()">
+  <app-schedule-fare [scheduleFareFormInitialValues]="scheduleFareFormInitialValues"></app-schedule-fare>
+</app-experimental-modal>
+
+<!--<h1 class="mb-5">Agendas {{ ddMMYYYYtoday }}</h1>
 <ng-container *ngIf="plannings$ | async as faresByPlanning">
   <div class="d-flex flex-row overflow-auto">
     <div class="container mb-1" *ngFor="let planning of faresByPlanning">
@@ -35,4 +42,4 @@
       </div>
     </div>
   </div>
-</ng-container>
+</ng-container>-->
