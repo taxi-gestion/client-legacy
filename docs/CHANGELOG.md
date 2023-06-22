@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/taxi-gestion/client/compare/v1.5.0...v1.5.1) (2023-06-22)
+
+
+### Bug Fixes
+
+* action was triggered multiple times ([#15](https://github.com/taxi-gestion/client/issues/15)) ([314f772](https://github.com/taxi-gestion/client/commit/314f772aa9b8c815437f30ae7f2cf66a969232fb))
+
 # [1.5.0](https://github.com/taxi-gestion/client/compare/v1.4.0...v1.5.0) (2023-06-17)
 
 
