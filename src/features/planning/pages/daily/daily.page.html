@@ -1,35 +1,21 @@
 <h1 class="mb-5">Plannings: {{ ddMMYYYYtoday }}</h1>
 <h2>
   <button (click)="openScheduleFareModal()">Ajouter courses</button>
+  <br />
+  <label for="column-size">Taille colonnes: {{ hourColumnSize }}</label>
+  <input type="range" id="column-size" name="column-size" min="150" max="400" step="50" [(ngModel)]="hourColumnSize" />
 </h2>
 <ng-container *ngIf="plannings$ | async as plannings">
-  <app-planning [start]="7 * 60" [end]="19 * 60">
+  <app-planning [start]="7 * 60" [end]="19 * 60" [hourColumnSize]="hourColumnSize">
     <b slot="title">Plannings</b>
-    <app-planning-row *ngFor="let planning of plannings" [sessions]="planning.fares" [template]="fare">
+    <app-planning-row
+      *ngFor="let planning of plannings"
+      [sessions]="planning.fares"
+      [template]="fare"
+      [hourColumnSize]="hourColumnSize">
       <ng-container slot="header">{{ planning.name }}</ng-container>
       <ng-template #fare let-fare="session">
-        🕐{{ fare.time }} 👤{{ fare.client }}
-        <br />
-        📞
-        <a class="text-white" href="tel:{{ fare.phone }}" target="_blank">{{ fare.phone }}</a>
-        <div style="height: 32px">
-          <img *ngIf="fare.nature === 'medical'" src="assets/icon/prescription2.svg" class="h-100 p-1" alt="medical-fare" />
-          <img *ngIf="fare.kind === 'one-way'" src="assets/icon/arrow-right.svg" class="h-100 p-1" alt="one-way-fare" />
-          <img
-            *ngIf="fare.kind === 'outward' || fare.kind === 'go-back'"
-            src="assets/icon/arrow-left-right.svg"
-            class="h-100 p-1"
-            alt="two-way-fare" />
-        </div>
-        <br />
-        <div style="white-space: nowrap">De: {{fare.departure}}</div>
-        <div style="white-space: nowrap">A: {{ fare.destination}}</div>
-        <a
-          class="text-white"
-          href="https://www.google.com/maps/dir/?api=1&origin={{ fare.departure}}&destination={{ fare.destination}}"
-          target="_blank">
-          Voir l'itinéraire
-        </a>
+        <app-fare-planning-session [fare]="fare"></app-fare-planning-session>
       </ng-template>
     </app-planning-row>
   </app-planning>

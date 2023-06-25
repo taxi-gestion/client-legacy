@@ -16,5 +16,7 @@ export class PlanningRowComponent {
 
   @Input({ required: true }) public template!: TemplateRef<{ session: PlanningSession }>;
 
+  @Input() public hourColumnSize: number = 200;
+
   public constructor(public readonly planning: PlanningComponent) {}
 }

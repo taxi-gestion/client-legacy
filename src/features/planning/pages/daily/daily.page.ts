@@ -32,17 +32,21 @@ export class DailyPage {
     map(groupByPlanning)
   );
 
-  public showScheduleFareModal: boolean = false;
-
   public scheduleFareFormInitialValues: Partial<FareToSchedule> = {
     date: this._selectedDate,
     driveKind: 'outward',
     driveNature: 'medical'
   };
+
+  //region Add Fares modal
+  public showScheduleFareModal: boolean = false;
   public handleScheduleFareModalClose(): void {
     this.showScheduleFareModal = false;
   }
   public openScheduleFareModal(): void {
     this.showScheduleFareModal = true;
   }
+  //endregion
+
+  public hourColumnSize: number = 300;
 }
