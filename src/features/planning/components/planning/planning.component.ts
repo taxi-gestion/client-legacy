@@ -13,6 +13,7 @@ export class PlanningComponent implements OnInit, OnChanges {
   @Input() public start: number = 0;
   @Input() public end: number = HOURS_IN_DAY * MINUTES_IN_HOUR;
   @Input() public pitch: number = 60;
+  @Input() public hourColumnSize: number = 200;
 
   public _hours$: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
   public hours$: Observable<number[]> = this._hours$.asObservable();

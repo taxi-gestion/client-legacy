@@ -2,12 +2,11 @@
   <div class="position-sticky start-0 bg-light me-4" style="min-width: 300px">
     <ng-content select="[slot=header]"></ng-content>
   </div>
-  <div style="min-width: 200px" *ngFor="let hour of planning.hours$ | async; index as index">
+  <div [style.min-width.px]="hourColumnSize" *ngFor="let hour of planning.hours$ | async; index as index">
     <ng-container *ngFor="let session of sessions">
       <div
-        class="bg-primary p-2 rounded text-white my-1"
         *ngIf="index === (session.startTimeInMinutes - planning.start) / planning.pitch"
-        [ngStyle]="{ 'width.px': (200 * session.duration) / planning.pitch }">
+        [ngStyle]="{ 'width.px': (hourColumnSize * session.duration) / planning.pitch }">
         <ng-container *ngTemplateOutlet="template; context: { session }"></ng-container>
       </div>
     </ng-container>
