@@ -1,0 +1,4 @@
+<ng-container *ngIf="isLoading; else loadActionDisplayIdle">
+  <ng-content select="[slot=loadActionDisplayLoading]"></ng-content>
+</ng-container>
+<ng-template #loadActionDisplayIdle><ng-content select="[slot=loadActionDisplayIdle]"></ng-content></ng-template>

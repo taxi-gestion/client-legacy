@@ -49,11 +49,16 @@
       <option value="standard">Non médical</option>
     </select>
   </div>
-  <button type="submit" class="btn btn-primary mt-5 p-3 w-100" [disabled]="(loadAction.isLoading$ | async) ?? false">
-    <ng-container *ngIf="(loadAction.isLoading$ | async) ?? false; else defaultText">
+  <button
+    [appLoadActionDisplay]="loadAction.isLoading$ | async"
+    #loadActionDisplay
+    type="submit"
+    class="btn btn-primary mt-5 p-3 w-100"
+    [disabled]="loadActionDisplay.isLoading">
+    <ng-container slot="loadActionDisplayIdle">Créer la course</ng-container>
+    <ng-container slot="loadActionDisplayLoading">
       <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
       Création en cours...
     </ng-container>
-    <ng-template #defaultText>Créer la course</ng-template>
   </button>
 </form>
