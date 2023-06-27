@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catchError, from, map, mergeWith, Observable, Subject, switchMap, tap } from 'rxjs';
+import { catchError, map, mergeWith, Observable, Subject, switchMap } from 'rxjs';
 import { START_LOADING, STOP_LOADING, whileLoading } from '@features/common';
 import { toInternationalFormat } from '../../presentation';
 import {
@@ -25,8 +25,6 @@ type ActivateFields = {
   templateUrl: './activate.page.html'
 })
 export class ActivatePage {
-  private readonly _isActivating$: Subject<boolean> = new Subject<boolean>();
-
   private readonly _isSendingActivationCode$: Subject<boolean> = new Subject<boolean>();
 
   private readonly _resendActivationCodeErrorMessage$: Subject<string> = new Subject<string>();
@@ -43,27 +41,14 @@ export class ActivatePage {
 
   public readonly defaultCode: string | null = this._route.snapshot.queryParamMap.get('code');
 
-  private handleActivateActionError(error: Error, caught: Observable<object>): Observable<object> {
-    setActivateErrorToForm(formatActivateError(error));
-    this._isActivating$.next(STOP_LOADING);
-    return caught;
-  }
-
   private resendActivationCodeActionError(error: Error, caught: Observable<void>): Observable<void> {
     this._resendActivationCodeErrorMessage$.next(activationCodeErrorMessageFrom(error));
     this._isSendingActivationCode$.next(STOP_LOADING);
     return caught;
   }
 
-  private readonly _activate$: Observable<boolean> = this._isActivating$.pipe(
-    switchMap(
-      whileLoading((): Observable<object> => this._activateAction$(toInternationalFormat(this.username.value), this.code.value))
-    ),
-    catchError(this.handleActivateActionError.bind(this)),
-    tap((): Observable<boolean> => from(this._router.navigate([this._toRoutes.get('activate')]))),
-    tap((): void => ACTIVATE_FORM.reset()),
-    map((): boolean => STOP_LOADING)
-  );
+  public readonly activate$ = (): Observable<object> =>
+    this._activateAction$(toInternationalFormat(this.username.value), this.code.value);
 
   private readonly _resendActivationCode$: Observable<boolean> = this._isSendingActivationCode$.pipe(
     switchMap(
@@ -72,9 +57,6 @@ export class ActivatePage {
     catchError(this.resendActivationCodeActionError.bind(this)),
     map((): boolean => STOP_LOADING)
   );
-
-  public readonly isActivating$: Observable<boolean> = this._isActivating$.pipe(mergeWith(this._activate$));
-
   public readonly isSendingActivationCode$: Observable<boolean> = this._isSendingActivationCode$.pipe(
     mergeWith(this._resendActivationCode$)
   );
@@ -90,13 +72,22 @@ export class ActivatePage {
     this.defaultCode != null && this.code.setValue(this.defaultCode);
   }
 
-  public onActivate = (): void => {
-    ACTIVATE_FORM.markAllAsTouched();
-    ACTIVATE_FORM.valid && this._isActivating$.next(START_LOADING);
-  };
-
   public onResendActivationCode(): void {
     this._isSendingActivationCode$.next(START_LOADING);
     this._resendActivationCodeErrorMessage$.next('');
   }
+
+  public onSubmitActivate = (triggerAction: () => void): void => {
+    ACTIVATE_FORM.markAllAsTouched();
+    ACTIVATE_FORM.valid && triggerAction();
+  };
+
+  public onActivateActionSuccess = async (): Promise<void> => {
+    ACTIVATE_FORM.reset();
+    await this._router.navigate([this._toRoutes.get('activate')]);
+  };
+
+  public onActivateActionError = (error: Error): void => {
+    setActivateErrorToForm(formatActivateError(error));
+  };
 }

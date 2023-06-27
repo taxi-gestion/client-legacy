@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoadModule } from '@features/common';
 import { DIRECTIVES } from '../directives';
 import { LAYOUTS } from '../layouts';
 import { PAGES } from '../pages';
@@ -12,7 +13,7 @@ import { AuthenticationFeatureRoutingModule } from './authentication.feature-rou
 
 @NgModule({
   declarations: [...DIRECTIVES, ...LAYOUTS, ...PAGES, ...COMPONENTS, ...PIPES],
-  imports: [CommonModule, ReactiveFormsModule, AuthenticationFeatureRoutingModule],
+  imports: [CommonModule, ReactiveFormsModule, LoadModule, AuthenticationFeatureRoutingModule],
   providers: [fieldErrorMessagesValueProvider(ERROR_MESSAGES)]
 })
 export class AuthenticationFeatureModule {}
