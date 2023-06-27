@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/taxi-gestion/client/compare/v1.5.1...v1.6.0) (2023-06-27)
+
+
+### Features
+
+* add load action display component ([#18](https://github.com/taxi-gestion/client/issues/18)) ([f0bf043](https://github.com/taxi-gestion/client/commit/f0bf043c0f3789acb4a95f3ed4bc4625b905cec9))
+
 ## [1.5.1](https://github.com/taxi-gestion/client/compare/v1.5.0...v1.5.1) (2023-06-22)
 
 
