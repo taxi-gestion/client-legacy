@@ -1,5 +1,5 @@
 export const ENV: { auth: { clientId: string } } = {
   auth: {
-    clientId: '530tabj6765pnpr9588ornk8db'
+    clientId: '4efnrpgm45mbhp7l0lhokfb7v0'
   }
 };
