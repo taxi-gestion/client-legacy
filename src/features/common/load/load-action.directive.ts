@@ -1,5 +1,5 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
-import { catchError, map, Observable, share, Subject, switchMap, tap } from 'rxjs';
+import { catchError, map, mergeWith, Observable, Subject, switchMap, tap } from 'rxjs';
 import { START_LOADING, STOP_LOADING, whileLoading } from '@features/common';
 
 @Directive({
@@ -13,20 +13,20 @@ export class LoadActionDirective<T> {
 
   @Output() public actionError: EventEmitter<Error> = new EventEmitter<Error>();
 
-  private readonly _triggerWhileLoading$ = (trigger$: Observable<boolean>): Observable<boolean> =>
-    trigger$.pipe(
-      switchMap(whileLoading((): Observable<T> => this.action$())),
-      catchError((error: Error, caught: Observable<T>): Observable<T> => {
-        this.actionError.emit(error);
-        return caught;
-      }),
-      tap((): void => this.actionSuccess.emit()),
-      map((): boolean => STOP_LOADING),
-      share()
-    );
+  private readonly _isLoading$: Subject<boolean> = new Subject<boolean>();
 
-  private readonly _trigger$: Subject<boolean> = new Subject<boolean>();
-  public readonly isLoading$: Observable<boolean> = this._triggerWhileLoading$(this._trigger$);
+  private readonly _triggerWhileLoading$: Observable<boolean> = this._isLoading$.pipe(
+    switchMap(whileLoading((): Observable<T> => this.action$())),
+    catchError((error: Error, caught: Observable<T>): Observable<T> => {
+      this.actionError.emit(error);
+      this._isLoading$.next(STOP_LOADING);
+      return caught;
+    }),
+    tap((): void => this.actionSuccess.emit()),
+    map((): boolean => STOP_LOADING)
+  );
 
-  public start = (): void => this._trigger$.next(START_LOADING);
+  public readonly isLoading$: Observable<boolean> = this._isLoading$.pipe(mergeWith(this._triggerWhileLoading$));
+
+  public start = (): void => this._isLoading$.next(START_LOADING);
 }
