@@ -5,7 +5,14 @@
     <br />
     Vous pourrez continuer là où vous en étiez après vous être connecté.
   </p>
-  <form class="mb-4" [formGroup]="loginForm" (ngSubmit)="onLogin()">
+  <form
+    class="mb-4"
+    [formGroup]="loginForm"
+    [appLoadAction]="login$"
+    #loadAction="loadAction"
+    (actionSuccess)="onLoginActionSuccess()"
+    (actionError)="onLoginActionError($event)"
+    (ngSubmit)="onSubmitLogin(loadAction.start)">
     <app-username-field
       [usernameControl]="username"
       [touched]="username.touched"
@@ -29,12 +36,17 @@
     <div class="text-danger mt-2" *ngIf="loginForm.errors?.['invalidUsernameOrPasswordError']">
       L'identifiant ou le mot de passe est invalide.
     </div>
-    <button type="submit" class="btn btn-primary mt-5 p-3 w-100" [disabled]="(isLoading$ | async) ?? false">
-      <ng-container *ngIf="(isLoading$ | async) ?? false; else defaultText">
+    <button
+      [appLoadActionDisplay]="loadAction.isLoading$ | async"
+      #loadActionDisplay
+      type="submit"
+      class="btn btn-primary mt-5 p-3 w-100"
+      [disabled]="loadActionDisplay.isLoading">
+      <ng-container slot="loadActionDisplayIdle">Se connecter</ng-container>
+      <ng-container slot="loadActionDisplayLoading">
         <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
         Connexion en cours...
       </ng-container>
-      <ng-template #defaultText>Se connecter</ng-template>
     </button>
   </form>
   <p class="mt-5 text-center">

@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catchError, from, map, mergeWith, Observable, Subject, switchMap, tap } from 'rxjs';
-import { START_LOADING, STOP_LOADING, whileLoading } from '@features/common';
-import { RegisterAction, REGISTER_ACTION, REDIRECT_ROUTES_PERSISTENCE, RedirectRoutesKeys } from '../../providers';
+import { Observable } from 'rxjs';
+import { REDIRECT_ROUTES_PERSISTENCE, RedirectRoutesKeys, REGISTER_ACTION, RegisterAction } from '../../providers';
 import { toInternationalFormat } from '../../presentation';
-import { formatRegisterError } from './register.presenter';
 import { REGISTER_FORM, setRegisterErrorToForm } from './register.form';
+import { formatLoginError } from '../login/login.presenter';
 
 type RegisterFields = {
   username: FormControl<string>;
@@ -19,8 +18,6 @@ type RegisterFields = {
   templateUrl: './register.page.html'
 })
 export class RegisterPage {
-  private readonly _isLoading$: Subject<boolean> = new Subject<boolean>();
-
   public registerForm: FormGroup<RegisterFields> = REGISTER_FORM;
 
   public username: RegisterFields['username'] = this.registerForm.controls.username;
@@ -29,28 +26,8 @@ export class RegisterPage {
 
   private readonly _defaultUsername: string | null = this._route.snapshot.queryParamMap.get('username');
 
-  private handleRegisterActionError(error: Error, caught: Observable<void>): Observable<void> {
-    setRegisterErrorToForm(formatRegisterError(error));
-    this._isLoading$.next(STOP_LOADING);
-    return caught;
-  }
-
-  private readonly _register$: Observable<boolean> = this._isLoading$.pipe(
-    switchMap(
-      whileLoading(
-        (): Observable<void> => this._registerAction$(toInternationalFormat(this.username.value), this.password.value)
-      )
-    ),
-    catchError(this.handleRegisterActionError.bind(this)),
-    tap(
-      (): Observable<boolean> =>
-        from(this._router.navigate([this._toRoutes.get('register')], { queryParams: { username: this.username.value } }))
-    ),
-    tap((): void => REGISTER_FORM.reset()),
-    map((): boolean => STOP_LOADING)
-  );
-
-  public readonly isLoading$: Observable<boolean> = this._isLoading$.pipe(mergeWith(this._register$));
+  public readonly register$ = (): Observable<void> =>
+    this._registerAction$(toInternationalFormat(this.username.value), this.password.value);
 
   public constructor(
     @Inject(REGISTER_ACTION) private readonly _registerAction$: RegisterAction<void>,
@@ -61,8 +38,17 @@ export class RegisterPage {
     this._defaultUsername != null && this.username.setValue(this._defaultUsername);
   }
 
-  public onRegister = (): void => {
+  public onSubmitRegister = (triggerAction: () => void): void => {
     REGISTER_FORM.markAllAsTouched();
-    REGISTER_FORM.valid && this._isLoading$.next(START_LOADING);
+    REGISTER_FORM.valid && triggerAction();
+  };
+
+  public onRegisterActionSuccess = async (): Promise<void> => {
+    REGISTER_FORM.reset();
+    await this._router.navigate([this._toRoutes.get('register')], { queryParams: { username: this.username.value } });
+  };
+
+  public onRegisterActionError = (error: Error): void => {
+    setRegisterErrorToForm(formatLoginError(error));
   };
 }
