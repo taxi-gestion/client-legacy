@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DailyPage } from '../pages';
 import { DriverAgendaPage } from '../pages/driver-agenda/driver-agenda-page.component';
-import {CanMatchOneUserGroupGuard, CanMatchUserAttributeGuard} from '@features/authentication';
+import { CanMatchOneUserGroupGuard, CanMatchUserAttributeGuard } from '@features/authentication';
 import { CanActivatePlanningRedirectGuard } from '../guards/can-activate-planning-redirect.guard';
 
 const ROUTES: Routes = [
