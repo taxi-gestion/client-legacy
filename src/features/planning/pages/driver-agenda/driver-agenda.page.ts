@@ -4,7 +4,7 @@ import { FARES_FOR_DATE_QUERY, FaresForDateQuery } from '@features/planning';
 import { ActivatedRoute } from '@angular/router';
 import { filterByPlanning, formatDateDDMMYYYY, toFaresForDatePresentation } from '../../common/fares.presenter';
 import { DailyAgenda } from '../../common/fares.presentation';
-import { Session, SESSION_PERSISTENCE } from '../../../authentication';
+import { SESSION_PERSISTENCE, Session } from '../../../authentication';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

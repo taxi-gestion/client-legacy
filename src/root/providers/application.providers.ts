@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { ClassProvider, FactoryProvider, ValueProvider } from '@angular/core';
 import {
   bearerTokenInterceptorProvider,
@@ -9,7 +10,6 @@ import {
   SESSION_PERSISTENCE,
   sessionValueProvider
 } from '@features/authentication';
-import { ENV } from '../../environments';
 import {
   COGNITO_PERSISTENCE,
   cognitoLogoutAction,
@@ -17,7 +17,7 @@ import {
   cognitoSession,
   cognitoValueProvider
 } from '@features/aws';
-import { HttpClient } from '@angular/common/http';
+import { ENV } from '../../environments';
 
 const redirectToRoutes: Map<RedirectRoutesKeys, string> = new Map<RedirectRoutesKeys, string>([
   ['activate', '/login'],
