@@ -45,7 +45,7 @@ export class RegisterPage {
 
   public onRegisterActionSuccess = async (): Promise<void> => {
     REGISTER_FORM.reset();
-    await this._router.navigate([this._toRoutes.get('register')]);
+    await this._router.navigate([this._toRoutes.get('register')], { queryParams: { username: this.username.value } });
   };
 
   public onRegisterActionError = (error: Error): void => {
