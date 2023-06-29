@@ -7,7 +7,7 @@ import { DailyAgenda } from '../../common/fares.presentation';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './driver-agenda-page.component.html'
+  templateUrl: './driver-agenda.page.html'
 })
 export class DriverAgendaPage {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

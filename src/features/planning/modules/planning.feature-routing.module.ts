@@ -1,11 +1,21 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DailyPage } from '../pages';
-import { DriverAgendaPage } from '../pages/driver-agenda/driver-agenda-page.component';
+import { DriverAgendaPage } from '../pages/driver-agenda/driver-agenda.page';
 import { CanMatchOneUserGroupGuard } from '@features/authentication';
 import { CanActivatePlanningRedirectGuard } from '../guards/can-activate-planning-redirect.guard';
+import { MissingAdminConfigurationPage } from '../pages/missing-admin-configuration/missing-admin-configuration.page';
+import { ManagerDriverChoicePage } from '../pages/manager-driver-choice/manager-driver-choice.page';
 
 const ROUTES: Routes = [
+  {
+    path: 'planning-or-agenda',
+    component: ManagerDriverChoicePage
+  },
+  {
+    path: 'missing-admin-configuration',
+    component: MissingAdminConfigurationPage
+  },
   {
     path: 'daily',
     canMatch: [CanMatchOneUserGroupGuard],
