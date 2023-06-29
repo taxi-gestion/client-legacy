@@ -1,15 +1,14 @@
 import { Inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
-import { SESSION_PERSISTENCE, TokenSession } from '@features/authentication';
+import { SESSION_PERSISTENCE, Session } from '@features/authentication';
 import { from, Observable, of } from 'rxjs';
 
 @Injectable()
 export class CanActivatePlanningRedirectGuard {
-  public constructor(@Inject(SESSION_PERSISTENCE) private readonly _session: TokenSession, private readonly _router: Router) {}
+  public constructor(@Inject(SESSION_PERSISTENCE) private readonly _session: Session, private readonly _router: Router) {}
 
   public canActivate = (route: ActivatedRouteSnapshot): Observable<boolean> => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    const userGroups: string[] = this._session.idTokenPayload('cognito:groups') as string[];
+    const userGroups: string[] = this._session.groups();
 
     if (isBothManagerAndDriver(userGroups)) return navigateToDashboard(this._router);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
