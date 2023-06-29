@@ -2,10 +2,10 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { AccountNotActivatedError, InvalidUsernameOrPasswordError, login, Session } from '@features/authentication';
 import { Cognito } from '../providers';
-import { CognitoAuthentication, setCognitoAuthenticationToLocalStorage } from '../authentication';
+import { CognitoSession, setCognitoAuthenticationToLocalStorage } from '../session';
 
 /* eslint-disable @typescript-eslint/naming-convention */
-type LoginResponse = { AuthenticationResult: CognitoAuthentication };
+type LoginResponse = { AuthenticationResult: CognitoSession };
 
 const LOGIN_HEADERS: Record<string, string> = {
   'X-Amz-Target': 'AWSCognitoIdentityProviderService.InitiateAuth',

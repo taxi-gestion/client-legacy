@@ -4,13 +4,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   CanMatchGuestGuard,
   CanMatchLoggedInGuard,
-  CanMatchRefreshTokenGuard,
   CanMatchOneUserGroupGuard,
-  CanMatchUserAttributeGuard
+  CanMatchRefreshTokenGuard
 } from '@features/authentication';
 import { COMPONENTS } from '../components';
 import { ApplicationRootLayout, LAYOUTS } from '../layouts';
-import { APPLICATION_PROVIDERS } from '../providers';
+import { applicationProviders } from '../providers';
 import { ApplicationRoutingModule } from './application-routing.module';
 
 @NgModule({
@@ -22,8 +21,7 @@ import { ApplicationRoutingModule } from './application-routing.module';
     CanMatchLoggedInGuard,
     CanMatchRefreshTokenGuard,
     CanMatchOneUserGroupGuard,
-    CanMatchUserAttributeGuard,
-    ...APPLICATION_PROVIDERS
+    ...applicationProviders()
   ]
 })
 export class ApplicationModule {}

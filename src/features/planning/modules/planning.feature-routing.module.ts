@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DailyPage } from '../pages';
 import { DriverAgendaPage } from '../pages/driver-agenda/driver-agenda-page.component';
-import { CanMatchOneUserGroupGuard, CanMatchUserAttributeGuard } from '@features/authentication';
+import { CanMatchOneUserGroupGuard } from '@features/authentication';
 import { CanActivatePlanningRedirectGuard } from '../guards/can-activate-planning-redirect.guard';
 
 const ROUTES: Routes = [
@@ -20,14 +20,14 @@ const ROUTES: Routes = [
   },
   {
     path: 'agenda',
-    canMatch: [CanMatchOneUserGroupGuard, CanMatchUserAttributeGuard],
-    data: { allowedGroups: ['developer', 'driver'], userAttribute: 'custom:planning_identifier' },
+    canMatch: [CanMatchOneUserGroupGuard],
+    data: { allowedGroups: ['developer', 'driver'] },
     component: DriverAgendaPage
   },
   {
     path: 'agenda/:date',
-    canMatch: [CanMatchOneUserGroupGuard, CanMatchUserAttributeGuard],
-    data: { allowedGroups: ['developer', 'driver'], userAttribute: 'custom:planning_identifier' },
+    canMatch: [CanMatchOneUserGroupGuard],
+    data: { allowedGroups: ['developer', 'driver'] },
     component: DriverAgendaPage
   },
   {

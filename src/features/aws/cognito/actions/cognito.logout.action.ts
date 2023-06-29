@@ -1,5 +1,5 @@
 import { logout, Session } from '@features/authentication';
-import { clearCognitoAuthenticationFromLocalStorage } from '@features/aws';
+import { clearCognitoAuthenticationFromLocalStorage } from '../session';
 
 export const cognitoLogoutAction = (session: Session) => (): void => {
   clearCognitoAuthenticationFromLocalStorage();

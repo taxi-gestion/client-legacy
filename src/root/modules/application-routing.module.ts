@@ -6,11 +6,12 @@ import {
   CanMatchLoggedInGuard,
   CanMatchRefreshTokenGuard
 } from '@features/authentication';
+import { cognitoAuthenticationProviders } from '@features/aws';
 import { DashboardFeatureModule } from '@features/dashboard';
 import { PlanningFeatureModule } from '@features/planning';
 import { PublicFeatureModule } from '@features/public';
 import { MainLayout } from '../layouts';
-import { AUTHENTICATION_PROVIDERS, PLANNING_PROVIDERS } from '../providers';
+import { PLANNING_PROVIDERS } from '../providers';
 
 const ROUTES: Routes = [
   {
@@ -37,7 +38,7 @@ const ROUTES: Routes = [
       (await import('@features/authentication')).AuthenticationFeatureModule,
     path: '',
     canMatch: [CanMatchGuestGuard],
-    providers: [...AUTHENTICATION_PROVIDERS]
+    providers: [...cognitoAuthenticationProviders()]
   },
   { path: '**', pathMatch: 'full', redirectTo: '/' }
 ];

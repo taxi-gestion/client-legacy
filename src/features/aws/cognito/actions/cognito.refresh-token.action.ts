@@ -1,11 +1,11 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, Observable, tap, throwError } from 'rxjs';
-import { login, TokenSession } from '@features/authentication';
+import { login, Session } from '@features/authentication';
 import { Cognito } from '../providers';
-import { CognitoAuthentication, setCognitoAuthenticationToLocalStorage } from '../authentication';
+import { CognitoSession, setCognitoAuthenticationToLocalStorage } from '../session';
 
 /* eslint-disable @typescript-eslint/naming-convention */
-type RefreshTokenResponse = { AuthenticationResult: CognitoAuthentication };
+type RefreshTokenResponse = { AuthenticationResult: CognitoSession };
 
 const REFRESH_TOKEN_HEADERS: Record<string, string> = {
   'X-Amz-Target': 'AWSCognitoIdentityProviderService.InitiateAuth',
@@ -25,7 +25,7 @@ const handleRefreshTokenError$ =
   };
 
 export const cognitoRefreshTokenAction$ =
-  (http: HttpClient, cognito: Cognito, session: TokenSession) => (): Observable<RefreshTokenResponse> =>
+  (http: HttpClient, cognito: Cognito, session: Session) => (): Observable<RefreshTokenResponse> =>
     http
       .post<RefreshTokenResponse>(
         refreshTokenUrl(cognito),

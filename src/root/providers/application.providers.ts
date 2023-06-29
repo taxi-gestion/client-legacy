@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { ClassProvider, FactoryProvider, ValueProvider } from '@angular/core';
 import {
   bearerTokenInterceptorProvider,
@@ -10,14 +9,15 @@ import {
   SESSION_PERSISTENCE,
   sessionValueProvider
 } from '@features/authentication';
+import { ENV } from '../../environments';
 import {
   COGNITO_PERSISTENCE,
   cognitoLogoutAction,
   cognitoRefreshTokenAction$,
-  cognitoTokenSession,
+  cognitoSession,
   cognitoValueProvider
 } from '@features/aws';
-import { ENV } from '../../environments';
+import { HttpClient } from '@angular/common/http';
 
 const redirectToRoutes: Map<RedirectRoutesKeys, string> = new Map<RedirectRoutesKeys, string>([
   ['activate', '/login'],
@@ -30,9 +30,13 @@ const redirectToRoutes: Map<RedirectRoutesKeys, string> = new Map<RedirectRoutes
   ['reset-password', '/login']
 ]);
 
-export const APPLICATION_PROVIDERS: (ClassProvider | FactoryProvider | ValueProvider)[] = [
+export const applicationProviders: () => (ClassProvider | FactoryProvider | ValueProvider)[] = (): (
+  | ClassProvider
+  | FactoryProvider
+  | ValueProvider
+)[] => [
   cognitoValueProvider({ clientId: ENV.auth.clientId, region: 'us-east-1' }),
-  sessionValueProvider(cognitoTokenSession()),
+  sessionValueProvider(cognitoSession()),
   redirectRoutesValueProvider(redirectToRoutes),
   logoutActionProvider(cognitoLogoutAction, [SESSION_PERSISTENCE]),
   refreshTokenActionProvider(cognitoRefreshTokenAction$, [HttpClient, COGNITO_PERSISTENCE, SESSION_PERSISTENCE]),

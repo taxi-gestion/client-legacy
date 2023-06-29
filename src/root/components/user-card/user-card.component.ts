@@ -1,9 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { Serializable } from '@features/authentication';
 
 type User = {
-  username: Serializable;
-  groups: Serializable;
+  username: string;
+  groups: string[];
 };
 
 @Component({

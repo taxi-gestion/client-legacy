@@ -9,7 +9,7 @@ import {
   REFRESH_TOKEN_ACTION,
   RefreshTokenAction,
   SESSION_PERSISTENCE,
-  TokenSession
+  Session
 } from '../../providers';
 import { Router } from '@angular/router';
 
@@ -27,7 +27,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
   private readonly _authorizedRoutePattern: RegExp = /\/api/u;
 
   public constructor(
-    @Inject(SESSION_PERSISTENCE) private readonly _tokenSession: TokenSession,
+    @Inject(SESSION_PERSISTENCE) private readonly _tokenSession: Session,
     @Inject(REFRESH_TOKEN_ACTION) private readonly _refreshTokenAction: RefreshTokenAction<void>,
     @Inject(LOGOUT_ACTION) private readonly _logoutAction: LogoutAction,
     @Inject(REDIRECT_ROUTES_PERSISTENCE) private readonly _toRoutes: Map<RedirectRoutesKeys, string>,
