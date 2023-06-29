@@ -8,7 +8,7 @@ import { SESSION_PERSISTENCE, TokenSession } from '../../../authentication';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './driver-agenda-page.component.html'
+  templateUrl: './driver-agenda.page.html'
 })
 export class DriverAgendaPage {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

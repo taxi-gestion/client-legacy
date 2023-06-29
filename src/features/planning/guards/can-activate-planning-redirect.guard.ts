@@ -10,7 +10,7 @@ export class CanActivatePlanningRedirectGuard {
   public canActivate = (route: ActivatedRouteSnapshot): Observable<boolean> => {
     const userGroups: string[] = this._session.groups();
 
-    if (isBothManagerAndDriver(userGroups)) return navigateToDashboard(this._router);
+    if (isBothManagerAndDriver(userGroups)) return navigateToChoicePage(this._router);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     if (isManager(userGroups)) return navigateToDaily(this._router)(route.params['date']);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -23,7 +23,7 @@ export class CanActivatePlanningRedirectGuard {
 const isManager = (userGroups: string[]): boolean => userGroups.includes('manager');
 const isDriver = (userGroups: string[]): boolean => userGroups.includes('driver');
 const isBothManagerAndDriver = (userGroups: string[]): boolean => isManager(userGroups) && isDriver(userGroups);
-const navigateToDashboard = (router: Router): Observable<boolean> => from(router.navigate(['/']));
+const navigateToChoicePage = (router: Router): Observable<boolean> => from(router.navigate(['/planning/planning-or-agenda']));
 const navigateToDaily =
   (router: Router) =>
   (date: string | undefined): Observable<boolean> =>
