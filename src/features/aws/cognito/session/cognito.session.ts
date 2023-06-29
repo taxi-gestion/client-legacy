@@ -72,10 +72,9 @@ export const cognitoSession = (): Session => ({
   remainingTime: (): number => substractTimeToTokenExpiration(localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY) ?? '', new Date()),
   username: (): string =>
     getFromJWTPayload(localStorage.getItem(ID_TOKEN_STORAGE_KEY), 'email') ??
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    getFromJWTPayload(localStorage.getItem(ID_TOKEN_STORAGE_KEY), 'phone_number')!,
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  groups: (): string[] => getFromJWTPayload(localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY), 'cognito:groups')!
+    getFromJWTPayload(localStorage.getItem(ID_TOKEN_STORAGE_KEY), 'phone_number') ??
+    '',
+  groups: (): string[] => getFromJWTPayload(localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY), 'cognito:groups') ?? []
 });
 
 export const setCognitoAuthenticationToLocalStorage = (cognitoAuthentication: CognitoSession): void => {

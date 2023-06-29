@@ -10,6 +10,8 @@ export class CanActivatePlanningRedirectGuard {
   public canActivate = (route: ActivatedRouteSnapshot): Observable<boolean> => {
     const userGroups: string[] = this._session.groups();
 
+    if (hasNoGroups(userGroups)) return navigateToMissingAdminConfiguration(this._router);
+
     if (isBothManagerAndDriver(userGroups)) return navigateToChoicePage(this._router);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     if (isManager(userGroups)) return navigateToDaily(this._router)(route.params['date']);
@@ -20,9 +22,12 @@ export class CanActivatePlanningRedirectGuard {
   };
 }
 
+const hasNoGroups = (userGroups: string[]): userGroups is [] => userGroups.length === 0;
 const isManager = (userGroups: string[]): boolean => userGroups.includes('manager');
 const isDriver = (userGroups: string[]): boolean => userGroups.includes('driver');
 const isBothManagerAndDriver = (userGroups: string[]): boolean => isManager(userGroups) && isDriver(userGroups);
+const navigateToMissingAdminConfiguration = (router: Router): Observable<boolean> =>
+  from(router.navigate(['/planning/missing-admin-configuration']));
 const navigateToChoicePage = (router: Router): Observable<boolean> => from(router.navigate(['/planning/planning-or-agenda']));
 const navigateToDaily =
   (router: Router) =>
