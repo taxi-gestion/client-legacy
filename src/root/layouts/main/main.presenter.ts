@@ -1,11 +1,11 @@
-import { Serializable, TokenSession } from '@features/authentication';
+import { Session } from '@features/authentication';
 
 export type UserPresentation = {
-  username: Serializable;
-  groups: Serializable;
+  username: string;
+  groups: string[];
 };
 
-export const userFromSession = (tokenSession: TokenSession): UserPresentation => ({
-  username: tokenSession.idTokenPayload('email') ?? tokenSession.idTokenPayload('phone_number'),
-  groups: tokenSession.accessTokenPayload('cognito:groups')
+export const userFromSession = (tokenSession: Session): UserPresentation => ({
+  username: tokenSession.username(),
+  groups: tokenSession.groups()
 });

@@ -10,16 +10,16 @@ import {
   SESSION_PERSISTENCE
 } from '@features/authentication';
 import {
-  COGNITO_PERSISTENCE,
   cognitoActivateAction$,
   cognitoForgotPasswordAction$,
   cognitoLoginAction$,
   cognitoRegisterAction$,
   cognitoResendActivationCodeAction$,
   cognitoResetPasswordAction$
-} from '@features/aws';
+} from '../actions';
+import { COGNITO_PERSISTENCE } from '../providers';
 
-export const AUTHENTICATION_PROVIDERS: FactoryProvider[] = [
+export const cognitoAuthenticationProviders: () => FactoryProvider[] = (): FactoryProvider[] => [
   forgotPasswordActionProvider(cognitoForgotPasswordAction$, [HttpClient, COGNITO_PERSISTENCE]),
   activateActionProvider(cognitoActivateAction$, [HttpClient, COGNITO_PERSISTENCE]),
   loginActionProvider(cognitoLoginAction$, [HttpClient, COGNITO_PERSISTENCE, SESSION_PERSISTENCE]),

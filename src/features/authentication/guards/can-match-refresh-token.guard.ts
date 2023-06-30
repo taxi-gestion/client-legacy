@@ -9,13 +9,13 @@ import {
   REFRESH_TOKEN_ACTION,
   RefreshTokenAction,
   SESSION_PERSISTENCE,
-  TokenSession
+  Session
 } from '../providers';
 
 @Injectable()
 export class CanMatchRefreshTokenGuard {
   public constructor(
-    @Inject(SESSION_PERSISTENCE) private readonly _session: TokenSession,
+    @Inject(SESSION_PERSISTENCE) private readonly _session: Session,
     @Inject(LOGOUT_ACTION) private readonly logoutAction: LogoutAction,
     @Inject(REFRESH_TOKEN_ACTION) private readonly _refreshTokenAction$: RefreshTokenAction<void>,
     @Inject(REDIRECT_ROUTES_PERSISTENCE) private readonly _toRoutes: Map<RedirectRoutesKeys, string>,

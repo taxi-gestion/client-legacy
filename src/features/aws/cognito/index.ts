@@ -1,3 +1,3 @@
 export * from './actions';
-export * from './authentication';
 export * from './providers';
+export * from './session';

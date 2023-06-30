@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { SESSION_PERSISTENCE, TokenSession } from '../../providers';
+import { SESSION_PERSISTENCE, Session } from '../../providers';
 
 const requestWithBearerToken = (request: HttpRequest<unknown>, token: string): HttpRequest<unknown> =>
   request.clone({
@@ -22,7 +22,7 @@ export const isValidToken = (token: string | null): token is string => token != 
 export class BearerTokenInterceptor implements HttpInterceptor {
   private readonly _authorizedRoutePattern: RegExp = /\/api/u;
 
-  public constructor(@Inject(SESSION_PERSISTENCE) private readonly _tokenSession: TokenSession) {}
+  public constructor(@Inject(SESSION_PERSISTENCE) private readonly _tokenSession: Session) {}
 
   private shouldForwardBearerToken(request: HttpRequest<unknown>, token: string | null): token is string {
     return isValidToken(token) && authorizedRouteMatchPattern(this._authorizedRoutePattern)(request.url);

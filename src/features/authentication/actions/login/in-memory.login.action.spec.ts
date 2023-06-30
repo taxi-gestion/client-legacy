@@ -5,7 +5,7 @@ import { inMemoryLoginAction$ } from './in-memory.login.action';
 
 describe('in memory login action', (): void => {
   it('should login with existing account', async (): Promise<void> => {
-    const session: Session = { isLoggedIn: false };
+    const session: Session = { isLoggedIn: false } as Session;
     const account: Account = { username: 'test@taxi-gestion.com', password: '5Hx$M8/y' };
     const accounts: Account[] = [account];
 
@@ -15,7 +15,7 @@ describe('in memory login action', (): void => {
   });
 
   it('should not login with unknown account', async (): Promise<void> => {
-    const session: Session = { isLoggedIn: false };
+    const session: Session = { isLoggedIn: false } as Session;
     const account: Account = { username: 'test@taxi-gestion.com', password: '5Hx$M8/y' };
     const accounts: Account[] = [account];
 
@@ -25,7 +25,7 @@ describe('in memory login action', (): void => {
   });
 
   it('should not login with wrong password', async (): Promise<void> => {
-    const session: Session = { isLoggedIn: false };
+    const session: Session = { isLoggedIn: false } as Session;
     const account: Account = { username: 'test@taxi-gestion.com', password: '5Hx$M8/y' };
     const accounts: Account[] = [account];
 

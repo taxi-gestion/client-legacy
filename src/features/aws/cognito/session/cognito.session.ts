@@ -1,4 +1,4 @@
-import type { TokenSession, Serializable } from '@features/authentication';
+import type { Session } from '@features/authentication';
 
 const COGNITO_STORAGE_KEY: string = 'aws.cognito';
 export const ACCESS_TOKEN_STORAGE_KEY: string = `${COGNITO_STORAGE_KEY}.access-token`;
@@ -7,7 +7,7 @@ export const REFRESH_TOKEN_STORAGE_KEY: string = `${COGNITO_STORAGE_KEY}.refresh
 export const EXPIRES_IN_STORAGE_KEY: string = `${COGNITO_STORAGE_KEY}.expires-in`;
 
 /* eslint-disable @typescript-eslint/naming-convention */
-export type CognitoAuthentication = {
+export type CognitoSession = {
   AccessToken: string;
   IdToken: string;
   RefreshToken?: string;
@@ -40,7 +40,7 @@ const base64ToJsonString = (base64: string | null): string | null =>
           .join('')
       );
 
-const tryParse = (jsonPayloadString: string, key: string): Serializable | null => {
+const tryParse = <T>(jsonPayloadString: string, key: string): T | null => {
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return JSON.parse(jsonPayloadString)[key];
@@ -49,7 +49,7 @@ const tryParse = (jsonPayloadString: string, key: string): Serializable | null =
   }
 };
 
-export const getFromJWTPayload = (token: string | null, key: string): Serializable | null => {
+export const getFromJWTPayload = <T>(token: string | null, key: string): T | null => {
   if (token === null) return null;
   const urlEncodedPayload: string | undefined = getPayload(token);
   const base64Payload: string | null = urlEncodedToBase64(urlEncodedPayload);
@@ -63,19 +63,21 @@ export const isCognitoTokenExpired = (token: string, now: Date): boolean => subs
 const isCognitoAuthenticationActive: boolean = ((idToken: string | null): boolean =>
   idToken == null ? false : !isCognitoTokenExpired(idToken, new Date()))(localStorage.getItem(ID_TOKEN_STORAGE_KEY));
 
-export const cognitoTokenSession = (): TokenSession => ({
+export const cognitoSession = (): Session => ({
   isLoggedIn: isCognitoAuthenticationActive,
   accessToken: (): string | null => localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY),
   idToken: (): string | null => localStorage.getItem(ID_TOKEN_STORAGE_KEY),
   refresh: (): string | null => localStorage.getItem(REFRESH_TOKEN_STORAGE_KEY),
   expiresIn: (): number => +(localStorage.getItem(EXPIRES_IN_STORAGE_KEY) ?? NaN),
   remainingTime: (): number => substractTimeToTokenExpiration(localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY) ?? '', new Date()),
-  accessTokenPayload: (key: string): Serializable | null =>
-    getFromJWTPayload(localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY), key),
-  idTokenPayload: (key: string): Serializable | null => getFromJWTPayload(localStorage.getItem(ID_TOKEN_STORAGE_KEY), key)
+  username: (): string =>
+    getFromJWTPayload(localStorage.getItem(ID_TOKEN_STORAGE_KEY), 'email') ??
+    getFromJWTPayload(localStorage.getItem(ID_TOKEN_STORAGE_KEY), 'phone_number') ??
+    '',
+  groups: (): string[] => getFromJWTPayload(localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY), 'cognito:groups') ?? []
 });
 
-export const setCognitoAuthenticationToLocalStorage = (cognitoAuthentication: CognitoAuthentication): void => {
+export const setCognitoAuthenticationToLocalStorage = (cognitoAuthentication: CognitoSession): void => {
   localStorage.setItem(ACCESS_TOKEN_STORAGE_KEY, cognitoAuthentication.AccessToken);
   localStorage.setItem(ID_TOKEN_STORAGE_KEY, cognitoAuthentication.IdToken);
   cognitoAuthentication.RefreshToken != null &&

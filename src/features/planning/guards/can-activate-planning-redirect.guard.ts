@@ -1,17 +1,18 @@
 import { Inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
-import { SESSION_PERSISTENCE, TokenSession } from '@features/authentication';
+import { SESSION_PERSISTENCE, Session } from '@features/authentication';
 import { from, Observable, of } from 'rxjs';
 
 @Injectable()
 export class CanActivatePlanningRedirectGuard {
-  public constructor(@Inject(SESSION_PERSISTENCE) private readonly _session: TokenSession, private readonly _router: Router) {}
+  public constructor(@Inject(SESSION_PERSISTENCE) private readonly _session: Session, private readonly _router: Router) {}
 
   public canActivate = (route: ActivatedRouteSnapshot): Observable<boolean> => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    const userGroups: string[] = this._session.idTokenPayload('cognito:groups') as string[];
+    const userGroups: string[] = this._session.groups();
 
-    if (isBothManagerAndDriver(userGroups)) return navigateToDashboard(this._router);
+    if (hasNoGroups(userGroups)) return navigateToMissingAdminConfiguration(this._router);
+
+    if (isBothManagerAndDriver(userGroups)) return navigateToChoicePage(this._router);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     if (isManager(userGroups)) return navigateToDaily(this._router)(route.params['date']);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -21,10 +22,13 @@ export class CanActivatePlanningRedirectGuard {
   };
 }
 
+const hasNoGroups = (userGroups: string[]): userGroups is [] => userGroups.length === 0;
 const isManager = (userGroups: string[]): boolean => userGroups.includes('manager');
 const isDriver = (userGroups: string[]): boolean => userGroups.includes('driver');
 const isBothManagerAndDriver = (userGroups: string[]): boolean => isManager(userGroups) && isDriver(userGroups);
-const navigateToDashboard = (router: Router): Observable<boolean> => from(router.navigate(['/']));
+const navigateToMissingAdminConfiguration = (router: Router): Observable<boolean> =>
+  from(router.navigate(['/planning/missing-admin-configuration']));
+const navigateToChoicePage = (router: Router): Observable<boolean> => from(router.navigate(['/planning/planning-or-agenda']));
 const navigateToDaily =
   (router: Router) =>
   (date: string | undefined): Observable<boolean> =>
