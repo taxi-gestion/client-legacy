@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
 import {
-  DEFAULT_END_TIME,
+  DEFAULT_END_HOUR,
   DEFAULT_INTERVAL,
-  DEFAULT_START_TIME,
+  DEFAULT_START_HOUR,
   PLANNING_SETTINGS_FORM,
   PlanningSettingsValues
 } from './planning-settings.form';
@@ -10,8 +10,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 
 type PlanningSettingsFields = {
   interval: FormControl<PlanningSettingsValues['interval']>;
-  startTime: FormControl<PlanningSettingsValues['startTime']>;
-  endTime: FormControl<PlanningSettingsValues['endTime']>;
+  startHour: FormControl<PlanningSettingsValues['startHour']>;
+  endHour: FormControl<PlanningSettingsValues['endHour']>;
 };
 
 export type PlanningSettings = {
@@ -31,10 +31,11 @@ export class PlanningSettingsComponent {
   public readonly planningSettingsForm: FormGroup<PlanningSettingsFields> = PLANNING_SETTINGS_FORM;
 
   public onPlanningSettingsFormChange(): void {
+    if (PLANNING_SETTINGS_FORM.invalid) return;
     this.planningSettingsChange.next({
       interval: +(this.planningSettingsForm.value.interval ?? DEFAULT_INTERVAL),
-      start: +(this.planningSettingsForm.value.startTime ?? DEFAULT_START_TIME) * 60,
-      end: +(this.planningSettingsForm.value.endTime ?? DEFAULT_END_TIME) * 60
+      start: +(this.planningSettingsForm.value.startHour ?? DEFAULT_START_HOUR) * 60,
+      end: +(this.planningSettingsForm.value.endHour ?? DEFAULT_END_HOUR) * 60
     });
   }
 }

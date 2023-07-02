@@ -3,7 +3,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { map, Observable, switchMap } from 'rxjs';
 import { FareForDate, FARES_FOR_DATE_QUERY, FaresForDateQuery } from '@features/planning';
 import { PlanningSettings } from '../../components/planning/planning-settings/planning-settings.component';
-import { DEFAULT_END_TIME, DEFAULT_START_TIME } from '../../components/planning/planning-settings/planning-settings.form';
+import { DEFAULT_END_HOUR, DEFAULT_START_HOUR } from '../../components/planning/planning-settings/planning-settings.form';
 import {
   toStandardDateFormat,
   groupByPlanning,
@@ -14,8 +14,8 @@ import { DailyPlannings } from '../../common/fares.presentation';
 
 const DEFAULT_PLANNING_SETTINGS: PlanningSettings = {
   interval: 30,
-  start: +DEFAULT_START_TIME * 60,
-  end: +DEFAULT_END_TIME * 60
+  start: +DEFAULT_START_HOUR * 60,
+  end: +DEFAULT_END_HOUR * 60
 };
 
 const paramsToDate = (params: Params): Date => (params['date'] == null ? new Date() : new Date(params['date'] as string));

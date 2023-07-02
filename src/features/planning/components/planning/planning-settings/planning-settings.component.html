@@ -6,7 +6,7 @@
     <option value="15">d'un quart d'heure</option>
   </select>
   , de
-  <select class="form-select w-auto d-inline-block" name="startTime" formControlName="startTime">
+  <select class="form-select w-auto d-inline-block" name="startHour" formControlName="startHour">
     <option value="00">00h00</option>
     <option value="01">01h00</option>
     <option value="02">02h00</option>
@@ -31,11 +31,9 @@
     <option value="21">21h00</option>
     <option value="22">22h00</option>
     <option value="23">23h00</option>
-    <option value="24">00h00</option>
   </select>
   à
-  <select class="form-select w-auto d-inline-block" name="endTime" formControlName="endTime">
-    <option value="00">00h00</option>
+  <select class="form-select w-auto d-inline-block" name="endHour" formControlName="endHour">
     <option value="01">01h00</option>
     <option value="02">02h00</option>
     <option value="03">03h00</option>
@@ -61,4 +59,10 @@
     <option value="23">23h00</option>
     <option value="24">00h00</option>
   </select>
+  <ul
+    class="small text-danger"
+    *ngIf="planningSettingsForm.get('endHour')?.errors?.['invalidHourError'] || planningSettingsForm.get('startHour')?.errors?.['invalidHourError']">
+    <li>Il doit y avoir au moins une heure entre l'heure de début et l'heure de fin</li>
+    <li>L'heure de fin ne peut pas être avant l'heure de début</li>
+  </ul>
 </form>
