@@ -13,7 +13,6 @@
 <button class="btn btn-primary" (click)="openScheduleFareModal()">Ajouter une course</button>
 <ng-container *ngIf="plannings$ | async as plannings">
   <app-planning [interval]="planningSettings.interval" [start]="planningSettings.start" [end]="planningSettings.end">
-    <b slot="title">Plannings</b>
     <app-planning-row *ngFor="let planning of plannings" [sessions]="planning.fares" [template]="fare">
       <ng-container slot="header">{{ planning.name }}</ng-container>
       <ng-template #fare let-fare="session">

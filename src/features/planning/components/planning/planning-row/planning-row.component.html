@@ -2,7 +2,7 @@
   <div class="position-sticky start-0 bg-light me-4" style="min-width: 300px">
     <ng-content select="[slot=header]"></ng-content>
   </div>
-  <div [style.min-width.px]="planning.columnWidth" *ngFor="let timeInMinutes of planning.timeInMinutes$ | async">
+  <div [style.min-width.px]="planning.columnWidth" *ngFor="let timeInMinutes of planning.timesInMinutes$ | async">
     <ng-container *ngFor="let session of sessions">
       <div
         *ngIf="

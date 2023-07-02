@@ -20,7 +20,7 @@ export class PlanningComponent implements OnChanges {
 
   public _timeInMinutes$: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
 
-  public timeInMinutes$: Observable<number[]> = this._timeInMinutes$.asObservable();
+  public timesInMinutes$: Observable<number[]> = this._timeInMinutes$.asObservable();
 
   /* eslint-disable no-mixed-operators */
   private hoursRange(): number[] {

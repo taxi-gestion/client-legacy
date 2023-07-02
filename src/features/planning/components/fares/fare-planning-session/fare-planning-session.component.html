@@ -1,6 +1,6 @@
 <div class="bg-white rounded-3 shadow-sm p-2 my-2">
   <h6 class="mb-0 text-capitalize d-flex">
-    <a class="text-body" href="tel:{{ fare.phone }}" title="Appeler le client">{{ fare.client }}</a>
+    <a class="text-body" href="tel:{{ fare.phone }}" title="Appeler le client au {{ fare.phone }}">{{ fare.client }}</a>
     <ng-container *ngIf="fare.nature === 'medical'">
       <span class="visually-hidden">Trajet médical</span>
       <i class="ms-auto ri-stethoscope-line small text-muted" aria-hidden="true"></i>
@@ -23,7 +23,4 @@
       [class.ri-arrow-left-right-line]="fare.kind === 'outward'"
       aria-hidden="true"></i>
   </small>
-  <div>
-    {{ fare.time }}
-  </div>
 </div>
