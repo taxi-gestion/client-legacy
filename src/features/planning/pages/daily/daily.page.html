@@ -14,7 +14,7 @@
 <ng-container *ngIf="plannings$ | async as plannings">
   <app-planning [interval]="planningSettings.interval" [start]="planningSettings.start" [end]="planningSettings.end">
     <app-planning-row *ngFor="let planning of plannings" [sessions]="planning.fares" [template]="fare">
-      <ng-container slot="header">{{ planning.name }}</ng-container>
+      <b slot="header" class="text-capitalize">{{ planning.name }}</b>
       <ng-template #fare let-fare="session">
         <app-fare-planning-session [fare]="fare"></app-fare-planning-session>
       </ng-template>

@@ -1,15 +1,18 @@
 <div class="d-flex">
-  <div class="position-sticky start-0 bg-light me-4" style="min-width: 300px">
+  <div class="position-sticky start-0 bg-white shadow border-bottom p-2 me-4" style="width: 200px; z-index: 1">
     <ng-content select="[slot=header]"></ng-content>
   </div>
-  <div [style.min-width.px]="planning.columnWidth" *ngFor="let timeInMinutes of planning.timesInMinutes$ | async">
+  <div
+    class="border-start-dashed border-2"
+    [style.width.px]="planning.columnWidth"
+    *ngFor="let timeInMinutes of planning.timesInMinutes$ | async">
     <ng-container *ngFor="let session of sessions">
       <div
         *ngIf="
           timeInMinutes + planning.interval - session.startTimeInMinutes > 0 &&
           timeInMinutes + planning.interval - session.startTimeInMinutes <= planning.interval
         "
-        [ngStyle]="{ 'width.px': (planning.columnWidth * session.duration) / planning.interval }"
+        [ngStyle]="{ 'width.px': (planning.columnWidth * session.duration) / planning.interval, 'min-width.px': 125 }"
         [style.transform]="
           'translateX(' + offsetForMinutes(session.startTimeInMinutes - timeInMinutes, planning.columnWidth) + 'px)'
         ">
