@@ -1,5 +1,6 @@
 import { PlanningComponent } from './planning/planning.component';
 import { PlanningRowComponent } from './planning/planning-row/planning-row.component';
+import { PlanningSettingsComponent } from './planning/planning-settings/planning-settings.component';
 import { FareDetailsComponent } from './fares/fare-details/fare-details.component';
 import { ScheduleFareComponent } from './fares/schedule-fare/schedule-fare.component';
 import { ExperimentalModalComponent } from './modal/experimental-modal.component';
@@ -9,6 +10,7 @@ import { FarePlanningSessionComponent } from './fares/fare-planning-session/fare
 export const COMPONENTS = [
   PlanningComponent,
   PlanningRowComponent,
+  PlanningSettingsComponent,
   FareDetailsComponent,
   FarePlanningSessionComponent,
   ScheduleFareComponent,

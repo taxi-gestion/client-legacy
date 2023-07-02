@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FormGroup } from '@angular/forms';
-import { FareToSchedule, FareToScheduleTransfer, SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../../providers';
+import { FareToScheduleTransfer, SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../../providers';
 import { SCHEDULE_FARE_FORM, ScheduleFareFields, setScheduleFareErrorToForm } from './schedule-fare.form';
 import { formatScheduleFareError, toFareToScheduleTransfer } from './schedule-fare.presenter';
 
@@ -11,10 +11,12 @@ import { formatScheduleFareError, toFareToScheduleTransfer } from './schedule-fa
   templateUrl: './schedule-fare.component.html'
 })
 export class ScheduleFareComponent {
-  @Input({ required: true }) public scheduleFareFormInitialValues: Partial<FareToSchedule> = {};
   @Output() public scheduleFareSubmitted: EventEmitter<void> = new EventEmitter<void>();
+
   @Output() public scheduleFareSuccess: EventEmitter<void> = new EventEmitter<void>();
+
   @Output() public scheduleFareError: EventEmitter<Error> = new EventEmitter<Error>();
+
   public readonly scheduleFare$ = (): Observable<object> =>
     this._scheduleFareAction$(toFareToScheduleTransfer(SCHEDULE_FARE_FORM.value as FareToScheduleTransfer));
 

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 export type FareToSchedule = {
   clientIdentity: string;
   clientPhone: string;
-  date: Date;
+  date: string;
   driveFrom: string;
   driveKind: 'go-back' | 'one-way' | 'outward';
   driveNature: 'medical' | 'standard';

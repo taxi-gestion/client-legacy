@@ -8,7 +8,7 @@ import {
 } from './fares.presentation';
 import { FareForDate, FaresForDate } from '../providers';
 
-export const formatDateDDMMYYYY = (date: Date): string => format(date, 'dd/MM/yyyy');
+export const toStandardDateFormat = (date: Date): string => format(date, 'yyyy-MM-dd');
 
 export const groupByPlanning = (faresList: DailyPlanning): DailyPlannings => {
   const groupedFares: Record<string, DailyPlanning> = faresList.reduce(
@@ -35,8 +35,10 @@ export const filterByPlanning =
 
 export const toFaresForDatePresentation = (fares: FaresForDate): FaresForDatePresentation =>
   fares.map(toFareForDatePresentation);
+
 export const toFaresForDatePlanningSession = (fares: FaresForDatePresentation): DailyPlanning =>
   fares.map(toFareForDatePlanningSession);
+
 export const toFareForDatePresentation = (fare: FareForDate): FareForDatePresentation => ({
   client: fare.client,
   creator: fare.creator,
@@ -56,13 +58,10 @@ const metersToKilometers = (meters: number): string => `${(meters / 1000).toFixe
 
 const isoTimeToMinutes = (timeString: string): number => {
   const parts: string[] | undefined = timeString.split(':');
-  const hours: number = parseInt(parts[0] ?? '0', 10);
-  // TODO The planning component doesnt handle minutes yet
-  //const minutes = parseInt((parts && parts[1]) ?? "0", 10);
-  return hours * 60;
+  const hours: number = parseInt(parts[0] ?? '0', 10) * 60;
+  const minutes: number = parseInt(parts[1] ?? '0', 10);
+  return hours + minutes;
 };
-
-const fareDurationMinOneHours = (duration: number): number => Math.max(duration, 60);
 
 export const toFareForDatePlanningSession = (fare: FareForDatePresentation): FareForDatePlanningSession => ({
   startTimeInMinutes: isoTimeToMinutes(fare.time),
@@ -71,7 +70,7 @@ export const toFareForDatePlanningSession = (fare: FareForDatePresentation): Far
   departure: fare.departure,
   destination: fare.destination,
   distance: fare.distance,
-  duration: fareDurationMinOneHours(fare.duration),
+  duration: fare.duration,
   kind: fare.kind,
   nature: fare.nature,
   phone: fare.phone,

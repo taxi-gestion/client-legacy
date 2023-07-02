@@ -125,3 +125,19 @@ $font-family-icons-lower: string.to-lower-case($font-family-icons);
 .ri-shield-check-line::before {
   content: '\f100';
 }
+
+.ri-stethoscope-line::before {
+  content: '\f197';
+}
+
+.ri-arrow-left-right-line::before {
+  content: '\ea62';
+}
+
+.ri-arrow-right-line::before {
+  content: '\ea6c';
+}
+
+.ri-arrow-turn-back-line::before {
+  content: '\f2e7';
+}

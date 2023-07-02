@@ -1,0 +1,64 @@
+<form [formGroup]="planningSettingsForm" (change)="onPlanningSettingsFormChange()">
+  Affichage des courses sur un intervalle de temps
+  <select name="interval" class="form-select w-auto d-inline-block" formControlName="interval">
+    <option value="60">d'une heure</option>
+    <option value="30">d'une demi-heure</option>
+    <option value="15">d'un quart d'heure</option>
+  </select>
+  , de
+  <select class="form-select w-auto d-inline-block" name="startTime" formControlName="startTime">
+    <option value="00">00h00</option>
+    <option value="01">01h00</option>
+    <option value="02">02h00</option>
+    <option value="03">03h00</option>
+    <option value="04">04h00</option>
+    <option value="05">05h00</option>
+    <option value="06">06h00</option>
+    <option value="07">07h00</option>
+    <option value="08">08h00</option>
+    <option value="09">09h00</option>
+    <option value="10">10h00</option>
+    <option value="11">11h00</option>
+    <option value="12">12h00</option>
+    <option value="13">13h00</option>
+    <option value="14">14h00</option>
+    <option value="15">15h00</option>
+    <option value="16">16h00</option>
+    <option value="17">17h00</option>
+    <option value="18">18h00</option>
+    <option value="19">19h00</option>
+    <option value="20">20h00</option>
+    <option value="21">21h00</option>
+    <option value="22">22h00</option>
+    <option value="23">23h00</option>
+    <option value="24">00h00</option>
+  </select>
+  à
+  <select class="form-select w-auto d-inline-block" name="endTime" formControlName="endTime">
+    <option value="00">00h00</option>
+    <option value="01">01h00</option>
+    <option value="02">02h00</option>
+    <option value="03">03h00</option>
+    <option value="04">04h00</option>
+    <option value="05">05h00</option>
+    <option value="06">06h00</option>
+    <option value="07">07h00</option>
+    <option value="08">08h00</option>
+    <option value="09">09h00</option>
+    <option value="10">10h00</option>
+    <option value="11">11h00</option>
+    <option value="12">12h00</option>
+    <option value="13">13h00</option>
+    <option value="14">14h00</option>
+    <option value="15">15h00</option>
+    <option value="16">16h00</option>
+    <option value="17">17h00</option>
+    <option value="18">18h00</option>
+    <option value="19">19h00</option>
+    <option value="20">20h00</option>
+    <option value="21">21h00</option>
+    <option value="22">22h00</option>
+    <option value="23">23h00</option>
+    <option value="24">00h00</option>
+  </select>
+</form>

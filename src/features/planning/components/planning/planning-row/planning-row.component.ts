@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, TemplateRef } from '@angular/core';
 import { PlanningComponent } from '../planning.component';
+import { scaleForMinutesRelativeToOneHour } from './planning-row.presenter';
 
 export type PlanningSession = {
   startTimeInMinutes: number;
@@ -16,7 +17,7 @@ export class PlanningRowComponent {
 
   @Input({ required: true }) public template!: TemplateRef<{ session: PlanningSession }>;
 
-  @Input() public hourColumnSize: number = 200;
-
   public constructor(public readonly planning: PlanningComponent) {}
+
+  public offsetForMinutes: (minutes: number, scale: number) => number = scaleForMinutesRelativeToOneHour;
 }

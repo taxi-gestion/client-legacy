@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 const HOURS_IN_DAY: 24 = 24 as const;
@@ -9,29 +9,29 @@ const MINUTES_IN_HOUR: 60 = 60 as const;
   selector: 'app-planning',
   templateUrl: './planning.component.html'
 })
-export class PlanningComponent implements OnInit, OnChanges {
+export class PlanningComponent implements OnChanges {
   @Input() public start: number = 0;
-  @Input() public end: number = HOURS_IN_DAY * MINUTES_IN_HOUR;
-  @Input() public pitch: number = 60;
-  @Input() public hourColumnSize: number = 200;
 
-  public _hours$: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
-  public hours$: Observable<number[]> = this._hours$.asObservable();
+  @Input() public end: number = HOURS_IN_DAY * MINUTES_IN_HOUR;
+
+  @Input() public interval: number = 60;
+
+  public readonly columnWidth: number = 400;
+
+  public _timeInMinutes$: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
+
+  public timeInMinutes$: Observable<number[]> = this._timeInMinutes$.asObservable();
 
   /* eslint-disable no-mixed-operators */
   private hoursRange(): number[] {
     return Array.from(
-      { length: (HOURS_IN_DAY * MINUTES_IN_HOUR - this.start - (HOURS_IN_DAY * MINUTES_IN_HOUR - this.end)) / this.pitch },
-      (_: string, i: number): number => i + this.start / this.pitch
+      { length: (HOURS_IN_DAY * MINUTES_IN_HOUR - this.start - (HOURS_IN_DAY * MINUTES_IN_HOUR - this.end)) / this.interval },
+      (_: string, i: number): number => i * this.interval + this.start
     );
   }
   /* eslint-enable */
 
-  public ngOnInit(): void {
-    this._hours$.next(this.hoursRange());
-  }
-
   public ngOnChanges(): void {
-    this._hours$.next(this.hoursRange());
+    this._timeInMinutes$.next(this.hoursRange());
   }
 }
