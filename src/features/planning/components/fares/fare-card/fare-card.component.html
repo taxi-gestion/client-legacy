@@ -1,0 +1,38 @@
+<div class="card border-0 shadow-sm h-100">
+  <div class="card-body">
+    <div class="d-flex">
+      <h5 class="card-title d-flex mb-0">{{ fare.client }}</h5>
+      <ng-container *ngIf="fare.nature === 'medical'">
+        <span class="visually-hidden">Trajet médical</span>
+        <i class="ms-auto ri-stethoscope-line text-muted" aria-hidden="true"></i>
+      </ng-container>
+    </div>
+    <div class="d-flex">
+      <a href="tel:{{ fare.phone }}">{{ fare.phone }}</a>
+      <i
+        class="align-bottom ms-auto text-muted"
+        [class.ri-arrow-right-line]="fare.kind === 'one-way'"
+        [class.ri-arrow-turn-back-line]="fare.kind === 'go-back'"
+        [class.ri-arrow-left-right-line]="fare.kind === 'outward'"
+        aria-hidden="true"></i>
+    </div>
+    <p class="small my-3">
+      Départ à
+      <b>{{ fare.time }}</b>
+      :
+      <a href="geo:{{ fare.departure }}">{{ fare.departure }}</a>
+      <br />
+      Destination :
+      <a href="geo:{{ fare.destination }}">{{ fare.destination }}</a>
+    </p>
+    <a
+      class="btn btn-sm btn-primary"
+      href="https://www.google.com/maps/dir/?api=1&origin={{ fare.departure }}&destination={{ fare.destination }}"
+      target="_blank">
+      Trajet de {{ fare.distance }} en {{ fare.duration }} min
+    </a>
+  </div>
+  <div class="card-footer border-light-subtle">
+    <small class="text-body-secondary">Créé par {{ fare.creator }}</small>
+  </div>
+</div>

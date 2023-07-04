@@ -53,6 +53,6 @@ export class DailyPage {
   }
 
   public async onPlanningDateChange(planningDate: string): Promise<void> {
-    await this._router.navigate(['/planning/daily', planningDate]);
+    await this._router.navigate(['planning', 'daily', planningDate]);
   }
 }
