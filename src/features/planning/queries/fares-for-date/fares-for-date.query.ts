@@ -11,7 +11,7 @@ export type FareTransfer = {
   distance: string;
   planning: string;
   duration: string;
-  kind: 'go-back' | 'one-way' | 'outward';
+  kind: 'one-way' | 'outward' | 'return';
   nature: 'medical' | 'standard';
   phone: string;
   status: 'scheduled';
