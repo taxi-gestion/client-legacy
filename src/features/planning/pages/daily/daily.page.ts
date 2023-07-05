@@ -1,52 +1,58 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { map, Observable } from 'rxjs';
-import { FARES_FOR_DATE_QUERY, FaresForDateQuery, FareToSchedule } from '@features/planning';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { map, Observable, switchMap } from 'rxjs';
+import { FareForDate, FARES_FOR_DATE_QUERY, FaresForDateQuery } from '@features/planning';
+import { PlanningSettings } from '../../components/planning/planning-settings/planning-settings.component';
+import { DEFAULT_END_HOUR, DEFAULT_START_HOUR } from '../../components/planning/planning-settings/planning-settings.form';
 import {
-  formatDateDDMMYYYY,
+  toStandardDateFormat,
   groupByPlanning,
   toFaresForDatePlanningSession,
   toFaresForDatePresentation
 } from '../../common/fares.presenter';
 import { DailyPlannings } from '../../common/fares.presentation';
 
+const DEFAULT_PLANNING_SETTINGS: PlanningSettings = {
+  interval: 30,
+  start: +DEFAULT_START_HOUR * 60,
+  end: +DEFAULT_END_HOUR * 60
+};
+
+const paramsToDate = (params: Params): Date => (params['date'] == null ? new Date() : new Date(params['date'] as string));
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './daily.page.html',
-  styleUrls: ['./daily.page.css']
+  templateUrl: './daily.page.html'
 })
 export class DailyPage {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  private readonly _dateFromUrl: string | null = this._route.snapshot.params['date'];
-  private readonly _selectedDate: Date = this._dateFromUrl == null ? new Date() : new Date(this._dateFromUrl);
-  public ddMMYYYYtoday: string = formatDateDDMMYYYY(this._selectedDate);
+  public planningDate: string = toStandardDateFormat(paramsToDate(this._route.snapshot.params));
 
-  public constructor(
-    private readonly _route: ActivatedRoute,
-    @Inject(FARES_FOR_DATE_QUERY) private readonly _faresForDateQuery: FaresForDateQuery
-  ) {}
+  public planningSettings: PlanningSettings = DEFAULT_PLANNING_SETTINGS;
 
-  public readonly plannings$: Observable<DailyPlannings> = this._faresForDateQuery(this._selectedDate).pipe(
+  public readonly plannings$: Observable<DailyPlannings> = this._route.params.pipe(
+    switchMap((params: Params): Observable<FareForDate[]> => this._faresForDateQuery(paramsToDate(params))),
     map(toFaresForDatePresentation),
     map(toFaresForDatePlanningSession),
     map(groupByPlanning)
   );
 
-  public scheduleFareFormInitialValues: Partial<FareToSchedule> = {
-    date: this._selectedDate,
-    driveKind: 'outward',
-    driveNature: 'medical'
-  };
-
-  //region Add Fares modal
   public showScheduleFareModal: boolean = false;
+
+  public constructor(
+    private readonly _router: Router,
+    private readonly _route: ActivatedRoute,
+    @Inject(FARES_FOR_DATE_QUERY) private readonly _faresForDateQuery: FaresForDateQuery
+  ) {}
+
   public handleScheduleFareModalClose(): void {
     this.showScheduleFareModal = false;
   }
+
   public openScheduleFareModal(): void {
     this.showScheduleFareModal = true;
   }
-  //endregion
 
-  public hourColumnSize: number = 300;
+  public async onPlanningDateChange(planningDate: string): Promise<void> {
+    await this._router.navigate(['planning', 'daily', planningDate]);
+  }
 }

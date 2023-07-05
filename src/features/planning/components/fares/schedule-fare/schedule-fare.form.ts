@@ -18,7 +18,7 @@ export const SCHEDULE_FARE_FORM: FormGroup<Record<keyof FareToSchedule, FormCont
 >({
   clientIdentity: new FormControl<FareToSchedule['clientIdentity']>('', [Validators.required]),
   clientPhone: new FormControl<FareToSchedule['clientPhone']>('', [Validators.required]),
-  date: new FormControl<FareToSchedule['date']>(new Date(), [Validators.required]),
+  date: new FormControl<FareToSchedule['date']>('', [Validators.required]),
   driveFrom: new FormControl<FareToSchedule['driveFrom']>('', [Validators.required]),
   driveKind: new FormControl<FareToSchedule['driveKind']>('outward', [Validators.required]),
   driveNature: new FormControl<FareToSchedule['driveNature']>('medical', [Validators.required]),

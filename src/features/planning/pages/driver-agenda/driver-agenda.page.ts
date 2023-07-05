@@ -1,31 +1,34 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { map, Observable } from 'rxjs';
-import { FARES_FOR_DATE_QUERY, FaresForDateQuery } from '@features/planning';
-import { ActivatedRoute } from '@angular/router';
-import { filterByPlanning, formatDateDDMMYYYY, toFaresForDatePresentation } from '../../common/fares.presenter';
-import { DailyAgenda } from '../../common/fares.presentation';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { map, Observable, switchMap } from 'rxjs';
+import { FareForDate, FARES_FOR_DATE_QUERY, FaresForDateQuery } from '@features/planning';
 import { SESSION_PERSISTENCE, Session } from '../../../authentication';
+import { filterByPlanning, toStandardDateFormat, toFaresForDatePresentation } from '../../common/fares.presenter';
+import { FareForDatePresentation } from '../../common/fares.presentation';
+
+const paramsToDate = (params: Params): Date => (params['date'] == null ? new Date() : new Date(params['date'] as string));
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './driver-agenda.page.html'
 })
 export class DriverAgendaPage {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  private readonly _dateFromUrl: string | null = this._route.snapshot.params['date'];
+  public planningDate: string = toStandardDateFormat(paramsToDate(this._route.snapshot.params));
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  private readonly _selectedDate: Date = this._dateFromUrl == null ? new Date() : new Date(this._dateFromUrl);
-  public today: string = formatDateDDMMYYYY(this._selectedDate);
+  public readonly agenda$: Observable<FareForDatePresentation[]> = this._route.params.pipe(
+    switchMap((params: Params): Observable<FareForDate[]> => this._faresForDateQuery(paramsToDate(params))),
+    map(toFaresForDatePresentation),
+    map(filterByPlanning(this._session.username()))
+  );
 
   public constructor(
+    private readonly _router: Router,
     private readonly _route: ActivatedRoute,
     @Inject(FARES_FOR_DATE_QUERY) private readonly _faresForDateQuery: FaresForDateQuery,
     @Inject(SESSION_PERSISTENCE) private readonly _session: Session
   ) {}
 
-  public readonly agenda$: Observable<DailyAgenda> = this._faresForDateQuery(this._selectedDate).pipe(
-    map(toFaresForDatePresentation),
-    map(filterByPlanning(this._session.username()))
-  );
+  public async onPlanningDateChange(planningDate: string): Promise<void> {
+    await this._router.navigate(['planning', 'agenda', planningDate]);
+  }
 }
