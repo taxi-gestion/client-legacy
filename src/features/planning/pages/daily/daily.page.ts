@@ -10,7 +10,7 @@ import {
   toFaresForDatePlanningSession,
   toFaresForDatePresentation
 } from '../../common/fares.presenter';
-import { DailyPlannings } from '../../common/fares.presentation';
+import { DailyPlannings, FaresForDatePresentation } from '../../common/fares.presentation';
 
 const DEFAULT_PLANNING_SETTINGS: PlanningSettings = {
   interval: 30,
@@ -34,6 +34,11 @@ export class DailyPage {
     map(toFaresForDatePresentation),
     map(toFaresForDatePlanningSession),
     map(groupByPlanning)
+  );
+
+  public readonly returnsToSchedule$: Observable<FaresForDatePresentation> = this._route.params.pipe(
+    switchMap((params: Params): Observable<FareForDate[]> => this._faresForDateQuery(paramsToDate(params))),
+    map(toFaresForDatePresentation)
   );
 
   public showScheduleFareModal: boolean = false;

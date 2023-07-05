@@ -5,6 +5,7 @@ import { ScheduleFareComponent } from './fares/schedule-fare/schedule-fare.compo
 import { ExperimentalModalComponent } from './modal/experimental-modal.component';
 import { FarePlanningSessionComponent } from './fares/fare-planning-session/fare-planning-session.component';
 import { FareCardComponent } from './fares/fare-card/fare-card.component';
+import { ReturnsToScheduleListComponent } from './fares/returns-to-schedule-list/returns-to-schedule-list.component';
 
 // eslint-disable-next-line @typescript-eslint/typedef
 export const COMPONENTS = [
@@ -14,5 +15,6 @@ export const COMPONENTS = [
   FarePlanningSessionComponent,
   FareCardComponent,
   ScheduleFareComponent,
-  ExperimentalModalComponent
+  ExperimentalModalComponent,
+  ReturnsToScheduleListComponent
 ];
