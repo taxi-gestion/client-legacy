@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { FaresForDatePresentation } from '../../../common/fares.presentation';
+import { FaresToScheduleForDatePresentation } from '@features/planning/common/fares-to-schedule.presentation';
 
 @Component({
   selector: 'app-returns-to-schedule-list',
   templateUrl: './returns-to-schedule-list.component.html'
 })
 export class ReturnsToScheduleListComponent {
-  @Input({ required: true }) public returnFaresToSchedule!: FaresForDatePresentation;
+  @Input({ required: true }) public returnFaresToSchedule!: FaresToScheduleForDatePresentation;
 }

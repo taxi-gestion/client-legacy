@@ -3,8 +3,9 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { map, Observable, switchMap } from 'rxjs';
 import { FareForDate, FARES_FOR_DATE_QUERY, FaresForDateQuery } from '@features/planning';
 import { SESSION_PERSISTENCE, Session } from '../../../authentication';
-import { filterByPlanning, toStandardDateFormat, toFaresForDatePresentation } from '../../common/fares.presenter';
+import { filterByPlanning, toFaresForDatePresentation } from '../../common/fares.presenter';
 import { FareForDatePresentation } from '../../common/fares.presentation';
+import { toStandardDateFormat } from '@features/planning/common/unit-convertion';
 
 const paramsToDate = (params: Params): Date => (params['date'] == null ? new Date() : new Date(params['date'] as string));
 
