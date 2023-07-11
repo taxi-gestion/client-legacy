@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { AFFECT_RETURN_FORM, AffectReturnFields, setAffectReturnErrorToForm } from './affect-return.form';
@@ -11,7 +20,7 @@ import { ReturnToAffectForDatePresentation } from '@features/planning/common/ret
   selector: 'app-affect-return',
   templateUrl: './affect-return.component.html'
 })
-export class AffectReturnComponent {
+export class AffectReturnComponent implements OnChanges {
   @Input({ required: true }) public returnFareToAffect!: ReturnToAffectForDatePresentation;
 
   @Output() public affectReturnSubmitted: EventEmitter<void> = new EventEmitter<void>();
@@ -26,6 +35,18 @@ export class AffectReturnComponent {
   public readonly affectReturnForm: FormGroup<AffectReturnFields> = AFFECT_RETURN_FORM;
 
   public constructor(@Inject(AFFECT_RETURN_ACTION) private readonly _affectReturnAction$: AffectReturnAction) {}
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['returnFareToAffect']?.firstChange === true) {
+      this.initFormValue();
+    }
+  }
+
+  private initFormValue(): void {
+    this.affectReturnForm.controls.fareId.setValue(this.returnFareToAffect.id);
+    this.affectReturnForm.controls.driveFrom.setValue(this.returnFareToAffect.departure);
+    this.affectReturnForm.controls.driveTo.setValue(this.returnFareToAffect.destination);
+  }
 
   public onSubmitReturnToAffect = (triggerAction: () => void): void => {
     AFFECT_RETURN_FORM.markAllAsTouched();

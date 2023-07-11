@@ -12,7 +12,7 @@ export type ReturnsToAffectTransfer = {
   kind: 'return';
   nature: 'medical' | 'standard';
   phone: string;
-  status: 'to-affect';
+  status: 'return-to-affect';
   time: string | undefined;
 };
 
@@ -29,7 +29,7 @@ const toReturnsToAffectForDate = (faresToSchedule: ReturnsToAffectTransfer[]): R
       nature: fare.nature,
       phone: fare.phone,
       planning: fare.planning,
-      status: 'to-affect',
+      status: 'return-to-affect',
       time: fare.time
     })
   );

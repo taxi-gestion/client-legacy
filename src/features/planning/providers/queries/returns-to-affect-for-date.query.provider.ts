@@ -27,6 +27,6 @@ export type ReturnToAffectForDate = {
   kind: 'return';
   nature: 'medical' | 'standard';
   phone: string;
-  status: 'to-affect';
+  status: 'return-to-affect';
   time: string | undefined;
 };
