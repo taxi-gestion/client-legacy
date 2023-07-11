@@ -1,0 +1,12 @@
+<div class="bg-white rounded-3 shadow-sm p-2 my-2">
+  <h2>Retours à affecter</h2>
+  <ul>
+    <li *ngFor="let returnFare of returnsToAffect">
+      <p>{{ returnFare.client }}</p>
+      <button class="btn btn-primary" (click)="openAffectReturnModal()">Affecter le retour</button>
+      <app-experimental-modal *ngIf="showAffectReturnModal" (closeModal)="handleAffectReturnModalClose()">
+        <app-affect-return [returnFareToAffect]="returnFare"></app-affect-return>
+      </app-experimental-modal>
+    </li>
+  </ul>
+</div>

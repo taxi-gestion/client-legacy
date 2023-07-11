@@ -1,14 +1,12 @@
-import { format } from 'date-fns';
 import {
+  DailyPlanning,
+  DailyPlannings,
   FareForDatePlanningSession,
   FareForDatePresentation,
-  DailyPlanning,
-  FaresForDatePresentation,
-  DailyPlannings
+  FaresForDatePresentation
 } from './fares.presentation';
 import { FareForDate, FaresForDate } from '../providers';
-
-export const toStandardDateFormat = (date: Date): string => format(date, 'yyyy-MM-dd');
+import { isoTimeToMinutes, metersToKilometers } from '@features/planning/common/unit-convertion';
 
 export const groupByPlanning = (faresList: DailyPlanning): DailyPlannings => {
   const groupedFares: Record<string, DailyPlanning> = faresList.reduce(
@@ -53,15 +51,6 @@ export const toFareForDatePresentation = (fare: FareForDate): FareForDatePresent
   status: fare.status,
   time: fare.time.substring(1)
 });
-
-const metersToKilometers = (meters: number): string => `${(meters / 1000).toFixed(1)} km`;
-
-const isoTimeToMinutes = (timeString: string): number => {
-  const parts: string[] | undefined = timeString.split(':');
-  const hours: number = parseInt(parts[0] ?? '0', 10) * 60;
-  const minutes: number = parseInt(parts[1] ?? '0', 10);
-  return hours + minutes;
-};
 
 export const toFareForDatePlanningSession = (fare: FareForDatePresentation): FareForDatePlanningSession => ({
   startTimeInMinutes: isoTimeToMinutes(fare.time),

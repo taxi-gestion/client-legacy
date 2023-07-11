@@ -1,0 +1,38 @@
+<h1>Affecter le retour</h1>
+<form
+  [formGroup]="affectReturnForm"
+  [appLoadAction]="affectReturn$"
+  #loadAction="loadAction"
+  (actionSuccess)="onAffectReturnActionSuccess()"
+  (actionError)="onAffectReturnActionError($event)"
+  (ngSubmit)="onSubmitReturnToAffect(loadAction.start)">
+  <input id="fareId" type="hidden" formControlName="fareId" />
+  <div>
+    <label for="startTime">A:</label>
+    <input id="startTime" type="time" formControlName="startTime" />
+  </div>
+  <div>
+    <label for="planning">Chauffeur:</label>
+    <input id="planning" type="text" formControlName="planning" />
+  </div>
+  <div>
+    <label for="driveFrom">Départ de:</label>
+    <input id="driveFrom" type="text" formControlName="driveFrom" />
+  </div>
+  <div>
+    <label for="driveTo">Arrivée:</label>
+    <input id="driveTo" type="text" formControlName="driveTo" />
+  </div>
+  <button
+    [appLoadActionDisplay]="loadAction.isLoading$ | async"
+    #loadActionDisplay
+    type="submit"
+    class="btn btn-primary mt-5 p-3 w-100"
+    [disabled]="loadActionDisplay.isLoading">
+    <ng-container slot="loadActionDisplayIdle">Affecter le retour</ng-container>
+    <ng-container slot="loadActionDisplayLoading">
+      <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+      Affectation en cours...
+    </ng-container>
+  </button>
+</form>

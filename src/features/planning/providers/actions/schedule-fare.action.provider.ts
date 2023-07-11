@@ -6,7 +6,7 @@ export type FareToSchedule = {
   clientPhone: string;
   date: string;
   driveFrom: string;
-  driveKind: 'go-back' | 'one-way' | 'outward';
+  driveKind: 'one-way' | 'outward' | 'return';
   driveNature: 'medical' | 'standard';
   planning: string | undefined;
   driveTo: string;
@@ -18,7 +18,7 @@ export type FareToScheduleTransfer = {
   clientPhone: string;
   date: string;
   driveFrom: string;
-  driveKind: 'go-back' | 'one-way' | 'outward';
+  driveKind: 'one-way' | 'outward' | 'return';
   driveNature: 'medical' | 'standard';
   planning: string | undefined;
   driveTo: string;

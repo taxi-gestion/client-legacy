@@ -1,7 +1,7 @@
-import { toStandardDateFormat } from './fares.presenter';
+import { toStandardDateFormat } from './unit-convertion';
 
 describe('daily presenter', (): void => {
-  it('should format date 2019-03-05 to 05/03/2019', (): void => {
+  it('should format date 2019-03-05 to string representation 2019-03-05', (): void => {
     const date: Date = new Date('2019-03-05');
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

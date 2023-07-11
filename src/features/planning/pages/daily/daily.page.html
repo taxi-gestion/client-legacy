@@ -25,3 +25,9 @@
 <app-experimental-modal *ngIf="showScheduleFareModal" (closeModal)="handleScheduleFareModalClose()">
   <app-schedule-fare></app-schedule-fare>
 </app-experimental-modal>
+
+<div class="w-25" style="right: 0; top: 100px; max-height: 100vh; overflow-y: auto">
+  <ng-container *ngIf="returnsToSchedule$ | async as returnsToSchedule">
+    <app-returns-to-affect-list [returnsToAffect]="returnsToSchedule"></app-returns-to-affect-list>
+  </ng-container>
+</div>
