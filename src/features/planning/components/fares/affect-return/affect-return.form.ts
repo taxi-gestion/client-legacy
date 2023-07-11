@@ -14,9 +14,9 @@ export const AFFECT_RETURN_FORM: FormGroup<Record<keyof ReturnToAffect, FormCont
 >({
   fareId: new FormControl<ReturnToAffect['fareId']>(''),
   driveFrom: new FormControl<ReturnToAffect['driveFrom']>('', [Validators.required]),
-  planning: new FormControl<ReturnToAffect['planning']>(''),
+  planning: new FormControl<ReturnToAffect['planning']>('', [Validators.required]),
   driveTo: new FormControl<ReturnToAffect['driveTo']>('', [Validators.required]),
-  startTime: new FormControl<ReturnToAffect['startTime']>('00:00', [Validators.required])
+  startTime: new FormControl<ReturnToAffect['startTime']>('12:00', [Validators.required])
 });
 
 export const setAffectReturnErrorToForm = (handledError: { field?: string; errors: Record<string, unknown> }): void =>
