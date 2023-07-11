@@ -4,18 +4,18 @@ import { map, Observable, switchMap } from 'rxjs';
 import {
   FareForDate,
   FARES_FOR_DATE_QUERY,
-  FARES_TO_SCHEDULE_FOR_DATE_QUERY,
   FaresForDateQuery,
-  FaresToScheduleForDateQuery,
-  FareToScheduleForDate
+  RETURNS_TO_AFFECT_FOR_DATE_QUERY,
+  ReturnsToAffectForDateQuery,
+  ReturnToAffectForDate
 } from '@features/planning';
 import { PlanningSettings } from '../../components/planning/planning-settings/planning-settings.component';
 import { DEFAULT_END_HOUR, DEFAULT_START_HOUR } from '../../components/planning/planning-settings/planning-settings.form';
 import { groupByPlanning, toFaresForDatePlanningSession, toFaresForDatePresentation } from '../../common/fares.presenter';
 import { DailyPlannings } from '../../common/fares.presentation';
 import { toStandardDateFormat } from '@features/planning/common/unit-convertion';
-import { FaresToScheduleForDatePresentation } from '@features/planning/common/fares-to-schedule.presentation';
-import { toFaresToScheduleForDatePresentation } from '@features/planning/common/fares-to-schedule.presenter';
+import { ReturnToAffectForDatePresentation } from '@features/planning/common/returns-to-affect.presentation';
+import { toReturnsToAffectForDatePresentation } from '@features/planning/common/returns-to-affect.presenter';
 
 const DEFAULT_PLANNING_SETTINGS: PlanningSettings = {
   interval: 30,
@@ -41,9 +41,9 @@ export class DailyPage {
     map(groupByPlanning)
   );
 
-  public readonly returnsToSchedule$: Observable<FaresToScheduleForDatePresentation> = this._route.params.pipe(
-    switchMap((params: Params): Observable<FareToScheduleForDate[]> => this._faresToScheduleForDateQuery(paramsToDate(params))),
-    map(toFaresToScheduleForDatePresentation)
+  public readonly returnsToSchedule$: Observable<ReturnToAffectForDatePresentation[]> = this._route.params.pipe(
+    switchMap((params: Params): Observable<ReturnToAffectForDate[]> => this._returnsToAffectForDateQuery(paramsToDate(params))),
+    map(toReturnsToAffectForDatePresentation)
   );
 
   public showScheduleFareModal: boolean = false;
@@ -52,7 +52,7 @@ export class DailyPage {
     private readonly _router: Router,
     private readonly _route: ActivatedRoute,
     @Inject(FARES_FOR_DATE_QUERY) private readonly _faresForDateQuery: FaresForDateQuery,
-    @Inject(FARES_TO_SCHEDULE_FOR_DATE_QUERY) private readonly _faresToScheduleForDateQuery: FaresToScheduleForDateQuery
+    @Inject(RETURNS_TO_AFFECT_FOR_DATE_QUERY) private readonly _returnsToAffectForDateQuery: ReturnsToAffectForDateQuery
   ) {}
 
   public handleScheduleFareModalClose(): void {

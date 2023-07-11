@@ -1,2 +1,2 @@
 export * from './fares-for-date/fares-for-date.query';
-export * from './fares-to-schedule-for-date/fares-to-schedule-for-date.query';
+export * from '@features/planning/queries/returns-to-affect-for-date/returns-to-affect-for-date.query';
