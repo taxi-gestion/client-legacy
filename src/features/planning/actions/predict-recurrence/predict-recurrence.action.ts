@@ -16,4 +16,8 @@ const handlePredictRecurrenceError$ =
 export const predictRecurrenceAction$ =
   (http: HttpClient): PredictRecurrenceAction =>
   (query: string): Observable<object> =>
-    http.post(predictRecurrenceUrl(), query).pipe(catchError(handlePredictRecurrenceError$()));
+    http
+      .post(predictRecurrenceUrl(), {
+        query
+      })
+      .pipe(catchError(handlePredictRecurrenceError$()));
