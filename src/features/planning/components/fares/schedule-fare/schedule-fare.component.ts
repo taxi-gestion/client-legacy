@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FormGroup } from '@angular/forms';
-import { FareToScheduleTransfer, SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../../providers';
+import { FareToScheduleTransfer, PredictedRecurrence, SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../../providers';
 import { SCHEDULE_FARE_FORM, ScheduleFareFields, setScheduleFareErrorToForm } from './schedule-fare.form';
 import { formatScheduleFareError, toFareToScheduleTransfer } from './schedule-fare.presenter';
 
@@ -27,6 +27,12 @@ export class ScheduleFareComponent {
   public onSubmitFareToSchedule = (triggerAction: () => void): void => {
     SCHEDULE_FARE_FORM.markAllAsTouched();
     SCHEDULE_FARE_FORM.valid && triggerAction();
+  };
+
+  public onPredictRecurrenceSuccessChange = (predictedRecurrence: PredictedRecurrence): void => {
+    this.scheduleFareForm.controls.recurrence.setValue(predictedRecurrence.query);
+    this.scheduleFareForm.controls.recurrenceQuery.setValue(predictedRecurrence.query);
+    this.scheduleFareForm.controls.recurrenceExplanation.setValue(predictedRecurrence.query);
   };
 
   public onScheduleFareActionSuccess = (): void => {

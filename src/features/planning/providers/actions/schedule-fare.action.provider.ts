@@ -11,6 +11,9 @@ export type FareToSchedule = {
   planning: string | undefined;
   driveTo: string;
   startTime: string;
+  recurrence: string | undefined;
+  recurrenceQuery: string | undefined;
+  recurrenceExplanation: string | undefined;
 };
 
 export type FareToScheduleTransfer = {
@@ -23,6 +26,9 @@ export type FareToScheduleTransfer = {
   planning: string | undefined;
   driveTo: string;
   startTime: string;
+  recurrence: string | undefined;
+  recurrenceQuery: string | undefined;
+  recurrenceExplanation: string | undefined;
 };
 
 export type ScheduleFareAction = (fareToSchedule: FareToScheduleTransfer) => Observable<object>;

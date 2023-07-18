@@ -34,6 +34,13 @@
     <label for="planning">Chauffeur:</label>
     <input id="planning" type="text" formControlName="planning" />
   </div>
+  <div class="border border-secondary p-1">
+    <app-predict-recurrence
+      [fromDate]="scheduleFareForm.controls.date.getRawValue()"
+      (predictRecurrenceSuccess)="onPredictRecurrenceSuccessChange($event)"></app-predict-recurrence>
+  </div>
+  <input id="recurrence" type="hidden" formControlName="recurrence" />
+  <input id="recurrenceQuery" type="hidden" formControlName="recurrenceQuery" />
   <div>
     <label for="driveKind">Type de trajet:</label>
     <select id="driveKind" formControlName="driveKind">

@@ -17,5 +17,8 @@ export const toFareToScheduleTransfer = (formValues: FareToScheduleTransfer): Fa
   driveNature: formValues.driveNature,
   driveTo: formValues.driveTo,
   planning: formValues.planning,
-  startTime: timeToIso8601String(formValues.startTime)
+  startTime: timeToIso8601String(formValues.startTime),
+  recurrence: formValues.recurrence,
+  recurrenceQuery: formValues.recurrenceQuery,
+  recurrenceExplanation: formValues.recurrenceExplanation
 });

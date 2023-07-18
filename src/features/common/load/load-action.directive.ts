@@ -9,7 +9,7 @@ import { START_LOADING, STOP_LOADING, whileLoading } from '@features/common';
 export class LoadActionDirective<T> {
   @Input({ required: true, alias: 'appLoadAction' }) public action$!: () => Observable<T>;
 
-  @Output() public actionSuccess: EventEmitter<void> = new EventEmitter<void>();
+  @Output() public actionSuccess: EventEmitter<T> = new EventEmitter<T>();
 
   @Output() public actionError: EventEmitter<Error> = new EventEmitter<Error>();
 
@@ -22,7 +22,7 @@ export class LoadActionDirective<T> {
       this._isLoading$.next(STOP_LOADING);
       return caught;
     }),
-    tap((): void => this.actionSuccess.emit()),
+    tap((actionResult: T): void => this.actionSuccess.emit(actionResult)),
     map((): boolean => STOP_LOADING)
   );
 

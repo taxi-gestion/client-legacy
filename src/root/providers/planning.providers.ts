@@ -8,12 +8,15 @@ import {
   scheduleFareAction$,
   affectReturnAction$,
   scheduleFareActionProvider,
-  returnsToAffectForDateQuery$
+  returnsToAffectForDateQuery$,
+  predictRecurrenceActionProvider,
+  predictRecurrenceAction$
 } from '@features/planning';
 
 export const PLANNING_PROVIDERS: FactoryProvider[] = [
   scheduleFareActionProvider(scheduleFareAction$, [HttpClient]),
   affectReturnActionProvider(affectReturnAction$, [HttpClient]),
+  predictRecurrenceActionProvider(predictRecurrenceAction$, [HttpClient]),
   faresForDateQueryProvider(faresForDateQuery$, [HttpClient]),
   returnsToAffectForDateQueryProvider(returnsToAffectForDateQuery$, [HttpClient])
 ];
