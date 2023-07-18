@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, Output } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { PREDICT_RECURRENCE_ACTION, PredictedRecurrence, PredictRecurrenceAction } from '../../providers';
 import { PREDICT_RECURRENCE_FORM, PredictRecurrenceFields, setPredictRecurrenceErrorToForm } from './predict-recurrence.form';
@@ -23,7 +23,9 @@ export class PredictRecurrenceComponent {
     this._predictRecurrenceAction$(PREDICT_RECURRENCE_FORM.controls.query.value as string);
 
   private readonly _displayNextOccurrences: Subject<Date[]> = new Subject<Date[]>();
+  private readonly _displayExplanation: BehaviorSubject<string> = new BehaviorSubject<string>('Pas de répétition active');
   public readonly displayNextOccurrences$: Observable<Date[]> = this._displayNextOccurrences.asObservable();
+  public readonly displayExplanation$: Observable<string> = this._displayExplanation.asObservable();
 
   public readonly predictRecurrenceForm: FormGroup<PredictRecurrenceFields> = PREDICT_RECURRENCE_FORM;
 
@@ -35,9 +37,8 @@ export class PredictRecurrenceComponent {
   };
 
   public onPredictRecurrenceActionSuccess = (predictedRecurrence: PredictedRecurrence): void => {
-    this._displayNextOccurrences.next(
-      getNextOccurrences((predictedRecurrence as { recurrence: string }).recurrence, this.fromDate)
-    );
+    this._displayNextOccurrences.next(getNextOccurrences(predictedRecurrence.recurrence, this.fromDate, 6));
+    this._displayExplanation.next(predictedRecurrence.explanation);
   };
 
   public onPredictRecurrenceActionError = (error: Error): void => {

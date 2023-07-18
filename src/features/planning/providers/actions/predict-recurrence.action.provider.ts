@@ -7,6 +7,7 @@ export type PredictRecurrence = {
 
 export type PredictedRecurrence = PredictRecurrence & {
   recurrence: string;
+  explanation: string;
 };
 
 export type PredictRecurrenceAction = (query: string) => Observable<object>;

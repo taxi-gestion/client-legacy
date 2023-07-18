@@ -6,20 +6,24 @@
   (actionError)="onPredictRecurrenceActionError($event)"
   (ngSubmit)="onSubmitPredictRecurrence(loadAction.start)">
   <div>
-    <label for="query">Récurrence:</label>
+    <label for="query">Répétition:</label>
     <br />
     <textarea
       id="query"
       type="text"
       formControlName="query"
-      placeholder="ex: tous les mardis | le 15 de chaque mois | tous les premiers vendredi de chaque mois"
+      placeholder="ex: tous les mardis | le 15 de chaque mois | tous les premiers vendredi de chaque mois | tous les mardis jusqua fin aout"
       style="width: 100%; height: 100%"></textarea>
     <ng-container *ngIf="displayNextOccurrences$ | async as nextOccurrences">
-      <div>Prochaines dates:</div>
+      <div><strong>6 Prochaines dates:</strong></div>
       <div *ngFor="let date of nextOccurrences">
         {{ date | date : 'EEEE, d MMMM, y à HH:mm' }}
       </div>
     </ng-container>
+    <div>
+      <strong>Détail du raisonnement:</strong>
+      {{ displayExplanation$ | async }}
+    </div>
   </div>
   <button
     [appLoadActionDisplay]="loadAction.isLoading$ | async"
@@ -27,7 +31,7 @@
     type="submit"
     class="btn btn-secondary mt-5 p-3 w-100"
     [disabled]="loadActionDisplay.isLoading">
-    <ng-container slot="loadActionDisplayIdle">Inférer la récurrence</ng-container>
+    <ng-container slot="loadActionDisplayIdle">Appliquer la répétition</ng-container>
     <ng-container slot="loadActionDisplayLoading">
       <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
       Inférence en cours...
