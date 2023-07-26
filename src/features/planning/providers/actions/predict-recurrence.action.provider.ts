@@ -10,6 +10,12 @@ export type PredictedRecurrence = PredictRecurrence & {
   explanation: string;
 };
 
+export type PredictedRecurrenceTransfer = {
+  query: string;
+  recurrence: string;
+  explanation: string;
+};
+
 export type PredictRecurrenceAction = (query: string) => Observable<object>;
 
 export const PREDICT_RECURRENCE_ACTION: symbol = Symbol('planning.predict-recurrence.action');

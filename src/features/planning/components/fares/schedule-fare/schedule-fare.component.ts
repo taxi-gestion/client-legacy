@@ -4,6 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { FareToScheduleTransfer, PredictedRecurrence, SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../../providers';
 import { SCHEDULE_FARE_FORM, ScheduleFareFields, setScheduleFareErrorToForm } from './schedule-fare.form';
 import { formatScheduleFareError, toFareToScheduleTransfer } from './schedule-fare.presenter';
+import { PlacePresentation } from '@features/places/definitions/places';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,6 +23,14 @@ export class ScheduleFareComponent {
 
   public readonly scheduleFareForm: FormGroup<ScheduleFareFields> = SCHEDULE_FARE_FORM;
 
+  public onSelectDepartureChange(place: PlacePresentation): void {
+    this.scheduleFareForm.controls.driveFrom.setValue(place);
+  }
+
+  public onSelectDestinationChange(place: PlacePresentation): void {
+    this.scheduleFareForm.controls.driveTo.setValue(place);
+  }
+
   public constructor(@Inject(SCHEDULE_FARE_ACTION) private readonly _scheduleFareAction$: ScheduleFareAction) {}
 
   public onSubmitFareToSchedule = (triggerAction: () => void): void => {
@@ -30,9 +39,7 @@ export class ScheduleFareComponent {
   };
 
   public onPredictRecurrenceSuccessChange = (predictedRecurrence: PredictedRecurrence): void => {
-    this.scheduleFareForm.controls.recurrence.setValue(predictedRecurrence.query);
-    this.scheduleFareForm.controls.recurrenceQuery.setValue(predictedRecurrence.query);
-    this.scheduleFareForm.controls.recurrenceExplanation.setValue(predictedRecurrence.query);
+    this.scheduleFareForm.controls.recurrence.setValue(predictedRecurrence);
   };
 
   public onScheduleFareActionSuccess = (): void => {

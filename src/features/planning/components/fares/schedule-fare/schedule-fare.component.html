@@ -23,12 +23,14 @@
     <input id="startTime" type="time" formControlName="startTime" />
   </div>
   <div>
-    <label for="driveFrom">Départ de:</label>
-    <input id="driveFrom" type="text" formControlName="driveFrom" />
+    Départ de:
+    <app-place-field (selectPlace)="onSelectDepartureChange($event)"></app-place-field>
+    <input id="driveFrom" type="hidden" formControlName="driveFrom" />
   </div>
   <div>
     <label for="driveTo">Arrivée:</label>
-    <input id="driveTo" type="text" formControlName="driveTo" />
+    <app-place-field (selectPlace)="onSelectDestinationChange($event)"></app-place-field>
+    <input id="driveTo" type="hidden" formControlName="driveTo" />
   </div>
   <div>
     <label for="planning">Chauffeur:</label>
@@ -40,7 +42,6 @@
       (predictRecurrenceSuccess)="onPredictRecurrenceSuccessChange($event)"></app-predict-recurrence>
   </div>
   <input id="recurrence" type="hidden" formControlName="recurrence" />
-  <input id="recurrenceQuery" type="hidden" formControlName="recurrenceQuery" />
   <div>
     <label for="driveKind">Type de trajet:</label>
     <select id="driveKind" formControlName="driveKind">

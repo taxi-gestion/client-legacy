@@ -1,0 +1,54 @@
+<form [formGroup]="formGroup">
+  <label for="place" class="visually-hidden"><ng-content></ng-content></label>
+  <div class="input-group">
+    <span class="input-group-text px-2">
+      <i class="text-muted ri-search-line ri-lg"></i>
+    </span>
+    <input
+      #placeInput
+      type="search"
+      placeholder="Entrez une adresse, un lieu-dit..."
+      name="place"
+      id="place"
+      class="form-control"
+      autocomplete="off"
+      aria-describedby="place"
+      aria-haspopup="true"
+      formControlName="place"
+      [attr.aria-describedby]="placeNotFound ? 'places-desc-error' : null"
+      [attr.aria-expanded]="placeResultsDropdown.expanded$ | async"
+      (input)="
+        search(placeInput.value);
+        placeInput.value.length <= minSearchTermLength ? placeResultsDropdown.reduce() : placeResultsDropdown.expand()
+      "
+      (focus)="placeInput.value.length <= minSearchTermLength ? placeResultsDropdown.reduce() : placeResultsDropdown.expand()"
+      (keyup.escape)="placeResultsDropdown.reduce()"
+      (keyup.enter)="placeResultsDropdown.activeIndex = 0; placeResultsDropdown.focus()" />
+    <button type="button" *ngIf="placeInput.value && displayReset" class="btn input-group-btn" (click)="clear()">
+      <i class="ri-close-line"></i>
+    </button>
+    <ng-content></ng-content>
+  </div>
+  <ul
+    #placeResultsDropdown="placeResultsDropdown"
+    appPlaceResultsDropdown
+    [dropdownControl]="placeInput"
+    [class.show]="placeResultsDropdown.expanded$ | async"
+    class="dropdown-menu position-absolute mt-1"
+    aria-labelledby="place">
+    <li #results *ngFor="let place of (placesFound$ | async) ?? []; index as placeIndex; trackBy: trackByPlaceName">
+      <button
+        type="button"
+        class="dropdown-item"
+        [class.active]="placeResultsDropdown.activeIndex === placeIndex"
+        [attr.aria-current]="placeResultsDropdown.activeIndex === placeIndex ? true : null"
+        (focusin)="placeResultsDropdown.setIndex(placeIndex)"
+        (focusout)="placeResultsDropdown.setIndex(-1)"
+        (click)="setPlaceSuggestion(place); placeResultsDropdown.reduce()">
+        <b>{{ place.label }}</b>
+        <br />
+        <small>{{ place.context }}</small>
+      </button>
+    </li>
+  </ul>
+</form>
