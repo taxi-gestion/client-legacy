@@ -6,7 +6,7 @@ import {
   FaresForDatePresentation
 } from './fares.presentation';
 import { FareForDate, FaresForDate } from '../providers';
-import { isoTimeToMinutes, metersToKilometers } from '@features/planning/common/unit-convertion';
+import { isoTimeToMinutes, metersToKilometers } from './unit-convertion';
 
 export const groupByPlanning = (faresList: DailyPlanning): DailyPlannings => {
   const groupedFares: Record<string, DailyPlanning> = faresList.reduce(

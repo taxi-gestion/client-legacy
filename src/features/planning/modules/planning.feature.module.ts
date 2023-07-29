@@ -7,8 +7,9 @@ import { CanActivatePlanningRedirectGuard } from '../guards';
 import { PAGES } from '../pages';
 import { PIPES } from '../pipes';
 import { PlanningFeatureRoutingModule } from './planning.feature-routing.module';
-import { PlaceFeatureModule } from '@features/place/modules';
-import { RecurrenceFeatureModule } from '@features/recurrence/modules';
+import { PlaceFeatureModule } from '@features/place';
+import { RecurrenceFeatureModule } from '@features/recurrence';
+import { UserFeatureModule } from '@features/user';
 
 @NgModule({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -20,7 +21,8 @@ import { RecurrenceFeatureModule } from '@features/recurrence/modules';
     ReactiveFormsModule,
     FormsModule,
     PlaceFeatureModule,
-    RecurrenceFeatureModule
+    RecurrenceFeatureModule,
+    UserFeatureModule
   ],
   providers: [CanActivatePlanningRedirectGuard]
 })

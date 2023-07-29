@@ -1,0 +1,54 @@
+<form [formGroup]="formGroup">
+  <label for="user" class="visually-hidden"><ng-content></ng-content></label>
+  <div class="input-group">
+    <span class="input-group-text px-2">
+      <i class="text-muted ri-search-line ri-lg"></i>
+    </span>
+    <input
+      #userInput
+      type="search"
+      placeholder="Rechercher..."
+      name="user"
+      id="user"
+      class="form-control"
+      autocomplete="off"
+      aria-describedby="user"
+      aria-haspopup="true"
+      formControlName="user"
+      [attr.aria-describedby]="userNotFound ? 'user-desc-error' : null"
+      [attr.aria-expanded]="userResultsDropdown.expanded$ | async"
+      (input)="
+        search(userInput.value);
+        userInput.value.length <= minSearchTermLength ? userResultsDropdown.reduce() : userResultsDropdown.expand()
+      "
+      (focus)="userInput.value.length <= minSearchTermLength ? userResultsDropdown.reduce() : userResultsDropdown.expand()"
+      (keyup.escape)="userResultsDropdown.reduce()"
+      (keyup.enter)="userResultsDropdown.activeIndex = 0; userResultsDropdown.focus()" />
+    <button type="button" *ngIf="userInput.value && displayReset" class="btn input-group-btn" (click)="clear()">
+      <i class="ri-close-line"></i>
+    </button>
+    <ng-content></ng-content>
+  </div>
+  <ul
+    #userResultsDropdown="userResultsDropdown"
+    appUserResultsDropdown
+    [dropdownControl]="userInput"
+    [class.show]="userResultsDropdown.expanded$ | async"
+    class="dropdown-menu position-absolute mt-1"
+    aria-labelledby="user">
+    <li #results *ngFor="let user of (usersFound$ | async) ?? []; index as userIndex; trackBy: trackByUserName">
+      <button
+        type="button"
+        class="dropdown-item"
+        [class.active]="userResultsDropdown.activeIndex === userIndex"
+        [attr.aria-current]="userResultsDropdown.activeIndex === userIndex ? true : null"
+        (focusin)="userResultsDropdown.setIndex(userIndex)"
+        (focusout)="userResultsDropdown.setIndex(-1)"
+        (click)="setUserSuggestion(user); userResultsDropdown.reduce()">
+        <b>{{ user.username }}</b>
+        <br />
+        <small>{{ user.identifier }}</small>
+      </button>
+    </li>
+  </ul>
+</form>

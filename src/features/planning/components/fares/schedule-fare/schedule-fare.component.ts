@@ -4,8 +4,9 @@ import { FormGroup } from '@angular/forms';
 import { FareToScheduleTransfer, SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../../providers';
 import { SCHEDULE_FARE_FORM, ScheduleFareFields, setScheduleFareErrorToForm } from './schedule-fare.form';
 import { formatScheduleFareError, toFareToScheduleTransfer } from './schedule-fare.presenter';
-import { PlacePresentation } from '@features/place/definitions/places';
+import { PlacePresentation } from '@features/place';
 import { PredictedRecurrence } from '@features/recurrence';
+import { UserPresentation } from '@features/user';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,6 +31,10 @@ export class ScheduleFareComponent {
 
   public onSelectDestinationChange(place: PlacePresentation): void {
     this.scheduleFareForm.controls.driveTo.setValue(place);
+  }
+
+  public onSelectDriverChange(driver: UserPresentation): void {
+    this.scheduleFareForm.controls.planning.setValue(driver.identifier);
   }
 
   public constructor(@Inject(SCHEDULE_FARE_ACTION) private readonly _scheduleFareAction$: ScheduleFareAction) {}

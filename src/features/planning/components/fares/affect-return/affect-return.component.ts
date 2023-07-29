@@ -13,7 +13,7 @@ import { FormGroup } from '@angular/forms';
 import { AFFECT_RETURN_FORM, AffectReturnFields, setAffectReturnErrorToForm } from './affect-return.form';
 import { formatAffectReturnError, toReturnToAffectTransfer } from './affect-return.presenter';
 import { AFFECT_RETURN_ACTION, AffectReturnAction, ReturnToAffectTransfer } from '@features/planning';
-import { ReturnToAffectForDatePresentation } from '@features/planning/common/returns-to-affect.presentation';
+import { ReturnToAffectForDatePresentation } from '../../../common/returns-to-affect.presentation';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

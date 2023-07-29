@@ -1,10 +1,10 @@
 import { Observable } from 'rxjs';
 import { FactoryProvider } from '@angular/core';
-import { Place } from '@features/place/definitions/places';
+import { Place } from '@features/place';
 
 export type SearchPlaceQuery = (search: string) => Observable<Place[]>;
 
-export const SEARCH_PLACE_QUERY: symbol = Symbol('place.search-place.query');
+export const SEARCH_PLACE_QUERY: symbol = Symbol('place.search-place.queries');
 
 export const searchPlaceQueryProvider = <TDependencies>(
   useFactory: (...providers: never[]) => SearchPlaceQuery,

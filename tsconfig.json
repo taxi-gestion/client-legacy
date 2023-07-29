@@ -5,7 +5,16 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
-      "@features/*": ["src/features/*"]
+      "@features/authentication": ["src/features/authentication"],
+      "@features/aws": ["src/features/aws"],
+      "@features/common": ["src/features/common"],
+      "@features/dashboard": ["src/features/dashboard"],
+      "@features/google": ["src/features/google"],
+      "@features/place": ["src/features/place"],
+      "@features/planning": ["src/features/planning"],
+      "@features/public": ["src/features/public"],
+      "@features/recurrence": ["src/features/recurrence"],
+      "@features/user": ["src/features/user"]
     },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
