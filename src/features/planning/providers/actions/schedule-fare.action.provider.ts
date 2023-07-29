@@ -1,7 +1,7 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
-import { PredictedRecurrence, PredictedRecurrenceTransfer } from '@features/planning';
-import { Place, PlaceTransfer } from '@features/places/definitions/places';
+import { Place, PlaceTransfer } from '@features/place';
+import { PredictedRecurrence, PredictedRecurrenceTransfer } from '@features/recurrence';
 
 export type FareToSchedule = {
   clientIdentity: string;

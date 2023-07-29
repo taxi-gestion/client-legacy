@@ -4,9 +4,9 @@
     <li *ngFor="let returnFare of returnsToAffect">
       <p>{{ returnFare.client }}</p>
       <button class="btn btn-primary" (click)="openAffectReturnModal()">Affecter le retour</button>
-      <app-experimental-modal *ngIf="showAffectReturnModal" (closeModal)="handleAffectReturnModalClose()">
+      <div *ngIf="showAffectReturnModal">
         <app-affect-return [returnFareToAffect]="returnFare"></app-affect-return>
-      </app-experimental-modal>
+      </div>
     </li>
   </ul>
 </div>

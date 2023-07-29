@@ -1,5 +1,5 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { PredictRecurrence } from '@features/planning';
+import { PredictRecurrence } from '../../providers';
 
 export type PredictRecurrenceFields = {
   query: FormControl<string>;

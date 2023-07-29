@@ -8,14 +8,13 @@ import {
   scheduleFareAction$,
   affectReturnAction$,
   scheduleFareActionProvider,
-  returnsToAffectForDateQuery$,
-  predictRecurrenceActionProvider,
-  predictRecurrenceAction$
+  returnsToAffectForDateQuery$
 } from '@features/planning';
-import { searchPlaceQueryProvider } from '@features/places/providers/queries';
+import { searchPlaceQueryProvider } from '@features/place/providers/queries';
 import { searchPlaceQuery$ } from '@features/google/maps/queries';
 import { GOOGLE_MAPS_API_KEY, googleMapsApiKeyValueProvider } from '@features/google';
 import { ENV } from '../../environments';
+import { predictRecurrenceActionProvider, predictRecurrenceAction$ } from '@features/recurrence';
 
 export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   googleMapsApiKeyValueProvider({ apiKey: ENV.api.maps }),
