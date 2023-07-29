@@ -46,22 +46,12 @@ export class DailyPage {
     map(toReturnsToAffectForDatePresentation)
   );
 
-  public showScheduleFareModal: boolean = false;
-
   public constructor(
     private readonly _router: Router,
     private readonly _route: ActivatedRoute,
     @Inject(FARES_FOR_DATE_QUERY) private readonly _faresForDateQuery: FaresForDateQuery,
     @Inject(RETURNS_TO_AFFECT_FOR_DATE_QUERY) private readonly _returnsToAffectForDateQuery: ReturnsToAffectForDateQuery
   ) {}
-
-  public handleScheduleFareModalClose(): void {
-    this.showScheduleFareModal = false;
-  }
-
-  public openScheduleFareModal(): void {
-    this.showScheduleFareModal = true;
-  }
 
   public async onPlanningDateChange(planningDate: string): Promise<void> {
     await this._router.navigate(['planning', 'daily', planningDate]);

@@ -1,19 +1,27 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { FareToSchedule } from '../../../providers';
+import { FareToSchedule, PredictedRecurrence } from '../../../providers';
+import { Place } from '@features/places/definitions/places';
 
 export type ScheduleFareFields = {
   clientIdentity: FormControl<string>;
   clientPhone: FormControl<string>;
   date: FormControl<Date>;
-  driveFrom: FormControl<string>;
+  driveFrom: FormControl<Place>;
   driveKind: FormControl<'one-way' | 'outward' | 'return'>;
   driveNature: FormControl<'medical' | 'standard'>;
   planning: FormControl<string>;
-  driveTo: FormControl<string>;
+  driveTo: FormControl<Place>;
   startTime: FormControl<string>;
-  recurrence: FormControl<string>;
-  recurrenceQuery: FormControl<string>;
-  recurrenceExplanation: FormControl<string>;
+  recurrence: FormControl<PredictedRecurrence>;
+};
+
+const defaultPlaceValue: Place = {
+  context: '',
+  label: '',
+  localisation: {
+    latitude: NaN,
+    longitude: NaN
+  }
 };
 
 export const SCHEDULE_FARE_FORM: FormGroup<Record<keyof FareToSchedule, FormControl>> = new FormGroup<
@@ -22,15 +30,13 @@ export const SCHEDULE_FARE_FORM: FormGroup<Record<keyof FareToSchedule, FormCont
   clientIdentity: new FormControl<FareToSchedule['clientIdentity']>('', [Validators.required]),
   clientPhone: new FormControl<FareToSchedule['clientPhone']>('', [Validators.required]),
   date: new FormControl<FareToSchedule['date']>('', [Validators.required]),
-  driveFrom: new FormControl<FareToSchedule['driveFrom']>('', [Validators.required]),
+  driveFrom: new FormControl<FareToSchedule['driveFrom']>(defaultPlaceValue, [Validators.required]),
   driveKind: new FormControl<FareToSchedule['driveKind']>('outward', [Validators.required]),
   driveNature: new FormControl<FareToSchedule['driveNature']>('medical', [Validators.required]),
   planning: new FormControl<FareToSchedule['planning']>(''),
-  driveTo: new FormControl<FareToSchedule['driveTo']>('', [Validators.required]),
+  driveTo: new FormControl<FareToSchedule['driveTo']>(defaultPlaceValue, [Validators.required]),
   startTime: new FormControl<FareToSchedule['startTime']>('00:00', [Validators.required]),
-  recurrence: new FormControl<FareToSchedule['recurrence']>('', [Validators.required]),
-  recurrenceQuery: new FormControl<FareToSchedule['recurrenceQuery']>('', [Validators.required]),
-  recurrenceExplanation: new FormControl<FareToSchedule['recurrenceExplanation']>('', [Validators.required])
+  recurrence: new FormControl<FareToSchedule['recurrence']>(undefined, [Validators.required])
 });
 
 export const setScheduleFareErrorToForm = (handledError: { field?: string; errors: Record<string, unknown> }): void =>
