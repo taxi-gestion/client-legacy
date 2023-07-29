@@ -34,7 +34,8 @@
   </div>
   <div>
     <label for="planning">Chauffeur:</label>
-    <input id="planning" type="text" formControlName="planning" />
+    <app-user-field (selectUser)="onSelectDriverChange($event)"></app-user-field>
+    <input id="planning" type="hidden" formControlName="planning" />
   </div>
   <div class="border border-secondary p-1">
     <app-predict-recurrence

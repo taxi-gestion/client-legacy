@@ -1,5 +1,5 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Place } from '@features/place/definitions/places';
+import { Place } from '@features/place';
 import { PredictedRecurrence } from '@features/recurrence';
 import { FareToSchedule } from '@features/planning';
 

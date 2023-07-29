@@ -1,6 +1,13 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { map, Observable, switchMap } from 'rxjs';
+import { PlanningSettings } from '../../components/planning/planning-settings/planning-settings.component';
+import { DEFAULT_END_HOUR, DEFAULT_START_HOUR } from '../../components/planning/planning-settings/planning-settings.form';
+import { groupByPlanning, toFaresForDatePlanningSession, toFaresForDatePresentation } from '../../common/fares.presenter';
+import { DailyPlannings } from '../../common/fares.presentation';
+import { toStandardDateFormat } from '../../common/unit-convertion';
+import { ReturnToAffectForDatePresentation } from '../../common/returns-to-affect.presentation';
+import { toReturnsToAffectForDatePresentation } from '../../common/returns-to-affect.presenter';
 import {
   FareForDate,
   FARES_FOR_DATE_QUERY,
@@ -8,14 +15,7 @@ import {
   RETURNS_TO_AFFECT_FOR_DATE_QUERY,
   ReturnsToAffectForDateQuery,
   ReturnToAffectForDate
-} from '@features/planning';
-import { PlanningSettings } from '../../components/planning/planning-settings/planning-settings.component';
-import { DEFAULT_END_HOUR, DEFAULT_START_HOUR } from '../../components/planning/planning-settings/planning-settings.form';
-import { groupByPlanning, toFaresForDatePlanningSession, toFaresForDatePresentation } from '../../common/fares.presenter';
-import { DailyPlannings } from '../../common/fares.presentation';
-import { toStandardDateFormat } from '@features/planning/common/unit-convertion';
-import { ReturnToAffectForDatePresentation } from '@features/planning/common/returns-to-affect.presentation';
-import { toReturnsToAffectForDatePresentation } from '@features/planning/common/returns-to-affect.presenter';
+} from '../../providers';
 
 const DEFAULT_PLANNING_SETTINGS: PlanningSettings = {
   interval: 30,

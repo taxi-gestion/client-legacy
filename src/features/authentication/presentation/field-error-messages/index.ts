@@ -1,7 +1,7 @@
 import { CODE_ERROR_MESSAGES, CodeError } from './code-error-messages/code.error-message';
 import { PASSWORD_ERROR_MESSAGES, PasswordError } from './password-error-messages/password.error-message';
 import { USERNAME_ERROR_MESSAGES, UsernameError } from './username-error-messages/username.error-message';
-import { ErrorMessages } from '@features/authentication/presentation/message.error';
+import { ErrorMessages } from '../../presentation/message.error';
 
 export * from './field-error-messages.presentation';
 

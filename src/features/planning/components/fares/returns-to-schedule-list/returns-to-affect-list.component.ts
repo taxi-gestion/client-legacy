@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ReturnToAffectForDatePresentation } from '@features/planning/common/returns-to-affect.presentation';
+import { ReturnToAffectForDatePresentation } from '../../../common/returns-to-affect.presentation';
 
 @Component({
   selector: 'app-returns-to-affect-list',

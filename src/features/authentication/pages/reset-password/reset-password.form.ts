@@ -1,5 +1,5 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { passwordValidator } from '@features/authentication/validators';
+import { passwordValidator } from '../../validators';
 
 type ResetPasswordForm = {
   username: string;

@@ -1,4 +1,4 @@
-import { ErrorMessages } from '@features/authentication/presentation/message.error';
+import { ErrorMessages } from '../../presentation/message.error';
 
 const onlyDefined = (message?: string): message is string => message != null;
 

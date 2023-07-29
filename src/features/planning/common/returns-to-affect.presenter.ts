@@ -1,5 +1,5 @@
-import { ReturnToAffectForDatePresentation } from '@features/planning/common/returns-to-affect.presentation';
-import { ReturnToAffectForDate } from '@features/planning';
+import { ReturnToAffectForDatePresentation } from '../common/returns-to-affect.presentation';
+import { ReturnToAffectForDate } from '../providers';
 
 export const toReturnsToAffectForDatePresentation = (fares: ReturnToAffectForDate[]): ReturnToAffectForDatePresentation[] =>
   fares.map(toReturnToAffectForDatePresentation);
