@@ -9,9 +9,9 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { SEARCH_PLACE_QUERY, SearchPlaceQuery } from '@features/places/providers/queries';
+import { SEARCH_PLACE_QUERY, SearchPlaceQuery } from '@features/place/providers/queries';
 import { debounceTime, distinctUntilChanged, filter, map, Observable, Subject, switchMap } from 'rxjs';
-import { PlacePresentation } from '@features/places/definitions/places';
+import { PlacePresentation } from '@features/place/definitions/places';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

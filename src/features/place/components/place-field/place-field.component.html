@@ -15,7 +15,7 @@
       aria-describedby="place"
       aria-haspopup="true"
       formControlName="place"
-      [attr.aria-describedby]="placeNotFound ? 'places-desc-error' : null"
+      [attr.aria-describedby]="placeNotFound ? 'place-desc-error' : null"
       [attr.aria-expanded]="placeResultsDropdown.expanded$ | async"
       (input)="
         search(placeInput.value);

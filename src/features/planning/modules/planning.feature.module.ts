@@ -7,12 +7,21 @@ import { CanActivatePlanningRedirectGuard } from '../guards';
 import { PAGES } from '../pages';
 import { PIPES } from '../pipes';
 import { PlanningFeatureRoutingModule } from './planning.feature-routing.module';
-import { PlaceFeatureModule } from '@features/places/modules';
+import { PlaceFeatureModule } from '@features/place/modules';
+import { RecurrenceFeatureModule } from '@features/recurrence/modules';
 
 @NgModule({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   declarations: [...PAGES, ...COMPONENTS, ...PIPES],
-  imports: [LoadModule, CommonModule, PlanningFeatureRoutingModule, ReactiveFormsModule, FormsModule, PlaceFeatureModule],
+  imports: [
+    LoadModule,
+    CommonModule,
+    PlanningFeatureRoutingModule,
+    ReactiveFormsModule,
+    FormsModule,
+    PlaceFeatureModule,
+    RecurrenceFeatureModule
+  ],
   providers: [CanActivatePlanningRedirectGuard]
 })
 export class PlanningFeatureModule {}

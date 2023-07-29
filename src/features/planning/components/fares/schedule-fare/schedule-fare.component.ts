@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FormGroup } from '@angular/forms';
-import { FareToScheduleTransfer, PredictedRecurrence, SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../../providers';
+import { FareToScheduleTransfer, SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../../providers';
 import { SCHEDULE_FARE_FORM, ScheduleFareFields, setScheduleFareErrorToForm } from './schedule-fare.form';
 import { formatScheduleFareError, toFareToScheduleTransfer } from './schedule-fare.presenter';
-import { PlacePresentation } from '@features/places/definitions/places';
+import { PlacePresentation } from '@features/place/definitions/places';
+import { PredictedRecurrence } from '@features/recurrence';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
