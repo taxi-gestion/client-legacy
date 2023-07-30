@@ -7,6 +7,7 @@ import { formatScheduleFareError, toFareToScheduleTransfer } from './schedule-fa
 import { PlacePresentation } from '@features/place';
 import { PredictedRecurrence } from '@features/recurrence';
 import { UserPresentation } from '@features/user';
+import { ClientPresentation } from '../../../../client';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,6 +36,15 @@ export class ScheduleFareComponent {
 
   public onSelectDriverChange(driver: UserPresentation): void {
     this.scheduleFareForm.controls.planning.setValue(driver.identifier);
+  }
+
+  public onSelectClientChange(client: ClientPresentation): void {
+    this.scheduleFareForm.controls.clientIdentity.setValue(`${client.lastname} ${client.firstname}`);
+    this.scheduleFareForm.controls.clientPhone.setValue(`${client.phone}`);
+  }
+
+  public onSearchClientTermChange(search: string): void {
+    this.scheduleFareForm.controls.clientIdentity.setValue(search);
   }
 
   public constructor(@Inject(SCHEDULE_FARE_ACTION) private readonly _scheduleFareAction$: ScheduleFareAction) {}

@@ -1,19 +1,21 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Place, PlaceTransfer } from '@features/place';
 
+// TODO link to Fare type so as to be protected from drift
 export type ReturnToAffect = {
   fareId: string;
-  driveFrom: string;
+  driveFrom: Place;
   planning: string;
-  driveTo: string;
+  driveTo: Place;
   startTime: string;
 };
 
 export type ReturnToAffectTransfer = {
   fareId: string;
-  driveFrom: string;
+  driveFrom: PlaceTransfer;
   planning: string;
-  driveTo: string;
+  driveTo: PlaceTransfer;
   startTime: string;
 };
 

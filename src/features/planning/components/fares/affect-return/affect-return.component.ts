@@ -14,6 +14,8 @@ import { AFFECT_RETURN_FORM, AffectReturnFields, setAffectReturnErrorToForm } fr
 import { formatAffectReturnError, toReturnToAffectTransfer } from './affect-return.presenter';
 import { AFFECT_RETURN_ACTION, AffectReturnAction, ReturnToAffectTransfer } from '@features/planning';
 import { ReturnToAffectForDatePresentation } from '../../../common/returns-to-affect.presentation';
+import { PlacePresentation } from '@features/place';
+import { UserPresentation } from '@features/user';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -46,6 +48,18 @@ export class AffectReturnComponent implements OnChanges {
     this.affectReturnForm.controls.fareId.setValue(this.returnFareToAffect.id);
     this.affectReturnForm.controls.driveFrom.setValue(this.returnFareToAffect.departure);
     this.affectReturnForm.controls.driveTo.setValue(this.returnFareToAffect.destination);
+  }
+
+  public onSelectDepartureChange(place: PlacePresentation): void {
+    this.affectReturnForm.controls.driveFrom.setValue(place);
+  }
+
+  public onSelectDestinationChange(place: PlacePresentation): void {
+    this.affectReturnForm.controls.driveTo.setValue(place);
+  }
+
+  public onSelectDriverChange(driver: UserPresentation): void {
+    this.affectReturnForm.controls.planning.setValue(driver.identifier);
   }
 
   public onSubmitReturnToAffect = (triggerAction: () => void): void => {

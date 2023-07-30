@@ -1,4 +1,5 @@
 import { PlanningSession } from '../components/planning/planning-row/planning-row.component';
+import { PlacePresentation } from '@features/place';
 
 export type DailyPlannings = {
   name: string;
@@ -8,8 +9,8 @@ export type DailyPlannings = {
 export type FareForDatePresentation = {
   client: string;
   creator: string;
-  departure: string;
-  destination: string;
+  departure: PlacePresentation;
+  destination: PlacePresentation;
   distance: string;
   planning: string;
   duration: number;

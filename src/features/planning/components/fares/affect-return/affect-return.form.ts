@@ -1,11 +1,13 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReturnToAffect } from '../../../providers';
+import { Place } from '@features/place';
+import { defaultPlaceValue } from '../../../common/fares.presenter';
 
 export type AffectReturnFields = {
   fareId: FormControl<string>;
-  driveFrom: FormControl<string>;
+  driveFrom: FormControl<Place>;
   planning: FormControl<string>;
-  driveTo: FormControl<string>;
+  driveTo: FormControl<Place>;
   startTime: FormControl<string>;
 };
 
@@ -13,9 +15,9 @@ export const AFFECT_RETURN_FORM: FormGroup<Record<keyof ReturnToAffect, FormCont
   Record<keyof ReturnToAffect, FormControl>
 >({
   fareId: new FormControl<ReturnToAffect['fareId']>(''),
-  driveFrom: new FormControl<ReturnToAffect['driveFrom']>('', [Validators.required]),
+  driveFrom: new FormControl<ReturnToAffect['driveFrom']>(defaultPlaceValue, [Validators.required]),
   planning: new FormControl<ReturnToAffect['planning']>('', [Validators.required]),
-  driveTo: new FormControl<ReturnToAffect['driveTo']>('', [Validators.required]),
+  driveTo: new FormControl<ReturnToAffect['driveTo']>(defaultPlaceValue, [Validators.required]),
   startTime: new FormControl<ReturnToAffect['startTime']>('12:00', [Validators.required])
 });
 

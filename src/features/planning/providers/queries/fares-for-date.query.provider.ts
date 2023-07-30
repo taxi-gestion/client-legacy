@@ -1,5 +1,6 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Place } from '@features/place';
 
 export const FARES_FOR_DATE_QUERY: 'planning.fares-for-date.query' = 'planning.fares-for-date.query' as const;
 
@@ -22,8 +23,8 @@ export type FareForDate = {
   client: string;
   creator: string;
   date: string;
-  departure: string;
-  destination: string;
+  departure: Place;
+  destination: Place;
   distance: string;
   planning: string;
   duration: string;

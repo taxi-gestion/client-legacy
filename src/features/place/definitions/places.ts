@@ -21,3 +21,14 @@ export type PlaceTransfer = {
   latitude: number;
   longitude: number;
 };
+
+export const toPlaces = (places: PlaceTransfer[]): Place[] => places.map(toPlace);
+
+export const toPlace = (place: PlaceTransfer): Place => ({
+  context: place.context,
+  label: place.context,
+  localisation: {
+    latitude: place.latitude,
+    longitude: place.longitude
+  }
+});

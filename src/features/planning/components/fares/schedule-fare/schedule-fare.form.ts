@@ -2,6 +2,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Place } from '@features/place';
 import { PredictedRecurrence } from '@features/recurrence';
 import { FareToSchedule } from '@features/planning';
+import { defaultPlaceValue } from '../../../common/fares.presenter';
 
 export type ScheduleFareFields = {
   clientIdentity: FormControl<string>;
@@ -14,15 +15,6 @@ export type ScheduleFareFields = {
   driveTo: FormControl<Place>;
   startTime: FormControl<string>;
   recurrence: FormControl<PredictedRecurrence>;
-};
-
-const defaultPlaceValue: Place = {
-  context: '',
-  label: '',
-  localisation: {
-    latitude: NaN,
-    longitude: NaN
-  }
 };
 
 export const SCHEDULE_FARE_FORM: FormGroup<Record<keyof FareToSchedule, FormControl>> = new FormGroup<

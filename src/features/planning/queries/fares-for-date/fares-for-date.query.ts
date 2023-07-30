@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { FareForDate, FaresForDate, FaresForDateQuery } from '../../providers';
+import { PlaceTransfer, toPlace } from '@features/place';
 
 export type FareTransfer = {
   client: string;
   creator: string;
   date: string;
-  departure: string;
-  destination: string;
+  departure: PlaceTransfer;
+  destination: PlaceTransfer;
   distance: string;
   planning: string;
   duration: string;
@@ -25,8 +26,8 @@ const toFaresForDate = (fares: FareTransfer[]): FaresForDate =>
       client: fare.client,
       creator: fare.creator,
       date: fare.date,
-      departure: fare.departure,
-      destination: fare.destination,
+      departure: toPlace(fare.departure),
+      destination: toPlace(fare.destination),
       distance: fare.distance,
       duration: fare.duration,
       kind: fare.kind,

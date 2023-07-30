@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { ReturnsToAffectForDate, ReturnsToAffectForDateQuery, ReturnToAffectForDate } from '@features/planning';
+import { Place } from '@features/place';
 
 export type ReturnsToAffectTransfer = {
   id: string;
   client: string;
   date: string;
-  departure: string;
-  destination: string;
+  departure: Place;
+  destination: Place;
   planning: string | undefined;
   kind: 'return';
   nature: 'medical' | 'standard';

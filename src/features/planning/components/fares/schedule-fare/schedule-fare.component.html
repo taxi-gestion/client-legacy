@@ -8,6 +8,9 @@
   (ngSubmit)="onSubmitFareToSchedule(loadAction.start)">
   <div>
     <label for="clientIdentity">Client:</label>
+    <app-client-field
+      (selectClient)="onSelectClientChange($event)"
+      (searchClientTerm)="onSearchClientTermChange($event)"></app-client-field>
     <input id="clientIdentity" type="text" formControlName="clientIdentity" />
   </div>
   <div>
