@@ -10,17 +10,19 @@ import { PlanningFeatureRoutingModule } from './planning.feature-routing.module'
 import { PlaceFeatureModule } from '@features/place';
 import { RecurrenceFeatureModule } from '@features/recurrence';
 import { UserFeatureModule } from '@features/user';
+import { ClientFeatureModule } from '../../client';
 
 @NgModule({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   declarations: [...PAGES, ...COMPONENTS, ...PIPES],
   imports: [
-    LoadModule,
     CommonModule,
-    PlanningFeatureRoutingModule,
-    ReactiveFormsModule,
     FormsModule,
+    LoadModule,
+    ReactiveFormsModule,
+    ClientFeatureModule,
     PlaceFeatureModule,
+    PlanningFeatureRoutingModule,
     RecurrenceFeatureModule,
     UserFeatureModule
   ],

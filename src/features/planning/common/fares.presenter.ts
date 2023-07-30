@@ -7,6 +7,16 @@ import {
 } from './fares.presentation';
 import { FareForDate, FaresForDate } from '../providers';
 import { isoTimeToMinutes, metersToKilometers } from './unit-convertion';
+import { Place } from '@features/place';
+
+export const defaultPlaceValue: Place = {
+  context: '',
+  label: '',
+  localisation: {
+    latitude: NaN,
+    longitude: NaN
+  }
+};
 
 export const groupByPlanning = (faresList: DailyPlanning): DailyPlannings => {
   const groupedFares: Record<string, DailyPlanning> = faresList.reduce(

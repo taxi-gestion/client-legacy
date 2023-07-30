@@ -14,7 +14,8 @@
       "@features/planning": ["src/features/planning"],
       "@features/public": ["src/features/public"],
       "@features/recurrence": ["src/features/recurrence"],
-      "@features/user": ["src/features/user"]
+      "@features/user": ["src/features/user"],
+      "@features/client": ["src/features/client"]
     },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",

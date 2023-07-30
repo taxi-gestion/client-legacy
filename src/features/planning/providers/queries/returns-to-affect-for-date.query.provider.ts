@@ -1,5 +1,6 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Place } from '@features/place';
 
 export const RETURNS_TO_AFFECT_FOR_DATE_QUERY: 'planning.returns-to-affect-for-date.query' =
   'planning.returns-to-affect-for-date.query' as const;
@@ -21,8 +22,8 @@ export type ReturnToAffectForDate = {
   id: string;
   client: string;
   date: string;
-  departure: string;
-  destination: string;
+  departure: Place;
+  destination: Place;
   planning: string | undefined;
   kind: 'return';
   nature: 'medical' | 'standard';

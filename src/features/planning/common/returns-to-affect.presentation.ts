@@ -1,8 +1,10 @@
+import { PlacePresentation } from '@features/place';
+
 export type ReturnToAffectForDatePresentation = {
   id: string;
   client: string;
-  departure: string;
-  destination: string;
+  departure: PlacePresentation;
+  destination: PlacePresentation;
   planning: string | undefined;
   kind: string;
   nature: string;
