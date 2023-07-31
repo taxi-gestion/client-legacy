@@ -6,7 +6,7 @@ import {
   FaresForDatePresentation
 } from './fares.presentation';
 import { FareForDate, FaresForDate } from '../providers';
-import { isoTimeToMinutes, metersToKilometersString } from './unit-convertion';
+import { isoTimeToMinutes } from './unit-convertion';
 import { Place } from '@features/place';
 
 export const defaultPlaceValue: Place = {
@@ -52,7 +52,7 @@ export const toFareForDatePresentation = (fare: FareForDate): FareForDatePresent
   creator: fare.creator,
   departure: fare.departure,
   destination: fare.destination,
-  distance: metersToKilometersString(Number(fare.distance)),
+  distance: Number(fare.distance),
   duration: Number(fare.duration),
   kind: fare.kind,
   nature: fare.nature,

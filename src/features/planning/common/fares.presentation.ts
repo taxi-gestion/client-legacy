@@ -11,7 +11,7 @@ export type FareForDatePresentation = {
   creator: string;
   departure: PlacePresentation;
   destination: PlacePresentation;
-  distance: string;
+  distance: number;
   planning: string;
   duration: number;
   kind: string;
