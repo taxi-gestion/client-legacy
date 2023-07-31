@@ -1,17 +1,15 @@
-import { NgModule, LOCALE_ID } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { registerLocaleData } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import localeFr from '@angular/common/locales/fr';
-
+import { LOCALE_ID, NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   CanMatchGuestGuard,
   CanMatchLoggedInGuard,
   CanMatchOneUserGroupGuard,
   CanMatchRefreshTokenGuard
 } from '@features/authentication';
-import { COMPONENTS } from '../components';
+import { COMPONENTS, NavbarUiModule } from '../components';
 import { ApplicationRootLayout, LAYOUTS } from '../layouts';
 import { applicationProviders } from '../providers';
 import { ApplicationRoutingModule } from './application-routing.module';
@@ -20,7 +18,7 @@ registerLocaleData(localeFr);
 
 @NgModule({
   declarations: [...LAYOUTS, ...COMPONENTS],
-  imports: [BrowserAnimationsModule, HttpClientModule, ApplicationRoutingModule],
+  imports: [BrowserAnimationsModule, HttpClientModule, ApplicationRoutingModule, NavbarUiModule],
   bootstrap: [ApplicationRootLayout],
   providers: [
     { provide: LOCALE_ID, useValue: 'fr-FR' },

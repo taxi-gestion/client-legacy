@@ -27,9 +27,9 @@ const paramsToDate = (params: Params): Date => (params['date'] == null ? new Dat
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './daily.page.html'
+  templateUrl: './daily.layout.html'
 })
-export class DailyPage {
+export class DailyLayout {
   public planningDate: string = toStandardDateFormat(paramsToDate(this._route.snapshot.params));
 
   public planningSettings: PlanningSettings = DEFAULT_PLANNING_SETTINGS;

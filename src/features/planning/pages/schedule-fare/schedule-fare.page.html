@@ -1,4 +1,10 @@
-<h1>Ajouter une course</h1>
+<div class="d-flex">
+  <h2 class="pt-2 pb-4">Ajouter une course</h2>
+  <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
+    <i class="ri-close-line ri-2x" aria-hidden="true"></i>
+    <span class="visually-hidden">Fermer</span>
+  </a>
+</div>
 <form
   [formGroup]="scheduleFareForm"
   [appLoadAction]="scheduleFare$"

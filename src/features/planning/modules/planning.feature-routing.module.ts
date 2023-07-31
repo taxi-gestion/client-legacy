@@ -1,11 +1,26 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DailyPage } from '../pages';
-import { DriverAgendaPage } from '../pages/driver-agenda/driver-agenda.page';
 import { CanMatchOneUserGroupGuard } from '@features/authentication';
-import { CanActivatePlanningRedirectGuard } from '../guards/can-activate-planning-redirect.guard';
-import { MissingAdminConfigurationPage } from '../pages/missing-admin-configuration/missing-admin-configuration.page';
-import { ManagerDriverChoicePage } from '../pages/manager-driver-choice/manager-driver-choice.page';
+import { CanActivatePlanningRedirectGuard } from '../guards';
+import { DailyLayout } from '../layouts';
+import {
+  AffectReturnPage,
+  DriverAgendaPage,
+  ManagerDriverChoicePage,
+  MissingAdminConfigurationPage,
+  ScheduleFarePage
+} from '../pages';
+
+const DAILY_PAGES: Routes = [
+  {
+    path: 'schedule-fare',
+    component: ScheduleFarePage
+  },
+  {
+    path: 'affect-return',
+    component: AffectReturnPage
+  }
+];
 
 const ROUTES: Routes = [
   {
@@ -20,13 +35,15 @@ const ROUTES: Routes = [
     path: 'daily',
     canMatch: [CanMatchOneUserGroupGuard],
     data: { allowedGroups: ['developer', 'manager'] },
-    component: DailyPage
+    children: DAILY_PAGES,
+    component: DailyLayout
   },
   {
     path: 'daily/:date',
     canMatch: [CanMatchOneUserGroupGuard],
     data: { allowedGroups: ['developer', 'manager'] },
-    component: DailyPage
+    children: DAILY_PAGES,
+    component: DailyLayout
   },
   {
     path: 'agenda',

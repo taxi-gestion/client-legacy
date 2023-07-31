@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-white">
+<nav class="navbar navbar-expand-lg" [ngClass]="'bg-' + scheme">
   <div class="container-fluid">
     <ng-content select="[slot=brand]"></ng-content>
     <button

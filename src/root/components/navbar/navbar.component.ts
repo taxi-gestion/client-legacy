@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
 const ANIMATION_DURATION: 300 = 300 as const;
+
+type NavbarScheme = 'body-secondary' | 'light';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -9,6 +11,8 @@ const ANIMATION_DURATION: 300 = 300 as const;
   templateUrl: './navbar.component.html'
 })
 export class NavbarComponent {
+  @Input() public scheme: NavbarScheme = 'light';
+
   private readonly _showing$: Subject<boolean> = new Subject<boolean>();
   public readonly showing$: Observable<boolean> = this._showing$.asObservable();
 

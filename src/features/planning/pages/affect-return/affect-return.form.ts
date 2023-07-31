@@ -1,7 +1,7 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ReturnToAffect } from '../../../providers';
 import { Place } from '@features/place';
-import { defaultPlaceValue } from '../../../common/fares.presenter';
+import { defaultPlaceValue } from '../../common/fares.presenter';
+import { ReturnToAffect } from '../../providers';
 
 export type AffectReturnFields = {
   fareId: FormControl<string>;

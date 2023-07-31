@@ -2,8 +2,10 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoadModule } from '@features/common';
+import { NavbarUiModule } from '../../../root/components';
 import { COMPONENTS } from '../components';
 import { CanActivatePlanningRedirectGuard } from '../guards';
+import { LAYOUTS } from '../layouts';
 import { PAGES } from '../pages';
 import { PIPES } from '../pipes';
 import { PlanningFeatureRoutingModule } from './planning.feature-routing.module';
@@ -14,7 +16,7 @@ import { ClientFeatureModule } from '../../client';
 
 @NgModule({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  declarations: [...PAGES, ...COMPONENTS, ...PIPES],
+  declarations: [...LAYOUTS, ...PAGES, ...COMPONENTS, ...PIPES],
   imports: [
     CommonModule,
     FormsModule,
@@ -24,7 +26,8 @@ import { ClientFeatureModule } from '../../client';
     PlaceFeatureModule,
     PlanningFeatureRoutingModule,
     RecurrenceFeatureModule,
-    UserFeatureModule
+    UserFeatureModule,
+    NavbarUiModule
   ],
   providers: [CanActivatePlanningRedirectGuard]
 })
