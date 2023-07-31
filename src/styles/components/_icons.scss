@@ -141,3 +141,7 @@ $font-family-icons-lower: string.to-lower-case($font-family-icons);
 .ri-arrow-turn-back-line::before {
   content: '\f2e7';
 }
+
+.ri-close-line::before {
+  content: '\eb99';
+}

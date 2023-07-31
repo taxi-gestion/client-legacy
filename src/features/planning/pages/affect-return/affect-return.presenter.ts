@@ -1,4 +1,4 @@
-import { ReturnToAffectTransfer } from '../../../providers';
+import { ReturnToAffectTransfer } from '../../providers';
 
 export type FormattedAffectReturnError = { field?: string; errors: Record<string, unknown> };
 export const formatAffectReturnError = (_error: Error): FormattedAffectReturnError => ({

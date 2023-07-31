@@ -1,5 +1,6 @@
-import { FareToScheduleTransfer } from '../../../providers';
 import { getUnixTime, parseISO } from 'date-fns';
+import { FareToScheduleTransfer } from '../../providers';
+
 export type FormattedScheduleFareError = { field?: string; errors: Record<string, unknown> };
 export const formatScheduleFareError = (_error: Error): FormattedScheduleFareError => ({
   errors: { unknown: true }

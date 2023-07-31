@@ -1,3 +1,4 @@
+$black: #000;
 $gray-500: #adb5bd;
 $gray-600: #6c757d;
 $primary: #065ad8;
@@ -8,6 +9,7 @@ $text-muted: $gray-500;
 $input-bg: #fafcfe;
 $input-group-addon-bg: $input-bg;
 $input-group-addon-color: $secondary;
+$box-shadow-sm: 0 0.125rem 0.25rem rgba($black, 0.16) !default;
 
 @import 'bootstrap/scss/variables';
 @import 'bootstrap/scss/variables-dark';

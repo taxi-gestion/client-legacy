@@ -1,9 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
-import { BehaviorSubject, combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
 import { FormGroup } from '@angular/forms';
-import { FareToScheduleTransfer, SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../../providers';
-import { SCHEDULE_FARE_FORM, ScheduleFareFields, setScheduleFareErrorToForm } from './schedule-fare.form';
-import { formatScheduleFareError, toFareToScheduleTransfer } from './schedule-fare.presenter';
+import { ClientPresentation } from '@features/client';
 import {
   ESTIMATE_JOURNEY_QUERY,
   EstimateJourneyQuery,
@@ -14,15 +11,17 @@ import {
 } from '@features/place';
 import { PredictedRecurrence } from '@features/recurrence';
 import { UserPresentation } from '@features/user';
-import { ClientPresentation } from '@features/client';
-import { defaultPlaceValue } from '../../../common/fares.presenter';
+import { BehaviorSubject, combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
+import { defaultPlaceValue } from '../../common/fares.presenter';
+import { FareToScheduleTransfer, SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../providers';
+import { SCHEDULE_FARE_FORM, ScheduleFareFields, setScheduleFareErrorToForm } from './schedule-fare.form';
+import { formatScheduleFareError, toFareToScheduleTransfer } from './schedule-fare.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-schedule-fare',
-  templateUrl: './schedule-fare.component.html'
+  templateUrl: './schedule-fare.page.html'
 })
-export class ScheduleFareComponent {
+export class ScheduleFarePage {
   @Output() public scheduleFareSubmitted: EventEmitter<void> = new EventEmitter<void>();
 
   @Output() public scheduleFareSuccess: EventEmitter<void> = new EventEmitter<void>();

@@ -8,21 +8,21 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
-import { Observable } from 'rxjs';
 import { FormGroup } from '@angular/forms';
-import { AFFECT_RETURN_FORM, AffectReturnFields, setAffectReturnErrorToForm } from './affect-return.form';
-import { formatAffectReturnError, toReturnToAffectTransfer } from './affect-return.presenter';
-import { AFFECT_RETURN_ACTION, AffectReturnAction, ReturnToAffectTransfer } from '@features/planning';
-import { ReturnToAffectForDatePresentation } from '../../../common/returns-to-affect.presentation';
 import { PlacePresentation } from '@features/place';
 import { UserPresentation } from '@features/user';
+import { Observable } from 'rxjs';
+import { ReturnToAffectForDatePresentation } from '../../common/returns-to-affect.presentation';
+import { AFFECT_RETURN_ACTION, AffectReturnAction, ReturnToAffectTransfer } from '../../providers';
+import { AFFECT_RETURN_FORM, AffectReturnFields, setAffectReturnErrorToForm } from './affect-return.form';
+import { formatAffectReturnError, toReturnToAffectTransfer } from './affect-return.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-affect-return',
-  templateUrl: './affect-return.component.html'
+  templateUrl: './affect-return.page.html'
 })
-export class AffectReturnComponent implements OnChanges {
+export class AffectReturnPage implements OnChanges {
   @Input({ required: true }) public returnFareToAffect!: ReturnToAffectForDatePresentation;
 
   @Output() public affectReturnSubmitted: EventEmitter<void> = new EventEmitter<void>();
