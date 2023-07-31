@@ -1,13 +1,21 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { FareToScheduleTransfer, SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../../providers';
 import { SCHEDULE_FARE_FORM, ScheduleFareFields, setScheduleFareErrorToForm } from './schedule-fare.form';
 import { formatScheduleFareError, toFareToScheduleTransfer } from './schedule-fare.presenter';
-import { PlacePresentation } from '@features/place';
+import {
+  ESTIMATE_JOURNEY_QUERY,
+  EstimateJourneyQuery,
+  isValidPlace,
+  JourneyEstimate,
+  Place,
+  PlacePresentation
+} from '@features/place';
 import { PredictedRecurrence } from '@features/recurrence';
 import { UserPresentation } from '@features/user';
-import { ClientPresentation } from '../../../../client';
+import { ClientPresentation } from '@features/client';
+import { defaultPlaceValue } from '../../../common/fares.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,13 +33,25 @@ export class ScheduleFareComponent {
     this._scheduleFareAction$(toFareToScheduleTransfer(SCHEDULE_FARE_FORM.value as FareToScheduleTransfer));
 
   public readonly scheduleFareForm: FormGroup<ScheduleFareFields> = SCHEDULE_FARE_FORM;
+  private readonly _departure: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
+  private readonly _destination: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
+  public readonly estimateJourney$: Observable<JourneyEstimate> = combineLatest([this._departure, this._destination]).pipe(
+    filter(([departure, destination]: [Place, Place]): boolean => isValidPlace(departure) && isValidPlace(destination)),
+    switchMap(
+      ([departure, destination]: [Place, Place]): Observable<JourneyEstimate> =>
+        this._estimateJourneyQuery$({ departure, destination })
+    ),
+    tap((estimate: JourneyEstimate): void => this.onJourneyEstimateReceived(estimate))
+  );
 
   public onSelectDepartureChange(place: PlacePresentation): void {
     this.scheduleFareForm.controls.driveFrom.setValue(place);
+    this._departure.next(place);
   }
 
   public onSelectDestinationChange(place: PlacePresentation): void {
     this.scheduleFareForm.controls.driveTo.setValue(place);
+    this._destination.next(place);
   }
 
   public onSelectDriverChange(driver: UserPresentation): void {
@@ -43,11 +63,19 @@ export class ScheduleFareComponent {
     this.scheduleFareForm.controls.clientPhone.setValue(`${client.phone}`);
   }
 
+  public onJourneyEstimateReceived(estimate: JourneyEstimate): void {
+    this.scheduleFareForm.controls.duration.setValue(estimate.duration.valueInSeconds);
+    this.scheduleFareForm.controls.distance.setValue(estimate.distance.valueInMeters);
+  }
+
   public onSearchClientTermChange(search: string): void {
     this.scheduleFareForm.controls.clientIdentity.setValue(search);
   }
 
-  public constructor(@Inject(SCHEDULE_FARE_ACTION) private readonly _scheduleFareAction$: ScheduleFareAction) {}
+  public constructor(
+    @Inject(SCHEDULE_FARE_ACTION) private readonly _scheduleFareAction$: ScheduleFareAction,
+    @Inject(ESTIMATE_JOURNEY_QUERY) private readonly _estimateJourneyQuery$: EstimateJourneyQuery
+  ) {}
 
   public onSubmitFareToSchedule = (triggerAction: () => void): void => {
     SCHEDULE_FARE_FORM.markAllAsTouched();

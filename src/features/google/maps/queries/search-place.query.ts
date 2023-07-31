@@ -56,7 +56,7 @@ const toPlaces = (places: PlaceResultTransfer[]): Place[] =>
     (place: PlaceResultTransfer): Place => ({
       context: place.formatted_address,
       label: place.name ?? place.formatted_address,
-      localisation: {
+      location: {
         latitude: place.geometry.location.lat,
         longitude: place.geometry.location.lng
       }

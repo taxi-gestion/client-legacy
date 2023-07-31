@@ -1,5 +1,5 @@
 import { FareToScheduleTransfer } from '../../../providers';
-
+import { getUnixTime, parseISO } from 'date-fns';
 export type FormattedScheduleFareError = { field?: string; errors: Record<string, unknown> };
 export const formatScheduleFareError = (_error: Error): FormattedScheduleFareError => ({
   errors: { unknown: true }
@@ -18,5 +18,13 @@ export const toFareToScheduleTransfer = (formValues: FareToScheduleTransfer): Fa
   driveTo: formValues.driveTo,
   planning: formValues.planning,
   startTime: timeToIso8601String(formValues.startTime),
-  recurrence: formValues.recurrence
+  recurrence: formValues.recurrence,
+  distance: formValues.distance,
+  duration: formValues.duration
 });
+
+// TODO A utiliser pour donner le departure_time à journey
+export const timestampFromDateAndTime = (datetimeISO8601: string): number => {
+  const dateTime: Date = parseISO(datetimeISO8601);
+  return getUnixTime(dateTime);
+};

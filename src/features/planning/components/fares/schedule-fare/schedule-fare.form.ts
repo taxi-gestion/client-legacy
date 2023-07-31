@@ -15,6 +15,8 @@ export type ScheduleFareFields = {
   driveTo: FormControl<Place>;
   startTime: FormControl<string>;
   recurrence: FormControl<PredictedRecurrence>;
+  duration: FormControl<number>;
+  distance: FormControl<number>;
 };
 
 export const SCHEDULE_FARE_FORM: FormGroup<Record<keyof FareToSchedule, FormControl>> = new FormGroup<
@@ -29,7 +31,9 @@ export const SCHEDULE_FARE_FORM: FormGroup<Record<keyof FareToSchedule, FormCont
   planning: new FormControl<FareToSchedule['planning']>(''),
   driveTo: new FormControl<FareToSchedule['driveTo']>(defaultPlaceValue, [Validators.required]),
   startTime: new FormControl<FareToSchedule['startTime']>('00:00', [Validators.required]),
-  recurrence: new FormControl<FareToSchedule['recurrence']>(undefined, [Validators.required])
+  recurrence: new FormControl<FareToSchedule['recurrence']>(undefined, [Validators.required]),
+  duration: new FormControl<FareToSchedule['duration']>(0, [Validators.required]),
+  distance: new FormControl<FareToSchedule['distance']>(0, [Validators.required])
 });
 
 export const setScheduleFareErrorToForm = (handledError: { field?: string; errors: Record<string, unknown> }): void =>

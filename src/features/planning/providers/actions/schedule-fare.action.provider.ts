@@ -14,6 +14,8 @@ export type FareToSchedule = {
   driveTo: Place;
   startTime: string;
   recurrence: PredictedRecurrence | undefined;
+  duration: number;
+  distance: number;
 };
 
 export type FareToScheduleTransfer = {
@@ -27,6 +29,8 @@ export type FareToScheduleTransfer = {
   driveTo: PlaceTransfer;
   startTime: string;
   recurrence: PredictedRecurrenceTransfer | undefined;
+  duration: number;
+  distance: number;
 };
 
 export type ScheduleFareAction = (fareToSchedule: FareToScheduleTransfer) => Observable<object>;
