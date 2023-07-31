@@ -11,7 +11,7 @@
     <app-client-field
       (selectClient)="onSelectClientChange($event)"
       (searchClientTerm)="onSearchClientTermChange($event)"></app-client-field>
-    <input id="clientIdentity" type="text" formControlName="clientIdentity" />
+    <input id="clientIdentity" type="hidden" formControlName="clientIdentity" />
   </div>
   <div>
     <label for="clientPhone">Téléphone:</label>
@@ -34,6 +34,16 @@
     <label for="driveTo">Arrivée:</label>
     <app-place-field (selectPlace)="onSelectDestinationChange($event)"></app-place-field>
     <input id="driveTo" type="hidden" formControlName="driveTo" />
+  </div>
+  <!-- TODO Refactor with appLoadAction -->
+  <div *ngIf="estimateJourney$ | async"></div>
+  <div>
+    <label for="driveTo">Durée (secondes, pipe à faire):</label>
+    <input id="duration" type="number" formControlName="duration" />
+  </div>
+  <div>
+    <label for="driveTo">Distance (metres, pipe à faire):</label>
+    <input id="distance" type="number" formControlName="distance" />
   </div>
   <div>
     <label for="planning">Chauffeur:</label>
