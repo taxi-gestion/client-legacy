@@ -1,7 +1,5 @@
 import { format } from 'date-fns';
 
-export const metersToKilometersString = (meters: number): string => `${(meters / 1000).toFixed(1)} km`;
-
 export const isoTimeToMinutes = (timeString: string): number => {
   const parts: string[] | undefined = timeString.split(':');
   const hours: number = parseInt(parts[0] ?? '0', 10) * 60;
