@@ -13,22 +13,12 @@ export type PlacePresentation = {
   location: Location;
 };
 
-export type PlaceTransfer = {
-  context: string;
-  label: string;
-  latitude: number;
-  longitude: number;
-};
+export type PlaceTransfer = Place;
 
 export const toPlaces = (places: PlaceTransfer[]): Place[] => places.map(toPlace);
 
 export const toPlace = (place: PlaceTransfer): Place => ({
-  context: place.context,
-  label: place.context,
-  location: {
-    latitude: place.latitude,
-    longitude: place.longitude
-  }
+  ...place
 });
 
 export const isValidPlace = (placeData: Place): placeData is Place => isValidLocation(placeData.location);
