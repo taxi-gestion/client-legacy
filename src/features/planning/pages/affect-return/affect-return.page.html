@@ -12,24 +12,36 @@
   (actionSuccess)="onAffectReturnActionSuccess()"
   (actionError)="onAffectReturnActionError($event)"
   (ngSubmit)="onSubmitReturnToAffect(loadAction.start)">
-  <input id="fareId" type="hidden" formControlName="fareId" />
+  <div>
+    Retour de:
+    <app-return-to-affect-field
+      [date]="selectedDate"
+      (selectReturnToAffect)="onSelectReturnToAffectChange($event)"></app-return-to-affect-field>
+    <input id="fareId" type="hidden" formControlName="fareId" />
+  </div>
   <div>
     <label for="startTime">A:</label>
     <input id="startTime" type="time" formControlName="startTime" />
   </div>
   <div>
     Départ de:
-    <app-place-field (selectPlace)="onSelectDepartureChange($event)"></app-place-field>
+    <app-place-field
+      [defaultValue]="(departureDefault$ | async) ?? ''"
+      (selectPlace)="onSelectDepartureChange($event)"></app-place-field>
     <input id="driveFrom" type="hidden" formControlName="driveFrom" />
   </div>
   <div>
     <label for="driveTo">Arrivée:</label>
-    <app-place-field (selectPlace)="onSelectDestinationChange($event)"></app-place-field>
+    <app-place-field
+      [defaultValue]="(destinationDefault$ | async) ?? ''"
+      (selectPlace)="onSelectDestinationChange($event)"></app-place-field>
     <input id="driveTo" type="hidden" formControlName="driveTo" />
   </div>
   <div>
     <label for="planning">Chauffeur:</label>
-    <app-user-field (selectUser)="onSelectDriverChange($event)"></app-user-field>
+    <app-user-field
+      [defaultValue]="(driverDefault$ | async) ?? ''"
+      (selectUser)="onSelectDriverChange($event)"></app-user-field>
     <input id="planning" type="hidden" formControlName="planning" />
   </div>
   <button

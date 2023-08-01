@@ -6,9 +6,13 @@
           Planifier une course
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="(returnsToSchedule$ | async) as returnsToSchedule">
         <a class="nav-link" ariaCurrentWhenActive="page" routerLinkActive="active" [routerLink]="'affect-return'">
-          Affecter un retour
+          Affecter un retour&nbsp;
+          <span class="badge text-bg-secondary">
+            {{ returnsToSchedule.length }}
+            <span class="visually-hidden">returns to affect</span>
+          </span>
         </a>
       </li>
     </ul>

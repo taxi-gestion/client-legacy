@@ -8,7 +8,9 @@
   </h6>
   <small class="text-muted d-flex">
     <a
-      href="https://www.google.com/maps/dir/?api=1&origin={{ fare.departure }}&destination={{ fare.destination }}"
+      href="https://www.google.com/maps/dir/?api=1&origin={{ fare.departure.context }}&destination={{
+        fare.destination.context
+      }}"
       target="_blank"
       title="Voir l'itinéraire"
       class="text-muted">
