@@ -8,6 +8,7 @@ import {
 import { FareForDate, FaresForDate } from '../providers';
 import { isoTimeToMinutes } from './unit-convertion';
 import { Place } from '@features/place';
+import { secondsToMinutes } from 'date-fns';
 
 export const defaultPlaceValue: Place = {
   context: '',
@@ -68,8 +69,8 @@ export const toFareForDatePlanningSession = (fare: FareForDatePresentation): Far
   creator: fare.creator,
   departure: fare.departure,
   destination: fare.destination,
-  distance: fare.distance,
-  duration: fare.duration,
+  distance: Number((fare.distance * 0.001).toPrecision(3)),
+  duration: secondsToMinutes(fare.duration),
   kind: fare.kind,
   nature: fare.nature,
   phone: fare.phone,
