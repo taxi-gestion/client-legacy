@@ -31,7 +31,7 @@ export const SCHEDULE_FARE_FORM: FormGroup<Record<keyof FareToSchedule, FormCont
   planning: new FormControl<FareToSchedule['planning']>(''),
   driveTo: new FormControl<FareToSchedule['driveTo']>(defaultPlaceValue, [Validators.required]),
   startTime: new FormControl<FareToSchedule['startTime']>('00:00', [Validators.required]),
-  recurrence: new FormControl<FareToSchedule['recurrence']>(undefined, [Validators.required]),
+  recurrence: new FormControl<FareToSchedule['recurrence']>(undefined),
   duration: new FormControl<FareToSchedule['duration']>(0, [Validators.required]),
   distance: new FormControl<FareToSchedule['distance']>(0, [Validators.required])
 });

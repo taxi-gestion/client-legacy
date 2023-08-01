@@ -20,8 +20,8 @@ import { ClientFeatureModule } from '../../client';
   imports: [
     CommonModule,
     FormsModule,
-    LoadModule,
     ReactiveFormsModule,
+    LoadModule,
     ClientFeatureModule,
     PlaceFeatureModule,
     PlanningFeatureRoutingModule,
