@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { ReturnsToAffectForDate, ReturnsToAffectForDateQuery, ReturnToAffectForDate } from '@features/planning';
-import { toPlace } from '@features/place';
+import { toPlace } from '@features/common/place';
 
 export type ReturnsToAffectTransfer = {
   id: string;

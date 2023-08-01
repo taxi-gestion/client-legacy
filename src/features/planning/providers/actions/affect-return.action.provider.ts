@@ -1,6 +1,6 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Place, PlaceTransfer } from '@features/place';
+import { Place, PlaceTransfer } from '@features/common/place';
 
 // TODO link to Fare type so as to be protected from drift
 export type ReturnToAffect = {

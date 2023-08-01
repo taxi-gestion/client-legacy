@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LoadModule } from '@features/common';
+import { LoadUiModule } from '@features/common';
 import { NavbarUiModule } from '../../../root/components';
 import { COMPONENTS } from '../components';
 import { CanActivatePlanningRedirectGuard } from '../guards';
@@ -9,10 +9,11 @@ import { LAYOUTS } from '../layouts';
 import { PAGES } from '../pages';
 import { PIPES } from '../pipes';
 import { PlanningFeatureRoutingModule } from './planning.feature-routing.module';
-import { PlaceFeatureModule } from '@features/place';
-import { RecurrenceFeatureModule } from '@features/recurrence';
-import { UserFeatureModule } from '@features/user';
-import { ClientFeatureModule } from '../../client';
+import { PlaceComponentModule } from '@features/common/place';
+import { RecurrenceServiceModule } from '@features/common/recurrence';
+import { UserServiceModule } from '@features/common/user';
+import { ClientServiceModule } from '@features/common/client';
+import { JourneyQueriesModule } from '@features/common/journey';
 
 @NgModule({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -21,12 +22,13 @@ import { ClientFeatureModule } from '../../client';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    LoadModule,
-    ClientFeatureModule,
-    PlaceFeatureModule,
+    LoadUiModule,
+    ClientServiceModule,
+    PlaceComponentModule,
+    JourneyQueriesModule,
     PlanningFeatureRoutingModule,
-    RecurrenceFeatureModule,
-    UserFeatureModule,
+    RecurrenceServiceModule,
+    UserServiceModule,
     NavbarUiModule
   ],
   providers: [CanActivatePlanningRedirectGuard]

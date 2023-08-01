@@ -13,11 +13,12 @@ import {
 
 import { estimateJourneyQuery$, GOOGLE_MAPS_API_KEY, googleMapsApiKeyValueProvider, searchPlaceQuery$ } from '@features/google';
 import { ENV } from '../../environments';
-import { predictRecurrenceActionProvider, predictRecurrenceAction$ } from '@features/recurrence';
-import { estimateJourneyQueryProvider, searchPlaceQueryProvider } from '@features/place';
-import { searchUserQueryProvider } from '@features/user';
+import { predictRecurrenceActionProvider, predictRecurrenceAction$ } from '@features/common/recurrence';
+import { searchPlaceQueryProvider } from '@features/common/place';
+import { searchUserQueryProvider } from '@features/common/user';
 import { cognitoListUsersWithDriverGroupQuery$ } from '@features/aws';
-import { searchClientQueryProvider, searchClientsQuery$ } from '@features/client';
+import { searchClientQueryProvider, searchClientsQuery$ } from '@features/common/client';
+import { estimateJourneyQueryProvider } from '@features/common/journey';
 
 export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   googleMapsApiKeyValueProvider({ apiKey: ENV.api.maps }),

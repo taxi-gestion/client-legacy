@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { GoogleMaps } from '@features/google';
-import { Place, SearchPlaceQuery } from '@features/place';
+import { Place, SearchPlaceQuery } from '@features/common/place';
 
 const searchPlaceUrl =
   (apiKey: string) =>
