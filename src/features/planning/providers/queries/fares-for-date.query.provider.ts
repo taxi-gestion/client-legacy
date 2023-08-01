@@ -1,6 +1,6 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Place } from '@features/place';
+import { Place } from '@features/common/place';
 
 export const FARES_FOR_DATE_QUERY: 'planning.fares-for-date.query' = 'planning.fares-for-date.query' as const;
 

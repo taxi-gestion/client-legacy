@@ -1,21 +1,15 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ClientPresentation } from '@features/client';
-import {
-  ESTIMATE_JOURNEY_QUERY,
-  EstimateJourneyQuery,
-  isValidPlace,
-  JourneyEstimate,
-  Place,
-  PlacePresentation
-} from '@features/place';
-import { PredictedRecurrence } from '@features/recurrence';
-import { UserPresentation } from '@features/user';
+import { ClientPresentation } from '@features/common/client';
+import { isValidPlace, Place, PlacePresentation } from '@features/common/place';
+import { PredictedRecurrence } from '@features/common/recurrence';
+import { UserPresentation } from '@features/common/user';
 import { BehaviorSubject, combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
 import { defaultPlaceValue } from '../../common/fares.presenter';
 import { FareToScheduleTransfer, SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../providers';
 import { SCHEDULE_FARE_FORM, ScheduleFareFields, setScheduleFareErrorToForm } from './schedule-fare.form';
 import { formatScheduleFareError, toFareToScheduleTransfer } from './schedule-fare.presenter';
+import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery, JourneyEstimate } from '@features/common/journey';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

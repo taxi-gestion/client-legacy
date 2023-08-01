@@ -1,7 +1,7 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Place } from '@features/place';
+import { Place } from '@features/common/place';
 import { FareToSchedule } from '@features/planning';
-import { PredictedRecurrence } from '@features/recurrence';
+import { PredictedRecurrence } from '@features/common/recurrence';
 import { defaultPlaceValue } from '../../common/fares.presenter';
 
 export type ScheduleFareFields = {

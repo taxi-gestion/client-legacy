@@ -7,7 +7,7 @@ import {
 } from './fares.presentation';
 import { FareForDate, FaresForDate } from '../providers';
 import { isoTimeToMinutes } from './unit-convertion';
-import { Place } from '@features/place';
+import { Place } from '@features/common/place';
 import { secondsToMinutes } from 'date-fns';
 
 export const defaultPlaceValue: Place = {

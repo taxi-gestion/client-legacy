@@ -1,4 +1,4 @@
-import { PlacePresentation } from '@features/place';
+import { PlacePresentation } from '@features/common/place';
 
 export type ReturnToAffectForDatePresentation = {
   id: string;

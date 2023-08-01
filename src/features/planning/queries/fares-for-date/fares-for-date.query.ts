@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { FareForDate, FaresForDate, FaresForDateQuery } from '../../providers';
-import { toPlace } from '@features/place';
+import { toPlace } from '@features/common/place';
 
 export type FareTransfer = {
   client: string;

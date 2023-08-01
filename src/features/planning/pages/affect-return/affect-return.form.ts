@@ -1,5 +1,5 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Place } from '@features/place';
+import { Place } from '@features/common/place';
 import { defaultPlaceValue } from '../../common/fares.presenter';
 import { ReturnToAffect } from '../../providers';
 

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { GoogleMaps } from '@features/google';
-import { EstimateJourneyQuery, JourneyEstimate, Journey } from '@features/place';
+import { EstimateJourneyQuery, JourneyEstimate, Journey } from '@features/common/journey';
 
 const estimateJourneyUrl =
   (apiKey: string) =>

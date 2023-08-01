@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { SearchUserQuery, User } from '@features/user';
+import { SearchUserQuery, User } from '@features/common/user';
 
 export type CognitoUsersTransfer = {
   data: string;

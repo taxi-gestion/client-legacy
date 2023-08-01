@@ -9,8 +9,8 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { PlacePresentation } from '@features/place';
-import { UserPresentation } from '@features/user';
+import { PlacePresentation } from '@features/common/place';
+import { UserPresentation } from '@features/common/user';
 import { Observable, Subject } from 'rxjs';
 import { ReturnToAffectForDatePresentation } from '../../common/returns-to-affect.presentation';
 import { AFFECT_RETURN_ACTION, AffectReturnAction, ReturnToAffectTransfer } from '../../providers';

@@ -1,6 +1,6 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Place } from '@features/place';
+import { Place } from '@features/common/place';
 
 export const RETURNS_TO_AFFECT_FOR_DATE_QUERY: 'planning.returns-to-affect-for-date.query' =
   'planning.returns-to-affect-for-date.query' as const;
