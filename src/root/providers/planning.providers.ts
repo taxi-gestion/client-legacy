@@ -13,7 +13,7 @@ import {
 
 import { estimateJourneyQuery$, GOOGLE_MAPS_API_KEY, googleMapsApiKeyValueProvider, searchPlaceQuery$ } from '@features/google';
 import { ENV } from '../../environments';
-import { predictRecurrenceActionProvider, predictRecurrenceAction$ } from '@features/common/recurrence';
+import { predictRecurrenceQueryProvider, predictRecurrenceQuery$ } from '@features/common/recurrence';
 import { searchPlaceQueryProvider } from '@features/common/place';
 import { searchUserQueryProvider } from '@features/common/user';
 import { cognitoListUsersWithDriverGroupQuery$ } from '@features/aws';
@@ -24,7 +24,7 @@ export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   googleMapsApiKeyValueProvider({ apiKey: ENV.api.maps }),
   scheduleFareActionProvider(scheduleFareAction$, [HttpClient]),
   affectReturnActionProvider(affectReturnAction$, [HttpClient]),
-  predictRecurrenceActionProvider(predictRecurrenceAction$, [HttpClient]),
+  predictRecurrenceQueryProvider(predictRecurrenceQuery$, [HttpClient]),
   faresForDateQueryProvider(faresForDateQuery$, [HttpClient]),
   returnsToAffectForDateQueryProvider(returnsToAffectForDateQuery$, [HttpClient]),
   searchPlaceQueryProvider(searchPlaceQuery$, [HttpClient, GOOGLE_MAPS_API_KEY]),

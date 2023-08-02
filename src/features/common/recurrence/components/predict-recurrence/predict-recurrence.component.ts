@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { FormGroup } from '@angular/forms';
-import { PREDICT_RECURRENCE_ACTION, PredictedRecurrence, PredictRecurrenceAction } from '../../providers';
+import { PREDICT_RECURRENCE_QUERY, PredictedRecurrence, PredictRecurrenceQuery } from '../../providers';
 import { PREDICT_RECURRENCE_FORM, PredictRecurrenceFields, setPredictRecurrenceErrorToForm } from './predict-recurrence.form';
 import { formatPredictRecurrenceError, getNextOccurrences } from './predict-recurrence.presenter';
 
@@ -20,7 +20,7 @@ export class PredictRecurrenceComponent {
   @Output() public predictRecurrenceError: EventEmitter<Error> = new EventEmitter<Error>();
 
   public readonly predictRecurrence$ = (): Observable<object> =>
-    this._predictRecurrenceAction$(PREDICT_RECURRENCE_FORM.controls.query.value as string);
+    this._predictRecurrenceQuery$(PREDICT_RECURRENCE_FORM.controls.query.value as string);
 
   private readonly _displayNextOccurrences: Subject<Date[]> = new Subject<Date[]>();
   private readonly _displayExplanation: BehaviorSubject<string> = new BehaviorSubject<string>('Pas de répétition active');
@@ -29,19 +29,19 @@ export class PredictRecurrenceComponent {
 
   public readonly predictRecurrenceForm: FormGroup<PredictRecurrenceFields> = PREDICT_RECURRENCE_FORM;
 
-  public constructor(@Inject(PREDICT_RECURRENCE_ACTION) private readonly _predictRecurrenceAction$: PredictRecurrenceAction) {}
+  public constructor(@Inject(PREDICT_RECURRENCE_QUERY) private readonly _predictRecurrenceQuery$: PredictRecurrenceQuery) {}
 
   public onSubmitPredictRecurrence = (triggerAction: () => void): void => {
     PREDICT_RECURRENCE_FORM.markAllAsTouched();
     PREDICT_RECURRENCE_FORM.valid && triggerAction();
   };
 
-  public onPredictRecurrenceActionSuccess = (predictedRecurrence: PredictedRecurrence): void => {
+  public onPredictRecurrenceQuerySuccess = (predictedRecurrence: PredictedRecurrence): void => {
     this._displayNextOccurrences.next(getNextOccurrences(predictedRecurrence.recurrence, this.fromDate, 6));
     this._displayExplanation.next(predictedRecurrence.explanation);
   };
 
-  public onPredictRecurrenceActionError = (error: Error): void => {
+  public onPredictRecurrenceQueryError = (error: Error): void => {
     setPredictRecurrenceErrorToForm(formatPredictRecurrenceError(error));
   };
 }
