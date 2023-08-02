@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
-import { PredictRecurrenceAction } from '../../providers';
+import { PredictRecurrenceQuery } from '../../providers';
 
 const predictRecurrenceUrl = (): string => `https://taxi-gestion.com/api/predict-recurrence`;
 
@@ -13,8 +13,8 @@ const handlePredictRecurrenceError$ =
     }
   };
 
-export const predictRecurrenceAction$ =
-  (http: HttpClient): PredictRecurrenceAction =>
+export const predictRecurrenceQuery$ =
+  (http: HttpClient): PredictRecurrenceQuery =>
   (query: string): Observable<object> =>
     http
       .post(predictRecurrenceUrl(), {
