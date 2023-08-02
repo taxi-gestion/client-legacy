@@ -6,13 +6,12 @@ import { PredictedRecurrence, PredictedRecurrenceTransfer } from '@features/comm
 export type FareToSchedule = {
   clientIdentity: string;
   clientPhone: string;
-  date: string;
+  datetime: string;
   driveFrom: Place;
   driveKind: 'one-way' | 'outward' | 'return';
   driveNature: 'medical' | 'standard';
   planning: string | undefined;
   driveTo: Place;
-  startTime: string;
   recurrence: PredictedRecurrence | undefined;
   duration: number;
   distance: number;
@@ -21,13 +20,12 @@ export type FareToSchedule = {
 export type FareToScheduleTransfer = {
   clientIdentity: string;
   clientPhone: string;
-  date: string;
+  datetime: string;
   driveFrom: PlaceTransfer;
   driveKind: 'one-way' | 'outward' | 'return';
   driveNature: 'medical' | 'standard';
   planning: string | undefined;
   driveTo: PlaceTransfer;
-  startTime: string;
   recurrence: PredictedRecurrenceTransfer | undefined;
   duration: number;
   distance: number;

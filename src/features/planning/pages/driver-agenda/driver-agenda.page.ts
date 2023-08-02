@@ -7,17 +7,18 @@ import { filterByPlanning, toFaresForDatePresentation } from '../../common/fares
 import { FareForDatePresentation } from '../../common/fares.presentation';
 import { toStandardDateFormat } from '../../common/unit-convertion';
 
-const paramsToDate = (params: Params): Date => (params['date'] == null ? new Date() : new Date(params['date'] as string));
+const paramsToDateString = (params: Params): string =>
+  params['date'] == null ? toStandardDateFormat(new Date()) : (params['date'] as string);
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './driver-agenda.page.html'
 })
 export class DriverAgendaPage {
-  public planningDate: string = toStandardDateFormat(paramsToDate(this._route.snapshot.params));
+  public planningDate: string = paramsToDateString(this._route.snapshot.params);
 
   public readonly agenda$: Observable<FareForDatePresentation[]> = this._route.params.pipe(
-    switchMap((params: Params): Observable<FareForDate[]> => this._faresForDateQuery(paramsToDate(params))),
+    switchMap((params: Params): Observable<FareForDate[]> => this._faresForDateQuery(paramsToDateString(params))),
     map(toFaresForDatePresentation),
     map(filterByPlanning(this._session.username()))
   );

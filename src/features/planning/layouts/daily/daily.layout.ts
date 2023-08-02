@@ -23,26 +23,29 @@ const DEFAULT_PLANNING_SETTINGS: PlanningSettings = {
   end: +DEFAULT_END_HOUR * 60
 };
 
-const paramsToDate = (params: Params): Date => (params['date'] == null ? new Date() : new Date(params['date'] as string));
+const paramsToDateString = (params: Params): string =>
+  params['date'] == null ? toStandardDateFormat(new Date()) : (params['date'] as string);
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './daily.layout.html'
 })
 export class DailyLayout {
-  public planningDate: string = toStandardDateFormat(paramsToDate(this._route.snapshot.params));
+  public planningDate: string = paramsToDateString(this._route.snapshot.params);
 
   public planningSettings: PlanningSettings = DEFAULT_PLANNING_SETTINGS;
 
   public readonly plannings$: Observable<DailyPlannings> = this._route.params.pipe(
-    switchMap((params: Params): Observable<FareForDate[]> => this._faresForDateQuery(paramsToDate(params))),
+    switchMap((params: Params): Observable<FareForDate[]> => this._faresForDateQuery(paramsToDateString(params))),
     map(toFaresForDatePresentation),
     map(toFaresForDatePlanningSession),
     map(groupByPlanning)
   );
 
   public readonly returnsToSchedule$: Observable<ReturnToAffectForDatePresentation[]> = this._route.params.pipe(
-    switchMap((params: Params): Observable<ReturnToAffectForDate[]> => this._returnsToAffectForDateQuery(paramsToDate(params))),
+    switchMap(
+      (params: Params): Observable<ReturnToAffectForDate[]> => this._returnsToAffectForDateQuery(paramsToDateString(params))
+    ),
     map(toReturnsToAffectForDatePresentation)
   );
 

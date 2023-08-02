@@ -39,14 +39,5 @@ const toReturnsToAffectForDate = (faresToSchedule: ReturnsToAffectTransfer[]): R
 
 export const returnsToAffectForDateQuery$ =
   (httpClient: HttpClient): ReturnsToAffectForDateQuery =>
-  (date: Date): Observable<ReturnsToAffectForDate> =>
-    httpClient
-      .get<ReturnsToAffectTransfer[]>(
-        `/api/returns-to-affect-for-date/${new Date(
-          `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(
-            2,
-            '0'
-          )}`
-        ).toISOString()}`
-      )
-      .pipe(map(toReturnsToAffectForDate));
+  (date: string): Observable<ReturnsToAffectForDate> =>
+    httpClient.get<ReturnsToAffectTransfer[]>(`/api/returns-to-affect-for-date/${date}`).pipe(map(toReturnsToAffectForDate));

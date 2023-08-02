@@ -7,13 +7,12 @@ import { defaultPlaceValue } from '../../common/fares.presenter';
 export type ScheduleFareFields = {
   clientIdentity: FormControl<string>;
   clientPhone: FormControl<string>;
-  date: FormControl<Date>;
+  datetime: FormControl<Date>;
   driveFrom: FormControl<Place>;
   driveKind: FormControl<'one-way' | 'outward' | 'return'>;
   driveNature: FormControl<'medical' | 'standard'>;
   planning: FormControl<string>;
   driveTo: FormControl<Place>;
-  startTime: FormControl<string>;
   recurrence: FormControl<PredictedRecurrence>;
   duration: FormControl<number>;
   distance: FormControl<number>;
@@ -24,13 +23,12 @@ export const SCHEDULE_FARE_FORM: FormGroup<Record<keyof FareToSchedule, FormCont
 >({
   clientIdentity: new FormControl<FareToSchedule['clientIdentity']>('', [Validators.required]),
   clientPhone: new FormControl<FareToSchedule['clientPhone']>('', [Validators.required]),
-  date: new FormControl<FareToSchedule['date']>('', [Validators.required]),
+  datetime: new FormControl<FareToSchedule['datetime']>('', [Validators.required]),
   driveFrom: new FormControl<FareToSchedule['driveFrom']>(defaultPlaceValue, [Validators.required]),
   driveKind: new FormControl<FareToSchedule['driveKind']>('outward', [Validators.required]),
   driveNature: new FormControl<FareToSchedule['driveNature']>('medical', [Validators.required]),
   planning: new FormControl<FareToSchedule['planning']>(''),
   driveTo: new FormControl<FareToSchedule['driveTo']>(defaultPlaceValue, [Validators.required]),
-  startTime: new FormControl<FareToSchedule['startTime']>('00:00', [Validators.required]),
   recurrence: new FormControl<FareToSchedule['recurrence']>(undefined),
   duration: new FormControl<FareToSchedule['duration']>(0, [Validators.required]),
   distance: new FormControl<FareToSchedule['distance']>(0, [Validators.required])

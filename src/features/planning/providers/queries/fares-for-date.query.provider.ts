@@ -4,7 +4,7 @@ import { Place } from '@features/common/place';
 
 export const FARES_FOR_DATE_QUERY: 'planning.fares-for-date.query' = 'planning.fares-for-date.query' as const;
 
-export type FaresForDateQuery = (date: Date) => Observable<FaresForDate>;
+export type FaresForDateQuery = (date: string) => Observable<FaresForDate>;
 
 export const faresForDateQueryProvider = <TDependencies>(
   useFactory: (...providers: never[]) => FaresForDateQuery,

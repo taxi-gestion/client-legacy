@@ -6,10 +6,11 @@ import { PredictedRecurrence } from '@features/common/recurrence';
 import { UserPresentation } from '@features/common/user';
 import { BehaviorSubject, combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
 import { defaultPlaceValue } from '../../common/fares.presenter';
-import { FareToScheduleTransfer, SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../providers';
+import { FareToSchedule, SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../providers';
 import { SCHEDULE_FARE_FORM, ScheduleFareFields, setScheduleFareErrorToForm } from './schedule-fare.form';
 import { formatScheduleFareError, toFareToScheduleTransfer } from './schedule-fare.presenter';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery, JourneyEstimate } from '@features/common/journey';
+import { datetimeLocalToIso8601UTCString } from '../../common/unit-convertion';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,7 +24,7 @@ export class ScheduleFarePage {
   @Output() public scheduleFareError: EventEmitter<Error> = new EventEmitter<Error>();
 
   public readonly scheduleFare$ = (): Observable<object> =>
-    this._scheduleFareAction$(toFareToScheduleTransfer(SCHEDULE_FARE_FORM.value as FareToScheduleTransfer));
+    this._scheduleFareAction$(toFareToScheduleTransfer(SCHEDULE_FARE_FORM.value as FareToSchedule));
 
   public readonly scheduleFareForm: FormGroup<ScheduleFareFields> = SCHEDULE_FARE_FORM;
   private readonly _departure: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
@@ -32,8 +33,11 @@ export class ScheduleFarePage {
     filter(([departure, destination]: [Place, Place]): boolean => isValidPlace(departure) && isValidPlace(destination)),
     switchMap(
       ([departure, destination]: [Place, Place]): Observable<JourneyEstimate> =>
-        // TODO Use datetime picker to get corresponding datetime iso8601 utc.
-        this._estimateJourneyQuery$({ departure, destination, departureTime: '2023-08-03T12:00:50.000Z' })
+        this._estimateJourneyQuery$({
+          departure,
+          destination,
+          departureTime: datetimeLocalToIso8601UTCString(SCHEDULE_FARE_FORM.controls.datetime.value as string)
+        })
     ),
     tap((estimate: JourneyEstimate): void => this.onJourneyEstimateReceived(estimate))
   );

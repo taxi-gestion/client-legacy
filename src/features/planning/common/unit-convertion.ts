@@ -7,3 +7,7 @@ export const isoTimeToMinutes = (timeString: string): number => {
   return hours + minutes;
 };
 export const toStandardDateFormat = (date: Date): string => format(date, 'yyyy-MM-dd');
+
+export const datetimeLocalToIso8601UTCString = (datetimeLocalISO8601: string): string =>
+  new Date(datetimeLocalISO8601).toISOString();
+export const formatDateToDatetimeLocalString = (date: Date): string => format(date, "yyyy-MM-dd'T'HH:mm");
