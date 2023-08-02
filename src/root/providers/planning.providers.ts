@@ -11,24 +11,21 @@ import {
   returnsToAffectForDateQuery$
 } from '@features/planning';
 
-import { estimateJourneyQuery$, GOOGLE_MAPS_API_KEY, googleMapsApiKeyValueProvider, searchPlaceQuery$ } from '@features/google';
-import { ENV } from '../../environments';
 import { predictRecurrenceQueryProvider, predictRecurrenceQuery$ } from '@features/common/recurrence';
-import { searchPlaceQueryProvider } from '@features/common/place';
+import { searchPlaceQueryProvider, searchPlaceQuery$ } from '@features/common/place';
 import { searchUserQueryProvider } from '@features/common/user';
 import { cognitoListUsersWithDriverGroupQuery$ } from '@features/aws';
 import { searchClientQueryProvider, searchClientsQuery$ } from '@features/common/client';
-import { estimateJourneyQueryProvider } from '@features/common/journey';
+import { estimateJourneyQueryProvider, estimateJourneyQuery$ } from '@features/common/journey';
 
 export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
-  googleMapsApiKeyValueProvider({ apiKey: ENV.api.maps }),
   scheduleFareActionProvider(scheduleFareAction$, [HttpClient]),
   affectReturnActionProvider(affectReturnAction$, [HttpClient]),
   predictRecurrenceQueryProvider(predictRecurrenceQuery$, [HttpClient]),
   faresForDateQueryProvider(faresForDateQuery$, [HttpClient]),
   returnsToAffectForDateQueryProvider(returnsToAffectForDateQuery$, [HttpClient]),
-  searchPlaceQueryProvider(searchPlaceQuery$, [HttpClient, GOOGLE_MAPS_API_KEY]),
+  searchPlaceQueryProvider(searchPlaceQuery$, [HttpClient]),
   searchUserQueryProvider(cognitoListUsersWithDriverGroupQuery$, [HttpClient]),
   searchClientQueryProvider(searchClientsQuery$, [HttpClient]),
-  estimateJourneyQueryProvider(estimateJourneyQuery$, [HttpClient, GOOGLE_MAPS_API_KEY])
+  estimateJourneyQueryProvider(estimateJourneyQuery$, [HttpClient])
 ];
