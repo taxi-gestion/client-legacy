@@ -22,7 +22,7 @@ import { RETURNS_TO_AFFECT_FOR_DATE_QUERY, ReturnsToAffectForDateQuery, ReturnTo
 export class ReturnToAffectFieldComponent implements OnChanges {
   @Input() public minSearchTermLength: number = 0;
   @Input() public searchDebounceTime: number = 300;
-  @Input({ required: true }) public date!: Date;
+  @Input({ required: true }) public date!: string;
 
   @Output() public readonly selectReturnToAffect: EventEmitter<ReturnToAffectForDatePresentation> =
     new EventEmitter<ReturnToAffectForDatePresentation>();

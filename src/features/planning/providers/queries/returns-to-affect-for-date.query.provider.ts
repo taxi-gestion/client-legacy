@@ -5,7 +5,7 @@ import { Place } from '@features/common/place';
 export const RETURNS_TO_AFFECT_FOR_DATE_QUERY: 'planning.returns-to-affect-for-date.query' =
   'planning.returns-to-affect-for-date.query' as const;
 
-export type ReturnsToAffectForDateQuery = (date: Date) => Observable<ReturnsToAffectForDate>;
+export type ReturnsToAffectForDateQuery = (date: string) => Observable<ReturnsToAffectForDate>;
 
 export const returnsToAffectForDateQueryProvider = <TDependencies>(
   useFactory: (...providers: never[]) => ReturnsToAffectForDateQuery,

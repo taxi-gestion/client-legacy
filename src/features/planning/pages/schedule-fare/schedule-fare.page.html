@@ -24,12 +24,8 @@
     <input id="clientPhone" type="text" formControlName="clientPhone" />
   </div>
   <div>
-    <label for="date">Le:</label>
-    <input id="date" type="date" formControlName="date" />
-  </div>
-  <div>
-    <label for="startTime">A:</label>
-    <input id="startTime" type="time" formControlName="startTime" />
+    <label for="datetime">Le/A:</label>
+    <input id="datetime" type="datetime-local" formControlName="datetime" />
   </div>
   <div>
     Départ de:
@@ -58,7 +54,7 @@
   </div>
   <div class="border border-secondary p-1">
     <app-predict-recurrence
-      [fromDate]="scheduleFareForm.controls.date.getRawValue()"
+      [fromDate]="scheduleFareForm.controls.datetime.getRawValue()"
       (predictRecurrenceSuccess)="onPredictRecurrenceSuccessChange($event)"></app-predict-recurrence>
   </div>
   <input id="recurrence" type="hidden" formControlName="recurrence" />
