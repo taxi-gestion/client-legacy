@@ -37,9 +37,6 @@ jobs:
           echo "export const ENV = {
             auth: {
               clientId: '${{ vars.COGNITO_APP_INTEGRATION_ID }}'
-            },
-            api: {
-              maps: '${{ secrets.GOOGLE_MAPS_API_KEY }}'
             }
           };" > src/environments/environment.ts
 

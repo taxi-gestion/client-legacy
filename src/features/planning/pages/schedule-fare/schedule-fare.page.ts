@@ -32,7 +32,8 @@ export class ScheduleFarePage {
     filter(([departure, destination]: [Place, Place]): boolean => isValidPlace(departure) && isValidPlace(destination)),
     switchMap(
       ([departure, destination]: [Place, Place]): Observable<JourneyEstimate> =>
-        this._estimateJourneyQuery$({ departure, destination })
+        // TODO Use datetime picker to get corresponding datetime iso8601 utc.
+        this._estimateJourneyQuery$({ departure, destination, departureTime: '2023-08-03T12:00:50.000Z' })
     ),
     tap((estimate: JourneyEstimate): void => this.onJourneyEstimateReceived(estimate))
   );
@@ -57,8 +58,8 @@ export class ScheduleFarePage {
   }
 
   public onJourneyEstimateReceived(estimate: JourneyEstimate): void {
-    this.scheduleFareForm.controls.duration.setValue(estimate.duration.valueInSeconds);
-    this.scheduleFareForm.controls.distance.setValue(estimate.distance.valueInMeters);
+    this.scheduleFareForm.controls.duration.setValue(estimate.durationInSeconds);
+    this.scheduleFareForm.controls.distance.setValue(estimate.distanceInMeters);
   }
 
   public onSearchClientTermChange(search: string): void {

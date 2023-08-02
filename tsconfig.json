@@ -9,7 +9,6 @@
       "@features/aws": ["src/features/aws"],
       "@features/common": ["src/features/common"],
       "@features/dashboard": ["src/features/dashboard"],
-      "@features/google": ["src/features/google"],
       "@features/common/place": ["src/features/common/place"],
       "@features/planning": ["src/features/planning"],
       "@features/public": ["src/features/public"],
