@@ -145,3 +145,7 @@ $font-family-icons-lower: string.to-lower-case($font-family-icons);
 .ri-close-line::before {
   content: '\eb99';
 }
+
+.ri-search-line::before {
+  content: '\f0d1';
+}

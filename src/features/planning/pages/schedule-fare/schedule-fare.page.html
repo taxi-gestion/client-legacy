@@ -1,5 +1,5 @@
 <div class="d-flex">
-  <h2 class="pt-2 pb-4">Ajouter une course</h2>
+  <h2 class="pt-2 pb-4 text-primary">Ajouter une course</h2>
   <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
     <i class="ri-close-line ri-2x" aria-hidden="true"></i>
     <span class="visually-hidden">Fermer</span>
@@ -12,72 +12,98 @@
   (actionSuccess)="onScheduleFareActionSuccess()"
   (actionError)="onScheduleFareActionError($event)"
   (ngSubmit)="onSubmitFareToSchedule(loadAction.start)">
-  <div>
-    <label for="clientIdentity">Client:</label>
+  <div class="mb-3">
+    <label for="clientIdentity" class="form-label">Nom du passager</label>
     <app-client-field
       (selectClient)="onSelectClientChange($event)"
       (searchClientTerm)="onSearchClientTermChange($event)"></app-client-field>
-    <input id="clientIdentity" type="hidden" formControlName="clientIdentity" />
+    <input id="clientIdentity" type="hidden" name="clientIdentity" formControlName="clientIdentity" />
   </div>
-  <div>
-    <label for="clientPhone">Téléphone:</label>
-    <input id="clientPhone" type="text" formControlName="clientPhone" />
+  <div class="mb-3">
+    <label for="clientPhone" class="form-label">Téléphone du contact</label>
+    <input
+      id="clientPhone"
+      type="text"
+      placeholder="+33(0) 6 XX XX XX XX"
+      class="form-control"
+      name="clientPhone"
+      formControlName="clientPhone" />
   </div>
-  <div>
-    <label for="datetime">Le/A:</label>
-    <input id="datetime" type="datetime-local" formControlName="datetime" />
+  <div class="mb-3">
+    <label for="departureDatetime" class="form-label">Date et heure du départ</label>
+    <input
+      id="departureDatetime"
+      type="datetime-local"
+      class="form-control"
+      name="departureDatetime"
+      formControlName="departureDatetime" />
   </div>
-  <div>
-    Départ de:
+  <div class="mb-3">
+    <label for="departurePlace" class="form-label">Lieu de départ</label>
     <app-place-field (selectPlace)="onSelectDepartureChange($event)"></app-place-field>
-    <input id="driveFrom" type="hidden" formControlName="driveFrom" />
+    <input id="departurePlace" type="hidden" name="departurePlace" formControlName="departurePlace" />
   </div>
-  <div>
-    <label for="driveTo">Arrivée:</label>
+  <div class="mb-3">
+    <label for="arrivalPlace" class="form-label">Lieu d'arrivée</label>
     <app-place-field (selectPlace)="onSelectDestinationChange($event)"></app-place-field>
-    <input id="driveTo" type="hidden" formControlName="driveTo" />
+    <input id="arrivalPlace" type="hidden" name="arrivalPlace" formControlName="arrivalPlace" />
   </div>
-  <!-- TODO Refactor with appLoadAction -->
-  <div *ngIf="estimateJourney$ | async"></div>
-  <div>
-    <label for="driveTo">Durée (secondes, pipe à faire):</label>
-    <input id="duration" type="number" formControlName="duration" />
+  <div class="mb-3">
+    <label for="fareDuration" class="form-label">Durée du trajet</label>
+    <input
+      id="fareDuration"
+      placeholder="Durée en minutes"
+      type="number"
+      class="form-control"
+      name="fareDuration"
+      formControlName="fareDuration" />
   </div>
-  <div>
-    <label for="driveTo">Distance (metres, pipe à faire):</label>
-    <input id="distance" type="number" formControlName="distance" />
+  <div class="mb-3">
+    <label for="fareDistance" class="form-label">Distance du trajet</label>
+    <input
+      id="fareDistance"
+      placeholder="Distance en km"
+      type="number"
+      class="form-control"
+      name="fareDistance"
+      formControlName="fareDistance" />
   </div>
-  <div>
-    <label for="planning">Chauffeur:</label>
+  <div class="mb-3">
+    <label for="chauffeur" class="form-label">Chauffeur</label>
     <app-user-field (selectUser)="onSelectDriverChange($event)"></app-user-field>
-    <input id="planning" type="hidden" formControlName="planning" />
+    <input id="chauffeur" type="hidden" name="chauffeur" formControlName="chauffeur" />
   </div>
-  <div class="border border-secondary p-1">
-    <app-predict-recurrence
-      [fromDate]="scheduleFareForm.controls.datetime.getRawValue()"
-      (predictRecurrenceSuccess)="onPredictRecurrenceSuccessChange($event)"></app-predict-recurrence>
+  <div class="mb-3">
+    <div class="form-check form-switch">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        id="driveKind"
+        name="driveKind"
+        formControlName="driveKind"
+        checked />
+      <label class="form-check-label" for="driveKind">Ce trajet comporte un retour</label>
+    </div>
   </div>
-  <input id="recurrence" type="hidden" formControlName="recurrence" />
-  <div>
-    <label for="driveKind">Type de trajet:</label>
-    <select id="driveKind" formControlName="driveKind">
-      <option value="one-way">Aller simple</option>
-      <option value="outward">Aller</option>
-      <option value="return">Retour</option>
-    </select>
-  </div>
-  <div>
-    <label for="driveNature">Nature du trajet:</label>
-    <select id="driveNature" formControlName="driveNature">
-      <option value="medical">Medical</option>
-      <option value="standard">Non médical</option>
-    </select>
+  <div class="mb-3">
+    <div class="form-check form-switch">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        id="driveNature"
+        name="driveNature"
+        formControlName="driveNature"
+        checked />
+      <label class="form-check-label" for="driveNature">Ce trajet est de nature médicale</label>
+    </div>
   </div>
   <button
     [appLoadActionDisplay]="loadAction.isLoading$ | async"
     #loadActionDisplay
     type="submit"
-    class="btn btn-primary mt-5 p-3 w-100"
+    class="btn mt-3 btn-primary w-100"
     [disabled]="loadActionDisplay.isLoading">
     <ng-container slot="loadActionDisplayIdle">Créer la course</ng-container>
     <ng-container slot="loadActionDisplayLoading">

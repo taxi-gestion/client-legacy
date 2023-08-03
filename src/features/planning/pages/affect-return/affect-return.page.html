@@ -1,5 +1,5 @@
 <div class="d-flex">
-  <h2 class="pt-2 pb-4">Affecter le retour</h2>
+  <h2 class="pt-2 pb-4 text-primary">Affecter le retour</h2>
   <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
     <i class="ri-close-line ri-2x" aria-hidden="true"></i>
     <span class="visually-hidden">Fermer</span>
@@ -12,43 +12,62 @@
   (actionSuccess)="onAffectReturnActionSuccess()"
   (actionError)="onAffectReturnActionError($event)"
   (ngSubmit)="onSubmitReturnToAffect(loadAction.start)">
-  <div>
-    Retour de:
+  <div class="mb-3">
+    <label for="fareId" class="form-label">Retour pour le passager</label>
     <app-return-to-affect-field
       [date]="selectedDate"
       (selectReturnToAffect)="onSelectReturnToAffectChange($event)"></app-return-to-affect-field>
-    <input id="fareId" type="hidden" formControlName="fareId" />
+    <input id="fareId" type="hidden" name="fareId" formControlName="fareId" />
   </div>
-  <div>
-    <label for="datetime">Le/A:</label>
-    <input id="datetime" type="datetime-local" formControlName="datetime" />
+  <div class="mb-3">
+    <label for="departureDatetime" class="form-label">Date et heure du retour</label>
+    <input
+      id="departureDatetime"
+      type="datetime-local"
+      class="form-control"
+      name="departureDatetime"
+      formControlName="departureDatetime" />
   </div>
-  <div>
-    Départ de:
-    <app-place-field
-      [defaultValue]="(departureDefault$ | async) ?? ''"
-      (selectPlace)="onSelectDepartureChange($event)"></app-place-field>
-    <input id="driveFrom" type="hidden" formControlName="driveFrom" />
+  <div class="mb-3">
+    <label for="departurePlace" class="form-label">Lieu de départ</label>
+    <app-place-field (selectPlace)="onSelectDepartureChange($event)"></app-place-field>
+    <input id="departurePlace" type="hidden" name="departurePlace" formControlName="departurePlace" />
   </div>
-  <div>
-    <label for="driveTo">Arrivée:</label>
-    <app-place-field
-      [defaultValue]="(destinationDefault$ | async) ?? ''"
-      (selectPlace)="onSelectDestinationChange($event)"></app-place-field>
-    <input id="driveTo" type="hidden" formControlName="driveTo" />
+  <div class="mb-3">
+    <label for="arrivalPlace" class="form-label">Lieu d'arrivée</label>
+    <app-place-field (selectPlace)="onSelectDestinationChange($event)"></app-place-field>
+    <input id="arrivalPlace" type="hidden" name="arrivalPlace" formControlName="arrivalPlace" />
   </div>
-  <div>
-    <label for="planning">Chauffeur:</label>
-    <app-user-field
-      [defaultValue]="(driverDefault$ | async) ?? ''"
-      (selectUser)="onSelectDriverChange($event)"></app-user-field>
-    <input id="planning" type="hidden" formControlName="planning" />
+  <div class="mb-3">
+    <label for="fareDuration" class="form-label">Durée du trajet</label>
+    <input
+      id="fareDuration"
+      placeholder="Durée en minutes"
+      type="number"
+      class="form-control"
+      name="fareDuration"
+      formControlName="fareDuration" />
+  </div>
+  <div class="mb-3">
+    <label for="fareDistance" class="form-label">Distance du trajet</label>
+    <input
+      id="fareDistance"
+      placeholder="Distance en km"
+      type="number"
+      class="form-control"
+      name="fareDistance"
+      formControlName="fareDistance" />
+  </div>
+  <div class="mb-3">
+    <label for="chauffeur" class="form-label">Chauffeur</label>
+    <app-user-field (selectUser)="onSelectDriverChange($event)"></app-user-field>
+    <input id="chauffeur" type="hidden" name="chauffeur" formControlName="chauffeur" />
   </div>
   <button
     [appLoadActionDisplay]="loadAction.isLoading$ | async"
     #loadActionDisplay
     type="submit"
-    class="btn btn-primary mt-5 p-3 w-100"
+    class="btn btn-primary mt-3 w-100"
     [disabled]="loadActionDisplay.isLoading">
     <ng-container slot="loadActionDisplayIdle">Affecter le retour</ng-container>
     <ng-container slot="loadActionDisplayLoading">
