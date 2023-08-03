@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CanMatchOneUserGroupGuard } from '@features/authentication';
-import { CanActivatePlanningRedirectGuard } from '../guards';
 import { DailyLayout } from '../layouts';
 import {
   AffectReturnPage,
@@ -10,6 +9,7 @@ import {
   MissingAdminConfigurationPage,
   ScheduleFarePage
 } from '../pages';
+import { CanActivatePlanningRedirectGuard } from '../guards';
 
 const DAILY_PAGES: Routes = [
   {

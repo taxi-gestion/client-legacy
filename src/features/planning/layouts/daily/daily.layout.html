@@ -17,8 +17,8 @@
       </li>
     </ul>
   </app-navbar>
-  <div class="row g-0 flex-grow-1">
-    <div class="d-flex flex-column" [class.col-9]="dailyOutlet.isActivated">
+  <div class="d-flex flex-grow-1 overflow-hidden g-0">
+    <div id="main-content" class="overflow-auto" [ngClass]="dailyOutlet.isActivated ? 'col-9' : 'col'">
       <div class="p-3">
         <h1>
           Planning du
@@ -44,10 +44,8 @@
         </app-planning>
       </div>
     </div>
-    <div [ngClass]="dailyOutlet.isActivated ? 'col-3' : 'd-none'">
-      <div class="shadow p-4 h-100 border-start bg-white">
-        <router-outlet #dailyOutlet="outlet"></router-outlet>
-      </div>
+    <div id="action-outlet" class="overflow-auto" [ngClass]="dailyOutlet.isActivated ? 'col-3' : 'd-none'">
+      <router-outlet #dailyOutlet="outlet"></router-outlet>
     </div>
   </div>
 </div>
