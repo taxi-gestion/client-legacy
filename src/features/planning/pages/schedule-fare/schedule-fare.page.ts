@@ -34,7 +34,7 @@ export class ScheduleFarePage {
     switchMap(
       ([departure, destination]: [Place, Place]): Observable<JourneyEstimate> =>
         this._estimateJourneyQuery$({
-          departure,
+          origin: departure,
           destination,
           departureTime: datetimeLocalToIso8601UTCString(SCHEDULE_FARE_FORM.controls.datetime.value as string)
         })
