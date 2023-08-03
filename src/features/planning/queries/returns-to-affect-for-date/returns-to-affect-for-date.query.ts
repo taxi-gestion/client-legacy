@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { toPlace } from '@features/common/place';
+import { PlaceTransfer } from '@features/common/place';
 import { ReturnsToAffectForDateQuery, ReturnToAffectForDate } from '../../providers';
 
 export type ReturnsToAffectTransfer = {
   id: string;
   client: string;
   datetime: string;
-  departure: string;
-  destination: string;
+  departure: PlaceTransfer;
+  destination: PlaceTransfer;
   planning: string | undefined;
   kind: 'return';
   nature: 'medical' | 'standard';
@@ -23,10 +23,8 @@ const toReturnsToAffectForDate = (faresToSchedule: ReturnsToAffectTransfer[]): R
       id: fare.id,
       client: fare.client,
       datetime: fare.datetime,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      departure: toPlace(JSON.parse(fare.departure)),
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      destination: toPlace(JSON.parse(fare.destination)),
+      departure: fare.departure,
+      destination: fare.destination,
       kind: 'return',
       nature: fare.nature,
       phone: fare.phone,
