@@ -5,10 +5,10 @@ import {
   FareForDatePresentation,
   FaresForDatePresentation
 } from './fares.presentation';
-import { FareForDate, FaresForDate } from '../providers';
-import { isoTimeToMinutes } from './unit-convertion';
+import { minutesSinceStartOfDayInTimezone, timeInTimezone } from './unit-convertion';
 import { Place } from '@features/common/place';
 import { secondsToMinutes } from 'date-fns';
+import { FareForDate } from '@features/planning';
 
 export const defaultPlaceValue: Place = {
   context: '',
@@ -42,7 +42,7 @@ export const filterByPlanning =
   (faresList: FaresForDatePresentation): FaresForDatePresentation =>
     faresList.filter((fare: FareForDatePresentation): boolean => fare.planning === planningToKeep);
 
-export const toFaresForDatePresentation = (fares: FaresForDate): FaresForDatePresentation =>
+export const toFaresForDatePresentation = (fares: FareForDate[]): FaresForDatePresentation =>
   fares.map(toFareForDatePresentation);
 
 export const toFaresForDatePlanningSession = (fares: FaresForDatePresentation): DailyPlanning =>
@@ -60,11 +60,12 @@ export const toFareForDatePresentation = (fare: FareForDate): FareForDatePresent
   phone: fare.phone.replace(' ', ''),
   planning: fare.planning,
   status: fare.status,
-  time: fare.time.substring(1)
+  datetime: fare.datetime,
+  localTime: timeInTimezone(fare.datetime, 'Europe/Paris')
 });
 
 export const toFareForDatePlanningSession = (fare: FareForDatePresentation): FareForDatePlanningSession => ({
-  startTimeInMinutes: isoTimeToMinutes(fare.time),
+  startTimeInMinutes: minutesSinceStartOfDayInTimezone(fare.datetime, 'Europe/Paris'),
   client: fare.client,
   creator: fare.creator,
   departure: fare.departure,
@@ -76,5 +77,6 @@ export const toFareForDatePlanningSession = (fare: FareForDatePresentation): Far
   phone: fare.phone,
   planning: fare.planning,
   status: fare.status,
-  time: fare.time
+  datetime: fare.datetime,
+  localTime: fare.localTime
 });

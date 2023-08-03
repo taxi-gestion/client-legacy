@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { ReturnsToAffectForDate, ReturnsToAffectForDateQuery, ReturnToAffectForDate } from '@features/planning';
 import { toPlace } from '@features/common/place';
+import { ReturnsToAffectForDateQuery, ReturnToAffectForDate } from '../../providers';
 
 export type ReturnsToAffectTransfer = {
   id: string;
   client: string;
-  date: string;
+  datetime: string;
   departure: string;
   destination: string;
   planning: string | undefined;
@@ -14,16 +14,15 @@ export type ReturnsToAffectTransfer = {
   nature: 'medical' | 'standard';
   phone: string;
   status: 'return-to-affect';
-  time: string | undefined;
 };
 
-const toReturnsToAffectForDate = (faresToSchedule: ReturnsToAffectTransfer[]): ReturnsToAffectForDate =>
+const toReturnsToAffectForDate = (faresToSchedule: ReturnsToAffectTransfer[]): ReturnToAffectForDate[] =>
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   faresToSchedule.map(
     (fare: ReturnsToAffectTransfer): ReturnToAffectForDate => ({
       id: fare.id,
       client: fare.client,
-      date: fare.date,
+      datetime: fare.datetime,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       departure: toPlace(JSON.parse(fare.departure)),
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -32,12 +31,11 @@ const toReturnsToAffectForDate = (faresToSchedule: ReturnsToAffectTransfer[]): R
       nature: fare.nature,
       phone: fare.phone,
       planning: fare.planning,
-      status: 'return-to-affect',
-      time: fare.time
+      status: 'return-to-affect'
     })
   );
 
 export const returnsToAffectForDateQuery$ =
   (httpClient: HttpClient): ReturnsToAffectForDateQuery =>
-  (date: string): Observable<ReturnsToAffectForDate> =>
+  (date: string): Observable<ReturnToAffectForDate[]> =>
     httpClient.get<ReturnsToAffectTransfer[]>(`/api/returns-to-affect-for-date/${date}`).pipe(map(toReturnsToAffectForDate));
