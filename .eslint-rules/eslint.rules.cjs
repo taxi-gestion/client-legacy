@@ -159,7 +159,7 @@ module.exports = {
   'no-lonely-if': 'error',
   'no-loop-func': 'off',
   'no-magic-numbers': ['off', { ignore: [0, 1] }],
-  'no-mixed-operators': 'error',
+  'no-mixed-operators': 'off',
   'no-multi-assign': 'error',
   'no-multi-str': 'error',
   'no-negated-condition': 'error',

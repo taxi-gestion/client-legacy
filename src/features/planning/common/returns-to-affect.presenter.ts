@@ -1,4 +1,4 @@
-import { ReturnToAffectForDatePresentation } from '../common/returns-to-affect.presentation';
+import { ReturnToAffectForDatePresentation } from './returns-to-affect.presentation';
 import { ReturnToAffectForDate } from '../providers';
 
 export const toReturnsToAffectForDatePresentation = (fares: ReturnToAffectForDate[]): ReturnToAffectForDatePresentation[] =>
@@ -14,5 +14,5 @@ export const toReturnToAffectForDatePresentation = (fare: ReturnToAffectForDate)
   phone: fare.phone,
   planning: fare.planning,
   status: 'return-to-affect',
-  time: fare.time
+  datetime: fare.datetime
 });

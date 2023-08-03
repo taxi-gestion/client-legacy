@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { FareForDate, FaresForDate, FaresForDateQuery } from '../../providers';
 import { toPlace } from '@features/common/place';
+import { FareForDate, FaresForDateQuery } from '../../providers';
 
 export type FareTransfer = {
   client: string;
   creator: string;
-  date: string;
+  datetime: string;
   departure: string;
   destination: string;
   distance: string;
@@ -16,15 +16,14 @@ export type FareTransfer = {
   nature: 'medical' | 'standard';
   phone: string;
   status: 'scheduled';
-  time: string;
 };
 
-const toFaresForDate = (fares: FareTransfer[]): FaresForDate =>
+const toFaresForDate = (fares: FareTransfer[]): FareForDate[] =>
   fares.map(
     (fare: FareTransfer): FareForDate => ({
       client: fare.client,
       creator: fare.creator,
-      date: fare.date,
+      datetime: fare.datetime,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       departure: toPlace(JSON.parse(fare.departure)),
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -35,12 +34,11 @@ const toFaresForDate = (fares: FareTransfer[]): FaresForDate =>
       nature: fare.nature,
       phone: fare.phone,
       planning: fare.planning,
-      status: fare.status,
-      time: fare.time
+      status: fare.status
     })
   );
 
 export const faresForDateQuery$ =
   (httpClient: HttpClient): FaresForDateQuery =>
-  (date: string): Observable<FaresForDate> =>
+  (date: string): Observable<FareForDate[]> =>
     httpClient.get<FareTransfer[]>(`/api/fares-for-date/${date}`).pipe(map(toFaresForDate));

@@ -4,7 +4,7 @@ import { Place } from '@features/common/place';
 
 export const FARES_FOR_DATE_QUERY: 'planning.fares-for-date.query' = 'planning.fares-for-date.query' as const;
 
-export type FaresForDateQuery = (date: string) => Observable<FaresForDate>;
+export type FaresForDateQuery = (date: string) => Observable<FareForDate[]>;
 
 export const faresForDateQueryProvider = <TDependencies>(
   useFactory: (...providers: never[]) => FaresForDateQuery,
@@ -15,14 +15,10 @@ export const faresForDateQueryProvider = <TDependencies>(
   deps
 });
 
-export type FareStatus = 'scheduled' /*| 'finished' | 'subcontracted'*/;
-
-export type FaresForDate = FareForDate[];
-
 export type FareForDate = {
   client: string;
   creator: string;
-  date: string;
+  datetime: string;
   departure: Place;
   destination: Place;
   distance: string;
@@ -31,6 +27,5 @@ export type FareForDate = {
   kind: 'one-way' | 'outward' | 'return';
   nature: 'medical' | 'standard';
   phone: string;
-  status: FareStatus;
-  time: string;
+  status: 'scheduled';
 };

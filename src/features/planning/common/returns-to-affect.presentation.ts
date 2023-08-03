@@ -10,5 +10,5 @@ export type ReturnToAffectForDatePresentation = {
   nature: string;
   phone: string;
   status: string;
-  time: string | undefined;
+  datetime: string;
 };

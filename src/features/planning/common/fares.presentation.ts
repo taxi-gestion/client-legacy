@@ -18,7 +18,8 @@ export type FareForDatePresentation = {
   nature: string;
   phone: string;
   status: string;
-  time: string;
+  datetime: string;
+  localTime: string;
 };
 
 export type FaresForDatePresentation = FareForDatePresentation[];
