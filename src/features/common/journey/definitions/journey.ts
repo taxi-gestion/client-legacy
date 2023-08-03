@@ -1,7 +1,7 @@
 import { Place } from '@features/common/place';
 
 export type Journey = {
-  departure: Place;
+  origin: Place;
   destination: Place;
 
   departureTime: string;
