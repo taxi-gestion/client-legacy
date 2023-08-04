@@ -1,37 +1,22 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Place, PlaceTransfer } from '@features/common/place';
-import { PredictedRecurrence, PredictedRecurrenceTransfer } from '@features/common/recurrence';
+import { PlaceTransfer } from '@features/common/place';
 
 export type FareToSchedule = {
-  clientIdentity: string;
-  clientPhone: string;
+  passenger: string;
+  phone: string;
   datetime: string;
-  driveFrom: Place;
-  driveKind: 'one-way' | 'outward' | 'return';
-  driveNature: 'medical' | 'standard';
-  planning: string | undefined;
-  driveTo: Place;
-  recurrence: PredictedRecurrence | undefined;
+  departure: PlaceTransfer;
+  kind: 'one-way' | 'two-way';
+  nature: 'medical' | 'standard';
+  driver: string;
+  arrival: PlaceTransfer;
+  //recurrence: PredictedRecurrenceTransfer | undefined;
   duration: number;
   distance: number;
 };
 
-export type FareToScheduleTransfer = {
-  clientIdentity: string;
-  clientPhone: string;
-  datetime: string;
-  driveFrom: PlaceTransfer;
-  driveKind: 'one-way' | 'outward' | 'return';
-  driveNature: 'medical' | 'standard';
-  planning: string | undefined;
-  driveTo: PlaceTransfer;
-  recurrence: PredictedRecurrenceTransfer | undefined;
-  duration: number;
-  distance: number;
-};
-
-export type ScheduleFareAction = (fareToSchedule: FareToScheduleTransfer) => Observable<object>;
+export type ScheduleFareAction = (fareToSchedule: FareToSchedule) => Observable<object>;
 
 export const SCHEDULE_FARE_ACTION: symbol = Symbol('planning.schedule-fare.action');
 

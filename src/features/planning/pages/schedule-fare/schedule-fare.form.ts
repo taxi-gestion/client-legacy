@@ -1,37 +1,50 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Place } from '@features/common/place';
-import { FareToSchedule } from '@features/planning';
-import { PredictedRecurrence } from '@features/common/recurrence';
 import { defaultPlaceValue } from '../../common/fares.presenter';
 
-export type ScheduleFareFields = {
-  clientIdentity: FormControl<string>;
-  clientPhone: FormControl<string>;
-  datetime: FormControl<Date>;
-  driveFrom: FormControl<Place>;
-  driveKind: FormControl<'one-way' | 'outward' | 'return'>;
-  driveNature: FormControl<'medical' | 'standard'>;
-  planning: FormControl<string>;
-  driveTo: FormControl<Place>;
-  recurrence: FormControl<PredictedRecurrence>;
-  duration: FormControl<number>;
-  distance: FormControl<number>;
+export type FareToSchedulePresentation = {
+  passenger: string;
+  phoneToCall: string;
+  departureDatetime: string;
+  departurePlace: Place;
+  arrivalPlace: Place;
+  driveDuration: number;
+  driveDistance: number;
+  driver: string;
+  isTwoWayDrive: boolean;
+  isMedicalDrive: boolean;
+
+  //repetition: PredictedRecurrence | undefined;
 };
 
-export const SCHEDULE_FARE_FORM: FormGroup<Record<keyof FareToSchedule, FormControl>> = new FormGroup<
-  Record<keyof FareToSchedule, FormControl>
+export type ScheduleFareFields = {
+  passenger: FormControl<string>;
+  phoneToCall: FormControl<string>;
+  departureDatetime: FormControl<Date>;
+  departurePlace: FormControl<Place>;
+  arrivalPlace: FormControl<Place>;
+  driveDuration: FormControl<number>;
+  driveDistance: FormControl<number>;
+  driver: FormControl<string>;
+  isTwoWayDrive: FormControl<boolean>;
+  isMedicalDrive: FormControl<boolean>;
+
+  //repetition: FormControl<PredictedRecurrence>;
+};
+
+export const SCHEDULE_FARE_FORM: FormGroup<Record<keyof FareToSchedulePresentation, FormControl>> = new FormGroup<
+  Record<keyof FareToSchedulePresentation, FormControl>
 >({
-  clientIdentity: new FormControl<FareToSchedule['clientIdentity']>('', [Validators.required]),
-  clientPhone: new FormControl<FareToSchedule['clientPhone']>('', [Validators.required]),
-  datetime: new FormControl<FareToSchedule['datetime']>('', [Validators.required]),
-  driveFrom: new FormControl<FareToSchedule['driveFrom']>(defaultPlaceValue, [Validators.required]),
-  driveKind: new FormControl<FareToSchedule['driveKind']>('outward', [Validators.required]),
-  driveNature: new FormControl<FareToSchedule['driveNature']>('medical', [Validators.required]),
-  planning: new FormControl<FareToSchedule['planning']>(''),
-  driveTo: new FormControl<FareToSchedule['driveTo']>(defaultPlaceValue, [Validators.required]),
-  recurrence: new FormControl<FareToSchedule['recurrence']>(undefined),
-  duration: new FormControl<FareToSchedule['duration']>(0, [Validators.required]),
-  distance: new FormControl<FareToSchedule['distance']>(0, [Validators.required])
+  passenger: new FormControl<FareToSchedulePresentation['passenger']>('', [Validators.required]),
+  phoneToCall: new FormControl<FareToSchedulePresentation['phoneToCall']>('', [Validators.required]),
+  departureDatetime: new FormControl<FareToSchedulePresentation['departureDatetime']>('', [Validators.required]),
+  departurePlace: new FormControl<FareToSchedulePresentation['departurePlace']>(defaultPlaceValue, [Validators.required]),
+  arrivalPlace: new FormControl<FareToSchedulePresentation['arrivalPlace']>(defaultPlaceValue, [Validators.required]),
+  driveDuration: new FormControl<FareToSchedulePresentation['driveDuration']>(0, [Validators.required]),
+  driveDistance: new FormControl<FareToSchedulePresentation['driveDistance']>(0, [Validators.required]),
+  driver: new FormControl<FareToSchedulePresentation['driver']>('', [Validators.required]),
+  isTwoWayDrive: new FormControl<FareToSchedulePresentation['isTwoWayDrive']>(true, [Validators.required]),
+  isMedicalDrive: new FormControl<FareToSchedulePresentation['isMedicalDrive']>(true, [Validators.required])
 });
 
 export const setScheduleFareErrorToForm = (handledError: { field?: string; errors: Record<string, unknown> }): void =>

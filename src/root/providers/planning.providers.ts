@@ -5,10 +5,10 @@ import {
   faresForDateQuery$,
   faresForDateQueryProvider,
   returnsToAffectForDateQueryProvider,
-  scheduleFareAction$,
   affectReturnAction$,
   scheduleFareActionProvider,
-  returnsToAffectForDateQuery$
+  returnsToAffectForDateQuery$,
+  validatedScheduleFareAction$
 } from '@features/planning';
 
 import { predictRecurrenceQueryProvider, predictRecurrenceQuery$ } from '@features/common/recurrence';
@@ -19,7 +19,7 @@ import { searchClientQueryProvider, searchClientsQuery$ } from '@features/common
 import { estimateJourneyQueryProvider, estimateJourneyQuery$ } from '@features/common/journey';
 
 export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
-  scheduleFareActionProvider(scheduleFareAction$, [HttpClient]),
+  scheduleFareActionProvider(validatedScheduleFareAction$, [HttpClient]),
   affectReturnActionProvider(affectReturnAction$, [HttpClient]),
   predictRecurrenceQueryProvider(predictRecurrenceQuery$, [HttpClient]),
   faresForDateQueryProvider(faresForDateQuery$, [HttpClient]),

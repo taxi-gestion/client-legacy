@@ -13,21 +13,21 @@
   (actionError)="onScheduleFareActionError($event)"
   (ngSubmit)="onSubmitFareToSchedule(loadAction.start)">
   <div class="mb-3">
-    <label for="clientIdentity" class="form-label">Nom du passager</label>
+    <label for="passenger" class="form-label">Nom du passager</label>
     <app-client-field
       (selectClient)="onSelectClientChange($event)"
       (searchClientTerm)="onSearchClientTermChange($event)"></app-client-field>
-    <input id="clientIdentity" type="hidden" name="clientIdentity" formControlName="clientIdentity" />
+    <input id="passenger" type="hidden" name="passenger" formControlName="passenger" />
   </div>
   <div class="mb-3">
-    <label for="clientPhone" class="form-label">Téléphone du contact</label>
+    <label for="phoneToCall" class="form-label">Téléphone à appeler</label>
     <input
-      id="clientPhone"
+      id="phoneToCall"
       type="text"
-      placeholder="+33(0) 6 XX XX XX XX"
+      placeholder="(+33)/(0) 6 XX XX XX XX"
       class="form-control"
-      name="clientPhone"
-      formControlName="clientPhone" />
+      name="phoneToCall"
+      formControlName="phoneToCall" />
   </div>
   <div class="mb-3">
     <label for="departureDatetime" class="form-label">Date et heure du départ</label>
@@ -49,29 +49,29 @@
     <input id="arrivalPlace" type="hidden" name="arrivalPlace" formControlName="arrivalPlace" />
   </div>
   <div class="mb-3">
-    <label for="fareDuration" class="form-label">Durée du trajet</label>
+    <label for="driveDuration" class="form-label">Durée du trajet</label>
     <input
-      id="fareDuration"
+      id="driveDuration"
       placeholder="Durée en minutes"
       type="number"
       class="form-control"
-      name="fareDuration"
-      formControlName="fareDuration" />
+      name="driveDuration"
+      formControlName="driveDuration" />
   </div>
   <div class="mb-3">
-    <label for="fareDistance" class="form-label">Distance du trajet</label>
+    <label for="driveDistance" class="form-label">Distance du trajet</label>
     <input
-      id="fareDistance"
+      id="driveDistance"
       placeholder="Distance en km"
       type="number"
       class="form-control"
-      name="fareDistance"
-      formControlName="fareDistance" />
+      name="driveDistance"
+      formControlName="driveDistance" />
   </div>
   <div class="mb-3">
-    <label for="chauffeur" class="form-label">Chauffeur</label>
+    <label for="driver" class="form-label">Chauffeur</label>
     <app-user-field (selectUser)="onSelectDriverChange($event)"></app-user-field>
-    <input id="chauffeur" type="hidden" name="chauffeur" formControlName="chauffeur" />
+    <input id="driver" type="hidden" name="driver" formControlName="driver" />
   </div>
   <div class="mb-3">
     <div class="form-check form-switch">
@@ -79,11 +79,11 @@
         class="form-check-input"
         type="checkbox"
         role="switch"
-        id="driveKind"
-        name="driveKind"
-        formControlName="driveKind"
+        id="isTwoWayDrive"
+        name="isTwoWayDrive"
+        formControlName="isTwoWayDrive"
         checked />
-      <label class="form-check-label" for="driveKind">Ce trajet comporte un retour</label>
+      <label class="form-check-label" for="isTwoWayDrive">Ce trajet comporte un retour</label>
     </div>
   </div>
   <div class="mb-3">
@@ -92,11 +92,11 @@
         class="form-check-input"
         type="checkbox"
         role="switch"
-        id="driveNature"
-        name="driveNature"
-        formControlName="driveNature"
+        id="isMedicalDrive"
+        name="isMedicalDrive"
+        formControlName="isMedicalDrive"
         checked />
-      <label class="form-check-label" for="driveNature">Ce trajet est de nature médicale</label>
+      <label class="form-check-label" for="isMedicalDrive">Ce trajet est de nature médicale</label>
     </div>
   </div>
   <button
@@ -111,4 +111,11 @@
       Création en cours...
     </ng-container>
   </button>
+  <div class="text-danger mt-2" *ngIf="scheduleFareForm.errors?.['validationFailedBeforeApiCallError']">
+    La structure des données de la requête ne respecte pas le contrat de transfer. La requête ne peut pas être effectuée.
+    Prévenir Romain qu'il va faire des heures supp'.
+  </div>
+  <div class="text-danger mt-2" *ngIf="scheduleFareForm.errors">
+    Une erreur est survenue lors de l'appel au service distant.
+  </div>
 </form>
