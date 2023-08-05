@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { PlacePresentation } from '@features/common/place';
 import { UserPresentation } from '@features/common/user';
 import { Observable, Subject } from 'rxjs';
-import { ReturnToAffectForDatePresentation } from '../../common/returns-to-affect.presentation';
-import { AFFECT_RETURN_ACTION, AffectReturnAction, ReturnToAffect } from '../../providers';
+import { AFFECT_RETURN_ACTION, AffectReturnAction } from '../../providers';
 import { AFFECT_RETURN_FORM, AffectReturnFields, setAffectReturnErrorToForm } from './affect-return.form';
-import { formatAffectReturnError, toReturnToAffectTransfer } from './affect-return.presenter';
+import { formatAffectReturnError, toReturnToAffectToScheduled } from './affect-return.presenter';
 import { ActivatedRoute, Params } from '@angular/router';
 import { toStandardDateFormat } from '../../common/unit-convertion';
+import { Place } from '@domain';
+import { ReturnToAffectPresentation } from '../../common';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,7 +23,7 @@ export class AffectReturnPage {
   @Output() public affectReturnError: EventEmitter<Error> = new EventEmitter<Error>();
 
   public readonly affectReturn$ = (): Observable<object> =>
-    this._affectReturnAction$(toReturnToAffectTransfer(AFFECT_RETURN_FORM.value as ReturnToAffect));
+    this._affectReturnAction$(toReturnToAffectToScheduled(AFFECT_RETURN_FORM.value as ReturnToAffectPresentation));
 
   public readonly affectReturnForm: FormGroup<AffectReturnFields> = AFFECT_RETURN_FORM;
 
@@ -34,34 +34,33 @@ export class AffectReturnPage {
     @Inject(AFFECT_RETURN_ACTION) private readonly _affectReturnAction$: AffectReturnAction
   ) {}
 
-  public onSelectDepartureChange(place: PlacePresentation): void {
-    this.affectReturnForm.controls.driveFrom.setValue(place);
+  public onSelectDepartureChange(place: Place): void {
+    this.affectReturnForm.controls.departurePlace.setValue(place);
   }
 
-  public onSelectDestinationChange(place: PlacePresentation): void {
-    this.affectReturnForm.controls.driveTo.setValue(place);
+  public onSelectArrivalChange(place: Place): void {
+    this.affectReturnForm.controls.arrivalPlace.setValue(place);
   }
 
-  private readonly _departureDefault$: Subject<string> = new Subject<string>();
-  public departureDefault$: Observable<string> = this._departureDefault$.asObservable();
+  private readonly _departureDisplayLabel$: Subject<string> = new Subject<string>();
+  public departureDisplayLabel$: Observable<string> = this._departureDisplayLabel$.asObservable();
 
-  private readonly _destinationDefault$: Subject<string> = new Subject<string>();
-  public destinationDefault$: Observable<string> = this._destinationDefault$.asObservable();
-  private readonly _driverDefault$: Subject<string> = new Subject<string>();
-  public driverDefault$: Observable<string> = this._driverDefault$.asObservable();
-  public onSelectReturnToAffectChange(returnToAffect: ReturnToAffectForDatePresentation): void {
-    this.affectReturnForm.controls.fareId.setValue(returnToAffect.id);
-
-    this.affectReturnForm.controls.driveFrom.setValue(returnToAffect.departure);
-    this._departureDefault$.next(returnToAffect.departure.label);
-    this.affectReturnForm.controls.driveTo.setValue(returnToAffect.destination);
-    this._destinationDefault$.next(returnToAffect.destination.label);
-    this.affectReturnForm.controls.planning.setValue(returnToAffect.planning ?? '');
-    this._driverDefault$.next(returnToAffect.planning ?? '');
+  private readonly _destinationDisplayLabel$: Subject<string> = new Subject<string>();
+  public destinationDisplayLabel$: Observable<string> = this._destinationDisplayLabel$.asObservable();
+  private readonly _driverDisplayLabel$: Subject<string> = new Subject<string>();
+  public driverDisplayLabel$: Observable<string> = this._driverDisplayLabel$.asObservable();
+  public onSelectReturnToAffectChange(returnToAffect: ReturnToAffectPresentation): void {
+    this.affectReturnForm.controls.returnToAffectId.setValue(returnToAffect.returnToAffectId);
+    this.affectReturnForm.controls.departurePlace.setValue(returnToAffect.departurePlace);
+    this._departureDisplayLabel$.next(returnToAffect.departurePlace.label);
+    this.affectReturnForm.controls.arrivalPlace.setValue(returnToAffect.arrivalPlace);
+    this._destinationDisplayLabel$.next(returnToAffect.arrivalPlace.label);
+    this.affectReturnForm.controls.driver.setValue(returnToAffect.driver);
+    this._driverDisplayLabel$.next(returnToAffect.driver);
   }
 
   public onSelectDriverChange(driver: UserPresentation): void {
-    this.affectReturnForm.controls.planning.setValue(driver.identifier);
+    this.affectReturnForm.controls.driver.setValue(driver.identifier);
   }
 
   public onSubmitReturnToAffect = (triggerAction: () => void): void => {

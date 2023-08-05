@@ -1,6 +1,6 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Place } from '@features/common/place';
 import { defaultPlaceValue } from '../../common/fares.presenter';
+import { Place } from '@domain';
 
 export type FareToSchedulePresentation = {
   passenger: string;

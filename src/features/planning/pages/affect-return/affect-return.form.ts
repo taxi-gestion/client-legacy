@@ -1,25 +1,33 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Place } from '@features/common/place';
 import { defaultPlaceValue } from '../../common/fares.presenter';
-import { ReturnToAffect } from '../../providers';
 import { formatDateToDatetimeLocalString } from '../../common/unit-convertion';
+import { Place } from '@domain';
+import { FareToSchedulePresentation } from '../schedule-fare/schedule-fare.form';
+import { ReturnToAffectPresentation } from '../../common/return-to-affect.presentation';
 
 export type AffectReturnFields = {
-  fareId: FormControl<string>;
-  driveFrom: FormControl<Place>;
-  planning: FormControl<string>;
-  driveTo: FormControl<Place>;
-  datetime: FormControl<string>;
+  returnToAffectId: FormControl<string>;
+  departureDatetime: FormControl<Date>;
+  departurePlace: FormControl<Place>;
+  arrivalPlace: FormControl<Place>;
+  driveDuration: FormControl<number>;
+  driveDistance: FormControl<number>;
+  driver: FormControl<string>;
 };
 
-export const AFFECT_RETURN_FORM: FormGroup<Record<keyof ReturnToAffect, FormControl>> = new FormGroup<
-  Record<keyof ReturnToAffect, FormControl>
+export const AFFECT_RETURN_FORM: FormGroup<Record<keyof ReturnToAffectPresentation, FormControl>> = new FormGroup<
+  Record<keyof ReturnToAffectPresentation, FormControl>
 >({
-  fareId: new FormControl<ReturnToAffect['fareId']>(''),
-  driveFrom: new FormControl<ReturnToAffect['driveFrom']>(defaultPlaceValue, [Validators.required]),
-  planning: new FormControl<ReturnToAffect['planning']>('', [Validators.required]),
-  driveTo: new FormControl<ReturnToAffect['driveTo']>(defaultPlaceValue, [Validators.required]),
-  datetime: new FormControl<ReturnToAffect['datetime']>(formatDateToDatetimeLocalString(new Date()), [Validators.required])
+  returnToAffectId: new FormControl<ReturnToAffectPresentation['returnToAffectId']>(''),
+  departureDatetime: new FormControl<ReturnToAffectPresentation['departureDatetime']>(
+    formatDateToDatetimeLocalString(new Date()),
+    [Validators.required]
+  ),
+  departurePlace: new FormControl<ReturnToAffectPresentation['departurePlace']>(defaultPlaceValue, [Validators.required]),
+  arrivalPlace: new FormControl<ReturnToAffectPresentation['arrivalPlace']>(defaultPlaceValue, [Validators.required]),
+  driveDuration: new FormControl<FareToSchedulePresentation['driveDuration']>(0, [Validators.required]),
+  driveDistance: new FormControl<FareToSchedulePresentation['driveDistance']>(0, [Validators.required]),
+  driver: new FormControl<ReturnToAffectPresentation['driver']>('', [Validators.required])
 });
 
 export const setAffectReturnErrorToForm = (handledError: { field?: string; errors: Record<string, unknown> }): void =>

@@ -1,7 +1,7 @@
 <div class="card border-0 shadow-sm h-100">
   <div class="card-body">
     <div class="d-flex">
-      <h5 class="card-title d-flex mb-0">{{ fare.client }}</h5>
+      <h5 class="card-title d-flex mb-0">{{ fare.passenger }}</h5>
       <ng-container *ngIf="fare.nature === 'medical'">
         <span class="visually-hidden">Trajet médical</span>
         <i class="ms-auto ri-stethoscope-line text-muted" aria-hidden="true"></i>
@@ -12,8 +12,7 @@
       <i
         class="align-bottom ms-auto text-muted"
         [class.ri-arrow-right-line]="fare.kind === 'one-way'"
-        [class.ri-arrow-turn-back-line]="fare.kind === 'return'"
-        [class.ri-arrow-left-right-line]="fare.kind === 'outward'"
+        [class.ri-arrow-left-right-line]="fare.kind === 'two-way'"
         aria-hidden="true"></i>
     </div>
     <p class="small my-3">

@@ -1,32 +1,11 @@
 import { PlanningSession } from '../components/planning/planning-row/planning-row.component';
-import { PlacePresentation } from '@features/common/place';
+import { Scheduled } from '@domain';
 
-export type DailyPlannings = {
-  name: string;
-  fares: DailyPlanning;
-}[];
-
-export type FareForDatePresentation = {
-  client: string;
-  creator: string;
-  departure: PlacePresentation;
-  destination: PlacePresentation;
-  distance: number;
-  planning: string;
-  duration: number;
-  kind: string;
-  nature: string;
-  phone: string;
-  status: string;
-  datetime: string;
-  localTime: string;
+export type DailyDriverPlanning = {
+  driver: string;
+  fares: ScheduledPlanningSession[];
 };
 
-export type FaresForDatePresentation = FareForDatePresentation[];
-
 // Plannings, horizontal axis
-export type FareForDatePlanningSession = FareForDatePresentation & PlanningSession;
-export type DailyPlanning = FareForDatePlanningSession[];
-
-// Agenda, vertical axis
-export type DailyAgenda = FaresForDatePresentation;
+export type ScheduledPresentation = Scheduled & { localTime: string };
+export type ScheduledPlanningSession = PlanningSession & ScheduledPresentation;

@@ -1,14 +1,7 @@
-import {
-  DailyPlanning,
-  DailyPlannings,
-  FareForDatePlanningSession,
-  FareForDatePresentation,
-  FaresForDatePresentation
-} from './fares.presentation';
+import { DailyDriverPlanning, ScheduledPlanningSession, ScheduledPresentation } from './fares.presentation';
 import { minutesSinceStartOfDayInTimezone, timeInTimezone } from './unit-convertion';
-import { Place } from '@features/common/place';
 import { secondsToMinutes } from 'date-fns';
-import { FareForDate } from '@features/planning';
+import { Place, Scheduled } from '@domain';
 
 export const defaultPlaceValue: Place = {
   context: '',
@@ -19,37 +12,43 @@ export const defaultPlaceValue: Place = {
   }
 };
 
-export const groupByPlanning = (faresList: DailyPlanning): DailyPlannings => {
-  const groupedFares: Record<string, DailyPlanning> = faresList.reduce(
-    (grouped: Record<string, DailyPlanning>, fare: FareForDatePlanningSession): Record<string, DailyPlanning> => {
-      const groups: Record<string, DailyPlanning> = grouped;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const key: string = fare.planning;
-      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-      if (groups[key] == null) groups[key] = [];
-      groups[key]?.push(fare);
-      return groups;
+export const groupByDriverPlanning = (faresList: ScheduledPlanningSession[]): DailyDriverPlanning[] => {
+  const groups: Record<string, ScheduledPlanningSession[]> = faresList.reduce<Record<string, ScheduledPlanningSession[]>>(
+    (
+      acc: Record<string, ScheduledPlanningSession[]>,
+      fare: ScheduledPlanningSession
+    ): Record<string, ScheduledPlanningSession[]> => {
+      if (acc[fare.driver] == null) {
+        // eslint-disable-next-line no-param-reassign
+        acc[fare.driver] = [];
+      }
+      acc[fare.driver]?.push(fare);
+      return acc;
     },
     {}
   );
 
-  // eslint-disable-next-line @typescript-eslint/typedef,@typescript-eslint/explicit-function-return-type
-  return Object.entries(groupedFares).map(([planning, fares]) => ({ name: planning, fares }));
+  return Object.entries(groups).map<DailyDriverPlanning>(
+    ([driver, fares]: [string, ScheduledPlanningSession[]]): DailyDriverPlanning => ({
+      driver,
+      fares
+    })
+  );
 };
 
 export const filterByPlanning =
   (planningToKeep: string) =>
-  (faresList: FaresForDatePresentation): FaresForDatePresentation =>
-    faresList.filter((fare: FareForDatePresentation): boolean => fare.planning === planningToKeep);
+  (faresList: ScheduledPresentation[]): ScheduledPresentation[] =>
+    faresList.filter((fare: ScheduledPresentation): boolean => fare.driver === planningToKeep);
 
-export const toFaresForDatePresentation = (fares: FareForDate[]): FaresForDatePresentation =>
-  fares.map(toFareForDatePresentation);
+export const toScheduledFaresPresentation = (fares: Scheduled[]): ScheduledPresentation[] =>
+  fares.map(toScheduledFarePresentation);
 
-export const toFaresForDatePlanningSession = (fares: FaresForDatePresentation): DailyPlanning =>
-  fares.map(toFareForDatePlanningSession);
+export const toFaresForDatePlanningSession = (fares: ScheduledPresentation[]): ScheduledPlanningSession[] =>
+  fares.map(toScheduledPlanningSession);
 
-export const toFareForDatePresentation = (fare: FareForDate): FareForDatePresentation => ({
-  client: fare.client,
+export const toScheduledFarePresentation = (fare: Scheduled): ScheduledPresentation => ({
+  passenger: fare.passenger,
   creator: fare.creator,
   departure: fare.departure,
   destination: fare.destination,
@@ -58,15 +57,15 @@ export const toFareForDatePresentation = (fare: FareForDate): FareForDatePresent
   kind: fare.kind,
   nature: fare.nature,
   phone: fare.phone.replace(' ', ''),
-  planning: fare.planning,
+  driver: fare.driver,
   status: fare.status,
   datetime: fare.datetime,
   localTime: timeInTimezone(fare.datetime, 'Europe/Paris')
 });
 
-export const toFareForDatePlanningSession = (fare: FareForDatePresentation): FareForDatePlanningSession => ({
+export const toScheduledPlanningSession = (fare: ScheduledPresentation): ScheduledPlanningSession => ({
   startTimeInMinutes: minutesSinceStartOfDayInTimezone(fare.datetime, 'Europe/Paris'),
-  client: fare.client,
+  passenger: fare.passenger,
   creator: fare.creator,
   departure: fare.departure,
   destination: fare.destination,
@@ -75,7 +74,7 @@ export const toFareForDatePlanningSession = (fare: FareForDatePresentation): Far
   kind: fare.kind,
   nature: fare.nature,
   phone: fare.phone,
-  planning: fare.planning,
+  driver: fare.driver,
   status: fare.status,
   datetime: fare.datetime,
   localTime: fare.localTime

@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { FactoryProvider } from '@angular/core';
-import { Journey, JourneyEstimate } from '../../definitions';
+import { Journey, JourneyEstimate } from '@domain';
 
 export type EstimateJourneyQuery = (journey: Journey) => Observable<JourneyEstimate>;
 

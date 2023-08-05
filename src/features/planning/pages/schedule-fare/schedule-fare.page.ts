@@ -1,7 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ClientPresentation } from '@features/common/client';
-import { isValidPlace, Place, PlacePresentation } from '@features/common/place';
 import { UserPresentation } from '@features/common/user';
 import { BehaviorSubject, combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
 import { defaultPlaceValue } from '../../common/fares.presenter';
@@ -13,7 +11,9 @@ import {
   setScheduleFareErrorToForm
 } from './schedule-fare.form';
 import { formatScheduleFareError, toFareToSchedule, toJourney } from './schedule-fare.presenter';
-import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery, JourneyEstimate } from '@features/common/journey';
+import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common/journey';
+import { isValidPlace, JourneyEstimate, Place } from '@domain';
+import { PassengerPresentation } from '../../../common/passenger';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,12 +41,12 @@ export class ScheduleFarePage {
     tap((estimate: JourneyEstimate): void => this.onJourneyEstimateReceived(estimate))
   );
 
-  public onSelectDepartureChange(place: PlacePresentation): void {
+  public onSelectDepartureChange(place: Place): void {
     this.scheduleFareForm.controls.departurePlace.setValue(place);
     this._departure.next(place);
   }
 
-  public onSelectDestinationChange(place: PlacePresentation): void {
+  public onSelectArrivalChange(place: Place): void {
     this.scheduleFareForm.controls.arrivalPlace.setValue(place);
     this._destination.next(place);
   }
@@ -55,9 +55,9 @@ export class ScheduleFarePage {
     this.scheduleFareForm.controls.driver.setValue(driver.identifier);
   }
 
-  public onSelectClientChange(client: ClientPresentation): void {
-    this.scheduleFareForm.controls.passenger.setValue(`${client.lastname} ${client.firstname}`);
-    this.scheduleFareForm.controls.phoneToCall.setValue(`${client.phone}`);
+  public onSelectPassengerChange(passenger: PassengerPresentation): void {
+    this.scheduleFareForm.controls.passenger.setValue(`${passenger.lastname} ${passenger.firstname}`);
+    this.scheduleFareForm.controls.phoneToCall.setValue(`${passenger.phone}`);
   }
 
   public onJourneyEstimateReceived(estimate: JourneyEstimate): void {
@@ -65,7 +65,7 @@ export class ScheduleFarePage {
     this.scheduleFareForm.controls.driveDistance.setValue(estimate.distanceInMeters);
   }
 
-  public onSearchClientTermChange(search: string): void {
+  public onSearchPassengerTermChange(search: string): void {
     this.scheduleFareForm.controls.passenger.setValue(search);
   }
 

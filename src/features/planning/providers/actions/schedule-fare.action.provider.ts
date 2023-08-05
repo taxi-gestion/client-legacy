@@ -1,22 +1,8 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
-import { PlaceTransfer } from '@features/common/place';
+import { ToSchedule } from '@domain';
 
-export type FareToSchedule = {
-  passenger: string;
-  phone: string;
-  datetime: string;
-  departure: PlaceTransfer;
-  kind: 'one-way' | 'two-way';
-  nature: 'medical' | 'standard';
-  driver: string;
-  arrival: PlaceTransfer;
-  //recurrence: PredictedRecurrenceTransfer | undefined;
-  duration: number;
-  distance: number;
-};
-
-export type ScheduleFareAction = (fareToSchedule: FareToSchedule) => Observable<object>;
+export type ScheduleFareAction = (fareToSchedule: ToSchedule) => Observable<object>;
 
 export const SCHEDULE_FARE_ACTION: symbol = Symbol('planning.schedule-fare.action');
 

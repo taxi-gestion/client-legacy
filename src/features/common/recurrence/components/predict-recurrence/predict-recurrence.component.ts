@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { FormGroup } from '@angular/forms';
-import { PREDICT_RECURRENCE_QUERY, PredictedRecurrence, PredictRecurrenceQuery } from '../../providers';
+import { PREDICT_RECURRENCE_QUERY, PredictRecurrenceQuery } from '../../providers';
 import { PREDICT_RECURRENCE_FORM, PredictRecurrenceFields, setPredictRecurrenceErrorToForm } from './predict-recurrence.form';
 import { formatPredictRecurrenceError, getNextOccurrences } from './predict-recurrence.presenter';
+import { PredictedRecurrence } from '@domain';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -20,7 +21,7 @@ export class PredictRecurrenceComponent {
   @Output() public predictRecurrenceError: EventEmitter<Error> = new EventEmitter<Error>();
 
   public readonly predictRecurrence$ = (): Observable<object> =>
-    this._predictRecurrenceQuery$(PREDICT_RECURRENCE_FORM.controls.query.value as string);
+    this._predictRecurrenceQuery$(PREDICT_RECURRENCE_FORM.value as string);
 
   private readonly _displayNextOccurrences: Subject<Date[]> = new Subject<Date[]>();
   private readonly _displayExplanation: BehaviorSubject<string> = new BehaviorSubject<string>('Pas de répétition active');

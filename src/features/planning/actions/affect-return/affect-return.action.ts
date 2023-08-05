@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
-import { ReturnToAffectTransfer, AffectReturnAction } from '../../providers';
+import { AffectReturnAction } from '../../providers';
+import { ReturnToAffectToScheduled } from '@domain';
 
 const affectReturnUrl = (): string => `https://taxi-gestion.com/api/affect-return`;
 
@@ -15,5 +16,5 @@ const handleAffectReturnError$ =
 
 export const affectReturnAction$ =
   (http: HttpClient): AffectReturnAction =>
-  (returnToAffect: ReturnToAffectTransfer): Observable<object> =>
+  (returnToAffect: ReturnToAffectToScheduled): Observable<object> =>
     http.post(affectReturnUrl(), returnToAffect).pipe(catchError(handleAffectReturnError$()));

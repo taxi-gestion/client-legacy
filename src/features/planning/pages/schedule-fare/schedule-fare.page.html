@@ -14,9 +14,9 @@
   (ngSubmit)="onSubmitFareToSchedule(loadAction.start)">
   <div class="mb-3">
     <label for="passenger" class="form-label">Nom du passager</label>
-    <app-client-field
-      (selectClient)="onSelectClientChange($event)"
-      (searchClientTerm)="onSearchClientTermChange($event)"></app-client-field>
+    <app-passenger-field
+      (selectPassenger)="onSelectPassengerChange($event)"
+      (searchPassengerTerm)="onSearchPassengerTermChange($event)"></app-passenger-field>
     <input id="passenger" type="hidden" name="passenger" formControlName="passenger" />
   </div>
   <div class="mb-3">
@@ -45,9 +45,13 @@
   </div>
   <div class="mb-3">
     <label for="arrivalPlace" class="form-label">Lieu d'arrivée</label>
-    <app-place-field (selectPlace)="onSelectDestinationChange($event)"></app-place-field>
+    <app-place-field (selectPlace)="onSelectArrivalChange($event)"></app-place-field>
     <input id="arrivalPlace" type="hidden" name="arrivalPlace" formControlName="arrivalPlace" />
   </div>
+  <!-- TODO Replace with
+    <app-estimate-fields [form]="form" [estimateJourney]="estimateJourney$ | async"></app-estimate-fields>
+  -->
+  <div *ngIf="estimateJourney$ | async"></div>
   <div class="mb-3">
     <label for="driveDuration" class="form-label">Durée du trajet</label>
     <input

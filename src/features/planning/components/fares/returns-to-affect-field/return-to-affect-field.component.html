@@ -57,11 +57,11 @@
         (focusin)="returnToAffectResultsDropdown.setIndex(returnToAffectIndex)"
         (focusout)="returnToAffectResultsDropdown.setIndex(-1)"
         (click)="setReturnToAffectSuggestion(returnToAffect); returnToAffectResultsDropdown.reduce()">
-        <b>{{ returnToAffect.client }}</b>
+        <b>{{ returnToAffect.passenger }}</b>
         <br />
-        <small>{{ returnToAffect.departure.label }} =></small>
+        <small>{{ returnToAffect.departurePlace.label }} =></small>
         <br />
-        <small>{{ returnToAffect.destination.label }}</small>
+        <small>{{ returnToAffect.arrivalPlace.label }}</small>
       </button>
     </li>
   </ul>

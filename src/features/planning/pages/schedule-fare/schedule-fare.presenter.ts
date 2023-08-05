@@ -1,18 +1,11 @@
-import { FareToSchedule } from '../../providers';
 import { datetimeLocalToIso8601UTCString } from '../../common/unit-convertion';
 import { FareToSchedulePresentation } from './schedule-fare.form';
-import { Journey } from '@features/common/journey';
 import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
+import { Journey, ToSchedule } from '@domain';
 
-export type FormattedScheduleFareError = { field?: string; errors: Record<string, unknown> };
-export const formatScheduleFareError = (error: Error): FormattedScheduleFareError =>
-  scheduleFareErrorFormatMap.get(error.name)?.(error) ?? {
-    errors: { unknown: true }
-  };
-
-export const toFareToSchedule = (formValues: FareToSchedulePresentation): FareToSchedule => ({
+export const toFareToSchedule = (formValues: FareToSchedulePresentation): ToSchedule => ({
   //recurrence: formValues.recurrence,
-  arrival: formValues.arrivalPlace,
+  destination: formValues.arrivalPlace,
   datetime: datetimeLocalToIso8601UTCString(formValues.departureDatetime),
   departure: formValues.departurePlace,
   distance: formValues.driveDistance,
@@ -21,7 +14,8 @@ export const toFareToSchedule = (formValues: FareToSchedulePresentation): FareTo
   kind: formValues.isTwoWayDrive ? 'two-way' : 'one-way',
   nature: formValues.isMedicalDrive ? 'medical' : 'standard',
   passenger: formValues.passenger,
-  phone: formValues.phoneToCall
+  phone: formValues.phoneToCall,
+  status: 'to-schedule'
 });
 
 export const toJourney = (formValues: FareToSchedulePresentation): Journey => ({
@@ -29,6 +23,12 @@ export const toJourney = (formValues: FareToSchedulePresentation): Journey => ({
   destination: formValues.arrivalPlace,
   departureTime: datetimeLocalToIso8601UTCString(formValues.departureDatetime)
 });
+
+export type FormattedScheduleFareError = { field?: string; errors: Record<string, unknown> };
+export const formatScheduleFareError = (error: Error): FormattedScheduleFareError =>
+  scheduleFareErrorFormatMap.get(error.name)?.(error) ?? {
+    errors: { unknown: true }
+  };
 
 const scheduleFareErrorFormatMap: Map<string, (error: Error) => FormattedScheduleFareError> = new Map([
   [

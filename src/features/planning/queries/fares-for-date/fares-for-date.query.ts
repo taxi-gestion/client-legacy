@@ -1,27 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
-import { PlaceTransfer } from '@features/common/place';
-import { FareForDate, FaresForDateQuery } from '../../providers';
+import { Observable } from 'rxjs';
+import { ScheduledFaresForDateQuery } from '../../providers';
+import { Scheduled } from '@domain';
 
-export type FareTransfer = {
-  client: string;
-  creator: string;
-  datetime: string;
-  departure: PlaceTransfer;
-  destination: PlaceTransfer;
-  distance: string;
-  planning: string;
-  duration: string;
-  kind: 'one-way' | 'outward' | 'return';
-  nature: 'medical' | 'standard';
-  phone: string;
-  status: 'scheduled';
-};
-
-const toFaresForDate = (fares: FareTransfer[]): FareForDate[] =>
+/*const toFaresForDate = (fares: Scheduled[]): Scheduled[] =>
   fares.map(
-    (fare: FareTransfer): FareForDate => ({
-      client: fare.client,
+    (fare: FareTransfer): Scheduled => ({
+      passenger: fare.passenger,
       creator: fare.creator,
       datetime: fare.datetime,
       departure: fare.departure,
@@ -31,12 +16,12 @@ const toFaresForDate = (fares: FareTransfer[]): FareForDate[] =>
       kind: fare.kind,
       nature: fare.nature,
       phone: fare.phone,
-      planning: fare.planning,
+      driver: fare.driver,
       status: fare.status
     })
-  );
+  );*/
 
 export const faresForDateQuery$ =
-  (httpClient: HttpClient): FaresForDateQuery =>
-  (date: string): Observable<FareForDate[]> =>
-    httpClient.get<FareTransfer[]>(`/api/fares-for-date/${date}`).pipe(map(toFaresForDate));
+  (httpClient: HttpClient): ScheduledFaresForDateQuery =>
+  (date: string): Observable<Scheduled[]> =>
+    httpClient.get<Scheduled[]>(`/api/fares-for-date/${date}`);

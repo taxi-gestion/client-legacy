@@ -10,9 +10,13 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter, map, Observable, Subject, switchMap } from 'rxjs';
-import { ReturnToAffectForDatePresentation } from '../../../common/returns-to-affect.presentation';
-import { toReturnsToAffectForDatePresentation } from '../../../common/returns-to-affect.presenter';
-import { RETURNS_TO_AFFECT_FOR_DATE_QUERY, ReturnsToAffectForDateQuery, ReturnToAffectForDate } from '../../../providers';
+import { RETURNS_TO_AFFECT_FOR_DATE_QUERY, ReturnsToAffectForDateQuery } from '../../../providers';
+import { Entity, ReturnToAffect } from '@domain';
+
+import {
+  ReturnToAffectWithPassengerPresentation,
+  toReturnsToAffectWithPassengerForDatePresentation
+} from './returns-to-affect.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,8 +28,8 @@ export class ReturnToAffectFieldComponent implements OnChanges {
   @Input() public searchDebounceTime: number = 300;
   @Input({ required: true }) public date!: string;
 
-  @Output() public readonly selectReturnToAffect: EventEmitter<ReturnToAffectForDatePresentation> =
-    new EventEmitter<ReturnToAffectForDatePresentation>();
+  @Output() public readonly selectReturnToAffect: EventEmitter<ReturnToAffectWithPassengerPresentation> =
+    new EventEmitter<ReturnToAffectWithPassengerPresentation>();
 
   @Output() public readonly resetReturnToAffect: EventEmitter<void> = new EventEmitter<void>();
 
@@ -38,13 +42,13 @@ export class ReturnToAffectFieldComponent implements OnChanges {
   private readonly _searchReturnToAffectTerm$: Subject<string> = new Subject<string>();
 
   // TODO Add sort result by matching term
-  public returnToAffectsFound$: Observable<ReturnToAffectForDatePresentation[]> = this._searchReturnToAffectTerm$.pipe(
+  public returnToAffectsFound$: Observable<ReturnToAffectWithPassengerPresentation[]> = this._searchReturnToAffectTerm$.pipe(
     map((searchReturnToAffectTerm: string): string => searchReturnToAffectTerm.trim()),
     filter((searchReturnToAffectTerm: string): boolean => searchReturnToAffectTerm.length >= this.minSearchTermLength),
     debounceTime(this.searchDebounceTime),
     distinctUntilChanged(),
-    switchMap((): Observable<ReturnToAffectForDate[]> => this._returnsToAffectForDateQuery(this.date)),
-    map(toReturnsToAffectForDatePresentation)
+    switchMap((): Observable<Entity<ReturnToAffect>[]> => this._returnsToAffectForDateQuery(this.date)),
+    map(toReturnsToAffectWithPassengerForDatePresentation)
   );
 
   public formGroup: FormGroup = new FormGroup({ returnToAffect: new FormControl() });
@@ -61,13 +65,13 @@ export class ReturnToAffectFieldComponent implements OnChanges {
     this._searchReturnToAffectTerm$.next(returnToAffectInput);
   }
 
-  public setReturnToAffectSuggestion(returnToAffect: ReturnToAffectForDatePresentation): void {
-    this.formGroup.get('returnToAffect')?.setValue(returnToAffect.client);
+  public setReturnToAffectSuggestion(returnToAffect: ReturnToAffectWithPassengerPresentation): void {
+    this.formGroup.get('returnToAffect')?.setValue(returnToAffect.passenger);
     this.selectReturnToAffect.next(returnToAffect);
   }
 
-  public trackByReturnToAffectId(_: number, returnToAffect: ReturnToAffectForDatePresentation): string {
-    return `${returnToAffect.id}`;
+  public trackByReturnToAffectId(_: number, returnToAffect: ReturnToAffectWithPassengerPresentation): string {
+    return `${returnToAffect.returnToAffectId}`;
   }
 
   public clear(): void {

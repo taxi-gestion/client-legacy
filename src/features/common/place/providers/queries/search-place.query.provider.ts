@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { FactoryProvider } from '@angular/core';
-import { Place } from '@features/common/place';
+import { Place } from '@domain';
 
 export type SearchPlaceQuery = (search: string) => Observable<Place[]>;
 

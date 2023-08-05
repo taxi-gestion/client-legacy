@@ -12,8 +12,8 @@ import { PlanningFeatureRoutingModule } from './planning.feature-routing.module'
 import { PlaceComponentModule } from '@features/common/place';
 import { RecurrenceServiceModule } from '@features/common/recurrence';
 import { UserServiceModule } from '@features/common/user';
-import { ClientServiceModule } from '@features/common/client';
 import { JourneyQueriesModule } from '@features/common/journey';
+import { PassengerServiceModule } from '../../common/passenger';
 
 @NgModule({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -23,7 +23,7 @@ import { JourneyQueriesModule } from '@features/common/journey';
     FormsModule,
     ReactiveFormsModule,
     LoadUiModule,
-    ClientServiceModule,
+    PassengerServiceModule,
     PlaceComponentModule,
     JourneyQueriesModule,
     PlanningFeatureRoutingModule,

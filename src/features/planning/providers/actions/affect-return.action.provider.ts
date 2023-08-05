@@ -1,19 +1,8 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Place } from '@features/common/place';
+import { ReturnToAffectToScheduled } from '@domain';
 
-// TODO link to Fare type so as to be protected from drift
-export type ReturnToAffect = {
-  fareId: string;
-  driveFrom: Place;
-  planning: string;
-  driveTo: Place;
-  datetime: string;
-};
-
-export type ReturnToAffectTransfer = ReturnToAffect;
-
-export type AffectReturnAction = (returnToAffect: ReturnToAffectTransfer) => Observable<object>;
+export type AffectReturnAction = (returnToAffect: ReturnToAffectToScheduled) => Observable<object>;
 
 export const AFFECT_RETURN_ACTION: symbol = Symbol('planning.affect-return.action');
 

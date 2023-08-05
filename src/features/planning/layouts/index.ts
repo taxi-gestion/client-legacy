@@ -1,6 +1,6 @@
-import { DailyLayout } from './daily/daily.layout';
+import { DailyPlanningLayout } from './daily-planning/daily-planning.layout';
 
-export * from './daily/daily.layout';
+export * from './daily-planning/daily-planning.layout';
 
 // eslint-disable-next-line @typescript-eslint/typedef
-export const LAYOUTS = [DailyLayout];
+export const LAYOUTS = [DailyPlanningLayout];
