@@ -1,23 +1,23 @@
 <div class="d-flex">
-  <h2 class="pt-2 pb-4 text-primary">Affecter le retour</h2>
+  <h2 class="pt-2 pb-4 text-primary">Scheduleer le retour</h2>
   <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
     <i class="ri-close-line ri-2x" aria-hidden="true"></i>
     <span class="visually-hidden">Fermer</span>
   </a>
 </div>
 <form
-  [formGroup]="affectReturnForm"
-  [appLoadAction]="affectReturn$"
+  [formGroup]="scheduleReturnForm"
+  [appLoadAction]="scheduleReturn$"
   #loadAction="loadAction"
-  (actionSuccess)="onAffectReturnActionSuccess()"
-  (actionError)="onAffectReturnActionError($event)"
-  (ngSubmit)="onSubmitReturnToAffect(loadAction.start)">
+  (actionSuccess)="onScheduleReturnActionSuccess()"
+  (actionError)="onScheduleReturnActionError($event)"
+  (ngSubmit)="onSubmitReturnToSchedule(loadAction.start)">
   <div class="mb-3">
-    <label for="returnToAffectId" class="form-label">Retour pour le passager</label>
-    <app-return-to-affect-field
+    <label for="returnToScheduleId" class="form-label">Retour pour le passager</label>
+    <app-return-to-schedule-field
       [date]="selectedDate"
-      (selectReturnToAffect)="onSelectReturnToAffectChange($event)"></app-return-to-affect-field>
-    <input id="returnToAffectId" type="hidden" name="returnToAffectId" formControlName="returnToAffectId" />
+      (selectReturnToSchedule)="onSelectReturnToScheduleChange($event)"></app-return-to-schedule-field>
+    <input id="returnToScheduleId" type="hidden" name="returnToScheduleId" formControlName="returnToScheduleId" />
   </div>
   <div class="mb-3">
     <label for="departureDatetime" class="form-label">Date et heure du retour</label>
@@ -69,10 +69,18 @@
     type="submit"
     class="btn btn-primary mt-3 w-100"
     [disabled]="loadActionDisplay.isLoading">
-    <ng-container slot="loadActionDisplayIdle">Affecter le retour</ng-container>
+    <ng-container slot="loadActionDisplayIdle">Scheduleer le retour</ng-container>
     <ng-container slot="loadActionDisplayLoading">
       <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
-      Affectation en cours...
+      Scheduleation en cours...
     </ng-container>
   </button>
+  <!-- TODO Mutualiser les erreurs communes -->
+  <div class="text-danger mt-2" *ngIf="scheduleReturnForm.errors?.['validationFailedBeforeApiCallError']">
+    La structure des données de la requête ne respecte pas le contrat de transfer. La requête ne peut pas être effectuée.
+    Prévenir Romain qu'il va faire des heures supp'.
+  </div>
+  <div class="text-danger mt-2" *ngIf="scheduleReturnForm.errors">
+    Une erreur est survenue lors de l'appel au service distant.
+  </div>
 </form>

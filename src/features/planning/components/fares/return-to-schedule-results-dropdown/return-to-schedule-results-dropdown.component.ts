@@ -15,12 +15,12 @@ const DEFAULT_INDEX: number = -1;
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  exportAs: 'returnToAffectResultsDropdown',
+  exportAs: 'returnToScheduleResultsDropdown',
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: '[appReturnToAffectResultsDropdown]',
-  templateUrl: './return-to-affect-results-dropdown.component.html'
+  selector: '[appReturnToScheduleResultsDropdown]',
+  templateUrl: './return-to-schedule-results-dropdown.component.html'
 })
-export class ReturnToAffectResultsDropdownComponent {
+export class ReturnToScheduleResultsDropdownComponent {
   private _expanded: boolean = false;
 
   private readonly _expanded$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this._expanded);

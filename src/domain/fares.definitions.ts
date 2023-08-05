@@ -25,12 +25,14 @@ export type Scheduled = Fare & {
   distance: number;
 };
 
-export type ReturnToAffect = Fare & {
-  kind: 'two-way';
-  status: 'return-to-affect';
-};
+export type PendingReturnToSchedule = Entity<
+  Fare & {
+    kind: 'two-way';
+    status: 'pending-return-to-schedule';
+  }
+>;
 
-export type ReturnToAffectToScheduled = Entity<{
+export type ReturnToSchedule = Entity<{
   departure: Place;
   destination: Place;
   driver: string;
@@ -38,5 +40,5 @@ export type ReturnToAffectToScheduled = Entity<{
   duration: number;
   distance: number;
   kind: 'two-way';
-  status: 'affecting-return';
+  status: 'return-to-schedule';
 }>;

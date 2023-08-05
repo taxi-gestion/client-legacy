@@ -115,6 +115,7 @@
       Création en cours...
     </ng-container>
   </button>
+  <!-- TODO Mutualiser les erreurs communes -->
   <div class="text-danger mt-2" *ngIf="scheduleFareForm.errors?.['validationFailedBeforeApiCallError']">
     La structure des données de la requête ne respecte pas le contrat de transfer. La requête ne peut pas être effectuée.
     Prévenir Romain qu'il va faire des heures supp'.

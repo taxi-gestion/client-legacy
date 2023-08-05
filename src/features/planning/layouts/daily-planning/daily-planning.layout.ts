@@ -12,11 +12,11 @@ import { toStandardDateFormat } from '../../common/unit-convertion';
 import {
   SCHEDULED_FARES_FOR_DATE_QUERY,
   ScheduledFaresForDateQuery,
-  RETURNS_TO_AFFECT_FOR_DATE_QUERY,
-  ReturnsToAffectForDateQuery
+  RETURNS_TO_SCHEDULE_FOR_DATE_QUERY,
+  ReturnsToScheduleForDateQuery
 } from '../../providers';
-import { Entity, ReturnToAffect, Scheduled } from '@domain';
-import { ReturnToAffectPresentation, toReturnsToAffectForDatePresentation } from '../../common';
+import { PendingReturnToSchedule, Scheduled } from '@domain';
+import { ReturnToSchedulePresentation, toReturnsToScheduleForDatePresentation } from '../../common';
 import { DailyDriverPlanning } from '../../common/fares.presentation';
 
 const DEFAULT_PLANNING_SETTINGS: PlanningSettings = {
@@ -44,18 +44,18 @@ export class DailyPlanningLayout {
     map(groupByDriverPlanning)
   );
 
-  public readonly returnsToSchedule$: Observable<ReturnToAffectPresentation[]> = this._route.params.pipe(
+  public readonly returnsToSchedule$: Observable<ReturnToSchedulePresentation[]> = this._route.params.pipe(
     switchMap(
-      (params: Params): Observable<Entity<ReturnToAffect>[]> => this._returnsToAffectForDateQuery(paramsToDateString(params))
+      (params: Params): Observable<PendingReturnToSchedule[]> => this._returnsToScheduleForDateQuery(paramsToDateString(params))
     ),
-    map(toReturnsToAffectForDatePresentation)
+    map(toReturnsToScheduleForDatePresentation)
   );
 
   public constructor(
     private readonly _router: Router,
     private readonly _route: ActivatedRoute,
     @Inject(SCHEDULED_FARES_FOR_DATE_QUERY) private readonly _faresForDateQuery: ScheduledFaresForDateQuery,
-    @Inject(RETURNS_TO_AFFECT_FOR_DATE_QUERY) private readonly _returnsToAffectForDateQuery: ReturnsToAffectForDateQuery
+    @Inject(RETURNS_TO_SCHEDULE_FOR_DATE_QUERY) private readonly _returnsToScheduleForDateQuery: ReturnsToScheduleForDateQuery
   ) {}
 
   public async onPlanningDateChange(planningDate: string): Promise<void> {

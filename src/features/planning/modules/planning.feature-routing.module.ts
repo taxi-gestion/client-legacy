@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CanMatchOneUserGroupGuard } from '@features/authentication';
 import { DailyPlanningLayout } from '../layouts';
 import {
-  AffectReturnPage,
+  ScheduleReturnPage,
   DriverAgendaPage,
   ManagerDriverChoicePage,
   MissingAdminConfigurationPage,
@@ -17,8 +17,8 @@ const DAILY_PAGES: Routes = [
     component: ScheduleFarePage
   },
   {
-    path: 'affect-return',
-    component: AffectReturnPage
+    path: 'schedule-return',
+    component: ScheduleReturnPage
   }
 ];
 

@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { ScheduleFareAction } from '../../providers';
-import { keyof as ioKeyof, number as ioNumber, string as ioString, Type, type as ioType, literal as ioLitteral } from 'io-ts';
+import { keyof as ioKeyof, number as ioNumber, string as ioString, Type, type as ioType, literal as ioLiteral } from 'io-ts';
 import { pipe as fpPipe } from 'fp-ts/function';
 import { fold } from 'fp-ts/Either';
 import { excess } from 'io-ts-excess';
@@ -20,11 +20,6 @@ const handleScheduleFareError$ =
         return throwError((): Observable<object> => caught);
     }
   };
-
-//export const scheduleFareAction$ =
-//  (http: HttpClient): ScheduleFareAction =>
-//  (fareToSchedule: ToSchedule): Observable<object> =>
-//    http.post(scheduleFareUrl(), fareToSchedule).pipe(catchError(handleScheduleFareError$()));
 
 export const validatedScheduleFareAction$ =
   (http: HttpClient): ScheduleFareAction =>
@@ -66,6 +61,6 @@ export const fareToScheduleTransferCodec: Type<ToSchedule> = excess(
     driver: ioString,
     duration: ioNumber,
     distance: ioNumber,
-    status: ioLitteral('to-schedule')
+    status: ioLiteral('to-schedule')
   })
 );

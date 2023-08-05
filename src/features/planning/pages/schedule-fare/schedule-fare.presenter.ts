@@ -24,6 +24,7 @@ export const toJourney = (formValues: FareToSchedulePresentation): Journey => ({
   departureTime: datetimeLocalToIso8601UTCString(formValues.departureDatetime)
 });
 
+// TODO Réfléchir à la mutualisation des erreurs communes
 export type FormattedScheduleFareError = { field?: string; errors: Record<string, unknown> };
 export const formatScheduleFareError = (error: Error): FormattedScheduleFareError =>
   scheduleFareErrorFormatMap.get(error.name)?.(error) ?? {

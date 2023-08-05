@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { FactoryProvider, ValueProvider } from '@angular/core';
 import {
-  affectReturnActionProvider,
+  scheduleReturnActionProvider,
   faresForDateQuery$,
   scheduledFaresForDateQueryProvider,
-  returnsToAffectForDateQueryProvider,
-  affectReturnAction$,
+  returnsToScheduleForDateQueryProvider,
   scheduleFareActionProvider,
-  returnsToAffectForDateQuery$,
-  validatedScheduleFareAction$
+  returnsToScheduleForDateQuery$,
+  validatedScheduleFareAction$,
+  validatedScheduleReturnAction$
 } from '@features/planning';
 
 import { predictRecurrenceQueryProvider, predictRecurrenceQuery$ } from '@features/common/recurrence';
@@ -20,10 +20,10 @@ import { searchPassengerQueryProvider, searchPassengersQuery$ } from '../../feat
 
 export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   scheduleFareActionProvider(validatedScheduleFareAction$, [HttpClient]),
-  affectReturnActionProvider(affectReturnAction$, [HttpClient]),
+  scheduleReturnActionProvider(validatedScheduleReturnAction$, [HttpClient]),
   predictRecurrenceQueryProvider(predictRecurrenceQuery$, [HttpClient]),
   scheduledFaresForDateQueryProvider(faresForDateQuery$, [HttpClient]),
-  returnsToAffectForDateQueryProvider(returnsToAffectForDateQuery$, [HttpClient]),
+  returnsToScheduleForDateQueryProvider(returnsToScheduleForDateQuery$, [HttpClient]),
   searchPlaceQueryProvider(searchPlaceQuery$, [HttpClient]),
   searchUserQueryProvider(cognitoListUsersWithDriverGroupQuery$, [HttpClient]),
   searchPassengerQueryProvider(searchPassengersQuery$, [HttpClient]),
