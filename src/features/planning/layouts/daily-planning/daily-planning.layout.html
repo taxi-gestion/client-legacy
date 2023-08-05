@@ -1,0 +1,54 @@
+<div class="d-flex flex-column h-100">
+  <app-navbar class="shadow-sm border-top" scheme="body-secondary">
+    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+      <li class="nav-item">
+        <a class="nav-link" ariaCurrentWhenActive="page" routerLinkActive="active" [routerLink]="'schedule-fare'">
+          Planifier une course
+        </a>
+      </li>
+      <li class="nav-item" *ngIf="(returnsToSchedule$ | async) as returnsToSchedule">
+        <a class="nav-link" ariaCurrentWhenActive="page" routerLinkActive="active" [routerLink]="'schedule-return'">
+          Scheduleer un retour&nbsp;
+          <span class="badge text-bg-secondary">
+            {{ returnsToSchedule.length }}
+            <span class="visually-hidden">returns to schedule</span>
+          </span>
+        </a>
+      </li>
+    </ul>
+  </app-navbar>
+  <div class="d-flex flex-grow-1 overflow-hidden g-0">
+    <div id="main-content" class="d-flex flex-column overflow-auto" [ngClass]="dailyOutlet.isActivated ? 'col-9' : 'col'">
+      <div class="p-3">
+        <h1>
+          Planning du
+          <input
+            #planningField
+            type="date"
+            [value]="planningDate"
+            class="form-control form-control-lg w-auto d-inline align-bottom"
+            (change)="onPlanningDateChange(planningField.value)" />
+        </h1>
+        <div class="lead mb-3">
+          <app-planning-settings (planningSettingsChange)="planningSettings = $event"></app-planning-settings>
+        </div>
+      </div>
+      <div class="flex-grow-1" *ngIf="plannings$ | async as plannings">
+        <app-planning [interval]="planningSettings.interval" [start]="planningSettings.start" [end]="planningSettings.end">
+          <app-planning-row *ngFor="let planning of plannings" [sessions]="planning.fares" [template]="fare">
+            <b slot="header" class="text-capitalize">{{ planning.driver }}</b>
+            <ng-template #fare let-fare="session">
+              <app-fare-planning-session [fare]="fare"></app-fare-planning-session>
+            </ng-template>
+          </app-planning-row>
+        </app-planning>
+      </div>
+    </div>
+    <div
+      id="action-outlet"
+      class="shadow p-4 border-start bg-white overflow-auto"
+      [ngClass]="dailyOutlet.isActivated ? 'col-3' : 'd-none'">
+      <router-outlet #dailyOutlet="outlet"></router-outlet>
+    </div>
+  </div>
+</div>

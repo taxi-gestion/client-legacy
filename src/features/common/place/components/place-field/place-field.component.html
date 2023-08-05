@@ -1,8 +1,8 @@
 <form [formGroup]="formGroup">
   <label for="place" class="visually-hidden"><ng-content></ng-content></label>
   <div class="input-group">
-    <span class="input-group-text px-2">
-      <i class="text-muted ri-search-line ri-lg"></i>
+    <span class="input-group-text pe-0">
+      <i class="text-muted ri-search-line" aria-hidden="true"></i>
     </span>
     <input
       #placeInput
@@ -10,7 +10,7 @@
       placeholder="Entrez une adresse, un lieu-dit..."
       name="place"
       id="place"
-      class="form-control"
+      class="form-control border-start-0"
       autocomplete="off"
       aria-describedby="place"
       aria-haspopup="true"

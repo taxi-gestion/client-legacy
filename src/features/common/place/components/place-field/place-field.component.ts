@@ -9,8 +9,9 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { SEARCH_PLACE_QUERY, SearchPlaceQuery, PlacePresentation } from '@features/common/place';
+import { SEARCH_PLACE_QUERY, SearchPlaceQuery } from '@features/common/place';
 import { debounceTime, distinctUntilChanged, filter, map, Observable, Subject, switchMap } from 'rxjs';
+import { Place } from '@domain';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,7 +22,7 @@ export class PlaceFieldComponent implements OnChanges {
   @Input() public minSearchTermLength: number = 3;
   @Input() public searchDebounceTime: number = 300;
 
-  @Output() public readonly selectPlace: EventEmitter<PlacePresentation> = new EventEmitter<PlacePresentation>();
+  @Output() public readonly selectPlace: EventEmitter<Place> = new EventEmitter<Place>();
 
   @Output() public readonly resetPlace: EventEmitter<void> = new EventEmitter<void>();
 
@@ -33,12 +34,12 @@ export class PlaceFieldComponent implements OnChanges {
 
   private readonly _searchPlaceTerm$: Subject<string> = new Subject<string>();
 
-  public placesFound$: Observable<PlacePresentation[]> = this._searchPlaceTerm$.pipe(
+  public placesFound$: Observable<Place[]> = this._searchPlaceTerm$.pipe(
     map((searchPlaceTerm: string): string => searchPlaceTerm.trim()),
     filter((searchPlaceTerm: string): boolean => searchPlaceTerm.length >= this.minSearchTermLength),
     debounceTime(this.searchDebounceTime),
     distinctUntilChanged(),
-    switchMap((searchPlaceTerm: string): Observable<PlacePresentation[]> => this._searchPlaceQuery(searchPlaceTerm))
+    switchMap((searchPlaceTerm: string): Observable<Place[]> => this._searchPlaceQuery(searchPlaceTerm))
   );
 
   public constructor(@Inject(SEARCH_PLACE_QUERY) private readonly _searchPlaceQuery: SearchPlaceQuery) {}
@@ -53,12 +54,12 @@ export class PlaceFieldComponent implements OnChanges {
     this._searchPlaceTerm$.next(placeInput);
   }
 
-  public setPlaceSuggestion(place: PlacePresentation): void {
+  public setPlaceSuggestion(place: Place): void {
     this.formGroup.get('place')?.setValue(place.label);
     this.selectPlace.next(place);
   }
 
-  public trackByPlaceName(_: number, place: PlacePresentation): string {
+  public trackByPlaceName(_: number, place: Place): string {
     return `${place.label}-${place.context}`;
   }
 

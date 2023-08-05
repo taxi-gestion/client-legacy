@@ -1,0 +1,86 @@
+<div class="d-flex">
+  <h2 class="pt-2 pb-4 text-primary">Scheduleer le retour</h2>
+  <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
+    <i class="ri-close-line ri-2x" aria-hidden="true"></i>
+    <span class="visually-hidden">Fermer</span>
+  </a>
+</div>
+<form
+  [formGroup]="scheduleReturnForm"
+  [appLoadAction]="scheduleReturn$"
+  #loadAction="loadAction"
+  (actionSuccess)="onScheduleReturnActionSuccess()"
+  (actionError)="onScheduleReturnActionError($event)"
+  (ngSubmit)="onSubmitReturnToSchedule(loadAction.start)">
+  <div class="mb-3">
+    <label for="returnToScheduleId" class="form-label">Retour pour le passager</label>
+    <app-return-to-schedule-field
+      [date]="selectedDate"
+      (selectReturnToSchedule)="onSelectReturnToScheduleChange($event)"></app-return-to-schedule-field>
+    <input id="returnToScheduleId" type="hidden" name="returnToScheduleId" formControlName="returnToScheduleId" />
+  </div>
+  <div class="mb-3">
+    <label for="departureDatetime" class="form-label">Date et heure du retour</label>
+    <input
+      id="departureDatetime"
+      type="datetime-local"
+      class="form-control"
+      name="departureDatetime"
+      formControlName="departureDatetime" />
+  </div>
+  <div class="mb-3">
+    <label for="departurePlace" class="form-label">Lieu de départ</label>
+    <app-place-field (selectPlace)="onSelectDepartureChange($event)"></app-place-field>
+    <input id="departurePlace" type="hidden" name="departurePlace" formControlName="departurePlace" />
+  </div>
+  <div class="mb-3">
+    <label for="arrivalPlace" class="form-label">Lieu d'arrivée</label>
+    <app-place-field (selectPlace)="onSelectArrivalChange($event)"></app-place-field>
+    <input id="arrivalPlace" type="hidden" name="arrivalPlace" formControlName="arrivalPlace" />
+  </div>
+  <div class="mb-3">
+    <label for="driveDuration" class="form-label">Durée du trajet</label>
+    <input
+      id="driveDuration"
+      placeholder="Durée en minutes"
+      type="number"
+      class="form-control"
+      name="driveDuration"
+      formControlName="driveDuration" />
+  </div>
+  <div class="mb-3">
+    <label for="driveDistance" class="form-label">Distance du trajet</label>
+    <input
+      id="driveDistance"
+      placeholder="Distance en km"
+      type="number"
+      class="form-control"
+      name="driveDistance"
+      formControlName="driveDistance" />
+  </div>
+  <div class="mb-3">
+    <label for="driver" class="form-label">Chauffeur</label>
+    <app-user-field (selectUser)="onSelectDriverChange($event)"></app-user-field>
+    <input id="driver" type="hidden" name="driver" formControlName="driver" />
+  </div>
+  <button
+    [appLoadActionDisplay]="loadAction.isLoading$ | async"
+    #loadActionDisplay
+    type="submit"
+    class="btn btn-primary mt-3 w-100"
+    [disabled]="loadActionDisplay.isLoading">
+    <ng-container slot="loadActionDisplayIdle">Scheduleer le retour</ng-container>
+    <ng-container slot="loadActionDisplayLoading">
+      <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+      Scheduleation en cours...
+    </ng-container>
+  </button>
+  <!-- TODO Mutualiser les erreurs communes -->
+  <div class="text-danger mt-2" *ngIf="scheduleReturnForm.errors?.['validationFailedBeforeApiCallError']">
+    La structure des données de la requête ne respecte pas le contrat de transfer. La requête ne peut pas être effectuée.
+    Prévenir Romain qu'il va faire des heures supp'.
+  </div>
+  <div class="text-danger mt-2" *ngIf="scheduleReturnForm.errors">
+    Une erreur est survenue lors de l'appel au service distant.
+  </div>
+</form>

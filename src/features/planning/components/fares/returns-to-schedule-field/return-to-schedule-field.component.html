@@ -1,0 +1,68 @@
+<form [formGroup]="formGroup">
+  <label for="returnToSchedule" class="visually-hidden"><ng-content></ng-content></label>
+  <div class="input-group">
+    <span class="input-group-text pe-0">
+      <i class="text-muted ri-search-line" aria-hidden="true"></i>
+    </span>
+    <input
+      #returnToScheduleInput
+      type="search"
+      placeholder="Rechercher un retour par le nom du passager"
+      name="returnToSchedule"
+      id="returnToSchedule"
+      class="form-control border-start-0"
+      autocomplete="off"
+      aria-describedby="returnToSchedule"
+      aria-haspopup="true"
+      formControlName="returnToSchedule"
+      [attr.aria-describedby]="returnToScheduleNotFound ? 'returnToSchedule-desc-error' : null"
+      [attr.aria-expanded]="returnToScheduleResultsDropdown.expanded$ | async"
+      (input)="
+        search(returnToScheduleInput.value);
+        returnToScheduleInput.value.length <= minSearchTermLength
+          ? returnToScheduleResultsDropdown.reduce()
+          : returnToScheduleResultsDropdown.expand()
+      "
+      (focus)="
+        returnToScheduleInput.value.length <= minSearchTermLength
+          ? returnToScheduleResultsDropdown.reduce()
+          : returnToScheduleResultsDropdown.expand()
+      "
+      (keyup.escape)="returnToScheduleResultsDropdown.reduce()"
+      (keyup.enter)="returnToScheduleResultsDropdown.activeIndex = 0; returnToScheduleResultsDropdown.focus()" />
+    <button type="button" *ngIf="returnToScheduleInput.value && displayReset" class="btn input-group-btn" (click)="clear()">
+      <i class="ri-close-line"></i>
+    </button>
+    <ng-content></ng-content>
+  </div>
+  <ul
+    #returnToScheduleResultsDropdown="returnToScheduleResultsDropdown"
+    appReturnToScheduleResultsDropdown
+    [dropdownControl]="returnToScheduleInput"
+    [class.show]="returnToScheduleResultsDropdown.expanded$ | async"
+    class="dropdown-menu position-absolute mt-1"
+    aria-labelledby="returnToSchedule">
+    <li
+      #results
+      *ngFor="
+        let returnToSchedule of (returnToSchedulesFound$ | async) ?? [];
+        index as returnToScheduleIndex;
+        trackBy: trackByReturnToScheduleId
+      ">
+      <button
+        type="button"
+        class="dropdown-item"
+        [class.active]="returnToScheduleResultsDropdown.activeIndex === returnToScheduleIndex"
+        [attr.aria-current]="returnToScheduleResultsDropdown.activeIndex === returnToScheduleIndex ? true : null"
+        (focusin)="returnToScheduleResultsDropdown.setIndex(returnToScheduleIndex)"
+        (focusout)="returnToScheduleResultsDropdown.setIndex(-1)"
+        (click)="setReturnToScheduleSuggestion(returnToSchedule); returnToScheduleResultsDropdown.reduce()">
+        <b>{{ returnToSchedule.passenger }}</b>
+        <br />
+        <small>{{ returnToSchedule.departurePlace.label }} =></small>
+        <br />
+        <small>{{ returnToSchedule.arrivalPlace.label }}</small>
+      </button>
+    </li>
+  </ul>
+</form>

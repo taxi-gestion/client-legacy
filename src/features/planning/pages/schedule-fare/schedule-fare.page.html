@@ -1,5 +1,5 @@
 <div class="d-flex">
-  <h2 class="pt-2 pb-4">Ajouter une course</h2>
+  <h2 class="pt-2 pb-4 text-primary">Ajouter une course</h2>
   <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
     <i class="ri-close-line ri-2x" aria-hidden="true"></i>
     <span class="visually-hidden">Fermer</span>
@@ -12,72 +12,102 @@
   (actionSuccess)="onScheduleFareActionSuccess()"
   (actionError)="onScheduleFareActionError($event)"
   (ngSubmit)="onSubmitFareToSchedule(loadAction.start)">
-  <div>
-    <label for="clientIdentity">Client:</label>
-    <app-client-field
-      (selectClient)="onSelectClientChange($event)"
-      (searchClientTerm)="onSearchClientTermChange($event)"></app-client-field>
-    <input id="clientIdentity" type="hidden" formControlName="clientIdentity" />
+  <div class="mb-3">
+    <label for="passenger" class="form-label">Nom du passager</label>
+    <app-passenger-field
+      (selectPassenger)="onSelectPassengerChange($event)"
+      (searchPassengerTerm)="onSearchPassengerTermChange($event)"></app-passenger-field>
+    <input id="passenger" type="hidden" name="passenger" formControlName="passenger" />
   </div>
-  <div>
-    <label for="clientPhone">Téléphone:</label>
-    <input id="clientPhone" type="text" formControlName="clientPhone" />
+  <div class="mb-3">
+    <label for="phoneToCall" class="form-label">Téléphone à appeler</label>
+    <input
+      id="phoneToCall"
+      type="text"
+      placeholder="(+33)/(0) 6 XX XX XX XX"
+      class="form-control"
+      name="phoneToCall"
+      formControlName="phoneToCall" />
   </div>
-  <div>
-    <label for="datetime">Le/A:</label>
-    <input id="datetime" type="datetime-local" formControlName="datetime" />
+  <div class="mb-3">
+    <label for="departureDatetime" class="form-label">Date et heure du départ</label>
+    <input
+      id="departureDatetime"
+      type="datetime-local"
+      class="form-control"
+      name="departureDatetime"
+      formControlName="departureDatetime" />
   </div>
-  <div>
-    Départ de:
+  <div class="mb-3">
+    <label for="departurePlace" class="form-label">Lieu de départ</label>
     <app-place-field (selectPlace)="onSelectDepartureChange($event)"></app-place-field>
-    <input id="driveFrom" type="hidden" formControlName="driveFrom" />
+    <input id="departurePlace" type="hidden" name="departurePlace" formControlName="departurePlace" />
   </div>
-  <div>
-    <label for="driveTo">Arrivée:</label>
-    <app-place-field (selectPlace)="onSelectDestinationChange($event)"></app-place-field>
-    <input id="driveTo" type="hidden" formControlName="driveTo" />
+  <div class="mb-3">
+    <label for="arrivalPlace" class="form-label">Lieu d'arrivée</label>
+    <app-place-field (selectPlace)="onSelectArrivalChange($event)"></app-place-field>
+    <input id="arrivalPlace" type="hidden" name="arrivalPlace" formControlName="arrivalPlace" />
   </div>
-  <!-- TODO Refactor with appLoadAction -->
+  <!-- TODO Replace with
+    <app-estimate-fields [form]="form" [estimateJourney]="estimateJourney$ | async"></app-estimate-fields>
+  -->
   <div *ngIf="estimateJourney$ | async"></div>
-  <div>
-    <label for="driveTo">Durée (secondes, pipe à faire):</label>
-    <input id="duration" type="number" formControlName="duration" />
+  <div class="mb-3">
+    <label for="driveDuration" class="form-label">Durée du trajet</label>
+    <input
+      id="driveDuration"
+      placeholder="Durée en minutes"
+      type="number"
+      class="form-control"
+      name="driveDuration"
+      formControlName="driveDuration" />
   </div>
-  <div>
-    <label for="driveTo">Distance (metres, pipe à faire):</label>
-    <input id="distance" type="number" formControlName="distance" />
+  <div class="mb-3">
+    <label for="driveDistance" class="form-label">Distance du trajet</label>
+    <input
+      id="driveDistance"
+      placeholder="Distance en km"
+      type="number"
+      class="form-control"
+      name="driveDistance"
+      formControlName="driveDistance" />
   </div>
-  <div>
-    <label for="planning">Chauffeur:</label>
+  <div class="mb-3">
+    <label for="driver" class="form-label">Chauffeur</label>
     <app-user-field (selectUser)="onSelectDriverChange($event)"></app-user-field>
-    <input id="planning" type="hidden" formControlName="planning" />
+    <input id="driver" type="hidden" name="driver" formControlName="driver" />
   </div>
-  <div class="border border-secondary p-1">
-    <app-predict-recurrence
-      [fromDate]="scheduleFareForm.controls.datetime.getRawValue()"
-      (predictRecurrenceSuccess)="onPredictRecurrenceSuccessChange($event)"></app-predict-recurrence>
+  <div class="mb-3">
+    <div class="form-check form-switch">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        id="isTwoWayDrive"
+        name="isTwoWayDrive"
+        formControlName="isTwoWayDrive"
+        checked />
+      <label class="form-check-label" for="isTwoWayDrive">Ce trajet comporte un retour</label>
+    </div>
   </div>
-  <input id="recurrence" type="hidden" formControlName="recurrence" />
-  <div>
-    <label for="driveKind">Type de trajet:</label>
-    <select id="driveKind" formControlName="driveKind">
-      <option value="one-way">Aller simple</option>
-      <option value="outward">Aller</option>
-      <option value="return">Retour</option>
-    </select>
-  </div>
-  <div>
-    <label for="driveNature">Nature du trajet:</label>
-    <select id="driveNature" formControlName="driveNature">
-      <option value="medical">Medical</option>
-      <option value="standard">Non médical</option>
-    </select>
+  <div class="mb-3">
+    <div class="form-check form-switch">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        id="isMedicalDrive"
+        name="isMedicalDrive"
+        formControlName="isMedicalDrive"
+        checked />
+      <label class="form-check-label" for="isMedicalDrive">Ce trajet est de nature médicale</label>
+    </div>
   </div>
   <button
     [appLoadActionDisplay]="loadAction.isLoading$ | async"
     #loadActionDisplay
     type="submit"
-    class="btn btn-primary mt-5 p-3 w-100"
+    class="btn mt-3 btn-primary w-100"
     [disabled]="loadActionDisplay.isLoading">
     <ng-container slot="loadActionDisplayIdle">Créer la course</ng-container>
     <ng-container slot="loadActionDisplayLoading">
@@ -85,4 +115,12 @@
       Création en cours...
     </ng-container>
   </button>
+  <!-- TODO Mutualiser les erreurs communes -->
+  <div class="text-danger mt-2" *ngIf="scheduleFareForm.errors?.['validationFailedBeforeApiCallError']">
+    La structure des données de la requête ne respecte pas le contrat de transfer. La requête ne peut pas être effectuée.
+    Prévenir Romain qu'il va faire des heures supp'.
+  </div>
+  <div class="text-danger mt-2" *ngIf="scheduleFareForm.errors">
+    Une erreur est survenue lors de l'appel au service distant.
+  </div>
 </form>

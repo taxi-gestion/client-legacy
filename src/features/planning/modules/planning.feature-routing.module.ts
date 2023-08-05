@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CanMatchOneUserGroupGuard } from '@features/authentication';
-import { DailyLayout } from '../layouts';
+import { DailyPlanningLayout } from '../layouts';
 import {
-  AffectReturnPage,
+  ScheduleReturnPage,
   DriverAgendaPage,
   ManagerDriverChoicePage,
   MissingAdminConfigurationPage,
@@ -17,8 +17,8 @@ const DAILY_PAGES: Routes = [
     component: ScheduleFarePage
   },
   {
-    path: 'affect-return',
-    component: AffectReturnPage
+    path: 'schedule-return',
+    component: ScheduleReturnPage
   }
 ];
 
@@ -36,14 +36,14 @@ const ROUTES: Routes = [
     canMatch: [CanMatchOneUserGroupGuard],
     data: { allowedGroups: ['developer', 'manager'] },
     children: DAILY_PAGES,
-    component: DailyLayout
+    component: DailyPlanningLayout
   },
   {
     path: 'daily/:date',
     canMatch: [CanMatchOneUserGroupGuard],
     data: { allowedGroups: ['developer', 'manager'] },
     children: DAILY_PAGES,
-    component: DailyLayout
+    component: DailyPlanningLayout
   },
   {
     path: 'agenda',

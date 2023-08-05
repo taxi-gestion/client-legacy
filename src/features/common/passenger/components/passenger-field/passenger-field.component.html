@@ -1,0 +1,62 @@
+<form [formGroup]="formGroup">
+  <label for="passenger" class="visually-hidden"><ng-content></ng-content></label>
+  <div class="input-group">
+    <span class="input-group-text pe-0">
+      <i class="text-muted ri-search-line" aria-hidden="true"></i>
+    </span>
+    <input
+      #passengerInput
+      type="search"
+      placeholder="Rechercher un passager par son nom"
+      name="passenger"
+      id="passenger"
+      class="form-control border-start-0"
+      autocomplete="off"
+      aria-describedby="passenger"
+      aria-haspopup="true"
+      formControlName="passenger"
+      [attr.aria-describedby]="passengerNotFound ? 'passenger-desc-error' : null"
+      [attr.aria-expanded]="passengerResultsDropdown.expanded$ | async"
+      (input)="
+        search(passengerInput.value);
+        passengerInput.value.length <= minSearchTermLength
+          ? passengerResultsDropdown.reduce()
+          : passengerResultsDropdown.expand()
+      "
+      (focus)="
+        passengerInput.value.length <= minSearchTermLength
+          ? passengerResultsDropdown.reduce()
+          : passengerResultsDropdown.expand()
+      "
+      (keyup.escape)="passengerResultsDropdown.reduce()"
+      (keyup.enter)="passengerResultsDropdown.activeIndex = 0; passengerResultsDropdown.focus()" />
+    <button type="button" *ngIf="passengerInput.value && displayReset" class="btn input-group-btn" (click)="clear()">
+      <i class="ri-close-line"></i>
+    </button>
+    <ng-content></ng-content>
+  </div>
+  <ul
+    #passengerResultsDropdown="passengerResultsDropdown"
+    appPassengerResultsDropdown
+    [dropdownControl]="passengerInput"
+    [class.show]="passengerResultsDropdown.expanded$ | async"
+    class="dropdown-menu position-absolute mt-1"
+    aria-labelledby="passenger">
+    <li
+      #results
+      *ngFor="let passenger of (passengersFound$ | async) ?? []; index as passengerIndex; trackBy: trackByPassengerName">
+      <button
+        type="button"
+        class="dropdown-item"
+        [class.active]="passengerResultsDropdown.activeIndex === passengerIndex"
+        [attr.aria-current]="passengerResultsDropdown.activeIndex === passengerIndex ? true : null"
+        (focusin)="passengerResultsDropdown.setIndex(passengerIndex)"
+        (focusout)="passengerResultsDropdown.setIndex(-1)"
+        (click)="setPassengerSuggestion(passenger); passengerResultsDropdown.reduce()">
+        <b>{{ passenger.lastname }} {{ passenger.firstname }}</b>
+        <br />
+        <small>{{ passenger.phone }}</small>
+      </button>
+    </li>
+  </ul>
+</form>

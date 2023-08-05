@@ -15,7 +15,8 @@
       "@features/common/recurrence": ["src/features/common/recurrence"],
       "@features/common/user": ["src/features/common/user"],
       "@features/common/client": ["src/features/common/client"],
-      "@features/common/journey": ["src/features/common/journey"]
+      "@features/common/journey": ["src/features/common/journey"],
+      "@domain": ["src/domain"]
     },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
