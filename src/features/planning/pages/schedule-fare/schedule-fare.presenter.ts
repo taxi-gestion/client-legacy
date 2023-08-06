@@ -1,9 +1,9 @@
 import { datetimeLocalToIso8601UTCString } from '../../common/unit-convertion';
 import { FareToSchedulePresentation } from './schedule-fare.form';
 import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
-import { Journey, ToSchedule } from '@domain';
+import { Journey, FareToSchedule } from '@domain';
 
-export const toFareToSchedule = (formValues: FareToSchedulePresentation): ToSchedule => ({
+export const toFareToSchedule = (formValues: FareToSchedulePresentation): FareToSchedule => ({
   //recurrence: formValues.recurrence,
   destination: formValues.arrivalPlace,
   datetime: datetimeLocalToIso8601UTCString(formValues.departureDatetime),

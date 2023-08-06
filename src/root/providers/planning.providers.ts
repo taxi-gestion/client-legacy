@@ -4,11 +4,11 @@ import {
   scheduleReturnActionProvider,
   faresForDateQuery$,
   scheduledFaresForDateQueryProvider,
-  returnsToScheduleForDateQueryProvider,
   scheduleFareActionProvider,
-  returnsToScheduleForDateQuery$,
   validatedScheduleFareAction$,
-  validatedScheduleReturnAction$
+  validatedScheduleReturnAction$,
+  pendingReturnsForDateQueryProvider,
+  pendingReturnsForDateQuery$
 } from '@features/planning';
 
 import { predictRecurrenceQueryProvider, predictRecurrenceQuery$ } from '@features/common/recurrence';
@@ -23,7 +23,7 @@ export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   scheduleReturnActionProvider(validatedScheduleReturnAction$, [HttpClient]),
   predictRecurrenceQueryProvider(predictRecurrenceQuery$, [HttpClient]),
   scheduledFaresForDateQueryProvider(faresForDateQuery$, [HttpClient]),
-  returnsToScheduleForDateQueryProvider(returnsToScheduleForDateQuery$, [HttpClient]),
+  pendingReturnsForDateQueryProvider(pendingReturnsForDateQuery$, [HttpClient]),
   searchPlaceQueryProvider(searchPlaceQuery$, [HttpClient]),
   searchUserQueryProvider(cognitoListUsersWithDriverGroupQuery$, [HttpClient]),
   searchPassengerQueryProvider(searchPassengersQuery$, [HttpClient]),

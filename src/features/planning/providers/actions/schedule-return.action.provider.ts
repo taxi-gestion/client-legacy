@@ -1,8 +1,8 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ReturnToSchedule } from '@domain';
+import { Entity, ReturnToSchedule } from '@domain';
 
-export type ScheduleReturnAction = (returnToSchedule: ReturnToSchedule) => Observable<object>;
+export type ScheduleReturnAction = (returnToSchedule: Entity & ReturnToSchedule) => Observable<object>;
 
 export const SCHEDULE_RETURN_ACTION: symbol = Symbol('planning.schedule-return.action');
 

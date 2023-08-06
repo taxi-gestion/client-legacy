@@ -3,10 +3,10 @@ import { defaultPlaceValue } from '../../common/fares.presenter';
 import { formatDateToDatetimeLocalString } from '../../common/unit-convertion';
 import { Place } from '@domain';
 import { FareToSchedulePresentation } from '../schedule-fare/schedule-fare.form';
-import { ReturnToSchedulePresentation } from '../../common/return-to-schedule.presentation';
+import { PendingPresentation } from '../../common';
 
 export type ScheduleReturnFields = {
-  returnToScheduleId: FormControl<string>;
+  pendingReturnId: FormControl<string>;
   departureDatetime: FormControl<Date>;
   departurePlace: FormControl<Place>;
   arrivalPlace: FormControl<Place>;
@@ -15,19 +15,18 @@ export type ScheduleReturnFields = {
   driver: FormControl<string>;
 };
 
-export const SCHEDULE_RETURN_FORM: FormGroup<Record<keyof ReturnToSchedulePresentation, FormControl>> = new FormGroup<
-  Record<keyof ReturnToSchedulePresentation, FormControl>
+export const SCHEDULE_RETURN_FORM: FormGroup<Record<keyof Omit<PendingPresentation, 'passenger'>, FormControl>> = new FormGroup<
+  Record<keyof Omit<PendingPresentation, 'passenger'>, FormControl>
 >({
-  returnToScheduleId: new FormControl<ReturnToSchedulePresentation['returnToScheduleId']>(''),
-  departureDatetime: new FormControl<ReturnToSchedulePresentation['departureDatetime']>(
-    formatDateToDatetimeLocalString(new Date()),
-    [Validators.required]
-  ),
-  departurePlace: new FormControl<ReturnToSchedulePresentation['departurePlace']>(defaultPlaceValue, [Validators.required]),
-  arrivalPlace: new FormControl<ReturnToSchedulePresentation['arrivalPlace']>(defaultPlaceValue, [Validators.required]),
+  pendingReturnId: new FormControl<PendingPresentation['pendingReturnId']>(''),
+  departureDatetime: new FormControl<PendingPresentation['departureDatetime']>(formatDateToDatetimeLocalString(new Date()), [
+    Validators.required
+  ]),
+  departurePlace: new FormControl<PendingPresentation['departurePlace']>(defaultPlaceValue, [Validators.required]),
+  arrivalPlace: new FormControl<PendingPresentation['arrivalPlace']>(defaultPlaceValue, [Validators.required]),
   driveDuration: new FormControl<FareToSchedulePresentation['driveDuration']>(0, [Validators.required]),
   driveDistance: new FormControl<FareToSchedulePresentation['driveDistance']>(0, [Validators.required]),
-  driver: new FormControl<ReturnToSchedulePresentation['driver']>('', [Validators.required])
+  driver: new FormControl<PendingPresentation['driver']>('', [Validators.required])
 });
 
 export const setScheduleReturnErrorToForm = (handledError: { field?: string; errors: Record<string, unknown> }): void =>

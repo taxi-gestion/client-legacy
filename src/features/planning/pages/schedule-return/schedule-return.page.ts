@@ -8,7 +8,7 @@ import { formatScheduleReturnError, toReturnToSchedule } from './schedule-return
 import { ActivatedRoute, Params } from '@angular/router';
 import { toStandardDateFormat } from '../../common/unit-convertion';
 import { Place } from '@domain';
-import { ReturnToSchedulePresentation } from '../../common';
+import { PendingPresentation } from '../../common';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,7 +23,7 @@ export class ScheduleReturnPage {
   @Output() public scheduleReturnError: EventEmitter<Error> = new EventEmitter<Error>();
 
   public readonly scheduleReturn$ = (): Observable<object> =>
-    this._scheduleReturnAction$(toReturnToSchedule(SCHEDULE_RETURN_FORM.value as ReturnToSchedulePresentation));
+    this._scheduleReturnAction$(toReturnToSchedule(SCHEDULE_RETURN_FORM.value as PendingPresentation));
 
   public readonly scheduleReturnForm: FormGroup<ScheduleReturnFields> = SCHEDULE_RETURN_FORM;
 
@@ -49,14 +49,14 @@ export class ScheduleReturnPage {
   public destinationDisplayLabel$: Observable<string> = this._destinationDisplayLabel$.asObservable();
   private readonly _driverDisplayLabel$: Subject<string> = new Subject<string>();
   public driverDisplayLabel$: Observable<string> = this._driverDisplayLabel$.asObservable();
-  public onSelectReturnToScheduleChange(returnToSchedule: ReturnToSchedulePresentation): void {
-    this.scheduleReturnForm.controls.returnToScheduleId.setValue(returnToSchedule.returnToScheduleId);
-    this.scheduleReturnForm.controls.departurePlace.setValue(returnToSchedule.departurePlace);
-    this._departureDisplayLabel$.next(returnToSchedule.departurePlace.label);
-    this.scheduleReturnForm.controls.arrivalPlace.setValue(returnToSchedule.arrivalPlace);
-    this._destinationDisplayLabel$.next(returnToSchedule.arrivalPlace.label);
-    this.scheduleReturnForm.controls.driver.setValue(returnToSchedule.driver);
-    this._driverDisplayLabel$.next(returnToSchedule.driver);
+  public onSelectPendingReturnChange(pendingReturn: PendingPresentation): void {
+    this.scheduleReturnForm.controls.pendingReturnId.setValue(pendingReturn.pendingReturnId);
+    this.scheduleReturnForm.controls.departurePlace.setValue(pendingReturn.departurePlace);
+    this._departureDisplayLabel$.next(pendingReturn.departurePlace.label);
+    this.scheduleReturnForm.controls.arrivalPlace.setValue(pendingReturn.arrivalPlace);
+    this._destinationDisplayLabel$.next(pendingReturn.arrivalPlace.label);
+    this.scheduleReturnForm.controls.driver.setValue(pendingReturn.driver);
+    this._driverDisplayLabel$.next(pendingReturn.driver);
   }
 
   public onSelectDriverChange(driver: UserPresentation): void {
