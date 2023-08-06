@@ -49,7 +49,6 @@ export const toFaresForDatePlanningSession = (fares: ScheduledPresentation[]): S
 
 export const toScheduledFarePresentation = (fare: Scheduled): ScheduledPresentation => ({
   passenger: fare.passenger,
-  creator: fare.creator,
   departure: fare.departure,
   destination: fare.destination,
   distance: Number(fare.distance),
@@ -66,7 +65,6 @@ export const toScheduledFarePresentation = (fare: Scheduled): ScheduledPresentat
 export const toScheduledPlanningSession = (fare: ScheduledPresentation): ScheduledPlanningSession => ({
   startTimeInMinutes: minutesSinceStartOfDayInTimezone(fare.datetime, 'Europe/Paris'),
   passenger: fare.passenger,
-  creator: fare.creator,
   departure: fare.departure,
   destination: fare.destination,
   distance: Number((fare.distance * 0.001).toPrecision(3)),

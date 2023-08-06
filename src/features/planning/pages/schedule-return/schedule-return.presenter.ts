@@ -1,10 +1,10 @@
 import { datetimeLocalToIso8601UTCString } from '../../common/unit-convertion';
-import { ReturnToSchedule } from '@domain';
-import { ReturnToSchedulePresentation } from '../../common';
+import { Entity, ReturnToSchedule } from '@domain';
+import { PendingPresentation } from '../../common';
 import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
 
-export const toReturnToSchedule = (formValues: ReturnToSchedulePresentation): ReturnToSchedule => ({
-  id: formValues.returnToScheduleId,
+export const toReturnToSchedule = (formValues: PendingPresentation): Entity & ReturnToSchedule => ({
+  id: formValues.pendingReturnId,
   departure: formValues.departurePlace,
   destination: formValues.arrivalPlace,
   driver: formValues.driver,

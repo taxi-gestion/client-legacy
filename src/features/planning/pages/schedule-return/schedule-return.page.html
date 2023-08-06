@@ -14,9 +14,9 @@
   (ngSubmit)="onSubmitReturnToSchedule(loadAction.start)">
   <div class="mb-3">
     <label for="returnToScheduleId" class="form-label">Retour pour le passager</label>
-    <app-return-to-schedule-field
+    <app-pending-return-field
       [date]="selectedDate"
-      (selectReturnToSchedule)="onSelectReturnToScheduleChange($event)"></app-return-to-schedule-field>
+      (selectPendingReturns)="onSelectPendingReturnChange($event)"></app-pending-return-field>
     <input id="returnToScheduleId" type="hidden" name="returnToScheduleId" formControlName="returnToScheduleId" />
   </div>
   <div class="mb-3">
