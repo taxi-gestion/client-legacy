@@ -1,5 +1,5 @@
 <div class="d-flex">
-  <h2 class="pt-2 pb-4 text-primary">Scheduleer le retour</h2>
+  <h2 class="pt-2 pb-4 text-primary">Planifier le retour</h2>
   <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
     <i class="ri-close-line ri-2x" aria-hidden="true"></i>
     <span class="visually-hidden">Fermer</span>
@@ -69,10 +69,10 @@
     type="submit"
     class="btn btn-primary mt-3 w-100"
     [disabled]="loadActionDisplay.isLoading">
-    <ng-container slot="loadActionDisplayIdle">Scheduleer le retour</ng-container>
+    <ng-container slot="loadActionDisplayIdle">Planifier le retour</ng-container>
     <ng-container slot="loadActionDisplayLoading">
       <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
-      Scheduleation en cours...
+      Planification en cours...
     </ng-container>
   </button>
   <!-- TODO Mutualiser les erreurs communes -->
