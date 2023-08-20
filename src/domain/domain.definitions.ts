@@ -19,6 +19,11 @@ export type Passenger = {
   phone: string;
 };
 
+export type Driver = {
+  identifier: string;
+  username: string;
+};
+
 export type Nature = {
   nature: 'medical' | 'standard';
 };
