@@ -11,7 +11,7 @@ import {
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter, map, Observable, Subject, switchMap } from 'rxjs';
 import { SEARCH_USER_QUERY, SearchUserQuery } from '../../providers';
-import { UserPresentation } from '../../definitions';
+import { User } from '@features/common/user';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,7 +22,7 @@ export class UserFieldComponent implements OnChanges {
   @Input() public minSearchTermLength: number = 0;
   @Input() public searchDebounceTime: number = 300;
 
-  @Output() public readonly selectUser: EventEmitter<UserPresentation> = new EventEmitter<UserPresentation>();
+  @Output() public readonly selectUser: EventEmitter<User> = new EventEmitter<User>();
 
   @Output() public readonly resetUser: EventEmitter<void> = new EventEmitter<void>();
 
@@ -34,12 +34,12 @@ export class UserFieldComponent implements OnChanges {
 
   private readonly _searchUserTerm$: Subject<string> = new Subject<string>();
 
-  public usersFound$: Observable<UserPresentation[]> = this._searchUserTerm$.pipe(
+  public usersFound$: Observable<User[]> = this._searchUserTerm$.pipe(
     map((searchUserTerm: string): string => searchUserTerm.trim()),
     filter((searchUserTerm: string): boolean => searchUserTerm.length >= this.minSearchTermLength),
     debounceTime(this.searchDebounceTime),
     distinctUntilChanged(),
-    switchMap((searchUserTerm: string): Observable<UserPresentation[]> => this._searchUserQuery(searchUserTerm))
+    switchMap((searchUserTerm: string): Observable<User[]> => this._searchUserQuery(searchUserTerm))
   );
 
   public constructor(@Inject(SEARCH_USER_QUERY) private readonly _searchUserQuery: SearchUserQuery) {}
@@ -54,13 +54,13 @@ export class UserFieldComponent implements OnChanges {
     this._searchUserTerm$.next(userInput);
   }
 
-  public setUserSuggestion(user: UserPresentation): void {
+  public setUserSuggestion(user: User): void {
     this.formGroup.get('user')?.setValue(user.identifier);
     this.selectUser.next(user);
   }
 
-  public trackByUserName(_: number, user: UserPresentation): string {
-    return `${user.username}-${user.identifier}`;
+  public trackByUserId(_: number, user: User): string {
+    return user.id;
   }
 
   public clear(): void {

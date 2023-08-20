@@ -1,13 +1,12 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { UserPresentation } from '@features/common/user';
 import { Observable, Subject } from 'rxjs';
 import { SCHEDULE_RETURN_ACTION, ScheduleReturnAction } from '../../providers';
 import { SCHEDULE_RETURN_FORM, ScheduleReturnFields, setScheduleReturnErrorToForm } from './schedule-return.form';
 import { formatScheduleReturnError, toReturnToSchedule } from './schedule-return.presenter';
 import { ActivatedRoute, Params } from '@angular/router';
 import { toStandardDateFormat } from '../../common/unit-convertion';
-import { Place } from '@domain';
+import { Driver, Place } from '@domain';
 import { PendingPresentation } from '../../common';
 
 @Component({
@@ -59,7 +58,7 @@ export class ScheduleReturnPage {
     this._driverDisplayLabel$.next(pendingReturn.driver);
   }
 
-  public onSelectDriverChange(driver: UserPresentation): void {
+  public onSelectDriverChange(driver: Driver): void {
     this.scheduleReturnForm.controls.driver.setValue(driver.identifier);
   }
 

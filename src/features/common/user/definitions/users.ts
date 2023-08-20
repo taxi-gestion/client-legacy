@@ -1,17 +1,6 @@
-export type User = {
-  identifier: string;
-  username: string;
-  groups: string[];
-};
+import { Entity } from '@domain';
 
-export type UserPresentation = {
+export type User = Entity & {
   identifier: string;
   username: string;
-  groups: string[];
-};
-
-export type UserTransfer = {
-  identifier: string;
-  username: string;
-  groups: string[];
 };

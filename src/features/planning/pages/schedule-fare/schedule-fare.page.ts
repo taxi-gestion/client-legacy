@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { UserPresentation } from '@features/common/user';
 import { BehaviorSubject, combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
 import { defaultPlaceValue } from '../../common/fares.presenter';
 import { SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../providers';
@@ -12,7 +11,7 @@ import {
 } from './schedule-fare.form';
 import { formatScheduleFareError, toFareToSchedule, toJourney } from './schedule-fare.presenter';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common/journey';
-import { isValidPlace, JourneyEstimate, Place } from '@domain';
+import { Driver, isValidPlace, JourneyEstimate, Place } from '@domain';
 import { PassengerPresentation } from '../../../common/passenger';
 
 @Component({
@@ -51,7 +50,7 @@ export class ScheduleFarePage {
     this._destination.next(place);
   }
 
-  public onSelectDriverChange(driver: UserPresentation): void {
+  public onSelectDriverChange(driver: Driver): void {
     this.scheduleFareForm.controls.driver.setValue(driver.identifier);
   }
 

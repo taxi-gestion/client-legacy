@@ -36,7 +36,7 @@
     [class.show]="userResultsDropdown.expanded$ | async"
     class="dropdown-menu position-absolute mt-1"
     aria-labelledby="user">
-    <li #results *ngFor="let user of (usersFound$ | async) ?? []; index as userIndex; trackBy: trackByUserName">
+    <li #results *ngFor="let user of (usersFound$ | async) ?? []; index as userIndex; trackBy: trackByUserId">
       <button
         type="button"
         class="dropdown-item"
