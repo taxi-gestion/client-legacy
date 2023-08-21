@@ -7,7 +7,8 @@ import {
   DriverAgendaPage,
   ManagerDriverChoicePage,
   MissingAdminConfigurationPage,
-  ScheduleFarePage
+  ScheduleFarePage,
+  RegisterRegularPage
 } from '../pages';
 import { CanActivatePlanningRedirectGuard } from '../guards';
 
@@ -19,6 +20,10 @@ const DAILY_PAGES: Routes = [
   {
     path: 'schedule-return',
     component: ScheduleReturnPage
+  },
+  {
+    path: 'register-regular',
+    component: RegisterRegularPage
   }
 ];
 

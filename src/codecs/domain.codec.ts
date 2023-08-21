@@ -7,7 +7,7 @@ import {
   string as ioString,
   type as ioType
 } from 'io-ts';
-import { Drive, DurationDistance, Entity, FareToSchedule, Passenger, ReturnToSchedule } from '@domain';
+import { Drive, DurationDistance, Entity, FareToSchedule, Passenger, Regular, ReturnToSchedule } from '@domain';
 
 import { placeCodec } from './common';
 
@@ -25,6 +25,12 @@ const durationDistanceCodec: Type<DurationDistance> = ioType({
 
 const passengerCodec: Type<Passenger> = ioType({
   passenger: ioString,
+  phone: ioString
+});
+
+export const regularPassengerCodec: Type<Regular> = ioType({
+  firstname: ioString,
+  lastname: ioString,
   phone: ioString
 });
 

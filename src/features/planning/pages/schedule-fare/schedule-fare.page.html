@@ -13,7 +13,7 @@
   (actionError)="onScheduleFareActionError($event)"
   (ngSubmit)="onSubmitFareToSchedule(loadAction.start)">
   <div class="mb-3">
-    <label for="passenger" class="form-label">Nom du passager</label>
+    <label for="passenger" class="form-label">Identité du passager</label>
     <app-passenger-field
       (selectPassenger)="onSelectPassengerChange($event)"
       (searchPassengerTerm)="onSearchPassengerTermChange($event)"></app-passenger-field>

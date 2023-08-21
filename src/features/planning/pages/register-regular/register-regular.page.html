@@ -1,0 +1,53 @@
+<div class="d-flex">
+  <h2 class="pt-2 pb-4 text-primary">Enregistrer un passager régulier</h2>
+  <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
+    <i class="ri-close-line ri-2x" aria-hidden="true"></i>
+    <span class="visually-hidden">Fermer</span>
+  </a>
+</div>
+<form
+  [formGroup]="registerRegularForm"
+  [appLoadAction]="registerRegular$"
+  #loadAction="loadAction"
+  (actionSuccess)="onRegisterRegularActionSuccess()"
+  (actionError)="onRegisterRegularActionError($event)"
+  (ngSubmit)="onSubmitFareToSchedule(loadAction.start)">
+  <div class="mb-3">
+    <label for="firstname" class="form-label">Prénom</label>
+    <input class="form-control" id="firstname" type="text" name="firstname" formControlName="firstname" placeholder="Jean" />
+  </div>
+  <div class="mb-3">
+    <label for="lastname" class="form-label">Nom de famille</label>
+    <input class="form-control" id="lastname" type="text" name="lastname" formControlName="lastname" placeholder="Dupont" />
+  </div>
+  <div class="mb-3">
+    <label for="phoneToAutocomplete" class="form-label">Téléphone à autocompléter</label>
+    <input
+      id="phoneToAutocomplete"
+      type="text"
+      placeholder="(+33)/(0) 6 XX XX XX XX"
+      class="form-control"
+      name="phoneToAutocomplete"
+      formControlName="phoneToAutocomplete" />
+  </div>
+  <button
+    [appLoadActionDisplay]="loadAction.isLoading$ | async"
+    #loadActionDisplay
+    type="submit"
+    class="btn mt-3 btn-primary w-100"
+    [disabled]="loadActionDisplay.isLoading">
+    <ng-container slot="loadActionDisplayIdle">Enregistrer le passager</ng-container>
+    <ng-container slot="loadActionDisplayLoading">
+      <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+      Enregistrement en cours...
+    </ng-container>
+  </button>
+  <!-- TODO Mutualiser les erreurs communes -->
+  <div class="text-danger mt-2" *ngIf="registerRegularForm.errors?.['validationFailedBeforeApiCallError']">
+    La structure des données de la requête ne respecte pas le contrat de transfer. La requête ne peut pas être effectuée.
+    Prévenir Romain qu'il va faire des heures supp'.
+  </div>
+  <div class="text-danger mt-2" *ngIf="registerRegularForm.errors">
+    Une erreur est survenue lors de l'appel au service distant.
+  </div>
+</form>
