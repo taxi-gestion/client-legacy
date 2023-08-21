@@ -1,25 +1,28 @@
 import { HttpClient } from '@angular/common/http';
 import { FactoryProvider, ValueProvider } from '@angular/core';
 import {
-  scheduleReturnActionProvider,
   faresForDateQuery$,
+  pendingReturnsForDateQuery$,
+  pendingReturnsForDateQueryProvider,
+  registerRegularActionProvider,
   scheduledFaresForDateQueryProvider,
   scheduleFareActionProvider,
+  scheduleReturnActionProvider,
+  validatedRegisterRegularAction$,
   validatedScheduleFareAction$,
-  validatedScheduleReturnAction$,
-  pendingReturnsForDateQueryProvider,
-  pendingReturnsForDateQuery$
+  validatedScheduleReturnAction$
 } from '@features/planning';
 
-import { predictRecurrenceQueryProvider, predictRecurrenceQuery$ } from '@features/common/recurrence';
-import { searchPlaceQueryProvider, searchPlaceQuery$ } from '@features/common/place';
+import { predictRecurrenceQuery$, predictRecurrenceQueryProvider } from '@features/common/recurrence';
+import { searchPlaceQuery$, searchPlaceQueryProvider } from '@features/common/place';
 import { searchUserQueryProvider } from '@features/common/user';
 import { cognitoListUsersWithDriverGroupQuery$ } from '@features/aws';
-import { estimateJourneyQueryProvider, estimateJourneyQuery$ } from '@features/common/journey';
+import { estimateJourneyQuery$, estimateJourneyQueryProvider } from '@features/common/journey';
 import { searchPassengerQueryProvider, searchPassengersQuery$ } from '../../features/common/passenger';
 
 export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   scheduleFareActionProvider(validatedScheduleFareAction$, [HttpClient]),
+  registerRegularActionProvider(validatedRegisterRegularAction$, [HttpClient]),
   scheduleReturnActionProvider(validatedScheduleReturnAction$, [HttpClient]),
   predictRecurrenceQueryProvider(predictRecurrenceQuery$, [HttpClient]),
   scheduledFaresForDateQueryProvider(faresForDateQuery$, [HttpClient]),

@@ -1,9 +1,9 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
-import { ScheduleFareAction } from '../../providers';
+import { ScheduleFareAction } from '../providers';
 import { pipe as fpPipe } from 'fp-ts/function';
 import { fold } from 'fp-ts/Either';
-import { ValidationFailedBeforeApiCallError } from '../../errors';
+import { ValidationFailedBeforeApiCallError } from '../errors';
 import { FareToSchedule } from '@domain';
 import { fareToScheduleCodec } from '@codecs';
 

@@ -1,6 +1,6 @@
 export type Passenger = {
-  lastname: string;
   firstname: string;
+  lastname: string;
   phone: string;
 };
 
