@@ -11,7 +11,7 @@ import {
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter, map, Observable, Subject, switchMap } from 'rxjs';
 import { SEARCH_PASSENGER_QUERY, SearchPassengerQuery } from '../../providers';
-import { PassengerPresentation } from '../../definitions';
+import { Passenger } from '@domain';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,7 +22,7 @@ export class PassengerFieldComponent implements OnChanges {
   @Input() public minSearchTermLength: number = 2;
   @Input() public searchDebounceTime: number = 300;
 
-  @Output() public readonly selectPassenger: EventEmitter<PassengerPresentation> = new EventEmitter<PassengerPresentation>();
+  @Output() public readonly selectPassenger: EventEmitter<Passenger> = new EventEmitter<Passenger>();
 
   @Output() public readonly searchPassengerTerm: EventEmitter<string> = new EventEmitter<string>();
 
@@ -36,14 +36,12 @@ export class PassengerFieldComponent implements OnChanges {
 
   private readonly _searchPassengerTerm$: Subject<string> = new Subject<string>();
 
-  public passengersFound$: Observable<PassengerPresentation[]> = this._searchPassengerTerm$.pipe(
+  public passengersFound$: Observable<Passenger[]> = this._searchPassengerTerm$.pipe(
     map((searchPassengerTerm: string): string => searchPassengerTerm.trim()),
     filter((searchPassengerTerm: string): boolean => searchPassengerTerm.length >= this.minSearchTermLength),
     debounceTime(this.searchDebounceTime),
     distinctUntilChanged(),
-    switchMap(
-      (searchPassengerTerm: string): Observable<PassengerPresentation[]> => this._searchPassengerQuery(searchPassengerTerm)
-    )
+    switchMap((searchPassengerTerm: string): Observable<Passenger[]> => this._searchPassengerQuery(searchPassengerTerm))
   );
 
   public constructor(@Inject(SEARCH_PASSENGER_QUERY) private readonly _searchPassengerQuery: SearchPassengerQuery) {}
@@ -59,13 +57,13 @@ export class PassengerFieldComponent implements OnChanges {
     this.searchPassengerTerm.next(passengerInput);
   }
 
-  public setPassengerSuggestion(passenger: PassengerPresentation): void {
-    this.formGroup.get('passenger')?.setValue(`${passenger.lastname} ${passenger.firstname}`);
+  public setPassengerSuggestion(passenger: Passenger): void {
+    this.formGroup.get('passenger')?.setValue(passenger.passenger);
     this.selectPassenger.next(passenger);
   }
 
-  public trackByPassengerName(_: number, passenger: PassengerPresentation): string {
-    return `${passenger.lastname}-${passenger.firstname}`;
+  public trackByPassengerName(_: number, passenger: Passenger): string {
+    return passenger.passenger;
   }
 
   public clear(): void {

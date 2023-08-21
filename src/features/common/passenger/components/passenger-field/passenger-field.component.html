@@ -53,7 +53,7 @@
         (focusin)="passengerResultsDropdown.setIndex(passengerIndex)"
         (focusout)="passengerResultsDropdown.setIndex(-1)"
         (click)="setPassengerSuggestion(passenger); passengerResultsDropdown.reduce()">
-        <b>{{ passenger.lastname }} {{ passenger.firstname }}</b>
+        <b>{{ passenger.passenger }}</b>
         <br />
         <small>{{ passenger.phone }}</small>
       </button>

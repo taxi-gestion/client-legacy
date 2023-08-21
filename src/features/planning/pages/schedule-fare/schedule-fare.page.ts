@@ -11,8 +11,7 @@ import {
 } from './schedule-fare.form';
 import { formatScheduleFareError, toFareToSchedule, toJourney } from './schedule-fare.presenter';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common/journey';
-import { Driver, isValidPlace, JourneyEstimate, Place } from '@domain';
-import { PassengerPresentation } from '../../../common/passenger';
+import { Driver, isValidPlace, JourneyEstimate, Passenger, Place } from '@domain';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -54,9 +53,9 @@ export class ScheduleFarePage {
     this.scheduleFareForm.controls.driver.setValue(driver.identifier);
   }
 
-  public onSelectPassengerChange(passenger: PassengerPresentation): void {
-    this.scheduleFareForm.controls.passenger.setValue(`${passenger.lastname} ${passenger.firstname}`);
-    this.scheduleFareForm.controls.phoneToCall.setValue(`${passenger.phone}`);
+  public onSelectPassengerChange(passenger: Passenger): void {
+    this.scheduleFareForm.controls.passenger.setValue(passenger.passenger);
+    this.scheduleFareForm.controls.phoneToCall.setValue(passenger.phone);
   }
 
   public onJourneyEstimateReceived(estimate: JourneyEstimate): void {
