@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SearchPassengerQuery } from '../../providers';
-import { Passenger } from '../../definitions';
+import { Passenger } from '@domain';
 
 export const searchPassengersQuery$ =
   (httpClient: HttpClient): SearchPassengerQuery =>

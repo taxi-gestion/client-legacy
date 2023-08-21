@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { FactoryProvider } from '@angular/core';
-import { Passenger } from '../../definitions';
+import { Passenger } from '@domain';
 
 export type SearchPassengerQuery = (search: string) => Observable<Passenger[]>;
 
