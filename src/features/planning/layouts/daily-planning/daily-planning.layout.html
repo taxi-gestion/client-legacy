@@ -45,8 +45,9 @@
             [rowContext]="planning"
             [sessions]="planning.fares"
             [template]="fare"
-            [onSlotClickAction]="onPlanningSlotClick">
-            <b slot="header" class="text-capitalize">{{ planning.driver }}</b>
+            [onSlotClickAction]="onPlanningSlotClick"
+            [onSessionClickAction]="onPlanningSessionClick">
+            <b slot="header">{{ planning.driver.username }}</b>
             <ng-template #fare let-fare="session">
               <app-fare-planning-session [fare]="fare"></app-fare-planning-session>
             </ng-template>

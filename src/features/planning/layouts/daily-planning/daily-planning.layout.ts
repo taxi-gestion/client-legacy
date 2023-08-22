@@ -1,23 +1,20 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { map, Observable, switchMap } from 'rxjs';
+import { combineLatest, map, Observable, Subject, switchMap, take } from 'rxjs';
 import { PlanningSettings } from '../../components/planning/planning-settings/planning-settings.component';
 import { DEFAULT_END_HOUR, DEFAULT_START_HOUR } from '../../components/planning/planning-settings/planning-settings.form';
-import {
-  groupByDriverPlanning,
-  toFaresForDatePlanningSession,
-  toScheduledFaresPresentation
-} from '../../common/fares.presenter';
+import { toDailyDriverPlanning } from '../../common/fares.presenter';
 import { toStandardDateFormat } from '../../common/unit-convertion';
 import {
-  SCHEDULED_FARES_FOR_DATE_QUERY,
-  ScheduledFaresForDateQuery,
   PENDING_RETURNS_FOR_DATE_QUERY,
-  PendingReturnsForDateQuery
+  PendingReturnsForDateQuery,
+  SCHEDULED_FARES_FOR_DATE_QUERY,
+  ScheduledFaresForDateQuery
 } from '../../providers';
-import { Entity, Pending, Scheduled } from '@domain';
+import { Driver, Entity, Pending, Scheduled } from '@domain';
 import { PendingPresentation, toPendingReturnsForDatePresentation } from '../../common';
 import { DailyDriverPlanning } from '../../common/fares.presentation';
+import { LIST_DRIVERS_QUERY, ListDriversQuery } from '@features/common/driver';
 
 const DEFAULT_PLANNING_SETTINGS: PlanningSettings = {
   interval: 30,
@@ -37,11 +34,21 @@ export class DailyPlanningLayout {
 
   public planningSettings: PlanningSettings = DEFAULT_PLANNING_SETTINGS;
 
-  public readonly plannings$: Observable<DailyDriverPlanning[]> = this._route.params.pipe(
-    switchMap((params: Params): Observable<Scheduled[]> => this._faresForDateQuery(paramsToDateString(params))),
-    map(toScheduledFaresPresentation),
-    map(toFaresForDatePlanningSession),
-    map(groupByDriverPlanning)
+  private readonly _drivers: Subject<(Driver & Entity)[]> = new Subject<(Driver & Entity)[]>();
+
+  public readonly drivers$: Observable<(Driver & Entity)[]> = this._drivers.pipe(
+    switchMap((): Observable<(Driver & Entity)[]> => this._listDriversQuery()),
+    take(1)
+  );
+
+  public readonly fares$: Observable<(Entity & Scheduled)[]> = this._route.params.pipe(
+    switchMap((params: Params): Observable<(Entity & Scheduled)[]> => this._faresForDateQuery(paramsToDateString(params)))
+  );
+
+  public readonly plannings$: Observable<DailyDriverPlanning[]> = combineLatest([this.drivers$, this.fares$]).pipe(
+    map(([drivers, fares]: [(Driver & Entity)[], (Entity & Scheduled)[]]): DailyDriverPlanning[] =>
+      toDailyDriverPlanning(drivers, fares)
+    )
   );
 
   public readonly returnsToSchedule$: Observable<PendingPresentation[]> = this._route.params.pipe(
@@ -55,26 +62,48 @@ export class DailyPlanningLayout {
     private readonly _router: Router,
     private readonly _route: ActivatedRoute,
     @Inject(SCHEDULED_FARES_FOR_DATE_QUERY) private readonly _faresForDateQuery: ScheduledFaresForDateQuery,
-    @Inject(PENDING_RETURNS_FOR_DATE_QUERY) private readonly _pendingReturnsForDateQuery: PendingReturnsForDateQuery
+    @Inject(PENDING_RETURNS_FOR_DATE_QUERY) private readonly _pendingReturnsForDateQuery: PendingReturnsForDateQuery,
+    @Inject(LIST_DRIVERS_QUERY) private readonly _listDriversQuery: ListDriversQuery //@Inject(DELETE_FARE_ACTION) private readonly _deleteFare: DeleteFareAction,
   ) {}
 
   public async onPlanningDateChange(planningDate: string): Promise<void> {
     await this._router.navigate(['planning', 'daily', planningDate]);
   }
 
-  public onPlanningSlotClick: (timeInMinutes: number, context: unknown) => Promise<void> = onPlanningSlotClick$(
+  public onPlanningSlotClick: (timeInMinutes: number, context: unknown) => Promise<void> = openScheduleFarePage$(
     this._router,
     this.planningDate
   );
+
+  public onPlanningSessionClick: (session: unknown, context: unknown) => Promise<void> = openScheduleReturnPage$(this._router);
+
+  /*deleteFareAction$(
+    this._router,
+    this._deleteFare
+  );*/
 }
 
-const onPlanningSlotClick$ =
+const openScheduleFarePage$ =
   (router: Router, date: string) =>
   async (timeInMinutes: number, context: unknown): Promise<void> => {
     await router.navigate([
       'planning',
       'daily',
       'schedule-fare',
-      { date, timeInMinutes, driver: (context as DailyDriverPlanning).driver }
+      { date, timeInMinutes, driver: (context as DailyDriverPlanning).driver.identifier }
     ]);
   };
+
+const openScheduleReturnPage$ = (router: Router) => async (): Promise<void> => {
+  await router.navigate(['planning', 'daily', 'schedule-return']);
+};
+
+//const deleteFareAction$ =
+//  (router: Router, deleteAction: DeleteFareAction) =>
+//    async (fareFromPlanningSession: unknown): Promise<void> => {
+//      deleteAction((fareFromPlanningSession as ScheduledPlanningSession).id);
+//      await router.navigate([
+//        'planning',
+//        'daily'
+//      ]);
+//};

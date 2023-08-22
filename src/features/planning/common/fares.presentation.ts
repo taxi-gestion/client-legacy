@@ -1,11 +1,11 @@
 import { PlanningSession } from '../components/planning/planning-row/planning-row.component';
-import { Scheduled } from '@domain';
+import { Driver, Entity, Scheduled } from '@domain';
 
 export type DailyDriverPlanning = {
-  driver: string;
+  driver: Driver & Entity;
   fares: ScheduledPlanningSession[];
 };
 
 // Plannings, horizontal axis
-export type ScheduledPresentation = Scheduled & { localTime: string };
+export type ScheduledPresentation = Entity & Scheduled & { localTime: string };
 export type ScheduledPlanningSession = PlanningSession & ScheduledPresentation;

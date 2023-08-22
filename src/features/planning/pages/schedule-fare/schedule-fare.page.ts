@@ -19,7 +19,7 @@ import { format } from 'date-fns-tz';
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './schedule-fare.page.html'
 })
-export class ScheduleFarePage /*implements OnInit*/ {
+export class ScheduleFarePage {
   @Output() public scheduleFareSubmitted: EventEmitter<void> = new EventEmitter<void>();
 
   @Output() public scheduleFareSuccess: EventEmitter<void> = new EventEmitter<void>();
@@ -80,6 +80,7 @@ export class ScheduleFarePage /*implements OnInit*/ {
     @Inject(SCHEDULE_FARE_ACTION) private readonly _scheduleFareAction$: ScheduleFareAction,
     @Inject(ESTIMATE_JOURNEY_QUERY) private readonly _estimateJourneyQuery$: EstimateJourneyQuery
   ) {
+    // TODO Inject parent and use Observable to pass context
     const dateString: string | null = this._route.snapshot.paramMap.get('date') ?? format(new Date(), 'yyyy-MM-dd');
     const timeInMinutes: number = Number(this._route.snapshot.paramMap.get('timeInMinutes'));
     const driver: string | null = this._route.snapshot.paramMap.get('driver');

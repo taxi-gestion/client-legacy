@@ -1,7 +1,7 @@
 import { DailyDriverPlanning, ScheduledPlanningSession, ScheduledPresentation } from './fares.presentation';
 import { minutesSinceStartOfDayInTimezone, timeInTimezone } from './unit-convertion';
 import { secondsToMinutes } from 'date-fns';
-import { Place, Scheduled } from '@domain';
+import { Driver, Entity, Place, Scheduled } from '@domain';
 
 export const defaultPlaceValue: Place = {
   context: '',
@@ -12,42 +12,31 @@ export const defaultPlaceValue: Place = {
   }
 };
 
-export const groupByDriverPlanning = (faresList: ScheduledPlanningSession[]): DailyDriverPlanning[] => {
-  const groups: Record<string, ScheduledPlanningSession[]> = faresList.reduce<Record<string, ScheduledPlanningSession[]>>(
-    (
-      acc: Record<string, ScheduledPlanningSession[]>,
-      fare: ScheduledPlanningSession
-    ): Record<string, ScheduledPlanningSession[]> => {
-      if (acc[fare.driver] == null) {
-        // eslint-disable-next-line no-param-reassign
-        acc[fare.driver] = [];
-      }
-      acc[fare.driver]?.push(fare);
-      return acc;
-    },
-    {}
-  );
-
-  return Object.entries(groups).map<DailyDriverPlanning>(
-    ([driver, fares]: [string, ScheduledPlanningSession[]]): DailyDriverPlanning => ({
+export function toDailyDriverPlanning(drivers: (Driver & Entity)[], fares: (Entity & Scheduled)[]): DailyDriverPlanning[] {
+  return drivers.map((driver: Driver & Entity): DailyDriverPlanning => {
+    const associatedFares: (Entity & Scheduled)[] = fares.filter(
+      (fare: Entity & Scheduled): boolean => fare.driver === driver.identifier
+    );
+    return {
       driver,
-      fares
-    })
-  );
-};
+      fares: toFaresForDatePlanningSession(toScheduledFaresPresentation(associatedFares))
+    };
+  });
+}
 
 export const filterByPlanning =
   (planningToKeep: string) =>
   (faresList: ScheduledPresentation[]): ScheduledPresentation[] =>
     faresList.filter((fare: ScheduledPresentation): boolean => fare.driver === planningToKeep);
 
-export const toScheduledFaresPresentation = (fares: Scheduled[]): ScheduledPresentation[] =>
+export const toScheduledFaresPresentation = (fares: (Entity & Scheduled)[]): ScheduledPresentation[] =>
   fares.map(toScheduledFarePresentation);
 
 export const toFaresForDatePlanningSession = (fares: ScheduledPresentation[]): ScheduledPlanningSession[] =>
   fares.map(toScheduledPlanningSession);
 
-export const toScheduledFarePresentation = (fare: Scheduled): ScheduledPresentation => ({
+export const toScheduledFarePresentation = (fare: Entity & Scheduled): ScheduledPresentation => ({
+  id: fare.id,
   passenger: fare.passenger,
   departure: fare.departure,
   destination: fare.destination,
@@ -63,7 +52,7 @@ export const toScheduledFarePresentation = (fare: Scheduled): ScheduledPresentat
 });
 
 export const toScheduledPlanningSession = (fare: ScheduledPresentation): ScheduledPlanningSession => ({
-  startTimeInMinutes: minutesSinceStartOfDayInTimezone(fare.datetime, 'Europe/Paris'),
+  id: fare.id,
   passenger: fare.passenger,
   departure: fare.departure,
   destination: fare.destination,
@@ -75,5 +64,6 @@ export const toScheduledPlanningSession = (fare: ScheduledPresentation): Schedul
   driver: fare.driver,
   status: fare.status,
   datetime: fare.datetime,
-  localTime: fare.localTime
+  localTime: fare.localTime,
+  startTimeInMinutes: minutesSinceStartOfDayInTimezone(fare.datetime, 'Europe/Paris')
 });

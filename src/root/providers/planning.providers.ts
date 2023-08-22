@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { FactoryProvider, ValueProvider } from '@angular/core';
 import {
+  deleteFareAction$,
+  deleteFareActionProvider,
   faresForDateQuery$,
   pendingReturnsForDateQuery$,
   pendingReturnsForDateQueryProvider,
@@ -13,12 +15,18 @@ import {
   validatedScheduleReturnAction$
 } from '@features/planning';
 
-import { predictRecurrenceQuery$, predictRecurrenceQueryProvider } from '@features/common/recurrence';
-import { searchPlaceQuery$, searchPlaceQueryProvider } from '@features/common/place';
-import { searchUserQueryProvider } from '@features/common/user';
-import { cognitoListUsersWithDriverGroupQuery$ } from '@features/aws';
-import { estimateJourneyQuery$, estimateJourneyQueryProvider } from '@features/common/journey';
-import { searchPassengerQueryProvider, searchPassengersQuery$ } from '../../features/common/passenger';
+import {
+  estimateJourneyQuery$,
+  estimateJourneyQueryProvider,
+  listDriversQuery$,
+  listDriversQueryProvider,
+  predictRecurrenceQuery$,
+  predictRecurrenceQueryProvider,
+  searchPassengerQueryProvider,
+  searchPassengersQuery$,
+  searchPlaceQuery$,
+  searchPlaceQueryProvider
+} from '@features/common';
 
 export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   scheduleFareActionProvider(validatedScheduleFareAction$, [HttpClient]),
@@ -28,7 +36,8 @@ export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   scheduledFaresForDateQueryProvider(faresForDateQuery$, [HttpClient]),
   pendingReturnsForDateQueryProvider(pendingReturnsForDateQuery$, [HttpClient]),
   searchPlaceQueryProvider(searchPlaceQuery$, [HttpClient]),
-  searchUserQueryProvider(cognitoListUsersWithDriverGroupQuery$, [HttpClient]),
+  listDriversQueryProvider(listDriversQuery$, [HttpClient]),
   searchPassengerQueryProvider(searchPassengersQuery$, [HttpClient]),
-  estimateJourneyQueryProvider(estimateJourneyQuery$, [HttpClient])
+  estimateJourneyQueryProvider(estimateJourneyQuery$, [HttpClient]),
+  deleteFareActionProvider(deleteFareAction$, [HttpClient])
 ];

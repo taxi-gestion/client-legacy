@@ -11,9 +11,9 @@ import { PIPES } from '../pipes';
 import { PlanningFeatureRoutingModule } from './planning.feature-routing.module';
 import { PlaceComponentModule } from '@features/common/place';
 import { RecurrenceServiceModule } from '@features/common/recurrence';
-import { UserServiceModule } from '@features/common/user';
 import { JourneyQueriesModule } from '@features/common/journey';
 import { PassengerServiceModule } from '../../common/passenger';
+import { DriverServiceModule } from '@features/common/driver';
 
 @NgModule({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -28,7 +28,7 @@ import { PassengerServiceModule } from '../../common/passenger';
     JourneyQueriesModule,
     PlanningFeatureRoutingModule,
     RecurrenceServiceModule,
-    UserServiceModule,
+    DriverServiceModule,
     NavbarUiModule
   ],
   providers: [CanActivatePlanningRedirectGuard]
