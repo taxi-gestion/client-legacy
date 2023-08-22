@@ -61,4 +61,20 @@ export class DailyPlanningLayout {
   public async onPlanningDateChange(planningDate: string): Promise<void> {
     await this._router.navigate(['planning', 'daily', planningDate]);
   }
+
+  public onPlanningSlotClick: (timeInMinutes: number, context: unknown) => Promise<void> = onPlanningSlotClick$(
+    this._router,
+    this.planningDate
+  );
 }
+
+const onPlanningSlotClick$ =
+  (router: Router, date: string) =>
+  async (timeInMinutes: number, context: unknown): Promise<void> => {
+    await router.navigate([
+      'planning',
+      'daily',
+      'schedule-fare',
+      { date, timeInMinutes, driver: (context as DailyDriverPlanning).driver }
+    ]);
+  };

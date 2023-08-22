@@ -5,6 +5,7 @@ export const toStandardDateFormat = (date: Date): string => format(date, 'yyyy-M
 
 export const datetimeLocalToIso8601UTCString = (datetimeLocalISO8601: string): string =>
   new Date(datetimeLocalISO8601).toISOString();
+
 export const formatDateToDatetimeLocalString = (date: Date): string => format(date, "yyyy-MM-dd'T'HH:mm");
 
 export const minutesSinceStartOfDayInTimezone = (isoUtcDate: string, timeZone: string): number => {

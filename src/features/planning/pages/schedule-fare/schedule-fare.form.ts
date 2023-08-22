@@ -20,7 +20,7 @@ export type FareToSchedulePresentation = {
 export type ScheduleFareFields = {
   passenger: FormControl<string>;
   phoneToCall: FormControl<string>;
-  departureDatetime: FormControl<Date>;
+  departureDatetime: FormControl<string>;
   departurePlace: FormControl<Place>;
   arrivalPlace: FormControl<Place>;
   driveDuration: FormControl<number>;

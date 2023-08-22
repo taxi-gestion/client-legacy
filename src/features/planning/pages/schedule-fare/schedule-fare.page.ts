@@ -12,12 +12,14 @@ import {
 import { formatScheduleFareError, toFareToSchedule, toJourney } from './schedule-fare.presenter';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common/journey';
 import { Driver, isValidPlace, JourneyEstimate, Passenger, Place } from '@domain';
+import { ActivatedRoute } from '@angular/router';
+import { format } from 'date-fns-tz';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './schedule-fare.page.html'
 })
-export class ScheduleFarePage {
+export class ScheduleFarePage /*implements OnInit*/ {
   @Output() public scheduleFareSubmitted: EventEmitter<void> = new EventEmitter<void>();
 
   @Output() public scheduleFareSuccess: EventEmitter<void> = new EventEmitter<void>();
@@ -28,8 +30,11 @@ export class ScheduleFarePage {
     this._scheduleFareAction$(toFareToSchedule(SCHEDULE_FARE_FORM.value as FareToSchedulePresentation));
 
   public readonly scheduleFareForm: FormGroup<ScheduleFareFields> = SCHEDULE_FARE_FORM;
+
   private readonly _departure: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
+
   private readonly _destination: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
+
   public readonly estimateJourney$: Observable<JourneyEstimate> = combineLatest([this._departure, this._destination]).pipe(
     filter(([departure, destination]: [Place, Place]): boolean => isValidPlace(departure) && isValidPlace(destination)),
     switchMap(
@@ -67,10 +72,28 @@ export class ScheduleFarePage {
     this.scheduleFareForm.controls.passenger.setValue(search);
   }
 
+  public defaultDriver: string = '';
+
+  // eslint-disable-next-line max-statements
   public constructor(
+    private readonly _route: ActivatedRoute,
     @Inject(SCHEDULE_FARE_ACTION) private readonly _scheduleFareAction$: ScheduleFareAction,
     @Inject(ESTIMATE_JOURNEY_QUERY) private readonly _estimateJourneyQuery$: EstimateJourneyQuery
-  ) {}
+  ) {
+    const dateString: string | null = this._route.snapshot.paramMap.get('date') ?? format(new Date(), 'yyyy-MM-dd');
+    const timeInMinutes: number = Number(this._route.snapshot.paramMap.get('timeInMinutes'));
+    const driver: string | null = this._route.snapshot.paramMap.get('driver');
+    //const initialValue: string = dateString === null ? new Date() : new Date(`${dateString}`)
+
+    const date: Date = new Date(dateString);
+    date.setHours(timeInMinutes / 60, timeInMinutes % 60);
+    this.scheduleFareForm.controls.departureDatetime.setValue(`${format(date, 'yyyy-MM-dd')}T${format(date, 'HH:mm')}`);
+
+    if (driver != null) {
+      this.scheduleFareForm.controls.driver.setValue(driver);
+      this.defaultDriver = driver;
+    }
+  }
 
   public onSubmitFareToSchedule = (triggerAction: () => void): void => {
     SCHEDULE_FARE_FORM.markAllAsTouched();

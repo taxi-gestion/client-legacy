@@ -4,10 +4,12 @@
   </div>
   <div
     class="border-start-dashed border-2"
+    (click)="onPlanningSlotClicked(timeInMinutes, rowContext)"
     [style.width.px]="planning.columnWidth"
     *ngFor="let timeInMinutes of planning.timesInMinutes$ | async">
     <ng-container *ngFor="let session of sessions">
       <div
+        (click)="onPlanningSessionClicked(session, rowContext, $event)"
         *ngIf="
           timeInMinutes + planning.interval - session.startTimeInMinutes > 0 &&
           timeInMinutes + planning.interval - session.startTimeInMinutes <= planning.interval

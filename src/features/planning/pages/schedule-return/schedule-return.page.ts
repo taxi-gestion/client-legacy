@@ -42,12 +42,17 @@ export class ScheduleReturnPage {
   }
 
   private readonly _departureDisplayLabel$: Subject<string> = new Subject<string>();
+
   public departureDisplayLabel$: Observable<string> = this._departureDisplayLabel$.asObservable();
 
   private readonly _destinationDisplayLabel$: Subject<string> = new Subject<string>();
+
   public destinationDisplayLabel$: Observable<string> = this._destinationDisplayLabel$.asObservable();
+
   private readonly _driverDisplayLabel$: Subject<string> = new Subject<string>();
+
   public driverDisplayLabel$: Observable<string> = this._driverDisplayLabel$.asObservable();
+
   public onSelectPendingReturnChange(pendingReturn: PendingPresentation): void {
     this.scheduleReturnForm.controls.pendingReturnId.setValue(pendingReturn.pendingReturnId);
     this.scheduleReturnForm.controls.departurePlace.setValue(pendingReturn.departurePlace);
