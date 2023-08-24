@@ -23,8 +23,8 @@
     </ul>
   </app-navbar>
   <div class="d-flex flex-grow-1 overflow-hidden g-0">
-    <div id="main-content" class="d-flex flex-column overflow-auto" [ngClass]="dailyOutlet.isActivated ? 'col-9' : 'col'">
-      <div class="p-3">
+    <div class="d-flex flex-column overflow-y-auto" [ngClass]="dailyOutlet.isActivated ? 'col-9' : 'col'">
+      <div class="p-3 sticky-top bg-light shadow-sm" style="left: 0">
         <h1>
           Planning du
           <input
@@ -34,13 +34,13 @@
             class="form-control form-control-lg w-auto d-inline align-bottom"
             (change)="onPlanningDateChange(planningField.value)" />
         </h1>
-        <div class="lead mb-3">
+        <div class="lead mb-1">
           <app-planning-settings (planningSettingsChange)="planningSettings = $event"></app-planning-settings>
         </div>
       </div>
-      <div class="flex-grow-1" *ngIf="plannings$ | async as plannings">
+      <div class="flex-grow-1 pt-2" *ngIf="plannings$ | async as plannings">
         <app-planning [interval]="planningSettings.interval" [start]="planningSettings.start" [end]="planningSettings.end">
-          <b slot="title">Planning des chauffeurs</b>
+          <b class="p-2" slot="title">Planning des chauffeurs</b>
           <app-planning-row
             class="d-flex"
             *ngFor="let planning of plannings"
@@ -58,10 +58,7 @@
         </app-planning>
       </div>
     </div>
-    <div
-      id="action-outlet"
-      class="shadow p-4 border-start bg-white overflow-auto"
-      [ngClass]="dailyOutlet.isActivated ? 'col-3' : 'd-none'">
+    <div class="shadow p-4 border-start bg-white overflow-auto" [ngClass]="dailyOutlet.isActivated ? 'col-3' : 'd-none'">
       <router-outlet #dailyOutlet="outlet"></router-outlet>
     </div>
   </div>
