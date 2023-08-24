@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { combineLatest, map, Observable, Subject, switchMap, take } from 'rxjs';
+import { combineLatest, map, Observable, of, switchMap, take } from 'rxjs';
 import { PlanningSettings } from '../../components/planning/planning-settings/planning-settings.component';
 import { DEFAULT_END_HOUR, DEFAULT_START_HOUR } from '../../components/planning/planning-settings/planning-settings.form';
 import { toDailyDriverPlanning } from '../../common/fares.presenter';
@@ -34,9 +34,7 @@ export class DailyPlanningLayout {
 
   public planningSettings: PlanningSettings = DEFAULT_PLANNING_SETTINGS;
 
-  private readonly _drivers: Subject<(Driver & Entity)[]> = new Subject<(Driver & Entity)[]>();
-
-  public readonly drivers$: Observable<(Driver & Entity)[]> = this._drivers.pipe(
+  public readonly drivers$: Observable<(Driver & Entity)[]> = of([]).pipe(
     switchMap((): Observable<(Driver & Entity)[]> => this._listDriversQuery()),
     take(1)
   );
