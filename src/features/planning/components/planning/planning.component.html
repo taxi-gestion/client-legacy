@@ -1,5 +1,5 @@
-<div class="d-flex overflow-auto flex-wrap py-4 h-100">
-  <div class="d-flex">
+<div class="d-flex flex-wrap py-4 h-100 flex-column">
+  <div class="d-flex flex-grow-0 flex-shrink-0">
     <div class="position-sticky start-0 bg-light me-4" style="width: 200px; margin-top: -25px; padding-top: 25px; z-index: 1">
       <ng-content select="[slot=title]"></ng-content>
     </div>
@@ -7,5 +7,7 @@
       <div class="d-inline-flex" style="transform: translate(-50%, -100%)">{{ timeInMinutes | minutesToTime }}</div>
     </div>
   </div>
-  <ng-content select="app-planning-row"></ng-content>
+  <div class="d-flex flex-grow-1 flex-shrink-1 overflow-auto flex-column">
+    <ng-content select="app-planning-row"></ng-content>
+  </div>
 </div>
