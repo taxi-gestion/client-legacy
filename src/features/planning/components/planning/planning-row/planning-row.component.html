@@ -1,9 +1,9 @@
 <div class="d-flex">
-  <div class="position-sticky start-0 bg-white shadow border-bottom p-2 me-4" style="width: 200px; z-index: 1">
+  <div class="position-sticky start-0 bg-white shadow border-bottom p-2 me-4 overflow-hidden" style="width: 200px; z-index: 1">
     <ng-content select="[slot=header]"></ng-content>
   </div>
   <div
-    class="border-start-dashed border-2"
+    class="border-start-dashed border-2 planning-slot"
     (click)="onPlanningSlotClicked(timeInMinutes, rowContext)"
     [style.width.px]="planning.columnWidth"
     *ngFor="let timeInMinutes of planning.timesInMinutes$ | async">

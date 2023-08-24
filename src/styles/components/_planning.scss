@@ -1,0 +1,20 @@
+app-planning-row {
+  flex: 1 0 0; /* grow, don't shrink, base size of 0 */
+  display: flex;
+  flex-direction: row;
+  margin: 0;
+  padding: 0;
+}
+
+app-planning-row > div {
+  display: flex;
+  flex: 1;
+}
+
+.planning-slot {
+  transition: transform 0.3s, background-color 0.3s; /* Smooth transition effect */
+}
+
+.planning-slot:hover {
+  background-color: #5f82c2;
+}
