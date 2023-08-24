@@ -23,8 +23,8 @@
     </ul>
   </app-navbar>
   <div class="d-flex flex-grow-1 overflow-hidden g-0">
-    <div id="main-content" class="d-flex flex-column overflow-y-auto" [ngClass]="dailyOutlet.isActivated ? 'col-9' : 'col'">
-      <div id="title-and-settings" class="p-3 sticky-top bg-light shadow-sm">
+    <div class="d-flex flex-column overflow-y-auto" [ngClass]="dailyOutlet.isActivated ? 'col-9' : 'col'">
+      <div class="p-3 sticky-top bg-light shadow-sm" style="left: 0">
         <h1>
           Planning du
           <input
@@ -58,10 +58,7 @@
         </app-planning>
       </div>
     </div>
-    <div
-      id="action-outlet"
-      class="shadow p-4 border-start bg-white overflow-auto"
-      [ngClass]="dailyOutlet.isActivated ? 'col-3' : 'd-none'">
+    <div class="shadow p-4 border-start bg-white overflow-auto" [ngClass]="dailyOutlet.isActivated ? 'col-3' : 'd-none'">
       <router-outlet #dailyOutlet="outlet"></router-outlet>
     </div>
   </div>
