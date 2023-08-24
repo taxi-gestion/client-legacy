@@ -19,6 +19,10 @@ export type Passenger = {
   phone: string;
 };
 
+export type Nature = {
+  nature: 'medical' | 'standard';
+};
+
 export type Regular = {
   firstname: string;
   lastname: string;
@@ -28,10 +32,6 @@ export type Regular = {
 export type Driver = {
   identifier: string;
   username: string;
-};
-
-export type Nature = {
-  nature: 'medical' | 'standard';
 };
 
 export type FareToSchedule = Drive &

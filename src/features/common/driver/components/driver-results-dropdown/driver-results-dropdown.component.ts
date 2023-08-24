@@ -15,12 +15,12 @@ const DEFAULT_INDEX: number = -1;
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  exportAs: 'userResultsDropdown',
+  exportAs: 'driverResultsDropdown',
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: '[appUserResultsDropdown]',
-  templateUrl: './user-results-dropdown.component.html'
+  selector: '[appDriverResultsDropdown]',
+  templateUrl: './driver-results-dropdown.component.html'
 })
-export class UserResultsDropdownComponent {
+export class DriverResultsDropdownComponent {
   private _expanded: boolean = false;
 
   private readonly _expanded$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this._expanded);

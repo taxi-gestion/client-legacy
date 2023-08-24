@@ -5,7 +5,7 @@ import { SCHEDULED_FARES_FOR_DATE_QUERY, ScheduledFaresForDateQuery } from '@fea
 import { SESSION_PERSISTENCE, Session } from '../../../authentication';
 import { filterByPlanning, toScheduledFaresPresentation } from '../../common/fares.presenter';
 import { toStandardDateFormat } from '../../common/unit-convertion';
-import { Scheduled } from '@domain';
+import { Entity, Scheduled } from '@domain';
 import { ScheduledPresentation } from '../../common/fares.presentation';
 
 const paramsToDateString = (params: Params): string =>
@@ -19,7 +19,7 @@ export class DriverAgendaPage {
   public planningDate: string = paramsToDateString(this._route.snapshot.params);
 
   public readonly agenda$: Observable<ScheduledPresentation[]> = this._route.params.pipe(
-    switchMap((params: Params): Observable<Scheduled[]> => this._faresForDateQuery(paramsToDateString(params))),
+    switchMap((params: Params): Observable<(Entity & Scheduled)[]> => this._faresForDateQuery(paramsToDateString(params))),
     map(toScheduledFaresPresentation),
     map(filterByPlanning(this._session.username()))
   );

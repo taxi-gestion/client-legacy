@@ -40,8 +40,14 @@
       </div>
       <div class="flex-grow-1" *ngIf="plannings$ | async as plannings">
         <app-planning [interval]="planningSettings.interval" [start]="planningSettings.start" [end]="planningSettings.end">
-          <app-planning-row *ngFor="let planning of plannings" [sessions]="planning.fares" [template]="fare">
-            <b slot="header" class="text-capitalize">{{ planning.driver }}</b>
+          <app-planning-row
+            *ngFor="let planning of plannings"
+            [rowContext]="planning"
+            [sessions]="planning.fares"
+            [template]="fare"
+            [onSlotClickAction]="onPlanningSlotClick"
+            [onSessionClickAction]="onPlanningSessionClick">
+            <b slot="header">{{ planning.driver.username }}</b>
             <ng-template #fare let-fare="session">
               <app-fare-planning-session [fare]="fare"></app-fare-planning-session>
             </ng-template>

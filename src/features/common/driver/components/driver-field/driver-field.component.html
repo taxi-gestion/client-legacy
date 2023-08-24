@@ -1,0 +1,56 @@
+<form [formGroup]="formGroup">
+  <label for="driver" class="visually-hidden"><ng-content></ng-content></label>
+  <div class="input-group">
+    <span class="input-group-text pe-0">
+      <i class="text-muted ri-search-line" aria-hidden="true"></i>
+    </span>
+    <input
+      #driverInput
+      type="search"
+      placeholder="Rechercher un chauffeur par son nom, prénom..."
+      name="driver"
+      id="driver"
+      class="form-control border-start-0"
+      autocomplete="off"
+      aria-describedby="driver"
+      aria-haspopup="true"
+      formControlName="driver"
+      [attr.aria-describedby]="driverNotFound ? 'driver-desc-error' : null"
+      [attr.aria-expanded]="driverResultsDropdown.expanded$ | async"
+      (input)="
+        search(driverInput.value);
+        driverInput.value.length <= minSearchTermLength ? driverResultsDropdown.reduce() : driverResultsDropdown.expand()
+      "
+      (focus)="
+        driverInput.value.length <= minSearchTermLength ? driverResultsDropdown.reduce() : driverResultsDropdown.expand()
+      "
+      (keyup.escape)="driverResultsDropdown.reduce()"
+      (keyup.enter)="driverResultsDropdown.activeIndex = 0; driverResultsDropdown.focus()" />
+    <button type="button" *ngIf="driverInput.value && displayReset" class="btn input-group-btn" (click)="clear()">
+      <i class="ri-close-line"></i>
+    </button>
+    <ng-content></ng-content>
+  </div>
+  <ul
+    #driverResultsDropdown="driverResultsDropdown"
+    appDriverResultsDropdown
+    [dropdownControl]="driverInput"
+    [class.show]="driverResultsDropdown.expanded$ | async"
+    class="dropdown-menu position-absolute mt-1"
+    aria-labelledby="driver">
+    <li #results *ngFor="let driver of (driversFound$ | async) ?? []; index as driverIndex; trackBy: trackByDriverId">
+      <button
+        type="button"
+        class="dropdown-item"
+        [class.active]="driverResultsDropdown.activeIndex === driverIndex"
+        [attr.aria-current]="driverResultsDropdown.activeIndex === driverIndex ? true : null"
+        (focusin)="driverResultsDropdown.setIndex(driverIndex)"
+        (focusout)="driverResultsDropdown.setIndex(-1)"
+        (click)="setDriverSuggestion(driver); driverResultsDropdown.reduce()">
+        <b>{{ driver.username }}</b>
+        <br />
+        <small>{{ driver.identifier }}</small>
+      </button>
+    </li>
+  </ul>
+</form>
