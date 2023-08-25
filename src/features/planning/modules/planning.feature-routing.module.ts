@@ -22,7 +22,7 @@ const DAILY_PAGES: Routes = [
     component: ScheduleReturnPage
   },
   {
-    path: 'register-regular',
+    path: 'schedule-fare/register-regular',
     component: RegisterRegularPage
   }
 ];

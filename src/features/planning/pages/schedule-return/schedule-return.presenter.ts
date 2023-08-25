@@ -1,4 +1,4 @@
-import { datetimeLocalToIso8601UTCString } from '../../common/unit-convertion';
+import { datetimeLocalToIso8601UTCString, metersToKilometers, minutesToSeconds } from '../../common/unit-convertion';
 import { Entity, ReturnToSchedule } from '@domain';
 import { PendingPresentation } from '../../common';
 import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
@@ -9,8 +9,8 @@ export const toReturnToSchedule = (formValues: PendingPresentation): Entity & Re
   destination: formValues.arrivalPlace,
   driver: formValues.driver,
   datetime: datetimeLocalToIso8601UTCString(formValues.departureDatetime),
-  duration: formValues.driveDuration,
-  distance: formValues.driveDistance,
+  distance: metersToKilometers(formValues.driveDistance),
+  duration: minutesToSeconds(formValues.driveDuration),
   kind: 'two-way',
   status: 'return-to-schedule'
 });

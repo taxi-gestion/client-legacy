@@ -1,16 +1,25 @@
-import { datetimeLocalToIso8601UTCString } from '../../common/unit-convertion';
+import {
+  datetimeLocalToIso8601UTCString,
+  formatDateToDatetimeLocalString,
+  metersToKilometers,
+  minutesToSeconds
+} from '../../common/unit-convertion';
 import { FareToSchedulePresentation } from './schedule-fare.form';
 import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
 import { Journey, FareToSchedule } from '@domain';
+import { addMinutes, subHours } from 'date-fns';
+
+export const toLocalDatetimeString = (dateString: string, timeInMinutes: number): string =>
+  formatDateToDatetimeLocalString(subHours(addMinutes(new Date(dateString), timeInMinutes), 2));
 
 export const toFareToSchedule = (formValues: FareToSchedulePresentation): FareToSchedule => ({
   //recurrence: formValues.recurrence,
   destination: formValues.arrivalPlace,
   datetime: datetimeLocalToIso8601UTCString(formValues.departureDatetime),
   departure: formValues.departurePlace,
-  distance: formValues.driveDistance,
+  distance: metersToKilometers(formValues.driveDistance),
   driver: formValues.driver,
-  duration: formValues.driveDuration,
+  duration: minutesToSeconds(formValues.driveDuration),
   kind: formValues.isTwoWayDrive ? 'two-way' : 'one-way',
   nature: formValues.isMedicalDrive ? 'medical' : 'standard',
   passenger: formValues.passenger,

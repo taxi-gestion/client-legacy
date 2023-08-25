@@ -15,11 +15,6 @@
           </span>
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" ariaCurrentWhenActive="page" routerLinkActive="active" [routerLink]="'register-regular'">
-          Enregistrer un passager régulier
-        </a>
-      </li>
     </ul>
   </app-navbar>
   <div class="d-flex flex-grow-1 overflow-hidden g-0">
@@ -30,7 +25,7 @@
           <input
             #planningField
             type="date"
-            [value]="planningDate"
+            [value]="planningDay"
             class="form-control form-control-lg w-auto d-inline align-bottom"
             (change)="onPlanningDateChange(planningField.value)" />
         </h1>
@@ -47,8 +42,8 @@
             [rowContext]="planning"
             [sessions]="planning.fares"
             [template]="fare"
-            [onSlotClickAction]="onPlanningSlotClick"
-            [onSessionClickAction]="onPlanningSessionClick">
+            (selectSlot)="onPlanningSlotClick($event)"
+            (selectSession)="onPlanningSessionClick($event)">
             <b slot="header">{{ planning.driver.username }}</b>
 
             <ng-template #fare let-fare="session">
