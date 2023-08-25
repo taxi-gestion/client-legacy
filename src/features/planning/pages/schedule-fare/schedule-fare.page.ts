@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { BehaviorSubject, combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap } from 'rxjs';
 import { defaultPlaceValue } from '../../common/fares.presenter';
 import { SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../providers';
 import {
@@ -9,11 +9,13 @@ import {
   ScheduleFareFields,
   setScheduleFareErrorToForm
 } from './schedule-fare.form';
-import { formatScheduleFareError, toFareToSchedule, toJourney } from './schedule-fare.presenter';
+import { formatScheduleFareError, toFareToSchedule, toJourney, toLocalDatetimeString } from './schedule-fare.presenter';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common/journey';
-import { Driver, isValidPlace, JourneyEstimate, Passenger, Place } from '@domain';
-import { ActivatedRoute } from '@angular/router';
-import { format } from 'date-fns-tz';
+import { Driver, DurationDistance, isValidPlace, JourneyEstimate, Passenger, Place } from '@domain';
+import { toDisplayDurationDistance } from '../../common/unit-convertion';
+import { DailyPlanningLayout } from '../../layouts';
+import { SlotContext } from '../../components/planning/planning-row/planning-row.component';
+import { DailyDriverPlanning } from '../../common/fares.presentation';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,13 +37,14 @@ export class ScheduleFarePage {
 
   private readonly _destination: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
 
-  public readonly estimateJourney$: Observable<JourneyEstimate> = combineLatest([this._departure, this._destination]).pipe(
+  public readonly estimateJourney$: Observable<DurationDistance> = combineLatest([this._departure, this._destination]).pipe(
     filter(([departure, destination]: [Place, Place]): boolean => isValidPlace(departure) && isValidPlace(destination)),
     switchMap(
       (): Observable<JourneyEstimate> =>
         this._estimateJourneyQuery$(toJourney(SCHEDULE_FARE_FORM.value as FareToSchedulePresentation))
     ),
-    tap((estimate: JourneyEstimate): void => this.onJourneyEstimateReceived(estimate))
+    map(toDisplayDurationDistance),
+    tap((estimate: DurationDistance): void => this.onJourneyEstimateReceived(estimate))
   );
 
   public onSelectDepartureChange(place: Place): void {
@@ -63,47 +66,37 @@ export class ScheduleFarePage {
     this.scheduleFareForm.controls.phoneToCall.setValue(passenger.phone);
   }
 
-  public onJourneyEstimateReceived(estimate: JourneyEstimate): void {
-    this.scheduleFareForm.controls.driveDuration.setValue(estimate.durationInSeconds);
-    this.scheduleFareForm.controls.driveDistance.setValue(estimate.distanceInMeters);
+  public onJourneyEstimateReceived(durationDistance: DurationDistance): void {
+    this.scheduleFareForm.controls.driveDuration.setValue(durationDistance.duration);
+    this.scheduleFareForm.controls.driveDistance.setValue(durationDistance.distance);
   }
 
   public onSearchPassengerTermChange(search: string): void {
     this.scheduleFareForm.controls.passenger.setValue(search);
   }
 
-  public defaultDriver: string = '';
+  public selectedSlotContext$: Observable<SlotContext<DailyDriverPlanning>> = this._planning.selectedSlotContext$.pipe(
+    filter(Boolean),
+    tap((context: SlotContext<DailyDriverPlanning>): void => this.updateLinkedFields(context))
+  );
 
-  // eslint-disable-next-line max-statements
+  public updateLinkedFields(context: SlotContext<DailyDriverPlanning>): void {
+    this.scheduleFareForm.controls.departureDatetime.setValue(
+      toLocalDatetimeString(this._planning.planningDay, context.startTimeInMinutes)
+    );
+    this.scheduleFareForm.controls.driver.setValue(context.rowContext.driver.identifier);
+  }
+
   public constructor(
-    private readonly _route: ActivatedRoute,
+    private readonly _planning: DailyPlanningLayout,
     @Inject(SCHEDULE_FARE_ACTION) private readonly _scheduleFareAction$: ScheduleFareAction,
     @Inject(ESTIMATE_JOURNEY_QUERY) private readonly _estimateJourneyQuery$: EstimateJourneyQuery
-  ) {
-    // TODO Inject parent and use Observable to pass context
-    const dateString: string | null = this._route.snapshot.paramMap.get('date') ?? format(new Date(), 'yyyy-MM-dd');
-    const timeInMinutes: number = Number(this._route.snapshot.paramMap.get('timeInMinutes'));
-    const driver: string | null = this._route.snapshot.paramMap.get('driver');
-    //const initialValue: string = dateString === null ? new Date() : new Date(`${dateString}`)
-
-    const date: Date = new Date(dateString);
-    date.setHours(timeInMinutes / 60, timeInMinutes % 60);
-    this.scheduleFareForm.controls.departureDatetime.setValue(`${format(date, 'yyyy-MM-dd')}T${format(date, 'HH:mm')}`);
-
-    if (driver != null) {
-      this.scheduleFareForm.controls.driver.setValue(driver);
-      this.defaultDriver = driver;
-    }
-  }
+  ) {}
 
   public onSubmitFareToSchedule = (triggerAction: () => void): void => {
     SCHEDULE_FARE_FORM.markAllAsTouched();
     SCHEDULE_FARE_FORM.valid && triggerAction();
   };
-
-  /*  public onPredictRecurrenceSuccessChange = (predictedRecurrence: PredictedRecurrence): void => {
-    this.scheduleFareForm.controls.recurrence.setValue(predictedRecurrence);
-  };*/
 
   public onScheduleFareActionSuccess = (): void => {
     SCHEDULE_FARE_FORM.reset();

@@ -1,10 +1,22 @@
-import { ChangeDetectionStrategy, Component, Input, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { PlanningComponent } from '../planning.component';
-import { scaleForMinutesRelativeToOneHour } from './planning-row.presenter';
+import { scaleForMinutesRelativeToOneHour, toContextualizedSession, toContextualizedSlot } from './planning-row.presenter';
 
-export type PlanningSession = {
-  startTimeInMinutes: number;
+export type PlanningSession = StartTime & {
   duration: number;
+};
+
+export type StartTime = {
+  startTimeInMinutes: number;
+};
+
+export type SlotContext<RowContext> = StartTime & {
+  rowContext: RowContext;
+};
+
+export type SessionContext<Session, Row> = PlanningSession & {
+  rowContext: Row;
+  sessionContext: Session;
 };
 
 @Component({
@@ -12,12 +24,18 @@ export type PlanningSession = {
   selector: 'app-planning-row',
   templateUrl: './planning-row.component.html'
 })
-export class PlanningRowComponent {
-  @Input({ required: true }) public sessions: PlanningSession[] = [];
+export class PlanningRowComponent<Row, Session extends PlanningSession> {
+  @Input({ required: true }) public sessions: Session[] = [];
 
   @Input() public rowContext: unknown = null;
 
-  @Input({ required: true }) public template!: TemplateRef<{ session: PlanningSession }>;
+  @Output() public readonly selectSlot: EventEmitter<SlotContext<Row>> = new EventEmitter<SlotContext<Row>>();
+
+  @Output() public readonly selectSession: EventEmitter<SessionContext<Session, Row>> = new EventEmitter<
+    SessionContext<Session, Row>
+  >();
+
+  @Input({ required: true }) public template!: TemplateRef<{ session: Session }>;
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   @Input() public onSlotClickAction: (timeInMinutes: number, context: unknown) => void = (): void => {};
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -27,12 +45,12 @@ export class PlanningRowComponent {
 
   public offsetForMinutes: (minutes: number, scale: number) => number = scaleForMinutesRelativeToOneHour;
 
-  public onPlanningSlotClicked(timeInMinutes: number, context: unknown): void {
-    this.onSlotClickAction(timeInMinutes, context);
+  public onPlanningSlotClicked(startTimeInMinutes: number, rowContext: unknown): void {
+    this.selectSlot.emit(toContextualizedSlot(rowContext as Row, { startTimeInMinutes }));
   }
 
-  public onPlanningSessionClicked(session: unknown, context: unknown, clickEvent: Event): void {
+  public onPlanningSessionClicked(sessionContext: unknown, rowContext: unknown, clickEvent: Event): void {
     clickEvent.stopPropagation();
-    this.onSessionClickAction(session, context);
+    this.selectSession.emit(toContextualizedSession(sessionContext as Session, rowContext as Row));
   }
 }
