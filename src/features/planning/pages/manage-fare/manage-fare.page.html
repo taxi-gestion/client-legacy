@@ -1,0 +1,26 @@
+<div class="d-flex">
+  <h2 class="pt-2 pb-4 text-primary">Gérer la course</h2>
+  <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
+    <i class="ri-close-line ri-2x" aria-hidden="true"></i>
+    <span class="visually-hidden">Fermer</span>
+  </a>
+</div>
+Résumé:
+<pre>{{ selectedSessionDetails$ | async }}</pre>
+<button
+  [appLoadAction]="deleteFare$"
+  #loadAction="loadAction"
+  (actionSuccess)="onActionSuccess()"
+  (actionError)="onManageFareActionError($event)"
+  (click)="onClickDeleteFare(loadAction.start)"
+  [appLoadActionDisplay]="loadAction.isLoading$ | async"
+  #loadActionDisplay
+  type="submit"
+  class="btn btn-warning mt-5 p-3 w-100"
+  [disabled]="loadActionDisplay.isLoading">
+  <ng-container slot="loadActionDisplayIdle">Supprimer la course</ng-container>
+  <ng-container slot="loadActionDisplayLoading">
+    <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+    Suppression en cours...
+  </ng-container>
+</button>

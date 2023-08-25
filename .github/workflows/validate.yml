@@ -28,7 +28,7 @@ jobs:
     name: Validation
     uses: codingones/github-actions-workflows/.github/workflows/node-validation-matrix.yml@main
     with:
-      validation-commands: '["yarn build", "yarn lint.commit", "yarn prettier.check", "yarn test"]'
+      validation-commands: '["yarn build", "yarn lint.commit", "yarn lint.es", "yarn prettier.check", "yarn test"]'
       fail-fast: false
       package-manager: 'yarn'
       install-dependencies-command: 'yarn install --frozen-lockfile'

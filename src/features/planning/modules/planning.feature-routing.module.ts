@@ -8,7 +8,8 @@ import {
   ManagerDriverChoicePage,
   MissingAdminConfigurationPage,
   ScheduleFarePage,
-  RegisterRegularPage
+  RegisterRegularPage,
+  ManageFarePage
 } from '../pages';
 import { CanActivatePlanningRedirectGuard } from '../guards';
 
@@ -24,6 +25,10 @@ const DAILY_PAGES: Routes = [
   {
     path: 'schedule-fare/register-regular',
     component: RegisterRegularPage
+  },
+  {
+    path: 'manage-fare',
+    component: ManageFarePage
   }
 ];
 
