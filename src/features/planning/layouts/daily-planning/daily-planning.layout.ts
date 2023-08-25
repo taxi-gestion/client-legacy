@@ -80,15 +80,15 @@ export class DailyPlanningLayout {
   //);
 
   public async onPlanningSlotClick(slotContext: SlotContext<DailyDriverPlanning>): Promise<void> {
-    await this._router.navigate(['planning', 'daily', 'schedule-fare']);
+    await this._router.navigate(['schedule-fare'], { relativeTo: this._route });
     this.selectedSlotContext$.next(slotContext);
   }
 
   public async onPlanningSessionClick(
     sessionContext: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>
   ): Promise<void> {
-    await this._router.navigate(['planning', 'daily', 'schedule-return']);
-    this.selectedSlotContext$.next(sessionContext);
+    await this._router.navigate(['manage-fare'], { relativeTo: this._route });
+    this.selectedSessionContext$.next(sessionContext);
   }
 
   /*deleteFareAction$(

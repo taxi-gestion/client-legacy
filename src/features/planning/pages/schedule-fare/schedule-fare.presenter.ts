@@ -1,7 +1,7 @@
 import {
   datetimeLocalToIso8601UTCString,
   formatDateToDatetimeLocalString,
-  metersToKilometers,
+  kilometersToMeters,
   minutesToSeconds
 } from '../../common/unit-convertion';
 import { FareToSchedulePresentation } from './schedule-fare.form';
@@ -17,7 +17,7 @@ export const toFareToSchedule = (formValues: FareToSchedulePresentation): FareTo
   destination: formValues.arrivalPlace,
   datetime: datetimeLocalToIso8601UTCString(formValues.departureDatetime),
   departure: formValues.departurePlace,
-  distance: metersToKilometers(formValues.driveDistance),
+  distance: kilometersToMeters(formValues.driveDistance),
   driver: formValues.driver,
   duration: minutesToSeconds(formValues.driveDuration),
   kind: formValues.isTwoWayDrive ? 'two-way' : 'one-way',
