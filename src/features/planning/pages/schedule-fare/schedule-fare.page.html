@@ -12,10 +12,6 @@
   (actionSuccess)="onScheduleFareActionSuccess()"
   (actionError)="onScheduleFareActionError($event)"
   (ngSubmit)="onSubmitFareToSchedule(loadAction.start)">
-  <!-- TODO Replace with
-  <app-estimate-fields [form]="form" [estimateJourney]="estimateJourney$ | async"></app-estimate-fields>
--->
-  <div *ngIf="estimateJourney$ | async"></div>
   <div class="mb-3">
     <label for="passenger" class="form-label">Identité du passager</label>
     <app-passenger-field
@@ -53,6 +49,7 @@
       name="departureDatetime"
       formControlName="departureDatetime" />
   </div>
+
   <div class="mb-3">
     <label for="departurePlace" class="form-label">Lieu de départ</label>
     <app-place-field (selectPlace)="onSelectDepartureChange($event)"></app-place-field>
@@ -63,6 +60,11 @@
     <app-place-field (selectPlace)="onSelectArrivalChange($event)"></app-place-field>
     <input id="arrivalPlace" type="hidden" name="arrivalPlace" formControlName="arrivalPlace" />
   </div>
+
+  <app-estimate-journey-fields
+    [form]="$any(scheduleFareForm)"
+    [estimateJourney]="estimateJourney$ | async"></app-estimate-journey-fields>
+
   <div class="mb-3">
     <label for="driveDuration" class="form-label">Durée du trajet</label>
     <div class="input-group">
@@ -93,6 +95,7 @@
       </div>
     </div>
   </div>
+
   <div class="mb-3">
     <label for="driver" class="form-label">Chauffeur</label>
     <!-- TODO Find a better way to link observable to view -->

@@ -1,8 +1,8 @@
+import { ScheduleFarePage } from './schedule-fare/schedule-fare.page';
 import { ScheduleReturnPage } from './schedule-return/schedule-return.page';
 import { DriverAgendaPage } from './driver-agenda/driver-agenda.page';
 import { ManagerDriverChoicePage } from './manager-driver-choice/manager-driver-choice.page';
 import { MissingAdminConfigurationPage } from './missing-admin-configuration/missing-admin-configuration.page';
-import { ScheduleFarePage } from './schedule-fare/schedule-fare.page';
 import { RegisterRegularPage } from './register-regular/register-regular.page';
 import { ManageFarePage } from './manage-fare/manage-fare.page';
 

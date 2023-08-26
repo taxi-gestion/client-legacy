@@ -1,35 +1,28 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { defaultPlaceValue } from '../../common/fares.presenter';
 import { Place } from '@domain';
+import { defaultPlaceValue } from '../../common/fares.presenter';
+import { ESTIMATE_JOURNEY_FORM_CONTROLS, EstimateJourneyFields, EstimateJourneyValues } from '../../components';
 
-export type FareToSchedulePresentation = {
+export type FareToSchedulePresentation = EstimateJourneyValues & {
   passenger: string;
   phoneToCall: string;
   departureDatetime: string;
   departurePlace: Place;
   arrivalPlace: Place;
-  driveDuration: number;
-  driveDistance: number;
   driver: string;
   isTwoWayDrive: boolean;
   isMedicalDrive: boolean;
-
-  //repetition: PredictedRecurrence | undefined;
 };
 
-export type ScheduleFareFields = {
+export type ScheduleFareFields = EstimateJourneyFields & {
   passenger: FormControl<string>;
   phoneToCall: FormControl<string>;
   departureDatetime: FormControl<string>;
   departurePlace: FormControl<Place>;
   arrivalPlace: FormControl<Place>;
-  driveDuration: FormControl<number>;
-  driveDistance: FormControl<number>;
   driver: FormControl<string>;
   isTwoWayDrive: FormControl<boolean>;
   isMedicalDrive: FormControl<boolean>;
-
-  //repetition: FormControl<PredictedRecurrence>;
 };
 
 export const SCHEDULE_FARE_FORM: FormGroup<Record<keyof FareToSchedulePresentation, FormControl>> = new FormGroup<
@@ -40,8 +33,7 @@ export const SCHEDULE_FARE_FORM: FormGroup<Record<keyof FareToSchedulePresentati
   departureDatetime: new FormControl<FareToSchedulePresentation['departureDatetime']>('', [Validators.required]),
   departurePlace: new FormControl<FareToSchedulePresentation['departurePlace']>(defaultPlaceValue, [Validators.required]),
   arrivalPlace: new FormControl<FareToSchedulePresentation['arrivalPlace']>(defaultPlaceValue, [Validators.required]),
-  driveDuration: new FormControl<FareToSchedulePresentation['driveDuration']>(0, [Validators.required]),
-  driveDistance: new FormControl<FareToSchedulePresentation['driveDistance']>(0, [Validators.required]),
+  ...ESTIMATE_JOURNEY_FORM_CONTROLS,
   driver: new FormControl<FareToSchedulePresentation['driver']>('', [Validators.required]),
   isTwoWayDrive: new FormControl<FareToSchedulePresentation['isTwoWayDrive']>(true, [Validators.required]),
   isMedicalDrive: new FormControl<FareToSchedulePresentation['isMedicalDrive']>(true, [Validators.required])

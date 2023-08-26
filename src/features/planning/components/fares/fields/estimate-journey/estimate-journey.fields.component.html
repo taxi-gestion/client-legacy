@@ -1,0 +1,30 @@
+<div class="mb-3">
+  <label for="driveDuration" class="form-label">Durée du trajet</label>
+  <div class="input-group">
+    <input
+      id="driveDuration"
+      placeholder="Durée en minutes"
+      type="number"
+      class="form-control"
+      name="driveDuration"
+      [formControl]="form.controls.driveDuration" />
+    <div class="input-group-append">
+      <span class="input-group-text">minutes</span>
+    </div>
+  </div>
+</div>
+<div class="mb-3">
+  <label for="driveDistance" class="form-label">Distance du trajet</label>
+  <div class="input-group">
+    <input
+      id="driveDistance"
+      placeholder="Distance en km"
+      type="number"
+      class="form-control"
+      name="driveDistance"
+      [formControl]="form.controls.driveDistance" />
+    <div class="input-group-append">
+      <span class="input-group-text">kilomètres</span>
+    </div>
+  </div>
+</div>
