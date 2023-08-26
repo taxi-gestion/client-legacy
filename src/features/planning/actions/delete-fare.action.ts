@@ -32,6 +32,9 @@ const deleteFareUrl = (fareId: string): string => `https://taxi-gestion.com/api/
 export const deleteFareAction$ =
   (httpClient: HttpClient): DeleteFareAction =>
   (fareId: string): Observable<[Entity & Scheduled, (Entity & Pending)?]> =>
-    httpClient.delete<[Entity & Scheduled, (Entity & Pending)?]>(
-      deleteFareUrl(fareId)
-    ); /*.pipe(catchError(handleDeleteFareError$()));*/
+    httpClient.delete<[Entity & Scheduled, (Entity & Pending)?]>(deleteFareUrl(fareId), {
+      headers: {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        'Content-Type': 'application/json'
+      }
+    }); /*.pipe(catchError(handleDeleteFareError$()));*/
