@@ -67,7 +67,7 @@ export class DailyPlanningLayout {
     private readonly _route: ActivatedRoute,
     @Inject(SCHEDULED_FARES_FOR_DATE_QUERY) private readonly _faresForDateQuery: ScheduledFaresForDateQuery,
     @Inject(PENDING_RETURNS_FOR_DATE_QUERY) private readonly _pendingReturnsForDateQuery: PendingReturnsForDateQuery,
-    @Inject(LIST_DRIVERS_QUERY) private readonly _listDriversQuery: ListDriversQuery //@Inject(DELETE_FARE_ACTION) private readonly _deleteFare: DeleteFareAction,
+    @Inject(LIST_DRIVERS_QUERY) private readonly _listDriversQuery: ListDriversQuery
   ) {}
 
   public async onPlanningDateChange(planningDate: string): Promise<void> {
