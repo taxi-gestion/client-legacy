@@ -13,9 +13,10 @@ app-planning-row > div {
 }
 
 .planning-slot {
-  transition: transform 0.3s, background-color 0.3s;
-}
+  transition: box-shadow 0.3s;
 
-.planning-slot:hover {
-  background-color: #5f82c2;
+  &:hover {
+    border-radius: 5px;
+    box-shadow: $primary-border-subtle 0 0 0 2px inset;
+  }
 }

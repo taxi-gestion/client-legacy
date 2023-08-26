@@ -19,7 +19,7 @@
   </app-navbar>
   <div class="d-flex flex-grow-1 overflow-hidden g-0">
     <div class="d-flex flex-column overflow-y-auto" [ngClass]="dailyOutlet.isActivated ? 'col-9' : 'col'">
-      <div class="p-3 sticky-top bg-light shadow-sm" style="left: 0">
+      <div class="p-3 sticky-top bg-light shadow-sm start-0">
         <h1>
           Planning du
           <input
@@ -37,17 +37,19 @@
         <app-planning [interval]="planningSettings.interval" [start]="planningSettings.start" [end]="planningSettings.end">
           <b class="p-2" slot="title">Planning des chauffeurs</b>
           <app-planning-row
-            class="d-flex"
             *ngFor="let planning of plannings"
-            [rowContext]="planning"
+            class="d-flex"
+            slotLink="schedule-fare"
+            [context]="planning"
             [sessions]="planning.fares"
             [template]="fare"
-            (selectSlot)="onPlanningSlotClick($event)"
-            (selectSession)="onPlanningSessionClick($event)">
+            (selectSlot)="onPlanningSlotClick($event)">
             <b slot="header">{{ planning.driver.username }}</b>
-
-            <ng-template #fare let-fare="session">
-              <app-fare-planning-session [fare]="fare"></app-fare-planning-session>
+            <ng-template #fare let-fare="session" let-context="context">
+              <app-fare-planning-session
+                [fare]="fare"
+                [rowContext]="context"
+                (selectSession)="onPlanningSessionClick($event)"></app-fare-planning-session>
             </ng-template>
           </app-planning-row>
         </app-planning>
