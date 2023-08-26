@@ -43,8 +43,7 @@ export class ScheduleFarePage {
       (): Observable<JourneyEstimate> =>
         this._estimateJourneyQuery$(toJourney(SCHEDULE_FARE_FORM.value as FareToSchedulePresentation))
     ),
-    map(toDisplayDurationDistance),
-    tap((estimate: DurationDistance): void => this.onJourneyEstimateReceived(estimate))
+    map(toDisplayDurationDistance)
   );
 
   public onSelectDepartureChange(place: Place): void {
@@ -64,11 +63,6 @@ export class ScheduleFarePage {
   public onSelectPassengerChange(passenger: Passenger): void {
     this.scheduleFareForm.controls.passenger.setValue(passenger.passenger);
     this.scheduleFareForm.controls.phoneToCall.setValue(passenger.phone);
-  }
-
-  public onJourneyEstimateReceived(durationDistance: DurationDistance): void {
-    this.scheduleFareForm.controls.driveDuration.setValue(durationDistance.duration);
-    this.scheduleFareForm.controls.driveDistance.setValue(durationDistance.distance);
   }
 
   public onSearchPassengerTermChange(search: string): void {
