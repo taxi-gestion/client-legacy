@@ -1,5 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { ScheduledPresentation } from '../../../common/fares.presentation';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { DailyDriverPlanning, ScheduledPlanningSession, ScheduledPresentation } from '../../../common/fares.presentation';
+import { SessionContext } from '../../planning/planning-row/planning-row.component';
+import { toContextualizedSession } from '../../planning/planning-row/planning-row.presenter';
 
 @Component({
   selector: 'app-fare-planning-session',
@@ -7,4 +9,15 @@ import { ScheduledPresentation } from '../../../common/fares.presentation';
 })
 export class FarePlanningSessionComponent {
   @Input({ required: true }) public fare!: ScheduledPresentation;
+
+  @Input({ required: true }) public rowContext!: DailyDriverPlanning;
+
+  @Output() public selectSession: EventEmitter<SessionContext<ScheduledPlanningSession, DailyDriverPlanning>> =
+    new EventEmitter<SessionContext<ScheduledPlanningSession, DailyDriverPlanning>>();
+
+  public onPlanningSessionClicked(sessionContext: unknown, rowContext: unknown): void {
+    this.selectSession.emit(
+      toContextualizedSession(sessionContext as ScheduledPlanningSession, rowContext as DailyDriverPlanning)
+    );
+  }
 }

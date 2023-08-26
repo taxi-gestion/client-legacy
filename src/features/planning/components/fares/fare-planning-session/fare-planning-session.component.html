@@ -1,22 +1,16 @@
-<div class="bg-white rounded-3 shadow-sm p-2 my-2">
-  <h6 class="mb-0 text-capitalize d-flex">
-    <a class="text-body" href="tel:{{ fare.phone }}" title="Appeler le client au {{ fare.phone }}">{{ fare.passenger }}</a>
+<a
+  class="bg-white d-block text-decoration-none rounded-3 shadow-sm p-2 my-2"
+  [routerLink]="'manage-fare'"
+  (click)="$event.stopPropagation(); onPlanningSessionClicked(fare, rowContext)">
+  <b class="mb-0 text-capitalize d-flex">
+    <span class="text-body cursor" title="Appeler le client au {{ fare.phone }}">{{ fare.passenger }}</span>
     <ng-container *ngIf="fare.nature === 'medical'">
       <span class="visually-hidden">Trajet médical</span>
       <i class="ms-auto ri-stethoscope-line small text-muted" aria-hidden="true"></i>
     </ng-container>
-  </h6>
+  </b>
   <small class="text-muted d-flex">
-    <a
-      href="https://www.google.com/maps/dir/?api=1&origin={{ fare.departure.context }}&destination={{
-        fare.destination.context
-      }}"
-      target="_blank"
-      title="Voir l'itinéraire"
-      class="text-muted">
-      {{ fare.distance }} Km
-    </a>
-    <span class="ms-2" title="{{ fare.localTime }}">{{ fare.duration }} min</span>
+    <span class="text-muted">{{ fare.distance }} Km - {{ fare.duration }} min</span>
     <span class="visually-hidden">{{ fare.kind }}</span>
     <i
       class="align-bottom ms-auto"
@@ -24,4 +18,4 @@
       [class.ri-arrow-left-right-line]="fare.kind === 'two-way'"
       aria-hidden="true"></i>
   </small>
-</div>
+</a>

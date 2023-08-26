@@ -2,14 +2,14 @@
   <div class="position-sticky bg-light start-0 p-2 me-4 overflow-hidden" style="width: 200px; top: 0; left: 0; z-index: 1">
     <ng-content select="[slot=header]"></ng-content>
   </div>
-  <div
-    class="border-start-dashed border-2 planning-slot overflow-auto d-flex"
-    (click)="onPlanningSlotClicked(timeInMinutes, rowContext)"
+  <a
+    [routerLink]="slotLink"
+    class="btn btn-link text-decoration-none border-start-dashed border-2 planning-slot overflow-auto d-flex text-start"
+    (click)="onPlanningSlotClicked(timeInMinutes, context)"
     [style.width.px]="planning.columnWidth"
     *ngFor="let timeInMinutes of planning.timesInMinutes$ | async">
     <ng-container *ngFor="let session of sessions">
       <div
-        (click)="onPlanningSessionClicked(session, rowContext, $event)"
         *ngIf="
           timeInMinutes + planning.interval - session.startTimeInMinutes > 0 &&
           timeInMinutes + planning.interval - session.startTimeInMinutes <= planning.interval
@@ -18,8 +18,8 @@
         [style.transform]="
           'translateX(' + offsetForMinutes(session.startTimeInMinutes - timeInMinutes, planning.columnWidth) + 'px)'
         ">
-        <ng-container *ngTemplateOutlet="template; context: { session }"></ng-container>
+        <ng-container *ngTemplateOutlet="template; context: { session, context }"></ng-container>
       </div>
     </ng-container>
-  </div>
+  </a>
 </div>
