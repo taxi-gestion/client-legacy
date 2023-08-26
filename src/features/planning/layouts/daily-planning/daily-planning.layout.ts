@@ -32,13 +32,19 @@ export class DailyPlanningLayout {
 
   public planningSettings: PlanningSettings = DEFAULT_PLANNING_SETTINGS;
 
-  public readonly selectedSlotContext$: BehaviorSubject<SlotContext<DailyDriverPlanning> | null> =
+  private readonly _selectedSlotContext$: BehaviorSubject<SlotContext<DailyDriverPlanning> | null> =
     new BehaviorSubject<SlotContext<DailyDriverPlanning> | null>(null);
 
-  public readonly selectedSessionContext$: BehaviorSubject<SessionContext<
+  public readonly selectedSlotContext$: Observable<SlotContext<DailyDriverPlanning> | null> =
+    this._selectedSlotContext$.asObservable();
+
+  private readonly _selectedSessionContext$: BehaviorSubject<SessionContext<
     ScheduledPlanningSession,
     DailyDriverPlanning
   > | null> = new BehaviorSubject<SessionContext<ScheduledPlanningSession, DailyDriverPlanning> | null>(null);
+
+  public readonly selectedSessionContext$: Observable<SessionContext<ScheduledPlanningSession, DailyDriverPlanning> | null> =
+    this._selectedSessionContext$.asObservable();
 
   public readonly drivers$: Observable<(Driver & Entity)[]> = of([]).pipe(
     switchMap((): Observable<(Driver & Entity)[]> => this._listDriversQuery()),
@@ -75,10 +81,10 @@ export class DailyPlanningLayout {
   }
 
   public onPlanningSlotClick(slotContext: SlotContext<DailyDriverPlanning>): void {
-    this.selectedSlotContext$.next(slotContext);
+    this._selectedSlotContext$.next(slotContext);
   }
 
   public onPlanningSessionClick(sessionContext: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>): void {
-    this.selectedSessionContext$.next(sessionContext);
+    this._selectedSessionContext$.next(sessionContext);
   }
 }
