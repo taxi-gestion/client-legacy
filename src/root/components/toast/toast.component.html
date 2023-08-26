@@ -1,0 +1,25 @@
+<div
+  class="toast fade align-items-center"
+  [ngClass]="status !== 'default' ? 'text-bg-' + status : null"
+  [class.hide]="(isShown$ | async) === false"
+  [class.show]="isShown$ | async"
+  [class.showing]="isShowing$ | async"
+  role="alert"
+  aria-live="assertive"
+  aria-atomic="true">
+  <div class="toast-header" *ngIf="title">
+    <strong class="me-auto">{{ title }}</strong>
+    <button *ngIf="canHide" type="button" class="btn-close" aria-label="Close" (click)="hide()"></button>
+  </div>
+  <div class="d-flex">
+    <div class="toast-body">
+      <ng-content></ng-content>
+    </div>
+    <button
+      *ngIf="title === undefined && canHide"
+      type="button"
+      class="btn-close me-2 m-auto"
+      aria-label="Close"
+      (click)="hide()"></button>
+  </div>
+</div>

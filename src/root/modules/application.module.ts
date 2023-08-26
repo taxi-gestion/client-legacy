@@ -9,7 +9,7 @@ import {
   CanMatchOneUserGroupGuard,
   CanMatchRefreshTokenGuard
 } from '@features/authentication';
-import { COMPONENTS, NavbarUiModule } from '../components';
+import { COMPONENTS, NavbarUiModule, ToasterModule } from '../components';
 import { ApplicationRootLayout, LAYOUTS } from '../layouts';
 import { applicationProviders } from '../providers';
 import { ApplicationRoutingModule } from './application-routing.module';
@@ -18,7 +18,7 @@ registerLocaleData(localeFr);
 
 @NgModule({
   declarations: [...LAYOUTS, ...COMPONENTS],
-  imports: [BrowserAnimationsModule, HttpClientModule, ApplicationRoutingModule, NavbarUiModule],
+  imports: [BrowserAnimationsModule, HttpClientModule, ApplicationRoutingModule, NavbarUiModule, ToasterModule.forRoot()],
   bootstrap: [ApplicationRootLayout],
   providers: [
     { provide: LOCALE_ID, useValue: 'fr-FR' },
