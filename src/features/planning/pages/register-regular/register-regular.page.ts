@@ -8,9 +8,10 @@ import {
   RegisterRegularPresentation,
   setRegisterRegularErrorToForm
 } from './register-regular.form';
-import { formatRegisterRegularError, toRegular } from './register-regular.presenter';
+import { formatRegisterRegularError, toRegisterRegularSuccessToast, toRegular } from './register-regular.presenter';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Entity, Regular } from '@domain';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,13 +43,7 @@ export class RegisterRegularPage {
 
   public onRegisterRegularActionSuccess = async (payload: unknown): Promise<void> => {
     REGISTER_REGULAR_FORM.reset();
-    // eslint-disable-next-line no-console
-    console.log('onRegisterRegularActionSuccess', payload);
-    this._toaster.toast({
-      content: 'Un nouveau passager a été enregistré avec succès',
-      status: 'success',
-      title: 'Nouveau passager régulier'
-    });
+    this._toaster.toast(toRegisterRegularSuccessToast(payload as { rows: (Entity & Regular)[] }[]));
     await this._router.navigate(['..'], { relativeTo: this._route });
   };
 
