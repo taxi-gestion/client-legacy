@@ -4,13 +4,15 @@ import {
   kilometersToMeters,
   minutesToSeconds
 } from '../../common/unit-convertion';
-import { FareToSchedulePresentation } from './schedule-fare.form';
-import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
-import { Journey, FareToSchedule } from '@domain';
-import { addMinutes, subHours } from 'date-fns';
+import {FareToSchedulePresentation} from './schedule-fare.form';
+import {VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME} from '../../errors';
+import {Entity, FareToSchedule, Journey, Scheduled} from '@domain';
+import {addMinutes, format, subHours} from 'date-fns';
 
 export const toLocalDatetimeString = (dateString: string, timeInMinutes: number): string =>
   formatDateToDatetimeLocalString(subHours(addMinutes(new Date(dateString), timeInMinutes), 2));
+
+export const toLocalTime = (datetime: string): string => format(new Date(datetime), "HH'h'mm");
 
 export const toFareToSchedule = (formValues: FareToSchedulePresentation): FareToSchedule => ({
   //recurrence: formValues.recurrence,
@@ -32,6 +34,9 @@ export const toJourney = (formValues: FareToSchedulePresentation): Journey => ({
   destination: formValues.arrivalPlace,
   departureTime: datetimeLocalToIso8601UTCString(formValues.departureDatetime)
 });
+
+export const toSuccessToast = (payload: Entity & Scheduled): string =>
+  `Course pour ${ payload.passenger } par ${ payload.driver } à ${ toLocalTime(payload.datetime) } ajoutée`
 
 // TODO Réfléchir à la mutualisation des erreurs communes
 export type FormattedScheduleFareError = { field?: string; errors: Record<string, unknown> };

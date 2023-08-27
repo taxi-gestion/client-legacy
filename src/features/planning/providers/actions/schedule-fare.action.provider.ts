@@ -1,6 +1,6 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FareToSchedule } from '@domain';
+import {FareToSchedule} from '@domain';
 
 export type ScheduleFareAction = (fareToSchedule: FareToSchedule) => Observable<object>;
 

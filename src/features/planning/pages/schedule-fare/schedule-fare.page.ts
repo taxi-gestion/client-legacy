@@ -9,9 +9,15 @@ import {
   ScheduleFareFields,
   setScheduleFareErrorToForm
 } from './schedule-fare.form';
-import { formatScheduleFareError, toFareToSchedule, toJourney, toLocalDatetimeString } from './schedule-fare.presenter';
+import {
+  formatScheduleFareError,
+  toFareToSchedule,
+  toJourney,
+  toLocalDatetimeString,
+  toSuccessToast
+} from './schedule-fare.presenter';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common/journey';
-import { Driver, DurationDistance, isValidPlace, JourneyEstimate, Passenger, Place } from '@domain';
+import {Driver, DurationDistance, Entity, isValidPlace, JourneyEstimate, Passenger, Place, Scheduled} from '@domain';
 import { toDisplayDurationDistance } from '../../common/unit-convertion';
 import { DailyPlanningLayout } from '../../layouts';
 import { SlotContext } from '../../components/planning/planning-row/planning-row.component';
@@ -30,7 +36,7 @@ export class ScheduleFarePage {
 
   @Output() public scheduleFareError: EventEmitter<Error> = new EventEmitter<Error>();
 
-  public readonly scheduleFare$ = (): Observable<object> =>
+  public readonly scheduleFare$ = (): Observable<Error | Entity & Scheduled> =>
     this._scheduleFareAction$(toFareToSchedule(SCHEDULE_FARE_FORM.value as FareToSchedulePresentation));
 
   public readonly scheduleFareForm: FormGroup<ScheduleFareFields> = SCHEDULE_FARE_FORM;
@@ -97,11 +103,9 @@ export class ScheduleFarePage {
     SCHEDULE_FARE_FORM.valid && triggerAction();
   };
 
-  public onScheduleFareActionSuccess = async (payload: unknown): Promise<void> => {
+  public onScheduleFareActionSuccess = async (payload: Entity & Scheduled): Promise<void> => {
     SCHEDULE_FARE_FORM.reset();
-    // eslint-disable-next-line no-console
-    console.log('onScheduleFareActionSuccess', payload);
-    this._toaster.toast({ content: 'La course a été enregistré avec succès', status: 'success', title: 'Course ajoutée' });
+    this._toaster.toast({ content: toSuccessToast(payload), status: 'success', title: 'Course ajoutée avec succès' });
     await this._router.navigate(['..'], { relativeTo: this._route });
   };
 
