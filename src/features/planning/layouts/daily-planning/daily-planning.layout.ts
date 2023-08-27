@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
-import { BehaviorSubject, combineLatest, filter, map, Observable, of, startWith, Subject, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, Observable, of, startWith, switchMap, take } from 'rxjs';
 import { PlanningSettings } from '../../components/planning/planning-settings/planning-settings.component';
 import { DEFAULT_END_HOUR, DEFAULT_START_HOUR } from '../../components/planning/planning-settings/planning-settings.form';
 import { toDailyDriverPlanning } from '../../common/fares.presenter';
@@ -26,10 +26,7 @@ const DEFAULT_PLANNING_SETTINGS: PlanningSettings = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './daily-planning.layout.html'
 })
-export class DailyPlanningLayout implements OnInit {
-  private readonly _refresh$: Subject<void> = new Subject<void>();
-  public readonly refresh$: Observable<void> = this._refresh$.asObservable();
-
+export class DailyPlanningLayout {
   public planningDay: string = paramsToDateDayString(this._route.snapshot.params);
 
   public planningSettings: PlanningSettings = DEFAULT_PLANNING_SETTINGS;
@@ -53,16 +50,9 @@ export class DailyPlanningLayout implements OnInit {
     take(1)
   );
 
-  public ngOnInit(): void {
-    this.refreshDataOnNavigatedTo();
-  }
-
-  public refreshDataOnNavigatedTo(): void {
-    this._router.events.pipe(
-      filter((routerEvent: unknown): routerEvent is NavigationEnd => routerEvent instanceof NavigationEnd),
-      tap((): void => this._refresh$.next())
-    );
-  }
+  public readonly refresh$: Observable<NavigationEnd> = this._router.events.pipe(
+    filter((routerEvent: unknown): routerEvent is NavigationEnd => routerEvent instanceof NavigationEnd)
+  );
 
   public readonly scheduledFares$: Observable<(Entity & Scheduled)[]> = this.refresh$.pipe(
     startWith(null),
