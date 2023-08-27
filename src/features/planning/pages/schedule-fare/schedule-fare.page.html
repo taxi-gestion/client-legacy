@@ -9,7 +9,7 @@
   [formGroup]="scheduleFareForm"
   [appLoadAction]="scheduleFare$"
   #loadAction="loadAction"
-  (actionSuccess)="onScheduleFareActionSuccess()"
+  (actionSuccess)="onScheduleFareActionSuccess($event)"
   (actionError)="onScheduleFareActionError($event)"
   (ngSubmit)="onSubmitFareToSchedule(loadAction.start)">
   <div class="mb-3">
