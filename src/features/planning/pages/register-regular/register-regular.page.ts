@@ -9,6 +9,8 @@ import {
   setRegisterRegularErrorToForm
 } from './register-regular.form';
 import { formatRegisterRegularError, toRegular } from './register-regular.presenter';
+import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,18 +28,32 @@ export class RegisterRegularPage {
 
   public readonly registerRegularForm: FormGroup<RegisterRegularFields> = REGISTER_REGULAR_FORM;
 
-  public constructor(@Inject(REGISTER_REGULAR_ACTION) private readonly _registerRegularAction$: RegisterRegularAction) {}
+  public constructor(
+    private readonly _toaster: ToasterPresenter,
+    private readonly _router: Router,
+    private readonly _route: ActivatedRoute,
+    @Inject(REGISTER_REGULAR_ACTION) private readonly _registerRegularAction$: RegisterRegularAction
+  ) {}
 
   public onSubmitFareToSchedule = (triggerAction: () => void): void => {
     REGISTER_REGULAR_FORM.markAllAsTouched();
     REGISTER_REGULAR_FORM.valid && triggerAction();
   };
 
-  public onRegisterRegularActionSuccess = (): void => {
+  public onRegisterRegularActionSuccess = async (payload: unknown): Promise<void> => {
     REGISTER_REGULAR_FORM.reset();
+    // eslint-disable-next-line no-console
+    console.log('onRegisterRegularActionSuccess', payload);
+    this._toaster.toast({
+      content: 'Un nouveau passager a été enregistré avec succès',
+      status: 'success',
+      title: 'Nouveau passager régulier'
+    });
+    await this._router.navigate(['..'], { relativeTo: this._route });
   };
 
   public onRegisterRegularActionError = (error: Error): void => {
     setRegisterRegularErrorToForm(formatRegisterRegularError(error));
+    this._toaster.toast({ content: "Échec de l'enregistrement", status: 'danger', title: 'Opération échouée' });
   };
 }

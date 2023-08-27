@@ -16,6 +16,8 @@ import { toDisplayDurationDistance } from '../../common/unit-convertion';
 import { DailyPlanningLayout } from '../../layouts';
 import { SlotContext } from '../../components/planning/planning-row/planning-row.component';
 import { DailyDriverPlanning } from '../../common/fares.presentation';
+import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -82,6 +84,9 @@ export class ScheduleFarePage {
   }
 
   public constructor(
+    private readonly _toaster: ToasterPresenter,
+    private readonly _router: Router,
+    private readonly _route: ActivatedRoute,
     private readonly _planning: DailyPlanningLayout,
     @Inject(SCHEDULE_FARE_ACTION) private readonly _scheduleFareAction$: ScheduleFareAction,
     @Inject(ESTIMATE_JOURNEY_QUERY) private readonly _estimateJourneyQuery$: EstimateJourneyQuery
@@ -92,11 +97,16 @@ export class ScheduleFarePage {
     SCHEDULE_FARE_FORM.valid && triggerAction();
   };
 
-  public onScheduleFareActionSuccess = (): void => {
+  public onScheduleFareActionSuccess = async (payload: unknown): Promise<void> => {
     SCHEDULE_FARE_FORM.reset();
+    // eslint-disable-next-line no-console
+    console.log('onScheduleFareActionSuccess', payload);
+    this._toaster.toast({ content: 'La course a été enregistré avec succès', status: 'success', title: 'Course ajoutée' });
+    await this._router.navigate(['..'], { relativeTo: this._route });
   };
 
   public onScheduleFareActionError = (error: Error): void => {
     setScheduleFareErrorToForm(formatScheduleFareError(error));
+    this._toaster.toast({ content: "Échec de l'enregistrement", status: 'danger', title: 'Opération échouée' });
   };
 }

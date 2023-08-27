@@ -9,7 +9,7 @@
   [formGroup]="registerRegularForm"
   [appLoadAction]="registerRegular$"
   #loadAction="loadAction"
-  (actionSuccess)="onRegisterRegularActionSuccess()"
+  (actionSuccess)="onRegisterRegularActionSuccess($event)"
   (actionError)="onRegisterRegularActionError($event)"
   (ngSubmit)="onSubmitFareToSchedule(loadAction.start)">
   <div class="mb-3">
