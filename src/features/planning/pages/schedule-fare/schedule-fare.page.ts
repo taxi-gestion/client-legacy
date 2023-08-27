@@ -9,9 +9,15 @@ import {
   ScheduleFareFields,
   setScheduleFareErrorToForm
 } from './schedule-fare.form';
-import { formatScheduleFareError, toFareToSchedule, toJourney, toLocalDatetimeString } from './schedule-fare.presenter';
+import {
+  formatScheduleFareError,
+  toFareToSchedule,
+  toJourney,
+  toLocalDatetimeString,
+  toScheduleFareSuccessToast
+} from './schedule-fare.presenter';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common/journey';
-import { Driver, DurationDistance, isValidPlace, JourneyEstimate, Passenger, Place } from '@domain';
+import { Driver, DurationDistance, Entity, isValidPlace, JourneyEstimate, Passenger, Place, Scheduled } from '@domain';
 import { toDisplayDurationDistance } from '../../common/unit-convertion';
 import { DailyPlanningLayout } from '../../layouts';
 import { SlotContext } from '../../components/planning/planning-row/planning-row.component';
@@ -30,6 +36,7 @@ export class ScheduleFarePage {
 
   @Output() public scheduleFareError: EventEmitter<Error> = new EventEmitter<Error>();
 
+  //TODO Type to Observable<Error | Entity & Scheduled>
   public readonly scheduleFare$ = (): Observable<object> =>
     this._scheduleFareAction$(toFareToSchedule(SCHEDULE_FARE_FORM.value as FareToSchedulePresentation));
 
@@ -99,9 +106,8 @@ export class ScheduleFarePage {
 
   public onScheduleFareActionSuccess = async (payload: unknown): Promise<void> => {
     SCHEDULE_FARE_FORM.reset();
-    // eslint-disable-next-line no-console
-    console.log('onScheduleFareActionSuccess', payload);
-    this._toaster.toast({ content: 'La course a été enregistré avec succès', status: 'success', title: 'Course ajoutée' });
+    // TODO Type action and modify returned payload
+    this._toaster.toast(toScheduleFareSuccessToast(payload as { rows: (Entity & Scheduled)[] }[]));
     await this._router.navigate(['..'], { relativeTo: this._route });
   };
 
