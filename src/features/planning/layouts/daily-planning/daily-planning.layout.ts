@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { BehaviorSubject, combineLatest, map, Observable, of, switchMap, take } from 'rxjs';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
+import { BehaviorSubject, combineLatest, filter, map, Observable, of, startWith, Subject, switchMap, take, tap } from 'rxjs';
 import { PlanningSettings } from '../../components/planning/planning-settings/planning-settings.component';
 import { DEFAULT_END_HOUR, DEFAULT_START_HOUR } from '../../components/planning/planning-settings/planning-settings.form';
 import { toDailyDriverPlanning } from '../../common/fares.presenter';
@@ -11,7 +11,6 @@ import {
   ScheduledFaresForDateQuery
 } from '../../providers';
 import { Driver, Entity, Pending, Scheduled } from '@domain';
-import { PendingPresentation, toPendingReturnsForDatePresentation } from '../../common';
 import { DailyDriverPlanning, ScheduledPlanningSession } from '../../common/fares.presentation';
 import { LIST_DRIVERS_QUERY, ListDriversQuery } from '@features/common/driver';
 import { paramsToDateDayString } from './daily-planning.presenter';
@@ -27,7 +26,10 @@ const DEFAULT_PLANNING_SETTINGS: PlanningSettings = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './daily-planning.layout.html'
 })
-export class DailyPlanningLayout {
+export class DailyPlanningLayout implements OnInit {
+  private readonly _refresh$: Subject<void> = new Subject<void>();
+  public readonly refresh$: Observable<void> = this._refresh$.asObservable();
+
   public planningDay: string = paramsToDateDayString(this._route.snapshot.params);
 
   public planningSettings: PlanningSettings = DEFAULT_PLANNING_SETTINGS;
@@ -51,21 +53,35 @@ export class DailyPlanningLayout {
     take(1)
   );
 
-  public readonly fares$: Observable<(Entity & Scheduled)[]> = this._route.params.pipe(
+  public ngOnInit(): void {
+    this.refreshDataOnNavigatedTo();
+  }
+
+  public refreshDataOnNavigatedTo(): void {
+    this._router.events.pipe(
+      filter((routerEvent: unknown): routerEvent is NavigationEnd => routerEvent instanceof NavigationEnd),
+      tap((): void => this._refresh$.next())
+    );
+  }
+
+  public readonly scheduledFares$: Observable<(Entity & Scheduled)[]> = this.refresh$.pipe(
+    startWith(null),
+    switchMap((): Observable<Params> => this._route.params),
     switchMap((params: Params): Observable<(Entity & Scheduled)[]> => this._faresForDateQuery(paramsToDateDayString(params)))
   );
 
-  public readonly plannings$: Observable<DailyDriverPlanning[]> = combineLatest([this.drivers$, this.fares$]).pipe(
-    map(([drivers, fares]: [(Driver & Entity)[], (Entity & Scheduled)[]]): DailyDriverPlanning[] =>
-      toDailyDriverPlanning(drivers, fares)
+  public readonly returnsToSchedule$: Observable<(Entity & Pending)[]> = this.refresh$.pipe(
+    startWith(null),
+    switchMap((): Observable<Params> => this._route.params),
+    switchMap(
+      (params: Params): Observable<(Entity & Pending)[]> => this._pendingReturnsForDateQuery(paramsToDateDayString(params))
     )
   );
 
-  public readonly returnsToSchedule$: Observable<PendingPresentation[]> = this._route.params.pipe(
-    switchMap(
-      (params: Params): Observable<(Entity & Pending)[]> => this._pendingReturnsForDateQuery(paramsToDateDayString(params))
-    ),
-    map(toPendingReturnsForDatePresentation)
+  public readonly plannings$: Observable<DailyDriverPlanning[]> = combineLatest([this.drivers$, this.scheduledFares$]).pipe(
+    map(([drivers, fares]: [(Driver & Entity)[], (Entity & Scheduled)[]]): DailyDriverPlanning[] =>
+      toDailyDriverPlanning(drivers, fares)
+    )
   );
 
   public constructor(
