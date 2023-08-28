@@ -17,7 +17,7 @@ import { paramsToDateDayString } from './daily-planning.presenter';
 import { SessionContext, SlotContext } from '../../components/planning/planning-row/planning-row.component';
 
 const DEFAULT_PLANNING_SETTINGS: PlanningSettings = {
-  interval: 30,
+  interval: 60,
   start: +DEFAULT_START_HOUR * 60,
   end: +DEFAULT_END_HOUR * 60
 };

@@ -1,6 +1,7 @@
 <form [formGroup]="planningSettingsForm" (change)="onPlanningSettingsFormChange()">
   Affichage des courses sur un intervalle de temps
   <select name="interval" class="form-select w-auto d-inline-block" formControlName="interval">
+    <option value="120">de deux heures</option>
     <option value="60">d'une heure</option>
     <option value="30">d'une demi-heure</option>
     <option value="15">d'un quart d'heure</option>

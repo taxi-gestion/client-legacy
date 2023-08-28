@@ -18,7 +18,10 @@
     </ul>
   </app-navbar>
   <div class="d-flex flex-grow-1 overflow-hidden g-0">
-    <div class="d-flex flex-column overflow-y-auto" [ngClass]="dailyOutlet.isActivated ? 'col-9' : 'col'">
+    <div
+      appHorizontalMouseScroll
+      class="d-flex flex-column overflow-y-auto"
+      [ngClass]="dailyOutlet.isActivated ? 'col-9' : 'col'">
       <div class="p-3 sticky-top bg-light shadow-sm start-0">
         <h1>
           Planning du
@@ -35,7 +38,6 @@
       </div>
       <div class="flex-grow-1 pt-2" *ngIf="plannings$ | async as plannings">
         <app-planning [interval]="planningSettings.interval" [start]="planningSettings.start" [end]="planningSettings.end">
-          <b class="p-2" slot="title">Planning des chauffeurs</b>
           <app-planning-row
             *ngFor="let planning of plannings"
             class="d-flex"

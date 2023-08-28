@@ -3,7 +3,7 @@ import { lessThanValidator, moreThanValidator } from './validators';
 
 type Digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 type Hour = `${0 | 1}${Digit}` | `${2}${0 | 1 | 2 | 3}`;
-type Interval = '15' | '30' | '60';
+type Interval = '15' | '30' | '60' | '120';
 
 export type PlanningSettingsValues = {
   interval: Interval;
@@ -11,7 +11,7 @@ export type PlanningSettingsValues = {
   endHour: Hour;
 };
 
-export const DEFAULT_INTERVAL: Interval = '30';
+export const DEFAULT_INTERVAL: Interval = '60';
 export const DEFAULT_START_HOUR: Hour = '07';
 export const DEFAULT_END_HOUR: Hour = '21';
 
