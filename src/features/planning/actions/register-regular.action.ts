@@ -9,16 +9,17 @@ import { regularPassengerCodec } from '@codecs';
 
 const registerRegularUrl = (): string => `https://taxi-gestion.com/api/register-regular`;
 
-const handleRegisterRegularError$ =
-  () =>
-  (errorResponse: Error | HttpErrorResponse, caught: Observable<object>): Observable<object> => {
-    if (errorResponse instanceof ValidationFailedBeforeApiCallError) return throwError((): Error => errorResponse);
+const handleRegisterRegularError$ = (
+  errorResponse: Error | HttpErrorResponse,
+  caught: Observable<object>
+): Observable<object> => {
+  if (errorResponse instanceof ValidationFailedBeforeApiCallError) return throwError((): Error => errorResponse);
 
-    switch ((errorResponse as HttpErrorResponse).error.__type) {
-      default:
-        return throwError((): Observable<object> => caught);
-    }
-  };
+  switch ((errorResponse as HttpErrorResponse).error.__type) {
+    default:
+      return throwError((): Observable<object> => caught);
+  }
+};
 
 export const validatedRegisterRegularAction$ =
   (http: HttpClient): RegisterRegularAction =>
@@ -27,8 +28,8 @@ export const validatedRegisterRegularAction$ =
       regularPassengerCodec.decode(regular),
       fold(
         (): Observable<object> =>
-          throwError((): Error => new ValidationFailedBeforeApiCallError()).pipe(catchError(handleRegisterRegularError$())),
+          throwError((): Error => new ValidationFailedBeforeApiCallError()).pipe(catchError(handleRegisterRegularError$)),
         (validatedTransfer: Regular): Observable<object> =>
-          http.post(registerRegularUrl(), validatedTransfer).pipe(catchError(handleRegisterRegularError$()))
+          http.post(registerRegularUrl(), validatedTransfer).pipe(catchError(handleRegisterRegularError$))
       )
     );

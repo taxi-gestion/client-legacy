@@ -9,16 +9,14 @@ import { fareToScheduleCodec } from '@codecs';
 
 const scheduleFareUrl = (): string => `/api/schedule-fare`;
 
-const handleScheduleFareError$ =
-  () =>
-  (errorResponse: Error | HttpErrorResponse, caught: Observable<object>): Observable<object> => {
-    if (errorResponse instanceof ValidationFailedBeforeApiCallError) return throwError((): Error => errorResponse);
+const handleScheduleFareError$ = (errorResponse: Error | HttpErrorResponse, caught: Observable<object>): Observable<object> => {
+  if (errorResponse instanceof ValidationFailedBeforeApiCallError) return throwError((): Error => errorResponse);
 
-    switch ((errorResponse as HttpErrorResponse).error.__type) {
-      default:
-        return throwError((): Observable<object> => caught);
-    }
-  };
+  switch ((errorResponse as HttpErrorResponse).error.__type) {
+    default:
+      return throwError((): Observable<object> => caught);
+  }
+};
 
 export const validatedScheduleFareAction$ =
   (http: HttpClient): ScheduleFareAction =>
@@ -27,8 +25,8 @@ export const validatedScheduleFareAction$ =
       fareToScheduleCodec.decode(fareToSchedule),
       fold(
         (): Observable<object> =>
-          throwError((): Error => new ValidationFailedBeforeApiCallError()).pipe(catchError(handleScheduleFareError$())),
+          throwError((): Error => new ValidationFailedBeforeApiCallError()).pipe(catchError(handleScheduleFareError$)),
         (validatedTransfer: FareToSchedule): Observable<object> =>
-          http.post(scheduleFareUrl(), validatedTransfer).pipe(catchError(handleScheduleFareError$()))
+          http.post(scheduleFareUrl(), validatedTransfer).pipe(catchError(handleScheduleFareError$))
       )
     );

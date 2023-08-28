@@ -8,7 +8,17 @@ import {
   type as ioType,
   array as ioArray
 } from 'io-ts';
-import { Drive, DurationDistance, Entity, FareToSchedule, Passenger, Pending, Regular, ReturnToSchedule } from '@domain';
+import {
+  Drive,
+  DurationDistance,
+  Entity,
+  FareToSchedule,
+  Passenger,
+  Pending,
+  Regular,
+  ReturnToSchedule,
+  Scheduled
+} from '@domain';
 
 import { placeCodec } from './common';
 
@@ -65,6 +75,21 @@ export const pendingReturnsCodec: Type<(Entity & Pending)[]> = ioArray(
       id: ioString,
       kind: ioLiteral('two-way'),
       status: ioLiteral('pending-return'),
+      nature: ioKeyof({ medical: null, standard: null })
+    })
+  ])
+);
+
+export const scheduledFaresCodec: Type<(Entity & Scheduled)[]> = ioArray(
+  ioIntersection([
+    passengerCodec,
+    driveCodec,
+    durationDistanceCodec,
+    ioType({
+      id: ioString,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      kind: ioKeyof({ 'one-way': null, 'two-way': null }),
+      status: ioLiteral('scheduled'),
       nature: ioKeyof({ medical: null, standard: null })
     })
   ])
