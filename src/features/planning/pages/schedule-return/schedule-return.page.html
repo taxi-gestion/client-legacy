@@ -13,11 +13,11 @@
   (actionError)="onScheduleReturnActionError($event)"
   (ngSubmit)="onSubmitReturnToSchedule(loadAction.start)">
   <div class="mb-3">
-    <label for="returnToScheduleId" class="form-label">Retour pour le passager</label>
+    <label for="pendingReturnId" class="form-label">Retour pour le passager</label>
     <app-pending-return-field
       [date]="selectedDate"
       (selectPendingReturns)="onSelectPendingReturnChange($event)"></app-pending-return-field>
-    <input id="returnToScheduleId" type="hidden" name="returnToScheduleId" formControlName="returnToScheduleId" />
+    <input id="pendingReturnId" type="hidden" name="pendingReturnId" formControlName="pendingReturnId" />
   </div>
   <div class="mb-3">
     <label for="departureDatetime" class="form-label">Date et heure du retour</label>
@@ -59,9 +59,9 @@
     </ng-container>
   </button>
   <!-- TODO Mutualiser les erreurs communes -->
-  <div class="text-danger mt-2" *ngIf="scheduleReturnForm.errors?.['validationFailedBeforeApiCallError']">
-    La structure des données de la requête ne respecte pas le contrat de transfer. La requête ne peut pas être effectuée.
-    Prévenir Romain qu'il va faire des heures supp'.
+  <div class="text-danger mt-2" *ngIf="scheduleReturnForm.errors?.['validationFailedAfterApiCallError']">
+    La structure des données reçues ne respecte pas le contrat de transfer. La requête ne peut pas être effectuée. Prévenir
+    Romain qu'il va faire des heures supp'.
   </div>
   <div class="text-danger mt-2" *ngIf="scheduleReturnForm.errors">
     Une erreur est survenue lors de l'appel au service distant.
