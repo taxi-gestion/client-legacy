@@ -1,9 +1,9 @@
 import { datetimeLocalToIso8601UTCString, metersToKilometers, minutesToSeconds } from '../../common/unit-convertion';
 import { Entity, ReturnToSchedule, Scheduled } from '@domain';
 import { PendingPresentation } from '../../common';
-import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { toLocalTime } from '../schedule-fare/schedule-fare.presenter';
+import { VALIDATION_FAILED_AFTER_API_CALL_ERROR_NAME } from '../../errors';
 
 export const toScheduleReturnSuccessToast = (payload: { rows: (Entity & Scheduled)[] }[]): Toast => {
   // TODO Adapt & type api response to return right payload
@@ -38,10 +38,10 @@ export const formatScheduleReturnError = (error: Error): FormattedScheduleReturn
 
 const scheduleReturnErrorFormatMap: Map<string, (error: Error) => FormattedScheduleReturnError> = new Map([
   [
-    VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME,
+    VALIDATION_FAILED_AFTER_API_CALL_ERROR_NAME,
     (error: Error): FormattedScheduleReturnError => ({
       errors: {
-        [VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME]: error
+        [VALIDATION_FAILED_AFTER_API_CALL_ERROR_NAME]: error
       }
     })
   ]

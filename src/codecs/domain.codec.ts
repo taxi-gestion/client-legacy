@@ -5,9 +5,10 @@ import {
   literal as ioLiteral,
   number as ioNumber,
   string as ioString,
-  type as ioType
+  type as ioType,
+  array as ioArray
 } from 'io-ts';
-import { Drive, DurationDistance, Entity, FareToSchedule, Passenger, Regular, ReturnToSchedule } from '@domain';
+import { Drive, DurationDistance, Entity, FareToSchedule, Passenger, Pending, Regular, ReturnToSchedule } from '@domain';
 
 import { placeCodec } from './common';
 
@@ -55,3 +56,16 @@ export const returnToScheduleCodec: Type<Entity & ReturnToSchedule> = ioIntersec
     status: ioLiteral('return-to-schedule')
   })
 ]);
+
+export const pendingReturnsCodec: Type<(Entity & Pending)[]> = ioArray(
+  ioIntersection([
+    passengerCodec,
+    driveCodec,
+    ioType({
+      id: ioString,
+      kind: ioLiteral('two-way'),
+      status: ioLiteral('pending-return'),
+      nature: ioKeyof({ medical: null, standard: null })
+    })
+  ])
+);

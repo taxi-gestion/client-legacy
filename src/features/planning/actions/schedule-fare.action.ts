@@ -7,7 +7,7 @@ import { ValidationFailedBeforeApiCallError } from '../errors';
 import { FareToSchedule } from '@domain';
 import { fareToScheduleCodec } from '@codecs';
 
-const scheduleFareUrl = (): string => `https://taxi-gestion.com/api/schedule-fare`;
+const scheduleFareUrl = (): string => `/api/schedule-fare`;
 
 const handleScheduleFareError$ =
   () =>
