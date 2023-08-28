@@ -2,10 +2,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { defaultPlaceValue } from '../../common/fares.presenter';
 import { formatDateToDatetimeLocalString } from '../../common/unit-convertion';
 import { Place } from '@domain';
-import { FareToSchedulePresentation } from '../schedule-fare/schedule-fare.form';
 import { PendingPresentation } from '../../common';
+import { ESTIMATE_JOURNEY_FORM_CONTROLS, EstimateJourneyFields } from '../../components';
 
-export type ScheduleReturnFields = {
+export type ScheduleReturnFields = EstimateJourneyFields & {
   pendingReturnId: FormControl<string>;
   departureDatetime: FormControl<Date>;
   departurePlace: FormControl<Place>;
@@ -24,8 +24,7 @@ export const SCHEDULE_RETURN_FORM: FormGroup<Record<keyof Omit<PendingPresentati
   ]),
   departurePlace: new FormControl<PendingPresentation['departurePlace']>(defaultPlaceValue, [Validators.required]),
   arrivalPlace: new FormControl<PendingPresentation['arrivalPlace']>(defaultPlaceValue, [Validators.required]),
-  driveDuration: new FormControl<FareToSchedulePresentation['driveDuration']>(0, [Validators.required]),
-  driveDistance: new FormControl<FareToSchedulePresentation['driveDistance']>(0, [Validators.required]),
+  ...ESTIMATE_JOURNEY_FORM_CONTROLS,
   driver: new FormControl<PendingPresentation['driver']>('', [Validators.required])
 });
 

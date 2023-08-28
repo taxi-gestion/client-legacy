@@ -1,13 +1,16 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, Observable, switchMap } from 'rxjs';
 import { SCHEDULE_RETURN_ACTION, ScheduleReturnAction } from '../../providers';
 import { SCHEDULE_RETURN_FORM, ScheduleReturnFields, setScheduleReturnErrorToForm } from './schedule-return.form';
-import { formatScheduleReturnError, toReturnToSchedule } from './schedule-return.presenter';
-import { ActivatedRoute, Params } from '@angular/router';
-import { toStandardDateFormat } from '../../common/unit-convertion';
-import { Driver, Place } from '@domain';
+import { formatScheduleReturnError, toReturnToSchedule, toScheduleReturnSuccessToast } from './schedule-return.presenter';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { toDisplayDurationDistance, toStandardDateFormat } from '../../common/unit-convertion';
+import { Driver, DurationDistance, Entity, isValidPlace, JourneyEstimate, Place, Scheduled } from '@domain';
 import { PendingPresentation } from '../../common';
+import { defaultPlaceValue, toJourney } from '../../common/fares.presenter';
+import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common';
+import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,45 +29,49 @@ export class ScheduleReturnPage {
 
   public readonly scheduleReturnForm: FormGroup<ScheduleReturnFields> = SCHEDULE_RETURN_FORM;
 
+  private readonly _departure: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
+
+  private readonly _destination: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
+
+  public readonly estimateJourney$: Observable<DurationDistance> = combineLatest([this._departure, this._destination]).pipe(
+    filter(([departure, destination]: [Place, Place]): boolean => isValidPlace(departure) && isValidPlace(destination)),
+    switchMap(
+      (): Observable<JourneyEstimate> =>
+        this._estimateJourneyQuery$(toJourney(SCHEDULE_RETURN_FORM.value as PendingPresentation))
+    ),
+    map(toDisplayDurationDistance)
+  );
+
   public selectedDate: string = paramsToDateString(this._route);
 
   public constructor(
+    private readonly _toaster: ToasterPresenter,
+    private readonly _router: Router,
     private readonly _route: ActivatedRoute,
-    @Inject(SCHEDULE_RETURN_ACTION) private readonly _scheduleReturnAction$: ScheduleReturnAction
+    @Inject(SCHEDULE_RETURN_ACTION) private readonly _scheduleReturnAction$: ScheduleReturnAction,
+    @Inject(ESTIMATE_JOURNEY_QUERY) private readonly _estimateJourneyQuery$: EstimateJourneyQuery
   ) {}
 
   public onSelectDepartureChange(place: Place): void {
     this.scheduleReturnForm.controls.departurePlace.setValue(place);
+    this._departure.next(place);
   }
 
   public onSelectArrivalChange(place: Place): void {
     this.scheduleReturnForm.controls.arrivalPlace.setValue(place);
-  }
-
-  private readonly _departureDisplayLabel$: Subject<string> = new Subject<string>();
-
-  public departureDisplayLabel$: Observable<string> = this._departureDisplayLabel$.asObservable();
-
-  private readonly _destinationDisplayLabel$: Subject<string> = new Subject<string>();
-
-  public destinationDisplayLabel$: Observable<string> = this._destinationDisplayLabel$.asObservable();
-
-  private readonly _driverDisplayLabel$: Subject<string> = new Subject<string>();
-
-  public driverDisplayLabel$: Observable<string> = this._driverDisplayLabel$.asObservable();
-
-  public onSelectPendingReturnChange(pendingReturn: PendingPresentation): void {
-    this.scheduleReturnForm.controls.pendingReturnId.setValue(pendingReturn.pendingReturnId);
-    this.scheduleReturnForm.controls.departurePlace.setValue(pendingReturn.departurePlace);
-    this._departureDisplayLabel$.next(pendingReturn.departurePlace.label);
-    this.scheduleReturnForm.controls.arrivalPlace.setValue(pendingReturn.arrivalPlace);
-    this._destinationDisplayLabel$.next(pendingReturn.arrivalPlace.label);
-    this.scheduleReturnForm.controls.driver.setValue(pendingReturn.driver);
-    this._driverDisplayLabel$.next(pendingReturn.driver);
+    this._destination.next(place);
   }
 
   public onSelectDriverChange(driver: Driver): void {
     this.scheduleReturnForm.controls.driver.setValue(driver.identifier);
+  }
+
+  public onSelectPendingReturnChange(pendingReturn: PendingPresentation): void {
+    this.scheduleReturnForm.controls.pendingReturnId.setValue(pendingReturn.pendingReturnId);
+    this.onSelectDepartureChange(pendingReturn.departurePlace);
+    this.onSelectArrivalChange(pendingReturn.departurePlace);
+    // TODO Have full entity
+    this.onSelectDriverChange({ identifier: pendingReturn.driver, username: pendingReturn.driver });
   }
 
   public onSubmitReturnToSchedule = (triggerAction: () => void): void => {
@@ -72,12 +79,15 @@ export class ScheduleReturnPage {
     SCHEDULE_RETURN_FORM.valid && triggerAction();
   };
 
-  public onScheduleReturnActionSuccess = (): void => {
+  public onScheduleReturnActionSuccess = async (payload: unknown): Promise<void> => {
     SCHEDULE_RETURN_FORM.reset();
+    this._toaster.toast(toScheduleReturnSuccessToast(payload as { rows: (Entity & Scheduled)[] }[]));
+    await this._router.navigate(['..'], { relativeTo: this._route });
   };
 
   public onScheduleReturnActionError = (error: Error): void => {
     setScheduleReturnErrorToForm(formatScheduleReturnError(error));
+    this._toaster.toast({ content: 'Échec de la planification du retour', status: 'danger', title: 'Opération échouée' });
   };
 }
 

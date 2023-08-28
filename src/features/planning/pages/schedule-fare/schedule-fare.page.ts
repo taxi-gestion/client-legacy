@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap } from 'rxjs';
-import { defaultPlaceValue } from '../../common/fares.presenter';
+import { defaultPlaceValue, toJourney } from '../../common/fares.presenter';
 import { SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../providers';
 import {
   FareToSchedulePresentation,
@@ -12,7 +12,6 @@ import {
 import {
   formatScheduleFareError,
   toFareToSchedule,
-  toJourney,
   toLocalDatetimeString,
   toScheduleFareSuccessToast
 } from './schedule-fare.presenter';
@@ -113,6 +112,6 @@ export class ScheduleFarePage {
 
   public onScheduleFareActionError = (error: Error): void => {
     setScheduleFareErrorToForm(formatScheduleFareError(error));
-    this._toaster.toast({ content: "Échec de l'enregistrement", status: 'danger', title: 'Opération échouée' });
+    this._toaster.toast({ content: 'Échec de la planification de la course', status: 'danger', title: 'Opération échouée' });
   };
 }

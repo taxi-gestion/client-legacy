@@ -9,7 +9,7 @@
   [formGroup]="scheduleReturnForm"
   [appLoadAction]="scheduleReturn$"
   #loadAction="loadAction"
-  (actionSuccess)="onScheduleReturnActionSuccess()"
+  (actionSuccess)="onScheduleReturnActionSuccess($event)"
   (actionError)="onScheduleReturnActionError($event)"
   (ngSubmit)="onSubmitReturnToSchedule(loadAction.start)">
   <div class="mb-3">
@@ -38,36 +38,9 @@
     <app-place-field (selectPlace)="onSelectArrivalChange($event)"></app-place-field>
     <input id="arrivalPlace" type="hidden" name="arrivalPlace" formControlName="arrivalPlace" />
   </div>
-  <div class="mb-3">
-    <label for="driveDuration" class="form-label">Durée du trajet</label>
-    <div class="input-group">
-      <input
-        id="driveDuration"
-        placeholder="Durée en minutes"
-        type="number"
-        class="form-control"
-        name="driveDuration"
-        formControlName="driveDuration" />
-      <div class="input-group-append">
-        <span class="input-group-text">minutes</span>
-      </div>
-    </div>
-  </div>
-  <div class="mb-3">
-    <label for="driveDistance" class="form-label">Distance du trajet</label>
-    <div class="input-group">
-      <input
-        id="driveDistance"
-        placeholder="Distance en km"
-        type="number"
-        class="form-control"
-        name="driveDistance"
-        formControlName="driveDistance" />
-      <div class="input-group-append">
-        <span class="input-group-text">kilomètres</span>
-      </div>
-    </div>
-  </div>
+  <app-estimate-journey-fields
+    [form]="$any(scheduleReturnForm)"
+    [estimateJourney]="estimateJourney$ | async"></app-estimate-journey-fields>
   <div class="mb-3">
     <label for="driver" class="form-label">Chauffeur</label>
     <app-driver-field (selectDriver)="onSelectDriverChange($event)"></app-driver-field>

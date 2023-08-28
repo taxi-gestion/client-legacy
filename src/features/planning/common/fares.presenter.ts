@@ -1,7 +1,7 @@
 import { DailyDriverPlanning, ScheduledPlanningSession, ScheduledPresentation } from './fares.presentation';
-import { minutesSinceStartOfDayInTimezone, timeInTimezone } from './unit-convertion';
+import { datetimeLocalToIso8601UTCString, minutesSinceStartOfDayInTimezone, timeInTimezone } from './unit-convertion';
 import { secondsToMinutes } from 'date-fns';
-import { Driver, Entity, Place, Scheduled } from '@domain';
+import { Driver, Entity, Journey, Place, Scheduled } from '@domain';
 
 export const defaultPlaceValue: Place = {
   context: '',
@@ -11,6 +11,12 @@ export const defaultPlaceValue: Place = {
     longitude: NaN
   }
 };
+
+export const toJourney = (formValues: { departurePlace: Place; arrivalPlace: Place; departureDatetime: string }): Journey => ({
+  origin: formValues.departurePlace,
+  destination: formValues.arrivalPlace,
+  departureTime: datetimeLocalToIso8601UTCString(formValues.departureDatetime)
+});
 
 export function toDailyDriverPlanning(drivers: (Driver & Entity)[], fares: (Entity & Scheduled)[]): DailyDriverPlanning[] {
   return drivers.map((driver: Driver & Entity): DailyDriverPlanning => {
