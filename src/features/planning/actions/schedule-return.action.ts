@@ -9,16 +9,17 @@ import { returnToScheduleCodec } from '@codecs';
 
 const scheduleReturnUrl = (): string => `https://taxi-gestion.com/api/schedule-return`;
 
-const handleScheduleReturnError$ =
-  () =>
-  (errorResponse: Error | HttpErrorResponse, caught: Observable<object>): Observable<object> => {
-    if (errorResponse instanceof ValidationFailedBeforeApiCallError) return throwError((): Error => errorResponse);
+const handleScheduleReturnError$ = (
+  errorResponse: Error | HttpErrorResponse,
+  caught: Observable<object>
+): Observable<object> => {
+  if (errorResponse instanceof ValidationFailedBeforeApiCallError) return throwError((): Error => errorResponse);
 
-    switch ((errorResponse as HttpErrorResponse).error.__type) {
-      default:
-        return throwError((): Observable<object> => caught);
-    }
-  };
+  switch ((errorResponse as HttpErrorResponse).error.__type) {
+    default:
+      return throwError((): Observable<object> => caught);
+  }
+};
 
 export const validatedScheduleReturnAction$ =
   (http: HttpClient): ScheduleReturnAction =>
@@ -27,8 +28,8 @@ export const validatedScheduleReturnAction$ =
       returnToScheduleCodec.decode(returnToSchedule),
       fold(
         (): Observable<object> =>
-          throwError((): Error => new ValidationFailedBeforeApiCallError()).pipe(catchError(handleScheduleReturnError$())),
+          throwError((): Error => new ValidationFailedBeforeApiCallError()).pipe(catchError(handleScheduleReturnError$)),
         (validatedTransfer: Entity & ReturnToSchedule): Observable<object> =>
-          http.post(scheduleReturnUrl(), validatedTransfer).pipe(catchError(handleScheduleReturnError$()))
+          http.post(scheduleReturnUrl(), validatedTransfer).pipe(catchError(handleScheduleReturnError$))
       )
     );

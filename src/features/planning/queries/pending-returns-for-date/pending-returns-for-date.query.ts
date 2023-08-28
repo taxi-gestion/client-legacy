@@ -1,5 +1,5 @@
-import { HttpClient } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError, map, Observable, throwError } from 'rxjs';
 import { Entity, Pending } from '@domain';
 import { PendingReturnsForDateQuery } from '../../providers';
 import { pipe as fpPipe } from 'fp-ts/function';
@@ -10,12 +10,35 @@ import { ValidationFailedAfterApiCallError } from '../../errors';
 export const validatedPendingReturnsForDateQuery$ =
   (httpClient: HttpClient): PendingReturnsForDateQuery =>
   (date: string): Observable<(Entity & Pending)[]> =>
-    fpPipe(
-      httpClient.get<unknown>(`/api/pending-returns-for-date/${date}`),
-      externalTypeCheckFor<(Entity & Pending)[]>(pendingReturnsCodec),
-      fold(
-        // TODO Share error reporter between projects
-        (): Observable<never> => throwError((): Error => new ValidationFailedAfterApiCallError()),
-        (validatedTransfer: (Entity & Pending)[]): Observable<(Entity & Pending)[]> => of(validatedTransfer)
+    httpClient.get<unknown>(`/api/pending-returns-for-date/${date}`).pipe(
+      map(pendingReturnsValidation),
+      catchError(
+        (error: Error | HttpErrorResponse, caught: Observable<(Entity & Pending)[]>): Observable<never> =>
+          handlePendingReturnsForDateError$(error, caught)
       )
     );
+
+const handlePendingReturnsForDateError$ = (
+  error: Error | HttpErrorResponse,
+  caught: Observable<(Entity & Pending)[]>
+): Observable<never> => {
+  if (error instanceof ValidationFailedAfterApiCallError) return throwError((): Error => error);
+
+  switch ((error as HttpErrorResponse).error.__type) {
+    default:
+      return throwError((): Observable<(Entity & Pending)[]> => caught);
+  }
+};
+
+const pendingReturnsValidation = (transfer: unknown): (Entity & Pending)[] =>
+  fpPipe(
+    transfer,
+    externalTypeCheckFor<(Entity & Pending)[]>(pendingReturnsCodec),
+    fold(
+      // TODO Share error reporter between projects
+      (): never => {
+        throw new ValidationFailedAfterApiCallError(`Faudrait mettre le HttpReporter...`);
+      },
+      (validatedTransfer: (Entity & Pending)[]): (Entity & Pending)[] => validatedTransfer
+    )
+  );

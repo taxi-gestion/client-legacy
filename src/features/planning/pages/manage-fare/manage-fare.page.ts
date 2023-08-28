@@ -26,8 +26,8 @@ export class ManageFarePage {
     ${context.sessionContext.passenger}.
     Téléphone à contacter: ${context.sessionContext.phone}
 
-    Départ: ${JSON.parse(context.sessionContext.departure as unknown as string).context}
-    Destination:  ${JSON.parse(context.sessionContext.destination as unknown as string).context}
+    Départ: ${context.sessionContext.departure.context}
+    Destination:  ${context.sessionContext.destination.context}
     Horaire: ${minutesToTime(context.sessionContext.startTimeInMinutes)}
 
     ${context.sessionContext.nature === 'medical' ? 'La course est à caractère médical.' : ''}

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
-import { BehaviorSubject, combineLatest, filter, map, Observable, of, startWith, switchMap, take } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, of, startWith, switchMap, take } from 'rxjs';
 import { PlanningSettings } from '../../components/planning/planning-settings/planning-settings.component';
 import { DEFAULT_END_HOUR, DEFAULT_START_HOUR } from '../../components/planning/planning-settings/planning-settings.form';
 import { toDailyDriverPlanning } from '../../common/fares.presenter';
@@ -15,6 +15,7 @@ import { DailyDriverPlanning, ScheduledPlanningSession } from '../../common/fare
 import { LIST_DRIVERS_QUERY, ListDriversQuery } from '@features/common/driver';
 import { paramsToDateDayString } from './daily-planning.presenter';
 import { SessionContext, SlotContext } from '../../components/planning/planning-row/planning-row.component';
+import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 
 const DEFAULT_PLANNING_SETTINGS: PlanningSettings = {
   interval: 60,
@@ -57,7 +58,15 @@ export class DailyPlanningLayout {
   public readonly scheduledFares$: Observable<(Entity & Scheduled)[]> = this.refresh$.pipe(
     startWith(null),
     switchMap((): Observable<Params> => this._route.params),
-    switchMap((params: Params): Observable<(Entity & Scheduled)[]> => this._faresForDateQuery(paramsToDateDayString(params)))
+    switchMap((params: Params): Observable<(Entity & Scheduled)[]> => this._faresForDateQuery(paramsToDateDayString(params))),
+    catchError((error: Error): Observable<(Entity & Scheduled)[]> => {
+      this._toaster.toast({
+        content: `Échec de la récupération des courses : ${error.name} | ${error.message}`,
+        status: 'danger',
+        title: 'Opération échouée'
+      });
+      return of([]);
+    })
   );
 
   public readonly returnsToSchedule$: Observable<(Entity & Pending)[]> = this.refresh$.pipe(
@@ -65,7 +74,15 @@ export class DailyPlanningLayout {
     switchMap((): Observable<Params> => this._route.params),
     switchMap(
       (params: Params): Observable<(Entity & Pending)[]> => this._pendingReturnsForDateQuery(paramsToDateDayString(params))
-    )
+    ),
+    catchError((error: Error): Observable<(Entity & Pending)[]> => {
+      this._toaster.toast({
+        content: `Échec de la récupération des retours en attente : ${error.name} | ${error.message}`,
+        status: 'danger',
+        title: 'Opération échouée'
+      });
+      return of([]);
+    })
   );
 
   public readonly plannings$: Observable<DailyDriverPlanning[]> = combineLatest([this.drivers$, this.scheduledFares$]).pipe(
@@ -75,6 +92,7 @@ export class DailyPlanningLayout {
   );
 
   public constructor(
+    private readonly _toaster: ToasterPresenter,
     private readonly _router: Router,
     private readonly _route: ActivatedRoute,
     @Inject(SCHEDULED_FARES_FOR_DATE_QUERY) private readonly _faresForDateQuery: ScheduledFaresForDateQuery,

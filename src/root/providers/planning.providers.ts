@@ -3,7 +3,7 @@ import { FactoryProvider, ValueProvider } from '@angular/core';
 import {
   deleteFareAction$,
   deleteFareActionProvider,
-  faresForDateQuery$,
+  validatedScheduledFaresForDateQuery$,
   pendingReturnsForDateQueryProvider,
   registerRegularActionProvider,
   scheduledFaresForDateQueryProvider,
@@ -33,7 +33,7 @@ export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   registerRegularActionProvider(validatedRegisterRegularAction$, [HttpClient]),
   scheduleReturnActionProvider(validatedScheduleReturnAction$, [HttpClient]),
   predictRecurrenceQueryProvider(predictRecurrenceQuery$, [HttpClient]),
-  scheduledFaresForDateQueryProvider(faresForDateQuery$, [HttpClient]),
+  scheduledFaresForDateQueryProvider(validatedScheduledFaresForDateQuery$, [HttpClient]),
   pendingReturnsForDateQueryProvider(validatedPendingReturnsForDateQuery$, [HttpClient]),
   searchPlaceQueryProvider(searchPlaceQuery$, [HttpClient]),
   listDriversQueryProvider(listDriversQuery$, [HttpClient]),
