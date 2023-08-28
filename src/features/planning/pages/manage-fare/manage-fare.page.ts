@@ -6,6 +6,9 @@ import { SessionContext } from '../../components/planning/planning-row/planning-
 import { DailyDriverPlanning, ScheduledPlanningSession } from '../../common/fares.presentation';
 import { ActivatedRoute, Router } from '@angular/router';
 import { minutesToTime } from '../../pipes/minutes-to-time/minutes-to-time.presenter';
+import { Entity, Scheduled } from '@domain';
+import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
+import { toDeleteFareSuccessToast } from './manage-fare.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,19 +48,21 @@ export class ManageFarePage {
     );
 
   public constructor(
+    private readonly _toaster: ToasterPresenter,
     private readonly _planning: DailyPlanningLayout,
     private readonly _router: Router,
     private readonly _route: ActivatedRoute,
     @Inject(DELETE_FARE_ACTION) private readonly _deleteFareAction$: DeleteFareAction
   ) {}
 
-  public async onActionSuccess(): Promise<void> {
+  public onDeleteFareActionSuccess = async (payload: unknown): Promise<void> => {
+    // TODO Type action and modify returned payload
+    this._toaster.toast(toDeleteFareSuccessToast(payload as { rows: (Entity & Scheduled)[] }[]));
     await this._router.navigate(['..'], { relativeTo: this._route });
-  }
+  };
 
-  public onManageFareActionError = (_error: Error): void => {
-    // eslint-disable-next-line no-alert
-    alert('ERROR ERROR ERROR');
+  public onDeleteFareActionError = (_error: Error): void => {
+    this._toaster.toast({ content: 'Échec de la suppression de la course', status: 'danger', title: 'Opération échouée' });
   };
 
   public onClickDeleteFare = (triggerAction: () => void): void => {

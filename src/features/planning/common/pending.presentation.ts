@@ -1,13 +1,12 @@
 import { Entity, Pending, Place } from '@domain';
+import { EstimateJourneyValues } from '../components';
 
-export type PendingPresentation = {
+export type PendingPresentation = EstimateJourneyValues & {
   passenger: string;
   pendingReturnId: string;
   departureDatetime: string;
   departurePlace: Place;
   arrivalPlace: Place;
-  driveDuration: number;
-  driveDistance: number;
   driver: string;
 };
 

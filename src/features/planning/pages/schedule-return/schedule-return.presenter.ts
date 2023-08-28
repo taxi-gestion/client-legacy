@@ -1,7 +1,20 @@
 import { datetimeLocalToIso8601UTCString, metersToKilometers, minutesToSeconds } from '../../common/unit-convertion';
-import { Entity, ReturnToSchedule } from '@domain';
+import { Entity, ReturnToSchedule, Scheduled } from '@domain';
 import { PendingPresentation } from '../../common';
 import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
+import { Toast } from '../../../../root/components/toaster/toaster.presenter';
+import { toLocalTime } from '../schedule-fare/schedule-fare.presenter';
+
+export const toScheduleReturnSuccessToast = (payload: { rows: (Entity & Scheduled)[] }[]): Toast => {
+  // TODO Adapt & type api response to return right payload
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const fare: Entity & Scheduled = payload[0]!.rows[0]!;
+  return {
+    content: `Retour pour ${fare.passenger} par ${fare.driver} à ${toLocalTime(fare.datetime)} planifié`,
+    status: 'success',
+    title: 'Un retour a été planifié'
+  };
+};
 
 export const toReturnToSchedule = (formValues: PendingPresentation): Entity & ReturnToSchedule => ({
   id: formValues.pendingReturnId,

@@ -6,7 +6,7 @@ import {
 } from '../../common/unit-convertion';
 import { FareToSchedulePresentation } from './schedule-fare.form';
 import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
-import { Journey, FareToSchedule, Entity, Scheduled } from '@domain';
+import { FareToSchedule, Entity, Scheduled } from '@domain';
 import { addMinutes, format, subHours } from 'date-fns';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 
@@ -20,9 +20,9 @@ export const toScheduleFareSuccessToast = (payload: { rows: (Entity & Scheduled)
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const fare: Entity & Scheduled = payload[0]!.rows[0]!;
   return {
-    content: `Course pour ${fare.passenger} par ${fare.driver} à ${toLocalTime(fare.datetime)} ajoutée`,
+    content: `Course pour ${fare.passenger} par ${fare.driver} à ${toLocalTime(fare.datetime)} planifiée`,
     status: 'success',
-    title: 'Course ajoutée avec succès'
+    title: 'Une course a été planifiée'
   };
 };
 
@@ -39,12 +39,6 @@ export const toFareToSchedule = (formValues: FareToSchedulePresentation): FareTo
   passenger: formValues.passenger,
   phone: formValues.phoneToCall,
   status: 'to-schedule'
-});
-
-export const toJourney = (formValues: FareToSchedulePresentation): Journey => ({
-  origin: formValues.departurePlace,
-  destination: formValues.arrivalPlace,
-  departureTime: datetimeLocalToIso8601UTCString(formValues.departureDatetime)
 });
 
 // TODO Réfléchir à la mutualisation des erreurs communes

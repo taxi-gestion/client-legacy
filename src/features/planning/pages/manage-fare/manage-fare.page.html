@@ -10,12 +10,12 @@ Résumé:
 <button
   [appLoadAction]="deleteFare$"
   #loadAction="loadAction"
-  (actionSuccess)="onActionSuccess()"
-  (actionError)="onManageFareActionError($event)"
+  (actionSuccess)="onDeleteFareActionSuccess($event)"
+  (actionError)="onDeleteFareActionError($event)"
   (click)="onClickDeleteFare(loadAction.start)"
   [appLoadActionDisplay]="loadAction.isLoading$ | async"
   #loadActionDisplay
-  type="submit"
+  type="button"
   class="btn btn-danger mt-5"
   [disabled]="loadActionDisplay.isLoading">
   <ng-container slot="loadActionDisplayIdle">Supprimer la course</ng-container>

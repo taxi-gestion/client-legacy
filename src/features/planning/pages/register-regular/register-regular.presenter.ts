@@ -8,9 +8,9 @@ export const toRegisterRegularSuccessToast = (payload: { rows: (Entity & Regular
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const regular: Entity & Regular = payload[0]!.rows[0]!;
   return {
-    content: `Un nouveau passager a été enregistré avec succès`,
+    content: `Nouveau passager, ${regular.firstname} ${regular.lastname} - ${regular.phone} enregistré`,
     status: 'success',
-    title: `Nouveau passager régulier: ${regular.firstname} ${regular.lastname} - ${regular.phone}`
+    title: `Un passager a été enregistré`
   };
 };
 export const toRegular = (formValues: RegisterRegularPresentation): Regular => ({
