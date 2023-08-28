@@ -69,7 +69,7 @@ export class ScheduleReturnPage {
   public onSelectPendingReturnChange(pendingReturn: PendingPresentation): void {
     this.scheduleReturnForm.controls.pendingReturnId.setValue(pendingReturn.pendingReturnId);
     this.onSelectDepartureChange(pendingReturn.departurePlace);
-    this.onSelectArrivalChange(pendingReturn.departurePlace);
+    this.onSelectArrivalChange(pendingReturn.arrivalPlace);
     // TODO Have full entity
     this.onSelectDriverChange({ identifier: pendingReturn.driver, username: pendingReturn.driver });
   }
