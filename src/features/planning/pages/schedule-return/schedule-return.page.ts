@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { BehaviorSubject, combineLatest, filter, map, Observable, switchMap } from 'rxjs';
 import { SCHEDULE_RETURN_ACTION, ScheduleReturnAction } from '../../providers';
 import { SCHEDULE_RETURN_FORM, ScheduleReturnFields, setScheduleReturnErrorToForm } from './schedule-return.form';
@@ -11,6 +11,7 @@ import { PendingPresentation } from '../../common';
 import { defaultPlaceValue, toJourney } from '../../common/fares.presenter';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
+import { EstimateJourneyValues } from '../../components';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -89,6 +90,11 @@ export class ScheduleReturnPage {
     setScheduleReturnErrorToForm(formatScheduleReturnError(error));
     this._toaster.toast({ content: 'Échec de la planification du retour', status: 'danger', title: 'Opération échouée' });
   };
+
+  public updateEstimateFields($event: Record<keyof EstimateJourneyValues, FormControl<number>>): void {
+    this.scheduleReturnForm.controls.driveDuration = $event.driveDuration;
+    this.scheduleReturnForm.controls.driveDistance = $event.driveDistance;
+  }
 }
 
 const paramsToDateString = (params: Params): string =>
