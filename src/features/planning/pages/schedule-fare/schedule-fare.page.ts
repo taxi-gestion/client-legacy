@@ -38,7 +38,8 @@ export class ScheduleFarePage {
 
   //TODO Type to Observable<Error | Entity & Scheduled>
   public readonly scheduleFare$ = (): Observable<object> =>
-    this._scheduleFareAction$(toFareToSchedule(SCHEDULE_FARE_FORM.value as FareToSchedulePresentation));
+    // TODO Had to use SCHEDULE_FARE_FORM.getRawValue() instead of SCHEDULE_FARE_FORM.value for the latest controls value to be retreived
+    this._scheduleFareAction$(toFareToSchedule(SCHEDULE_FARE_FORM.getRawValue() as FareToSchedulePresentation));
 
   public readonly scheduleFareForm: FormGroup<ScheduleFareFields> = SCHEDULE_FARE_FORM;
 
@@ -50,7 +51,7 @@ export class ScheduleFarePage {
     filter(([departure, destination]: [Place, Place]): boolean => isValidPlace(departure) && isValidPlace(destination)),
     switchMap(
       (): Observable<JourneyEstimate> =>
-        this._estimateJourneyQuery$(toJourney(SCHEDULE_FARE_FORM.value as FareToSchedulePresentation))
+        this._estimateJourneyQuery$(toJourney(SCHEDULE_FARE_FORM.getRawValue() as FareToSchedulePresentation))
     ),
     map(toDisplayDurationDistance)
   );
