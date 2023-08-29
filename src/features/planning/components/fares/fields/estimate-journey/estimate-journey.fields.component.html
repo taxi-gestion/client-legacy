@@ -7,7 +7,8 @@
       type="number"
       class="form-control"
       name="driveDuration"
-      [formControl]="form.controls.driveDuration" />
+      [formControl]="form.controls.driveDuration"
+      (change)="onFormChange()" />
     <div class="input-group-append">
       <span class="input-group-text">minutes</span>
     </div>
@@ -22,7 +23,8 @@
       type="number"
       class="form-control"
       name="driveDistance"
-      [formControl]="form.controls.driveDistance" />
+      [formControl]="form.controls.driveDistance"
+      (change)="onFormChange()" />
     <div class="input-group-append">
       <span class="input-group-text">kilomètres</span>
     </div>

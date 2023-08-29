@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap } from 'rxjs';
 import { defaultPlaceValue, toJourney } from '../../common/fares.presenter';
 import { SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../providers';
@@ -23,6 +23,7 @@ import { SlotContext } from '../../components/planning/planning-row/planning-row
 import { DailyDriverPlanning } from '../../common/fares.presentation';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EstimateJourneyValues } from '../../components';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -114,4 +115,9 @@ export class ScheduleFarePage {
     setScheduleFareErrorToForm(formatScheduleFareError(error));
     this._toaster.toast({ content: 'Échec de la planification de la course', status: 'danger', title: 'Opération échouée' });
   };
+
+  public updateEstimateFields($event: Record<keyof EstimateJourneyValues, FormControl<number>>): void {
+    this.scheduleFareForm.controls.driveDuration = $event.driveDuration;
+    this.scheduleFareForm.controls.driveDistance = $event.driveDistance;
+  }
 }

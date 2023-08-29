@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DurationDistance } from '@domain';
 
@@ -29,8 +29,16 @@ export class EstimateJourneyFieldsComponent {
     durationDistance != null && this.onJourneyEstimateReceived(durationDistance);
   }
 
+  @Output() public formControlUpdated: EventEmitter<Record<keyof EstimateJourneyValues, FormControl>> = new EventEmitter<
+    Record<keyof EstimateJourneyValues, FormControl>
+  >();
+
   public onJourneyEstimateReceived(durationDistance: DurationDistance): void {
     this.form.controls.driveDuration.setValue(durationDistance.duration);
     this.form.controls.driveDistance.setValue(durationDistance.distance);
+  }
+
+  public onFormChange(): void {
+    this.formControlUpdated.emit(this.form.controls);
   }
 }

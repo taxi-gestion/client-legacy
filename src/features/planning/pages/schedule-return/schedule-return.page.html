@@ -40,7 +40,8 @@
   </div>
   <app-estimate-journey-fields
     [form]="$any(scheduleReturnForm)"
-    [estimateJourney]="estimateJourney$ | async"></app-estimate-journey-fields>
+    [estimateJourney]="estimateJourney$ | async"
+    (formControlUpdated)="updateEstimateFields($event)"></app-estimate-journey-fields>
   <div class="mb-3">
     <label for="driver" class="form-label">Chauffeur</label>
     <app-driver-field (selectDriver)="onSelectDriverChange($event)"></app-driver-field>
