@@ -1,4 +1,4 @@
-import { datetimeLocalToIso8601UTCString, metersToKilometers, minutesToSeconds } from '../../common/unit-convertion';
+import { datetimeLocalToIso8601UTCString, kilometersToMeters, minutesToSeconds } from '../../common/unit-convertion';
 import { Entity, ReturnToSchedule, Scheduled } from '@domain';
 import { PendingPresentation } from '../../common';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
@@ -22,7 +22,7 @@ export const toReturnToSchedule = (formValues: PendingPresentation): Entity & Re
   destination: formValues.arrivalPlace,
   driver: formValues.driver,
   datetime: datetimeLocalToIso8601UTCString(formValues.departureDatetime),
-  distance: metersToKilometers(formValues.driveDistance),
+  distance: kilometersToMeters(formValues.driveDistance),
   duration: minutesToSeconds(formValues.driveDuration),
   kind: 'two-way',
   status: 'return-to-schedule'
