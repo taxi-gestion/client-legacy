@@ -6,7 +6,7 @@ import { SessionContext } from '../../components/planning/planning-row/planning-
 import { DailyDriverPlanning, ScheduledPlanningSession } from '../../common/fares.presentation';
 import { ActivatedRoute, Router } from '@angular/router';
 import { minutesToTime } from '../../pipes/minutes-to-time/minutes-to-time.presenter';
-import { Entity, Scheduled } from '@domain';
+import { Entity, Pending, Scheduled } from '@domain';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { toDeleteFareSuccessToast } from './manage-fare.presenter';
 
@@ -39,11 +39,12 @@ export class ManageFarePage {
   );
   /* eslint-enable @typescript-eslint/restrict-template-expressions */
 
-  public readonly deleteFare$ = (): Observable<object> =>
+  public readonly deleteFare$ = (): Observable<[Entity & Scheduled, (Entity & Pending)?]> =>
     this.selectedSessionContext$.pipe(
       switchMap(
-        (context: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>): Observable<object> =>
-          this._deleteFareAction$(context.sessionContext.id)
+        (
+          context: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>
+        ): Observable<[Entity & Scheduled, (Entity & Pending)?]> => this._deleteFareAction$(context.sessionContext.id)
       )
     );
 
@@ -55,14 +56,14 @@ export class ManageFarePage {
     @Inject(DELETE_FARE_ACTION) private readonly _deleteFareAction$: DeleteFareAction
   ) {}
 
-  public onDeleteFareActionSuccess = async (payload: unknown): Promise<void> => {
+  public onDeleteFareActionSuccess = async (payload: [Entity & Scheduled, (Entity & Pending)?]): Promise<void> => {
     // TODO Type action and modify returned payload
-    this._toaster.toast(toDeleteFareSuccessToast(payload as { rows: (Entity & Scheduled)[] }[]));
+    this._toaster.toast(toDeleteFareSuccessToast(payload));
     await this._router.navigate(['..'], { relativeTo: this._route });
   };
 
   public onDeleteFareActionError = (_error: Error): void => {
-    this._toaster.toast({ content: 'Échec de la suppression de la course', status: 'danger', title: 'Opération échouée' });
+    this._toaster.toast({ content: 'Échec de la suppression', status: 'danger', title: 'Opération échouée' });
   };
 
   public onClickDeleteFare = (triggerAction: () => void): void => {
