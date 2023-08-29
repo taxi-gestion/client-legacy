@@ -26,7 +26,8 @@ export class ScheduleReturnPage {
   @Output() public scheduleReturnError: EventEmitter<Error> = new EventEmitter<Error>();
 
   public readonly scheduleReturn$ = (): Observable<object> =>
-    this._scheduleReturnAction$(toReturnToSchedule(SCHEDULE_RETURN_FORM.value as PendingPresentation));
+    // TODO Had to use SCHEDULE_FARE_FORM.getRawValue() instead of SCHEDULE_FARE_FORM.value for the latest controls value to be retreived
+    this._scheduleReturnAction$(toReturnToSchedule(SCHEDULE_RETURN_FORM.getRawValue() as PendingPresentation));
 
   public readonly scheduleReturnForm: FormGroup<ScheduleReturnFields> = SCHEDULE_RETURN_FORM;
 
@@ -38,7 +39,7 @@ export class ScheduleReturnPage {
     filter(([departure, destination]: [Place, Place]): boolean => isValidPlace(departure) && isValidPlace(destination)),
     switchMap(
       (): Observable<JourneyEstimate> =>
-        this._estimateJourneyQuery$(toJourney(SCHEDULE_RETURN_FORM.value as PendingPresentation))
+        this._estimateJourneyQuery$(toJourney(SCHEDULE_RETURN_FORM.getRawValue() as PendingPresentation))
     ),
     map(toDisplayDurationDistance)
   );
