@@ -33,7 +33,17 @@ export class ScheduleReturnPage {
 
   private readonly _departure: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
 
+  public departureDisplay: Observable<string> = this._departure
+    .asObservable()
+    .pipe(map((place: Place): string => place.context));
+
   private readonly _destination: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
+  public destinationDisplay: Observable<string> = this._destination
+    .asObservable()
+    .pipe(map((place: Place): string => place.context));
+
+  private readonly _driverDisplay: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  public driverDisplay: Observable<string> = this._driverDisplay.asObservable();
 
   public readonly estimateJourney$: Observable<DurationDistance> = combineLatest([this._departure, this._destination]).pipe(
     filter(([departure, destination]: [Place, Place]): boolean => isValidPlace(departure) && isValidPlace(destination)),
@@ -54,6 +64,14 @@ export class ScheduleReturnPage {
     @Inject(ESTIMATE_JOURNEY_QUERY) private readonly _estimateJourneyQuery$: EstimateJourneyQuery
   ) {}
 
+  public onSelectPendingReturnChange(pendingReturn: PendingPresentation): void {
+    this.scheduleReturnForm.controls.pendingReturnId.setValue(pendingReturn.pendingReturnId);
+    this.onSelectDepartureChange(pendingReturn.departurePlace);
+    this.onSelectArrivalChange(pendingReturn.arrivalPlace);
+    // TODO Have full entity
+    this.onSelectDriverChange({ identifier: pendingReturn.driver, username: pendingReturn.driver });
+  }
+
   public onSelectDepartureChange(place: Place): void {
     this.scheduleReturnForm.controls.departurePlace.setValue(place);
     this._departure.next(place);
@@ -66,14 +84,7 @@ export class ScheduleReturnPage {
 
   public onSelectDriverChange(driver: Driver): void {
     this.scheduleReturnForm.controls.driver.setValue(driver.identifier);
-  }
-
-  public onSelectPendingReturnChange(pendingReturn: PendingPresentation): void {
-    this.scheduleReturnForm.controls.pendingReturnId.setValue(pendingReturn.pendingReturnId);
-    this.onSelectDepartureChange(pendingReturn.departurePlace);
-    this.onSelectArrivalChange(pendingReturn.arrivalPlace);
-    // TODO Have full entity
-    this.onSelectDriverChange({ identifier: pendingReturn.driver, username: pendingReturn.driver });
+    this._driverDisplay.next(driver.identifier);
   }
 
   public onSubmitReturnToSchedule = (triggerAction: () => void): void => {
