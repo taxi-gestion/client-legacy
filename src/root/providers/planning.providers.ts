@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { FactoryProvider, ValueProvider } from '@angular/core';
 import {
-  deleteFareAction$,
+  validatedDeleteFareAction$,
   deleteFareActionProvider,
   validatedScheduledFaresForDateQuery$,
   pendingReturnsForDateQueryProvider,
@@ -39,5 +39,5 @@ export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   listDriversQueryProvider(listDriversQuery$, [HttpClient]),
   searchPassengerQueryProvider(searchPassengersQuery$, [HttpClient]),
   estimateJourneyQueryProvider(estimateJourneyQuery$, [HttpClient]),
-  deleteFareActionProvider(deleteFareAction$, [HttpClient])
+  deleteFareActionProvider(validatedDeleteFareAction$, [HttpClient])
 ];
