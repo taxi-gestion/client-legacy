@@ -24,3 +24,12 @@ app-planning-row > div {
 .shadow-right {
   box-shadow: 5px 0 5px -2px rgb(0 0 0 / 10%);
 }
+
+.planning-session {
+  background-color: $white;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: $primary-bg-subtle;
+  }
+}
