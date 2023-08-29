@@ -1,40 +1,47 @@
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { DeleteFareAction } from '../providers';
 import { Entity, Pending, Scheduled } from '@domain';
+import { ValidationFailedAfterApiCallError } from '../errors';
 
 const deleteFareUrl = (fareId: string): string => `https://taxi-gestion.com/api/delete-fare/${fareId}`;
 
-/*const handleDeleteFareError$ =
-  () =>
-  (errorResponse: Error | HttpErrorResponse, caught: Observable<object>): Observable<object> => {
-    if (errorResponse instanceof ValidationFailedBeforeApiCallError) return throwError((): Error => errorResponse);
-
-    switch ((errorResponse as HttpErrorResponse).error.__type) {
-      default:
-        return throwError((): Observable<object> => caught);
-    }
-  };*/
-
-/*export const validatedDeleteFareAction$ =
-  (http: HttpClient): DeleteFareAction =>
-  (fareToSchedule: FareToSchedule): Observable<object> =>
-    fpPipe(
-      fareToScheduleCodec.decode(fareToSchedule),
-      fold(
-        (): Observable<object> =>
-          throwError((): Error => new ValidationFailedBeforeApiCallError()).pipe(catchError(handleDeleteFareError$())),
-        (validatedTransfer: FareToSchedule): Observable<object> =>
-          http.post(deleteFareUrl(), validatedTransfer).pipe(catchError(handleDeleteFareError$()))
-      )
-    );*/
-
-export const deleteFareAction$ =
+export const validatedDeleteFareAction$ =
   (httpClient: HttpClient): DeleteFareAction =>
   (fareId: string): Observable<[Entity & Scheduled, (Entity & Pending)?]> =>
-    httpClient.delete<[Entity & Scheduled, (Entity & Pending)?]>(deleteFareUrl(fareId), {
-      headers: {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        'Content-Type': 'application/json'
-      }
-    }); /*.pipe(catchError(handleDeleteFareError$()));*/
+    httpClient.delete<unknown>(deleteFareUrl(fareId)).pipe(
+      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type,no-console,@typescript-eslint/typedef
+      tap((x) => console.log('delete raw return', x)),
+      map(deletedFareAndReturnValidation),
+      catchError(
+        (error: Error | HttpErrorResponse, caught: Observable<[Entity & Scheduled, (Entity & Pending)?]>): Observable<never> =>
+          handleDeletedFareAndReturnError$(error, caught)
+      )
+    );
+
+const handleDeletedFareAndReturnError$ = (
+  error: Error | HttpErrorResponse,
+  caught: Observable<[Entity & Scheduled, (Entity & Pending)?]>
+): Observable<never> => {
+  if (error instanceof ValidationFailedAfterApiCallError) return throwError((): Error => error);
+
+  switch ((error as HttpErrorResponse).error.__type) {
+    default:
+      return throwError((): Observable<[Entity & Scheduled, (Entity & Pending)?]> => caught);
+  }
+};
+
+const deletedFareAndReturnValidation = (_transfer: unknown): [Entity & Scheduled, (Entity & Pending)?] =>
+  [{}, {}] as unknown as [Entity & Scheduled, (Entity & Pending)?];
+
+//fpPipe(
+//  transfer,
+//  externalTypeCheckFor<[Entity & Scheduled, (Entity & Pending)?]>(scheduledFaresCodec),
+//  fold(
+//    // TODO Share error reporter between projects
+//    (): never => {
+//      throw new ValidationFailedAfterApiCallError(`Faudrait mettre le HttpReporter...`);
+//    },
+//    (validatedTransfer: [Entity & Scheduled, (Entity & Pending)?]): [Entity & Scheduled, (Entity & Pending)?] => validatedTransfer
+//  )
+//);
