@@ -7,6 +7,7 @@ import { filterByPlanning, toScheduledFaresPresentation } from '../../common/far
 import { toStandardDateFormat } from '../../common/unit-convertion';
 import { Entity, Scheduled } from '@domain';
 import { ScheduledPresentation } from '../../common/fares.presentation';
+import { toAgendaFares } from './driver-agenda.presenter';
 
 const paramsToDateString = (params: Params): string =>
   params['date'] == null ? toStandardDateFormat(new Date()) : (params['date'] as string);
@@ -21,7 +22,8 @@ export class DriverAgendaPage {
   public readonly agenda$: Observable<ScheduledPresentation[]> = this._route.params.pipe(
     switchMap((params: Params): Observable<(Entity & Scheduled)[]> => this._faresForDateQuery(paramsToDateString(params))),
     map(toScheduledFaresPresentation),
-    map(filterByPlanning(this._session.username()))
+    map(filterByPlanning(this._session.username())),
+    map(toAgendaFares)
   );
 
   public constructor(
