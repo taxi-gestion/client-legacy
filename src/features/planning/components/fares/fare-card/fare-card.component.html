@@ -17,18 +17,28 @@
     </div>
     <p class="small my-3">
       Départ à
-      <b>{{ fare.localTime }}</b>
+      <b>{{ fare.datetime }}</b>
       :
-      <a href="geo:{{ fare.departure }}">{{ fare.departure }}</a>
+      <a href="geo:{{ fare.departure.location.latitude }},{{ fare.departure.location.longitude }}">
+        {{ fare.departure.context }}
+      </a>
       <br />
       Destination :
-      <a href="geo:{{ fare.destination }}">{{ fare.destination }}</a>
+      <a href="geo:{{ fare.destination.location.latitude }},{{ fare.destination.location.longitude }}">
+        {{ fare.destination.context }}
+      </a>
     </p>
     <a
       class="btn btn-sm btn-primary"
-      href="https://www.google.com/maps/dir/?api=1&origin={{ fare.departure }}&destination={{ fare.destination }}"
+      href="https://www.google.com/maps/dir/?api=1&origin={{ fare.departure.context }}&destination={{
+        fare.destination.context
+      }}"
       target="_blank">
-      Trajet de {{ fare.distance }} en {{ fare.duration }} min
+      Visualiser le trajet
     </a>
+    <br />
+    Estimation distance: {{ fare.distance }} Km
+    <br />
+    Estimation temps: {{ fare.duration }} minutes
   </div>
 </div>
