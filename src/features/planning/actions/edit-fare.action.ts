@@ -1,28 +1,37 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, Observable, tap, throwError } from 'rxjs';
-import { DeleteFareAction } from '../providers';
-import { Entity, Pending, Scheduled } from '@domain';
-import { ValidationFailedAfterApiCallError } from '../errors';
 import { pipe as fpPipe } from 'fp-ts/function';
-import { externalTypeCheckFor, scheduledFareAndOptionalPendingReturnCodec } from '@codecs';
 import { fold } from 'fp-ts/Either';
+import { ValidationFailedAfterApiCallError, ValidationFailedBeforeApiCallError } from '../errors';
+import { Entity, FareToEdit, Pending, Scheduled } from '@domain';
+import { externalTypeCheckFor, fareToEditCodec, scheduledFareAndOptionalPendingReturnCodec } from '@codecs';
+import { EditFareAction } from '../providers';
 
-const deleteFareUrl = (fareId: string): string => `https://taxi-gestion.com/api/delete-fare/${fareId}`;
+const editFareUrl = (): string => `/api/edit-fare`;
 
-export const validatedDeleteFareAction$ =
-  (httpClient: HttpClient): DeleteFareAction =>
-  (fareId: string): Observable<[Entity & Scheduled, (Entity & Pending)?]> =>
-    httpClient.delete<unknown>(deleteFareUrl(fareId)).pipe(
-      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type,no-console,@typescript-eslint/typedef
-      tap((x) => console.log('delete raw return', x)),
-      map(deletedFareAndReturnValidation),
-      catchError(
-        (error: Error | HttpErrorResponse, caught: Observable<[Entity & Scheduled, (Entity & Pending)?]>): Observable<never> =>
-          handleDeletedFareAndReturnError$(error, caught)
+export const validatedEditFareAction$ =
+  (http: HttpClient): EditFareAction =>
+  (fareToEdit: FareToEdit): Observable<[Entity & Scheduled, (Entity & Pending)?]> =>
+    fpPipe(
+      fareToEditCodec.decode(fareToEdit),
+      fold(
+        (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCallError()),
+        (validatedTransfer: FareToEdit): Observable<[Entity & Scheduled, (Entity & Pending)?]> =>
+          http.post<unknown>(editFareUrl(), validatedTransfer).pipe(
+            // eslint-disable-next-line @typescript-eslint/explicit-function-return-type,no-console,@typescript-eslint/typedef
+            tap((x) => console.log('edit raw return', x)),
+            map(editedFareAndReturnValidation),
+            catchError(
+              (
+                error: Error | HttpErrorResponse,
+                caught: Observable<[Entity & Scheduled, (Entity & Pending)?]>
+              ): Observable<never> => handleEditedFareAndReturnError$(error, caught)
+            )
+          )
       )
     );
 
-const handleDeletedFareAndReturnError$ = (
+const handleEditedFareAndReturnError$ = (
   error: Error | HttpErrorResponse,
   caught: Observable<[Entity & Scheduled, (Entity & Pending)?]>
 ): Observable<never> => {
@@ -34,7 +43,7 @@ const handleDeletedFareAndReturnError$ = (
   }
 };
 
-const deletedFareAndReturnValidation = (transfer: unknown): [Entity & Scheduled, (Entity & Pending)?] =>
+const editedFareAndReturnValidation = (transfer: unknown): [Entity & Scheduled, (Entity & Pending)?] =>
   fpPipe(
     transfer,
     extractRows,

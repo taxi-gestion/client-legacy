@@ -1,19 +1,9 @@
-import {
-  datetimeLocalToIso8601UTCString,
-  formatDateToDatetimeLocalString,
-  kilometersToMeters,
-  minutesToSeconds
-} from '../../common/unit-convertion';
+import { datetimeLocalToIso8601UTCString, kilometersToMeters, minutesToSeconds } from '../../common/unit-convertion';
 import { FareToSchedulePresentation } from './schedule-fare.form';
 import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
-import { FareToSchedule, Entity, Scheduled } from '@domain';
-import { addMinutes, format, subHours } from 'date-fns';
+import { Entity, FareToSchedule, Scheduled } from '@domain';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
-
-export const toLocalDatetimeString = (dateString: string, timeInMinutes: number): string =>
-  formatDateToDatetimeLocalString(subHours(addMinutes(new Date(dateString), timeInMinutes), 2));
-
-export const toLocalTime = (datetime: string): string => format(new Date(datetime), "HH'h'mm");
+import { toLocalTime } from '../../common/fares.presenter';
 
 export const toScheduleFareSuccessToast = (payload: { rows: (Entity & Scheduled)[] }[]): Toast => {
   // TODO Adapt & type api response to return right payload

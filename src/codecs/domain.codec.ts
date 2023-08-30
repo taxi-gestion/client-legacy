@@ -15,6 +15,7 @@ import {
   Drive,
   DurationDistance,
   Entity,
+  FareToEdit,
   FareToSchedule,
   Passenger,
   Pending,
@@ -24,6 +25,10 @@ import {
 } from '@domain';
 
 import { placeCodec } from './common';
+
+const entityCodec: Type<Entity> = ioType({
+  id: ioString
+});
 
 const driveCodec: Type<Drive> = ioType({
   datetime: ioString,
@@ -61,20 +66,33 @@ export const fareToScheduleCodec: Type<FareToSchedule> = ioIntersection([
 ]);
 
 export const returnToScheduleCodec: Type<Entity & ReturnToSchedule> = ioIntersection([
+  entityCodec,
   driveCodec,
   durationDistanceCodec,
   ioType({
-    id: ioString,
     kind: ioLiteral('two-way'),
     status: ioLiteral('return-to-schedule')
   })
 ]);
 
+export const fareToEditCodec: Type<Entity & FareToEdit> = ioIntersection([
+  entityCodec,
+  driveCodec,
+  durationDistanceCodec,
+  passengerCodec,
+  ioType({
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    kind: ioKeyof({ 'one-way': null, 'two-way': null }),
+    status: ioLiteral('to-edit'),
+    nature: ioKeyof({ medical: null, standard: null })
+  })
+]);
+
 const pendingReturnCodec: Type<Entity & Pending> = ioIntersection([
+  entityCodec,
   passengerCodec,
   driveCodec,
   ioType({
-    id: ioString,
     kind: ioLiteral('two-way'),
     status: ioLiteral('pending-return'),
     nature: ioKeyof({ medical: null, standard: null })
@@ -84,11 +102,11 @@ const pendingReturnCodec: Type<Entity & Pending> = ioIntersection([
 export const pendingReturnsCodec: Type<(Entity & Pending)[]> = ioArray(pendingReturnCodec);
 
 const scheduledFareCodec: Type<Entity & Scheduled> = ioIntersection([
+  entityCodec,
   passengerCodec,
   driveCodec,
   durationDistanceCodec,
   ioType({
-    id: ioString,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     kind: ioKeyof({ 'one-way': null, 'two-way': null }),
     status: ioLiteral('scheduled'),
@@ -98,7 +116,7 @@ const scheduledFareCodec: Type<Entity & Scheduled> = ioIntersection([
 
 export const scheduledFaresCodec: Type<(Entity & Scheduled)[]> = ioArray(scheduledFareCodec);
 
-export const fareAndOptionalPendingCodec: Type<[Entity & Scheduled, (Entity & Pending)?]> = ioTuple([
+export const scheduledFareAndOptionalPendingReturnCodec: Type<[Entity & Scheduled, (Entity & Pending)?]> = ioTuple([
   scheduledFareCodec,
   ioUnion([pendingReturnCodec, ioUndefined])
 ]) as unknown as Type<[Entity & Scheduled, (Entity & Pending)?]>;

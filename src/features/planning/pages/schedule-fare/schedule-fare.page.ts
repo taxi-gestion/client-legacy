@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap } from 'rxjs';
-import { defaultPlaceValue, toJourney } from '../../common/fares.presenter';
+import { defaultPlaceValue, toJourney, toLocalDatetimeString } from '../../common/fares.presenter';
 import { SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../providers';
 import {
   FareToSchedulePresentation,
@@ -9,12 +9,7 @@ import {
   ScheduleFareFields,
   setScheduleFareErrorToForm
 } from './schedule-fare.form';
-import {
-  formatScheduleFareError,
-  toFareToSchedule,
-  toLocalDatetimeString,
-  toScheduleFareSuccessToast
-} from './schedule-fare.presenter';
+import { formatScheduleFareError, toFareToSchedule, toScheduleFareSuccessToast } from './schedule-fare.presenter';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common/journey';
 import { Driver, DurationDistance, Entity, isValidPlace, JourneyEstimate, Passenger, Place, Scheduled } from '@domain';
 import { toDisplayDurationDistance } from '../../common/unit-convertion';
@@ -47,6 +42,7 @@ export class ScheduleFarePage {
 
   private readonly _destination: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
 
+  //region estimateJourney
   public readonly estimateJourney$: Observable<DurationDistance> = combineLatest([this._departure, this._destination]).pipe(
     filter(([departure, destination]: [Place, Place]): boolean => isValidPlace(departure) && isValidPlace(destination)),
     switchMap(
@@ -55,6 +51,12 @@ export class ScheduleFarePage {
     ),
     map(toDisplayDurationDistance)
   );
+
+  public updateEstimateFields($event: Record<keyof EstimateJourneyValues, FormControl<number>>): void {
+    this.scheduleFareForm.controls.driveDuration = $event.driveDuration;
+    this.scheduleFareForm.controls.driveDistance = $event.driveDistance;
+  }
+  //endregion
 
   public onSelectDepartureChange(place: Place): void {
     this.scheduleFareForm.controls.departurePlace.setValue(place);
@@ -116,9 +118,4 @@ export class ScheduleFarePage {
     setScheduleFareErrorToForm(formatScheduleFareError(error));
     this._toaster.toast({ content: 'Échec de la planification de la course', status: 'danger', title: 'Opération échouée' });
   };
-
-  public updateEstimateFields($event: Record<keyof EstimateJourneyValues, FormControl<number>>): void {
-    this.scheduleFareForm.controls.driveDuration = $event.driveDuration;
-    this.scheduleFareForm.controls.driveDistance = $event.driveDistance;
-  }
 }

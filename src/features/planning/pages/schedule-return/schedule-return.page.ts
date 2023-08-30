@@ -31,21 +31,21 @@ export class ScheduleReturnPage {
 
   public readonly scheduleReturnForm: FormGroup<ScheduleReturnFields> = SCHEDULE_RETURN_FORM;
 
-  private readonly _departure: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
+  private readonly _departure$: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
 
-  public departureDisplay: Observable<string> = this._departure
+  public departureDisplay$: Observable<string> = this._departure$
     .asObservable()
     .pipe(map((place: Place): string => place.context));
 
-  private readonly _destination: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
-  public destinationDisplay: Observable<string> = this._destination
+  private readonly _destination$: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
+  public destinationDisplay$: Observable<string> = this._destination$
     .asObservable()
     .pipe(map((place: Place): string => place.context));
 
-  private readonly _driverDisplay: BehaviorSubject<string> = new BehaviorSubject<string>('');
-  public driverDisplay: Observable<string> = this._driverDisplay.asObservable();
+  private readonly _driverDisplay$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  public driverDisplay$: Observable<string> = this._driverDisplay$.asObservable();
 
-  public readonly estimateJourney$: Observable<DurationDistance> = combineLatest([this._departure, this._destination]).pipe(
+  public readonly estimateJourney$: Observable<DurationDistance> = combineLatest([this._departure$, this._destination$]).pipe(
     filter(([departure, destination]: [Place, Place]): boolean => isValidPlace(departure) && isValidPlace(destination)),
     switchMap(
       (): Observable<JourneyEstimate> =>
@@ -74,17 +74,17 @@ export class ScheduleReturnPage {
 
   public onSelectDepartureChange(place: Place): void {
     this.scheduleReturnForm.controls.departurePlace.setValue(place);
-    this._departure.next(place);
+    this._departure$.next(place);
   }
 
   public onSelectArrivalChange(place: Place): void {
     this.scheduleReturnForm.controls.arrivalPlace.setValue(place);
-    this._destination.next(place);
+    this._destination$.next(place);
   }
 
   public onSelectDriverChange(driver: Driver): void {
     this.scheduleReturnForm.controls.driver.setValue(driver.identifier);
-    this._driverDisplay.next(driver.identifier);
+    this._driverDisplay$.next(driver.identifier);
   }
 
   public onSubmitReturnToSchedule = (triggerAction: () => void): void => {

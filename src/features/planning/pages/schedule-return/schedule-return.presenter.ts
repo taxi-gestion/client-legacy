@@ -2,8 +2,8 @@ import { datetimeLocalToIso8601UTCString, kilometersToMeters, minutesToSeconds }
 import { Entity, ReturnToSchedule, Scheduled } from '@domain';
 import { PendingPresentation } from '../../common';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
-import { toLocalTime } from '../schedule-fare/schedule-fare.presenter';
 import { VALIDATION_FAILED_AFTER_API_CALL_ERROR_NAME } from '../../errors';
+import { toLocalTime } from '../../common/fares.presenter';
 
 export const toScheduleReturnSuccessToast = (payload: { rows: (Entity & Scheduled)[] }[]): Toast => {
   // TODO Adapt & type api response to return right payload
