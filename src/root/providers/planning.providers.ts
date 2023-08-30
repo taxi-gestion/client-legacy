@@ -12,7 +12,8 @@ import {
   validatedPendingReturnsForDateQuery$,
   validatedRegisterRegularAction$,
   validatedScheduleFareAction$,
-  validatedScheduleReturnAction$
+  validatedScheduleReturnAction$,
+  editFareActionProvider
 } from '@features/planning';
 
 import {
@@ -27,6 +28,7 @@ import {
   searchPlaceQuery$,
   searchPlaceQueryProvider
 } from '@features/common';
+import { validatedEditFareAction$ } from '../../features/planning/actions/edit-fare.action';
 
 export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   scheduleFareActionProvider(validatedScheduleFareAction$, [HttpClient]),
@@ -39,5 +41,6 @@ export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   listDriversQueryProvider(listDriversQuery$, [HttpClient]),
   searchPassengerQueryProvider(searchPassengersQuery$, [HttpClient]),
   estimateJourneyQueryProvider(estimateJourneyQuery$, [HttpClient]),
-  deleteFareActionProvider(validatedDeleteFareAction$, [HttpClient])
+  deleteFareActionProvider(validatedDeleteFareAction$, [HttpClient]),
+  editFareActionProvider(validatedEditFareAction$, [HttpClient])
 ];

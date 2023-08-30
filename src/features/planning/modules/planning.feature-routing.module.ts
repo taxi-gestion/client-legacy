@@ -15,20 +15,28 @@ import { CanActivatePlanningRedirectGuard } from '../guards';
 
 const DAILY_PAGES: Routes = [
   {
-    path: 'schedule-fare',
-    component: ScheduleFarePage
+    path: 'manage-fare',
+    component: ManageFarePage
   },
   {
-    path: 'schedule-return',
-    component: ScheduleReturnPage
+    path: 'manage-fare/register-regular',
+    component: RegisterRegularPage
+  },
+  {
+    path: 'register-regular',
+    component: RegisterRegularPage
+  },
+  {
+    path: 'schedule-fare',
+    component: ScheduleFarePage
   },
   {
     path: 'schedule-fare/register-regular',
     component: RegisterRegularPage
   },
   {
-    path: 'manage-fare',
-    component: ManageFarePage
+    path: 'schedule-return',
+    component: ScheduleReturnPage
   }
 ];
 

@@ -42,6 +42,14 @@ export type FareToSchedule = Drive &
     status: 'to-schedule';
   };
 
+export type FareToEdit = Drive &
+  DurationDistance &
+  Nature &
+  Passenger & {
+    kind: 'one-way' | 'two-way';
+    status: 'to-edit';
+  };
+
 export type ReturnToSchedule = Drive &
   DurationDistance & {
     kind: 'two-way';

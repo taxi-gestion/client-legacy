@@ -1,12 +1,169 @@
 <div class="d-flex">
-  <h2 class="pt-2 pb-4 text-primary">Gérer la course</h2>
+  <h2 class="pt-2 pb-2 text-primary">Gérer la course</h2>
   <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
     <i class="ri-close-line ri-2x" aria-hidden="true"></i>
     <span class="visually-hidden">Fermer</span>
   </a>
 </div>
-Résumé:
-<pre>{{ selectedSessionDetails$ | async }}</pre>
+<hr />
+<h3 class="mb-3 text-primary h5">Modifier la course</h3>
+<form
+  [formGroup]="editFareForm"
+  [appLoadAction]="editFare$"
+  #loadAction="loadAction"
+  (actionSuccess)="onEditFareActionSuccess($event)"
+  (actionError)="onEditFareActionError($event)"
+  (ngSubmit)="onSubmitFareToEdit(loadAction.start)">
+  <div *ngIf="selectedSessionToFormValues$ | async"></div>
+  <div class="mb-3">
+    <label for="passenger" class="form-label">Identité du passager</label>
+    <app-passenger-field
+      (selectPassenger)="onSelectPassengerChange($event)"
+      (searchPassengerTerm)="onSearchPassengerTermChange($event)"
+      [defaultValue]="(selectedSessionPassenger$ | async) ?? ''"></app-passenger-field>
+    <input id="passenger" type="hidden" name="passenger" formControlName="passenger" />
+
+    <div class="row align-items-center mt-3">
+      <div class="col-auto">
+        <div>ou</div>
+      </div>
+      <div class="col-auto">
+        <a class="btn btn-secondary" ariaCurrentWhenActive="page" routerLinkActive="active" [routerLink]="'register-regular'">
+          Enregistrer un passager régulier
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="mb-3">
+    <label for="phoneToCall" class="form-label">Téléphone à appeler</label>
+    <input
+      id="phoneToCall"
+      type="text"
+      placeholder="(+33)/(0) 6 XX XX XX XX"
+      class="form-control"
+      name="phoneToCall"
+      formControlName="phoneToCall" />
+  </div>
+  <div class="mb-3">
+    <label for="departureDatetime" class="form-label">Date et heure du départ</label>
+    <input
+      id="departureDatetime"
+      type="datetime-local"
+      class="form-control"
+      name="departureDatetime"
+      formControlName="departureDatetime" />
+  </div>
+  <div class="mb-3">
+    <label for="departurePlace" class="form-label">Lieu de départ</label>
+    <app-place-field
+      (selectPlace)="onSelectDepartureChange($event)"
+      [defaultValue]="(departureDisplay$ | async) ?? ''"></app-place-field>
+    <input id="departurePlace" type="hidden" name="departurePlace" formControlName="departurePlace" />
+  </div>
+  <div class="mb-3">
+    <label for="arrivalPlace" class="form-label">Lieu d'arrivée</label>
+    <app-place-field
+      (selectPlace)="onSelectArrivalChange($event)"
+      [defaultValue]="(destinationDisplay$ | async) ?? ''"></app-place-field>
+    <input id="arrivalPlace" type="hidden" name="arrivalPlace" formControlName="arrivalPlace" />
+  </div>
+  <app-estimate-journey-fields
+    [form]="$any(editFareForm)"
+    [estimateJourney]="estimateJourney$ | async"
+    (formControlUpdated)="updateEstimateFields($event)"></app-estimate-journey-fields>
+  <div class="mb-3">
+    <label for="driver" class="form-label">Chauffeur</label>
+    <!-- TODO Find a better way to link observable to view -->
+    <app-driver-field
+      (selectDriver)="onSelectDriverChange($event)"
+      [defaultValue]="(driverDisplay$ | async) ?? ''"></app-driver-field>
+    <input id="driver" type="hidden" name="driver" formControlName="driver" />
+  </div>
+  <div class="mb-3">
+    <div class="form-check form-switch">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        id="isTwoWayDrive"
+        name="isTwoWayDrive"
+        formControlName="isTwoWayDrive"
+        checked />
+      <label class="form-check-label" for="isTwoWayDrive">Ce trajet comporte un retour</label>
+    </div>
+  </div>
+  <div class="mb-3">
+    <div class="form-check form-switch">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        id="isMedicalDrive"
+        name="isMedicalDrive"
+        formControlName="isMedicalDrive"
+        checked />
+      <label class="form-check-label" for="isMedicalDrive">Ce trajet est de nature médicale</label>
+    </div>
+  </div>
+  <button
+    [appLoadActionDisplay]="loadAction.isLoading$ | async"
+    #loadActionDisplay
+    type="submit"
+    class="btn mt-3 btn-primary w-100"
+    [disabled]="loadActionDisplay.isLoading">
+    <ng-container slot="loadActionDisplayIdle">Modifier la course</ng-container>
+    <ng-container slot="loadActionDisplayLoading">
+      <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+      Modification en cours...
+    </ng-container>
+  </button>
+  <!-- TODO Mutualiser les erreurs communes -->
+  <div class="text-danger mt-2" *ngIf="editFareForm.errors?.['validationFailedBeforeApiCallError']">
+    La structure des données de la requête ne respecte pas le contrat de transfer. La requête ne peut pas être effectuée.
+    Prévenir Romain qu'il va faire des heures supp'.
+  </div>
+  <div class="text-danger mt-2" *ngIf="editFareForm.errors">Une erreur est survenue lors de l'appel au service distant.</div>
+</form>
+<hr />
+<h3 class="mb-3 text-primary h5">Sous-traiter la course (irréversible)</h3>
+<!--    [formGroup]="subcontractFareForm"
+    [appLoadAction]="subcontractFare$"
+    #loadAction="loadAction"
+    (actionSuccess)="onSubcontractFareActionSuccess($event)"
+    (actionError)="onSubcontractFareActionError($event)"
+    (ngSubmit)="onSubmitFareToSubcontract(loadAction.start)"-->
+<form>
+  <div class="mb-3 mt-3">
+    <label for="subcontractor" class="form-label">Sous-traitant</label>
+    <input
+      id="subcontractor"
+      type="text"
+      placeholder="Identité du sous-traitant"
+      class="form-control"
+      name="subcontractor"
+      formControlName="subcontractor" />
+  </div>
+  <!--
+      [appLoadActionDisplay]="loadAction.isLoading$ | async"
+    #loadActionDisplay
+    [disabled]="loadActionDisplay.isLoading"
+  -->
+  <button type="submit" class="btn mt-3 btn-warning text-white w-100">
+    <ng-container slot="loadActionDisplayIdle">Sous-traiter la course</ng-container>
+    <!--    <ng-container slot="loadActionDisplayLoading">
+      <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+      Sous-traitance en cours...
+    </ng-container>-->
+  </button>
+  <!-- TODO Mutualiser les erreurs communes -->
+  <div class="text-danger mt-2" *ngIf="editFareForm.errors?.['validationFailedBeforeApiCallError']">
+    La structure des données de la requête ne respecte pas le contrat de transfer. La requête ne peut pas être effectuée.
+    Prévenir Romain qu'il va faire des heures supp'.
+  </div>
+  <div class="text-danger mt-2" *ngIf="editFareForm.errors">Une erreur est survenue lors de l'appel au service distant.</div>
+</form>
+<hr />
+<h3 class="mb-3 text-primary h5">Supprimer la course (irréversible)</h3>
 <button
   [appLoadAction]="deleteFare$"
   #loadAction="loadAction"
@@ -16,7 +173,7 @@ Résumé:
   [appLoadActionDisplay]="loadAction.isLoading$ | async"
   #loadActionDisplay
   type="button"
-  class="btn btn-danger mt-5"
+  class="btn btn-danger mt-2 w-100"
   [disabled]="loadActionDisplay.isLoading">
   <ng-container slot="loadActionDisplayIdle">Supprimer la course</ng-container>
   <ng-container slot="loadActionDisplayLoading">

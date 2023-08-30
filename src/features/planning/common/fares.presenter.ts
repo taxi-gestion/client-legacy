@@ -1,6 +1,11 @@
 import { DailyDriverPlanning, ScheduledPlanningSession, ScheduledPresentation } from './fares.presentation';
-import { datetimeLocalToIso8601UTCString, minutesSinceStartOfDayInTimezone, timeInTimezone } from './unit-convertion';
-import { secondsToMinutes } from 'date-fns';
+import {
+  datetimeLocalToIso8601UTCString,
+  formatDateToDatetimeLocalString,
+  minutesSinceStartOfDayInTimezone,
+  timeInTimezone
+} from './unit-convertion';
+import { addMinutes, format, secondsToMinutes, subHours } from 'date-fns';
 import { Driver, Entity, Journey, Place, Scheduled } from '@domain';
 
 export const defaultPlaceValue: Place = {
@@ -73,3 +78,8 @@ export const toScheduledPlanningSession = (fare: ScheduledPresentation): Schedul
   localTime: fare.localTime,
   startTimeInMinutes: minutesSinceStartOfDayInTimezone(fare.datetime, 'Europe/Paris')
 });
+
+export const toLocalTime = (datetime: string): string => format(new Date(datetime), "HH'h'mm");
+
+export const toLocalDatetimeString = (dateString: string, timeInMinutes: number): string =>
+  formatDateToDatetimeLocalString(subHours(addMinutes(new Date(dateString), timeInMinutes), 2));
