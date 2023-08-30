@@ -11,7 +11,7 @@ const editFareUrl = (): string => `/api/edit-fare`;
 
 export const validatedEditFareAction$ =
   (http: HttpClient): EditFareAction =>
-  (fareToEdit: FareToEdit): Observable<[Entity & Scheduled, (Entity & Pending)?]> =>
+  (fareToEdit: Entity & FareToEdit): Observable<[Entity & Scheduled, (Entity & Pending)?]> =>
     fpPipe(
       fareToEditCodec.decode(fareToEdit),
       fold(
