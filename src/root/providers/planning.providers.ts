@@ -13,7 +13,8 @@ import {
   validatedRegisterRegularAction$,
   validatedScheduleFareAction$,
   validatedScheduleReturnAction$,
-  editFareActionProvider
+  editFareActionProvider,
+  subcontractFareActionProvider
 } from '@features/planning';
 
 import {
@@ -29,6 +30,7 @@ import {
   searchPlaceQueryProvider
 } from '@features/common';
 import { validatedEditFareAction$ } from '../../features/planning/actions/edit-fare.action';
+import { validatedSubcontractFareAction$ } from '../../features/planning/actions/subcontract-fare.action';
 
 export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   scheduleFareActionProvider(validatedScheduleFareAction$, [HttpClient]),
@@ -42,5 +44,6 @@ export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   searchPassengerQueryProvider(searchPassengersQuery$, [HttpClient]),
   estimateJourneyQueryProvider(estimateJourneyQuery$, [HttpClient]),
   deleteFareActionProvider(validatedDeleteFareAction$, [HttpClient]),
-  editFareActionProvider(validatedEditFareAction$, [HttpClient])
+  editFareActionProvider(validatedEditFareAction$, [HttpClient]),
+  subcontractFareActionProvider(validatedSubcontractFareAction$, [HttpClient])
 ];

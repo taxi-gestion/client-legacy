@@ -26,7 +26,7 @@ export class ToastComponent implements OnInit {
 
   @Input() public status: ToastStatus = 'default';
 
-  @Input() public delay: number = 3000;
+  @Input() public delay: number = 5000;
 
   @Input() public autohide: boolean = true;
 

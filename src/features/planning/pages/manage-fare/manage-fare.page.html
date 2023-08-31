@@ -10,10 +10,10 @@
 <form
   [formGroup]="editFareForm"
   [appLoadAction]="editFare$"
-  #loadAction="loadAction"
+  #editLoadAction="loadAction"
   (actionSuccess)="onEditFareActionSuccess($event)"
   (actionError)="onEditFareActionError($event)"
-  (ngSubmit)="onSubmitFareToEdit(loadAction.start)">
+  (ngSubmit)="onSubmitFareToEdit(editLoadAction.start)">
   <div *ngIf="selectedSessionToFormValues$ | async"></div>
   <div class="mb-3">
     <label for="passenger" class="form-label">Identité du passager</label>
@@ -106,11 +106,11 @@
     </div>
   </div>
   <button
-    [appLoadActionDisplay]="loadAction.isLoading$ | async"
-    #loadActionDisplay
+    [appLoadActionDisplay]="editLoadAction.isLoading$ | async"
+    #editLoadActionDisplay
     type="submit"
     class="btn mt-3 btn-primary w-100"
-    [disabled]="loadActionDisplay.isLoading">
+    [disabled]="editLoadActionDisplay.isLoading">
     <ng-container slot="loadActionDisplayIdle">Modifier la course</ng-container>
     <ng-container slot="loadActionDisplayLoading">
       <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
@@ -126,13 +126,13 @@
 </form>
 <hr />
 <h3 class="mb-3 text-primary h5">Sous-traiter la course (irréversible)</h3>
-<!--    [formGroup]="subcontractFareForm"
-    [appLoadAction]="subcontractFare$"
-    #loadAction="loadAction"
-    (actionSuccess)="onSubcontractFareActionSuccess($event)"
-    (actionError)="onSubcontractFareActionError($event)"
-    (ngSubmit)="onSubmitFareToSubcontract(loadAction.start)"-->
-<form>
+<form
+  [formGroup]="subcontractFareForm"
+  [appLoadAction]="subcontractFare$"
+  #subcontractLoadAction="loadAction"
+  (actionSuccess)="onSubcontractFareActionSuccess($event)"
+  (actionError)="onSubcontractFareActionError($event)"
+  (ngSubmit)="onSubmitFareToSubcontract(subcontractLoadAction.start)">
   <div class="mb-3 mt-3">
     <label for="subcontractor" class="form-label">Sous-traitant</label>
     <input
@@ -143,17 +143,17 @@
       name="subcontractor"
       formControlName="subcontractor" />
   </div>
-  <!--
-      [appLoadActionDisplay]="loadAction.isLoading$ | async"
-    #loadActionDisplay
-    [disabled]="loadActionDisplay.isLoading"
-  -->
-  <button type="submit" class="btn mt-3 btn-warning text-white w-100">
+  <button
+    [appLoadActionDisplay]="subcontractLoadAction.isLoading$ | async"
+    #subcontractLoadActionDisplay
+    [disabled]="subcontractLoadActionDisplay.isLoading"
+    type="submit"
+    class="btn mt-3 btn-warning text-white w-100">
     <ng-container slot="loadActionDisplayIdle">Sous-traiter la course</ng-container>
-    <!--    <ng-container slot="loadActionDisplayLoading">
+    <ng-container slot="loadActionDisplayLoading">
       <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
       Sous-traitance en cours...
-    </ng-container>-->
+    </ng-container>
   </button>
   <!-- TODO Mutualiser les erreurs communes -->
   <div class="text-danger mt-2" *ngIf="editFareForm.errors?.['validationFailedBeforeApiCallError']">
@@ -166,15 +166,15 @@
 <h3 class="mb-3 text-primary h5">Supprimer la course (irréversible)</h3>
 <button
   [appLoadAction]="deleteFare$"
-  #loadAction="loadAction"
+  #deleteLoadAction="loadAction"
   (actionSuccess)="onDeleteFareActionSuccess($event)"
   (actionError)="onDeleteFareActionError($event)"
-  (click)="onClickDeleteFare(loadAction.start)"
-  [appLoadActionDisplay]="loadAction.isLoading$ | async"
-  #loadActionDisplay
+  (click)="onClickDeleteFare(deleteLoadAction.start)"
+  [appLoadActionDisplay]="deleteLoadAction.isLoading$ | async"
+  #deleteLoadActionDisplay
   type="button"
   class="btn btn-danger mt-2 w-100"
-  [disabled]="loadActionDisplay.isLoading">
+  [disabled]="deleteLoadActionDisplay.isLoading">
   <ng-container slot="loadActionDisplayIdle">Supprimer la course</ng-container>
   <ng-container slot="loadActionDisplayLoading">
     <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
