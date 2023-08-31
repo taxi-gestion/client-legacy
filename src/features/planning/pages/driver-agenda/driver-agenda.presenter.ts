@@ -9,3 +9,9 @@ const toAgendaFare = (fare: ScheduledPresentation): ScheduledPresentation => ({
   distance: metersToKilometers(fare.duration),
   datetime: formatDateToDatetimeLocalString(new Date(fare.datetime)).split('T')[1] ?? ''
 });
+
+export const sortByDatetime = (fares: ScheduledPresentation[]): ScheduledPresentation[] =>
+  fares.sort(
+    (fareA: ScheduledPresentation, fareB: ScheduledPresentation): number =>
+      new Date(fareA.datetime).getTime() - new Date(fareB.datetime).getTime()
+  );

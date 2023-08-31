@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { map, Observable, switchMap } from 'rxjs';
 import { SCHEDULED_FARES_FOR_DATE_QUERY, ScheduledFaresForDateQuery } from '@features/planning';
-import { SESSION_PERSISTENCE, Session } from '../../../authentication';
+import { Session, SESSION_PERSISTENCE } from '../../../authentication';
 import { filterByPlanning, toScheduledFaresPresentation } from '../../common/fares.presenter';
 import { toStandardDateFormat } from '../../common/unit-convertion';
 import { Entity, Scheduled } from '@domain';
 import { ScheduledPresentation } from '../../common/fares.presentation';
-import { toAgendaFares } from './driver-agenda.presenter';
+import { sortByDatetime, toAgendaFares } from './driver-agenda.presenter';
 
 const paramsToDateString = (params: Params): string =>
   params['date'] == null ? toStandardDateFormat(new Date()) : (params['date'] as string);
@@ -23,7 +23,8 @@ export class DriverAgendaPage {
     switchMap((params: Params): Observable<(Entity & Scheduled)[]> => this._faresForDateQuery(paramsToDateString(params))),
     map(toScheduledFaresPresentation),
     map(filterByPlanning(this._session.username())),
-    map(toAgendaFares)
+    map(toAgendaFares),
+    map(sortByDatetime)
   );
 
   public constructor(
