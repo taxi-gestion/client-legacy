@@ -2,6 +2,7 @@ import { Place } from './place.definition';
 export type Entity = { id: string };
 export type ReturnToDelete = { idToDelete: string };
 
+// TODO Refactor Drive to exclude driver
 export type Drive = {
   departure: Place;
   destination: Place;
@@ -32,6 +33,10 @@ export type Regular = {
 export type Driver = {
   identifier: string;
   username: string;
+};
+
+export type Subcontractor = {
+  subcontractor: string;
 };
 
 export type FareToSchedule = Drive &
@@ -71,4 +76,24 @@ export type Scheduled = Drive &
   Passenger & {
     kind: 'one-way' | 'two-way';
     status: 'scheduled';
+  };
+
+// TODO Refactor Drive to exclude driver
+export type FareToSubcontract = DurationDistance &
+  Nature &
+  Omit<Drive, 'driver'> &
+  Passenger &
+  Subcontractor & {
+    kind: 'one-way' | 'two-way';
+    status: 'to-subcontract';
+  };
+
+// TODO Refactor Drive to exclude driver
+export type Subcontracted = DurationDistance &
+  Nature &
+  Omit<Drive, 'driver'> &
+  Passenger &
+  Subcontractor & {
+    kind: 'one-way' | 'two-way';
+    status: 'subcontracted';
   };

@@ -1,12 +1,30 @@
 /* eslint-disable max-lines */
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap } from 'rxjs';
-import { DELETE_FARE_ACTION, DeleteFareAction, EDIT_FARE_ACTION, EditFareAction } from '../../providers';
+import {
+  DELETE_FARE_ACTION,
+  DeleteFareAction,
+  EDIT_FARE_ACTION,
+  EditFareAction,
+  SUBCONTRACT_FARE_ACTION,
+  SubcontractFareAction
+} from '../../providers';
 import { DailyPlanningLayout } from '../../layouts';
 import { SessionContext } from '../../components/planning/planning-row/planning-row.component';
 import { DailyDriverPlanning, ScheduledPlanningSession } from '../../common/fares.presentation';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Driver, DurationDistance, Entity, isValidPlace, JourneyEstimate, Passenger, Pending, Place, Scheduled } from '@domain';
+import {
+  Driver,
+  DurationDistance,
+  Entity,
+  isValidPlace,
+  JourneyEstimate,
+  Passenger,
+  Pending,
+  Place,
+  Scheduled,
+  Subcontracted
+} from '@domain';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { FormControl, FormGroup } from '@angular/forms';
 import { EDIT_FARE_FORM, EditFareFields, FareToEditPresentation, setEditFareErrorToForm } from './edit-fare.form';
@@ -16,6 +34,8 @@ import { defaultPlaceValue, toJourney } from '../../common/fares.presenter';
 import { formatDateToDatetimeLocalString, toDisplayDurationDistance } from '../../common/unit-convertion';
 import { EstimateJourneyValues } from '../../components';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common';
+import { formatSubcontractFareError, toFareToSubcontract, toSubcontractFareSuccessToast } from './subcontract-fare.presenter';
+import { setSubcontractFareErrorToForm, SUBCONTRACT_FARE_FORM, SubcontractFareFields } from './subcontract-fare.form';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,8 +55,6 @@ export class ManageFarePage {
 
   public selectedSessionPassenger$: Observable<string> = this.selectedSessionContext$.pipe(map(passengerFromContext));
 
-  public readonly editFareForm: FormGroup<EditFareFields> = EDIT_FARE_FORM;
-
   private readonly _departure: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
 
   private readonly _destination: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
@@ -48,12 +66,15 @@ export class ManageFarePage {
     private readonly _route: ActivatedRoute,
     @Inject(DELETE_FARE_ACTION) private readonly _deleteFareAction$: DeleteFareAction,
     @Inject(EDIT_FARE_ACTION) private readonly _editFareAction$: EditFareAction,
+    @Inject(SUBCONTRACT_FARE_ACTION) private readonly _subcontractFareAction$: SubcontractFareAction,
     @Inject(ESTIMATE_JOURNEY_QUERY) private readonly _estimateJourneyQuery$: EstimateJourneyQuery
   ) {}
 
   //region edit
+  public readonly editFareForm: FormGroup<EditFareFields> = EDIT_FARE_FORM;
+
   //TODO Type to Observable<Error | Entity & Scheduled>
-  public readonly editFare$ = (): Observable<object> =>
+  public readonly editFare$ = (): Observable<[Entity & Scheduled, (Entity & Pending)?]> =>
     // TODO Had to use EDIT_FARE_FORM.getRawValue() instead of EDIT_FARE_FORM.value for the latest controls value to be retreived
     this._editFareAction$(toFareToEdit(EDIT_FARE_FORM.getRawValue() as FareToEditPresentation));
 
@@ -73,7 +94,37 @@ export class ManageFarePage {
     setEditFareErrorToForm(formatEditFareError(error));
     this._toaster.toast({ content: 'Échec de la planification de la course', status: 'danger', title: 'Opération échouée' });
   };
-  //enregion
+  //endregion
+
+  //region subcontract
+  public readonly subcontractFareForm: FormGroup<SubcontractFareFields> = SUBCONTRACT_FARE_FORM;
+
+  public readonly subcontractFare$ = (): Observable<Entity & Subcontracted> =>
+    // TODO Had to use SUBCONTRACT_FARE_FORM.getRawValue() instead of SUBCONTRACT_FARE_FORM.value for the latest controls value to be retreived
+    this._subcontractFareAction$(
+      toFareToSubcontract(
+        SUBCONTRACT_FARE_FORM.getRawValue() as { subcontractor: string },
+        EDIT_FARE_FORM.getRawValue() as FareToEditPresentation
+      )
+    );
+
+  public onSubmitFareToSubcontract = (triggerAction: () => void): void => {
+    SUBCONTRACT_FARE_FORM.markAllAsTouched();
+    SUBCONTRACT_FARE_FORM.valid && triggerAction();
+  };
+
+  public onSubcontractFareActionSuccess = async (payload: unknown): Promise<void> => {
+    SUBCONTRACT_FARE_FORM.reset();
+    // TODO Type action and modify returned payload
+    this._toaster.toast(toSubcontractFareSuccessToast(payload as { rows: (Entity & Subcontracted)[] }[]));
+    await this._router.navigate(['..'], { relativeTo: this._route });
+  };
+
+  public onSubcontractFareActionError = (error: Error): void => {
+    setSubcontractFareErrorToForm(formatSubcontractFareError(error));
+    this._toaster.toast({ content: 'Échec de la sous-traitance de la course', status: 'danger', title: 'Opération échouée' });
+  };
+  //endregion
 
   //region delete
   public readonly deleteFare$ = (): Observable<[Entity & Scheduled, (Entity & Pending)?]> =>

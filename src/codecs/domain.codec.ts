@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import type { Type } from 'io-ts';
 import {
   intersection as ioIntersection,
@@ -17,11 +18,13 @@ import {
   Entity,
   FareToEdit,
   FareToSchedule,
+  FareToSubcontract,
   Passenger,
   Pending,
   Regular,
   ReturnToSchedule,
-  Scheduled
+  Scheduled,
+  Subcontracted
 } from '@domain';
 
 import { placeCodec } from './common';
@@ -120,3 +123,38 @@ export const scheduledFareAndOptionalPendingReturnCodec: Type<[Entity & Schedule
   scheduledFareCodec,
   ioUnion([pendingReturnCodec, ioUndefined])
 ]) as unknown as Type<[Entity & Scheduled, (Entity & Pending)?]>;
+
+// TODO Remove once type Drive has been updated
+const driveWithoutDriverCodec: Type<Omit<Drive, 'driver'>> = ioType({
+  datetime: ioString,
+  departure: placeCodec,
+  destination: placeCodec
+});
+
+export const fareToSubcontractCodec: Type<Entity & FareToSubcontract> = ioIntersection([
+  entityCodec,
+  driveWithoutDriverCodec,
+  durationDistanceCodec,
+  passengerCodec,
+  ioType({
+    subcontractor: ioString,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    kind: ioKeyof({ 'one-way': null, 'two-way': null }),
+    status: ioLiteral('to-subcontract'),
+    nature: ioKeyof({ medical: null, standard: null })
+  })
+]);
+
+export const subcontractedFareCodec: Type<Entity & Subcontracted> = ioIntersection([
+  entityCodec,
+  passengerCodec,
+  driveWithoutDriverCodec,
+  durationDistanceCodec,
+  ioType({
+    subcontractor: ioString,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    kind: ioKeyof({ 'one-way': null, 'two-way': null }),
+    status: ioLiteral('subcontracted'),
+    nature: ioKeyof({ medical: null, standard: null })
+  })
+]);
