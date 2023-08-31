@@ -7,7 +7,6 @@ import {
   CanMatchRefreshTokenGuard
 } from '@features/authentication';
 import { cognitoAuthenticationProviders } from '@features/aws';
-import { DashboardFeatureModule } from '@features/dashboard';
 import { PlanningFeatureModule } from '@features/planning';
 import { PublicFeatureModule } from '@features/public';
 import { MainLayout } from '../layouts';
@@ -21,13 +20,13 @@ const ROUTES: Routes = [
     canMatch: [CanMatchRefreshTokenGuard, CanMatchLoggedInGuard],
     providers: [...PLANNING_PROVIDERS]
   },
-  {
+  /*  {
     loadChildren: async (): Promise<typeof DashboardFeatureModule> =>
       (await import('@features/dashboard')).DashboardFeatureModule,
     component: MainLayout,
     path: '',
     canMatch: [CanMatchRefreshTokenGuard, CanMatchLoggedInGuard]
-  },
+  },*/
   {
     loadChildren: async (): Promise<typeof PublicFeatureModule> => (await import('@features/public')).PublicFeatureModule,
     path: '',
@@ -40,7 +39,7 @@ const ROUTES: Routes = [
     canMatch: [CanMatchGuestGuard],
     providers: [...cognitoAuthenticationProviders()]
   },
-  { path: '**', pathMatch: 'full', redirectTo: '/' }
+  { path: '**', pathMatch: 'full', redirectTo: '/planning' }
 ];
 
 @NgModule({
