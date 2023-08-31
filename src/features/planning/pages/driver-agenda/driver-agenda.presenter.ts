@@ -6,12 +6,15 @@ export const toAgendaFares = (fares: ScheduledPresentation[]): ScheduledPresenta
 const toAgendaFare = (fare: ScheduledPresentation): ScheduledPresentation => ({
   ...fare,
   duration: secondsToMinutes(fare.duration),
-  distance: metersToKilometers(fare.duration),
+  distance: metersToKilometers(fare.distance),
   datetime: formatDateToDatetimeLocalString(new Date(fare.datetime)).split('T')[1] ?? ''
 });
 
+/* eslint-disable */
 export const sortByDatetime = (fares: ScheduledPresentation[]): ScheduledPresentation[] =>
-  fares.sort(
-    (fareA: ScheduledPresentation, fareB: ScheduledPresentation): number =>
-      new Date(fareA.datetime).getTime() - new Date(fareB.datetime).getTime()
-  );
+  fares.sort((a, b) => {
+    const aMinutes = parseInt(a.datetime.split(':')[0]!) * 60 + parseInt(a.datetime.split(':')[1]!);
+    const bMinutes = parseInt(b.datetime.split(':')[0]!) * 60 + parseInt(b.datetime.split(':')[1]!);
+    return aMinutes - bMinutes;
+  });
+/* eslint-enable */
