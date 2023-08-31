@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter, map, Observable, Subject, switchMap } from 'rxjs';
-import { LIST_DRIVERS_QUERY, ListDriversQuery } from '../../providers';
+import { LIST_DRIVERS_QUERY, SearchDriverQuery } from '../../providers';
 import { Driver, Entity } from '@domain';
 
 @Component({
@@ -40,10 +40,10 @@ export class DriverFieldComponent implements OnChanges {
     debounceTime(this.searchDebounceTime),
     distinctUntilChanged(),
     // TODO Add sort by term
-    switchMap((_listDriversTerm: string): Observable<(Driver & Entity)[]> => this._listDriversQuery())
+    switchMap((listDriversTerm: string): Observable<(Driver & Entity)[]> => this._listDriversQuery(listDriversTerm))
   );
 
-  public constructor(@Inject(LIST_DRIVERS_QUERY) private readonly _listDriversQuery: ListDriversQuery) {}
+  public constructor(@Inject(LIST_DRIVERS_QUERY) private readonly _listDriversQuery: SearchDriverQuery) {}
 
   public formGroup: FormGroup = new FormGroup({ driver: new FormControl() });
 
