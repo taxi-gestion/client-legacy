@@ -1,5 +1,5 @@
 <div class="d-flex">
-  <h2 class="pt-2 pb-4 text-primary">Planifier le retour</h2>
+  <h2 class="pt-2 pb-4 text-primary">Planifier un retour</h2>
   <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
     <i class="ri-close-line ri-2x" aria-hidden="true"></i>
     <span class="visually-hidden">Fermer</span>
@@ -15,7 +15,7 @@
   <div class="mb-3">
     <label for="pendingReturnId" class="form-label">Retour pour le passager</label>
     <app-pending-return-field
-      [date]="selectedDate"
+      [date]="planningDay"
       (selectPendingReturns)="onSelectPendingReturnChange($event)"></app-pending-return-field>
     <input id="pendingReturnId" type="hidden" name="pendingReturnId" formControlName="pendingReturnId" />
   </div>

@@ -4,14 +4,15 @@ import { BehaviorSubject, combineLatest, filter, map, Observable, switchMap } fr
 import { SCHEDULE_RETURN_ACTION, ScheduleReturnAction } from '../../providers';
 import { SCHEDULE_RETURN_FORM, ScheduleReturnFields, setScheduleReturnErrorToForm } from './schedule-return.form';
 import { formatScheduleReturnError, toReturnToSchedule, toScheduleReturnSuccessToast } from './schedule-return.presenter';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { toDisplayDurationDistance, toStandardDateFormat } from '../../common/unit-convertion';
+import { ActivatedRoute, Router } from '@angular/router';
+import { toDisplayDurationDistance } from '../../common/unit-convertion';
 import { Driver, DurationDistance, Entity, isValidPlace, JourneyEstimate, Place, Scheduled } from '@domain';
 import { PendingPresentation } from '../../common';
 import { defaultPlaceValue, toJourney } from '../../common/fares.presenter';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { EstimateJourneyValues } from '../../components';
+import { DailyPlanningLayout } from '../../layouts';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -54,12 +55,13 @@ export class ScheduleReturnPage {
     map(toDisplayDurationDistance)
   );
 
-  public selectedDate: string = paramsToDateString(this._route);
+  public planningDay: string = this._planning.planningDay;
 
   public constructor(
     private readonly _toaster: ToasterPresenter,
     private readonly _router: Router,
     private readonly _route: ActivatedRoute,
+    private readonly _planning: DailyPlanningLayout,
     @Inject(SCHEDULE_RETURN_ACTION) private readonly _scheduleReturnAction$: ScheduleReturnAction,
     @Inject(ESTIMATE_JOURNEY_QUERY) private readonly _estimateJourneyQuery$: EstimateJourneyQuery
   ) {}
@@ -108,6 +110,3 @@ export class ScheduleReturnPage {
     this.scheduleReturnForm.controls.driveDistance = $event.driveDistance;
   }
 }
-
-const paramsToDateString = (params: Params): string =>
-  params['date'] == null ? toStandardDateFormat(new Date()) : (params['date'] as string);

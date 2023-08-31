@@ -6,8 +6,13 @@ import { Passenger } from '@domain';
 export const searchPassengersQuery$ =
   (httpClient: HttpClient): SearchPassengerQuery =>
   (search: string): Observable<Passenger[]> =>
-    httpClient.get<Passenger[]>(`/api/list-passengers`).pipe(map(sortByProximity(search)));
+    httpClient.get<Passenger[]>(`/api/list-passengers`).pipe(map(filterByterm(search)));
 
+const filterByterm =
+  (search: string) =>
+  (passengers: Passenger[]): Passenger[] =>
+    passengers.filter((passenger: Passenger): boolean => passenger.passenger.toLowerCase().includes(search.toLowerCase()));
+/*
 const sortByProximity =
   (search: string) =>
   (passengers: Passenger[]): Passenger[] =>
@@ -24,3 +29,4 @@ const calculateScore = (text: string, searchTerm: string): number => {
   // Assign higher scores to matches that occur at the beginning of the text
   return 1 / (index + 1);
 };
+*/

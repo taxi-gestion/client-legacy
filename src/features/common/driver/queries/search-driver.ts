@@ -6,8 +6,16 @@ import { Driver, Entity } from '@domain';
 export const listDriversQuery$ =
   (httpClient: HttpClient): SearchDriverQuery =>
   (search: string): Observable<(Driver & Entity)[]> =>
-    httpClient.get<(Driver & Entity)[]>(`/api/list-drivers`).pipe(map(sortByProximity(search)));
+    httpClient.get<(Driver & Entity)[]>(`/api/list-drivers`).pipe(map(filterByterm(search)));
 
+const filterByterm =
+  (search: string) =>
+  (passengers: (Driver & Entity)[]): (Driver & Entity)[] =>
+    passengers.filter((passenger: Driver & Entity): boolean =>
+      passenger.identifier.toLowerCase().includes(search.toLowerCase())
+    );
+
+/*
 const sortByProximity =
   (search: string) =>
   (drivers: (Driver & Entity)[]): (Driver & Entity)[] =>
@@ -24,3 +32,4 @@ const calculateScore = (text: string, searchTerm: string): number => {
   // Assign higher scores to matches that occur at the beginning of the text
   return 1 / (index + 1);
 };
+*/
