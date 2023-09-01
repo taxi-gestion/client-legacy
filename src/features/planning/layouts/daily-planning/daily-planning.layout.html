@@ -21,7 +21,7 @@
     <div
       appHorizontalMouseScroll
       class="d-flex flex-column overflow-y-auto"
-      [ngClass]="dailyOutlet.isActivated ? 'col-9' : 'col'">
+      [ngClass]="dailyOutlet.isActivated ? 'col-1' : 'col'">
       <div class="p-3 sticky-top bg-light shadow-sm start-0">
         <h1>
           Planning du
@@ -57,7 +57,7 @@
         </app-planning>
       </div>
     </div>
-    <div class="shadow p-4 border-start bg-white overflow-auto" [ngClass]="dailyOutlet.isActivated ? 'col-3' : 'd-none'">
+    <div class="shadow p-4 border-start bg-white overflow-auto" [ngClass]="dailyOutlet.isActivated ? 'col-11' : 'd-none'">
       <router-outlet #dailyOutlet="outlet"></router-outlet>
     </div>
   </div>
