@@ -28,7 +28,9 @@ const DEFAULT_PLANNING_SETTINGS: PlanningSettings = {
   templateUrl: './daily-planning.layout.html'
 })
 export class DailyPlanningLayout {
-  public planningDay: string = paramsToDateDayString(this._route.snapshot.params);
+  public planningDay$: Observable<string> = this._route.params.pipe(
+    map((params: Params): string => paramsToDateDayString(params))
+  );
 
   public planningSettings: PlanningSettings = DEFAULT_PLANNING_SETTINGS;
 

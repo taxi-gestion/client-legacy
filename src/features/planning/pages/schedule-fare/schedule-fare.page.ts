@@ -86,10 +86,17 @@ export class ScheduleFarePage {
     tap((context: SlotContext<DailyDriverPlanning>): void => this.updateLinkedFields(context))
   );
 
+  public selectedDateContext$: Observable<string> = combineLatest([
+    this._planning.planningDay$,
+    this.selectedSlotContext$
+  ]).pipe(
+    map(([dateString, context]: [dateString: string, context: SlotContext<DailyDriverPlanning>]): string =>
+      toLocalDatetimeString(dateString, context.startTimeInMinutes)
+    ),
+    tap((localDateString: string): void => this.scheduleFareForm.controls.departureDatetime.setValue(localDateString))
+  );
+
   public updateLinkedFields(context: SlotContext<DailyDriverPlanning>): void {
-    this.scheduleFareForm.controls.departureDatetime.setValue(
-      toLocalDatetimeString(this._planning.planningDay, context.startTimeInMinutes)
-    );
     this.scheduleFareForm.controls.driver.setValue(context.rowContext.driver.identifier);
   }
 

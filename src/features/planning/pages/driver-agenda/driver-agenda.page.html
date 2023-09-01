@@ -1,22 +1,18 @@
-<div class="d-flex flex-column h-100">
-  <div class="d-flex flex-grow-1 overflow-hidden g-0">
-    <div class="d-flex flex-column overflow-hidden col">
-      <div class="sticky-top bg-light shadow-sm start-0">
-        <h1 class="mb-1">
-          Courses du
-          <input
-            #planningField
-            type="date"
-            [value]="planningDate"
-            class="form-control form-control-lg w-auto d-inline align-bottom"
-            (change)="onPlanningDateChange(planningField.value)" />
-        </h1>
-      </div>
-      <div class="flex-grow-1 pt-2 overflow-y-auto" *ngIf="agenda$ | async as fares">
-        <div class="col-xxl-3 col-xl-4 col-md-6 col-12 mb-3" *ngFor="let fare of fares">
-          <app-fare-card [fare]="fare"></app-fare-card>
-        </div>
-      </div>
+<div class="d-flex flex-grow-1 flex-column overflow-hidden h-100 mt-2 g-0 col">
+  <div class="sticky-top shadow-sm start-0">
+    <h1 class="mb-1">
+      Courses du
+      <input
+        #planningField
+        type="date"
+        [value]="planningDate"
+        class="form-control form-control-lg w-auto d-inline align-bottom"
+        (change)="onPlanningDateChange(planningField.value)" />
+    </h1>
+  </div>
+  <div class="flex-grow-1 pt-2 overflow-y-auto" *ngIf="agenda$ | async as fares">
+    <div class="col-xxl-3 col-xl-4 col-md-6 col-12 mb-3" *ngFor="let fare of fares">
+      <app-fare-card [fare]="fare"></app-fare-card>
     </div>
   </div>
 </div>

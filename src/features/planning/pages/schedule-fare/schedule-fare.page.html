@@ -41,6 +41,8 @@
       formControlName="phoneToCall" />
   </div>
   <div class="mb-3">
+    <!-- TODO: Create sub-component -->
+    <div *ngIf="selectedDateContext$ | async"></div>
     <label for="departureDatetime" class="form-label">Date et heure du départ</label>
     <input
       id="departureDatetime"
