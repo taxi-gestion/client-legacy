@@ -1,11 +1,16 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { BehaviorSubject, combineLatest, filter, map, Observable, switchMap } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap } from 'rxjs';
 import { SCHEDULE_RETURN_ACTION, ScheduleReturnAction } from '../../providers';
 import { SCHEDULE_RETURN_FORM, ScheduleReturnFields, setScheduleReturnErrorToForm } from './schedule-return.form';
-import { formatScheduleReturnError, toReturnToSchedule, toScheduleReturnSuccessToast } from './schedule-return.presenter';
+import {
+  formatScheduleReturnError,
+  nowOrLater,
+  toReturnToSchedule,
+  toScheduleReturnSuccessToast
+} from './schedule-return.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
-import { toDisplayDurationDistance } from '../../common/unit-convertion';
+import { formatDateToDatetimeLocalString, toDisplayDurationDistance } from '../../common/unit-convertion';
 import { Driver, DurationDistance, Entity, isValidPlace, JourneyEstimate, Place, Scheduled } from '@domain';
 import { PendingPresentation } from '../../common';
 import { defaultPlaceValue, toJourney } from '../../common/fares.presenter';
@@ -55,7 +60,11 @@ export class ScheduleReturnPage {
     map(toDisplayDurationDistance)
   );
 
-  public planningDay: string = this._planning.planningDay;
+  public planningDay$: Observable<string> = this._planning.planningDay$.pipe(
+    tap((dayString: string): void =>
+      this.scheduleReturnForm.controls.departureDatetime.setValue(formatDateToDatetimeLocalString(nowOrLater(dayString)))
+    )
+  );
 
   public constructor(
     private readonly _toaster: ToasterPresenter,

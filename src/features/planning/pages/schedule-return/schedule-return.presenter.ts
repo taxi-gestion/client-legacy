@@ -4,6 +4,7 @@ import { PendingPresentation } from '../../common';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { VALIDATION_FAILED_AFTER_API_CALL_ERROR_NAME } from '../../errors';
 import { toLocalTime } from '../../common/fares.presenter';
+import { max } from 'date-fns';
 
 export const toScheduleReturnSuccessToast = (payload: { rows: (Entity & Scheduled)[] }[]): Toast => {
   // TODO Adapt & type api response to return right payload
@@ -46,3 +47,10 @@ const scheduleReturnErrorFormatMap: Map<string, (error: Error) => FormattedSched
     })
   ]
 ]);
+
+export const nowOrLater = (dayString: string): Date => {
+  const now: Date = new Date();
+  const later: Date = new Date(dayString);
+
+  return max([now, later]);
+};

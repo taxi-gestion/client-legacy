@@ -15,7 +15,7 @@
   <div class="mb-3">
     <label for="pendingReturnId" class="form-label">Retour pour le passager</label>
     <app-pending-return-field
-      [date]="planningDay"
+      [date]="(planningDay$ | async) ?? ''"
       (selectPendingReturns)="onSelectPendingReturnChange($event)"></app-pending-return-field>
     <input id="pendingReturnId" type="hidden" name="pendingReturnId" formControlName="pendingReturnId" />
   </div>
