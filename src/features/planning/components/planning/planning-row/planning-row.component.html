@@ -6,7 +6,7 @@
   </div>
   <a
     [routerLink]="slotLink"
-    class="btn btn-link text-decoration-none border-start-dashed border-2 planning-slot overflow-auto d-flex text-start"
+    class="btn btn-link text-decoration-none border-start-dashed border-2 planning-slot d-flex text-start"
     (click)="onPlanningSlotClicked(timeInMinutes, context)"
     [style.width.px]="planning.columnWidth"
     *ngFor="let timeInMinutes of planning.timesInMinutes$ | async">
