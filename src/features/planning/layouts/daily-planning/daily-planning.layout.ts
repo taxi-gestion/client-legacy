@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
 import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, of, startWith, switchMap, take } from 'rxjs';
 import { PlanningSettings } from '../../components/planning/planning-settings/planning-settings.component';
@@ -16,6 +16,7 @@ import { LIST_DRIVERS_QUERY, SearchDriverQuery } from '@features/common/driver';
 import { paramsToDateDayString } from './daily-planning.presenter';
 import { SessionContext, SlotContext } from '../../components/planning/planning-row/planning-row.component';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
+import { NavbarComponent } from '../../../../root/components';
 
 const DEFAULT_PLANNING_SETTINGS: PlanningSettings = {
   interval: 60,
@@ -28,6 +29,12 @@ const DEFAULT_PLANNING_SETTINGS: PlanningSettings = {
   templateUrl: './daily-planning.layout.html'
 })
 export class DailyPlanningLayout {
+  // TODO @Marc Do i have the right to do this ?
+  @ViewChild(NavbarComponent) private readonly _navbar!: NavbarComponent;
+  public toggleNavbar(): void {
+    this._navbar.toggle();
+  }
+
   public planningDay$: Observable<string> = this._route.params.pipe(
     map((params: Params): string => paramsToDateDayString(params))
   );
