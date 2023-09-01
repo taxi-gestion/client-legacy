@@ -2,12 +2,22 @@
   <app-navbar class="shadow-sm border-top" scheme="body-secondary">
     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
       <li class="nav-item">
-        <a class="nav-link" ariaCurrentWhenActive="page" routerLinkActive="active" [routerLink]="'schedule-fare'">
+        <a
+          class="nav-link"
+          ariaCurrentWhenActive="page"
+          routerLinkActive="active"
+          [routerLink]="'schedule-fare'"
+          (click)="toggleNavbar()">
           Planifier une course
         </a>
       </li>
       <li class="nav-item" *ngIf="(returnsToSchedule$ | async) as returnsToSchedule">
-        <a class="nav-link" ariaCurrentWhenActive="page" routerLinkActive="active" [routerLink]="'schedule-return'">
+        <a
+          class="nav-link"
+          ariaCurrentWhenActive="page"
+          routerLinkActive="active"
+          [routerLink]="'schedule-return'"
+          (click)="toggleNavbar()">
           Planifier un retour&nbsp;
           <span class="badge text-bg-secondary">
             {{ returnsToSchedule.length }}
