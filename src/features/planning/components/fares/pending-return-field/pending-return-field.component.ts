@@ -11,7 +11,7 @@ import {
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter, map, Observable, Subject, switchMap } from 'rxjs';
 import { PENDING_RETURNS_FOR_DATE_QUERY, PendingReturnsForDateQuery } from '../../../providers';
-import { Entity, Pending } from '@domain';
+import { Entity, Pending } from '@definitions';
 import { PendingPresentation, toPendingReturnsForDatePresentation } from '../../../common';
 
 @Component({

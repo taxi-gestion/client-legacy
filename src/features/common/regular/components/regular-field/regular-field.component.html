@@ -1,0 +1,56 @@
+<form [formGroup]="formGroup">
+  <label for="regular" class="visually-hidden"><ng-content></ng-content></label>
+  <div class="input-group">
+    <span class="input-group-text pe-0">
+      <i class="text-muted ri-search-line" aria-hidden="true"></i>
+    </span>
+    <input
+      #regularInput
+      type="search"
+      placeholder="Rechercher un passager par son nom, prénom..."
+      name="regular"
+      id="regular"
+      class="form-control border-start-0"
+      autocomplete="off"
+      aria-describedby="regular"
+      aria-haspopup="true"
+      formControlName="regular"
+      [attr.aria-describedby]="regularNotFound ? 'regular-desc-error' : null"
+      [attr.aria-expanded]="regularResultsDropdown.expanded$ | async"
+      (input)="
+        search(regularInput.value);
+        regularInput.value.length <= minSearchTermLength ? regularResultsDropdown.reduce() : regularResultsDropdown.expand()
+      "
+      (focus)="
+        regularInput.value.length <= minSearchTermLength ? regularResultsDropdown.reduce() : regularResultsDropdown.expand()
+      "
+      (keyup.escape)="regularResultsDropdown.reduce()"
+      (keyup.enter)="regularResultsDropdown.activeIndex = 0; regularResultsDropdown.focus()" />
+    <button type="button" *ngIf="regularInput.value && displayReset" class="btn input-group-btn" (click)="clear()">
+      <i class="ri-close-line"></i>
+    </button>
+    <ng-content></ng-content>
+  </div>
+  <ul
+    #regularResultsDropdown="regularResultsDropdown"
+    appRegularResultsDropdown
+    [dropdownControl]="regularInput"
+    [class.show]="regularResultsDropdown.expanded$ | async"
+    class="dropdown-menu position-absolute mt-1"
+    aria-labelledby="regular">
+    <li #results *ngFor="let regular of (regularsFound$ | async) ?? []; index as regularIndex; trackBy: trackByRegularName">
+      <button
+        type="button"
+        class="dropdown-item"
+        [class.active]="regularResultsDropdown.activeIndex === regularIndex"
+        [attr.aria-current]="regularResultsDropdown.activeIndex === regularIndex ? true : null"
+        (focusin)="regularResultsDropdown.setIndex(regularIndex)"
+        (focusout)="regularResultsDropdown.setIndex(-1)"
+        (click)="setRegularSuggestion(regular); regularResultsDropdown.reduce()">
+        <b>{{ regular.lastname }} {{ regular.firstname }}</b>
+        <br />
+        <small>{{ regular.phone }}</small>
+      </button>
+    </li>
+  </ul>
+</form>

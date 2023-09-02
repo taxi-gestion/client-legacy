@@ -16,15 +16,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   Driver,
   DurationDistance,
-  Entity,
+  FaresDeleted,
+  FaresEdited,
+  FaresSubcontracted,
   isValidPlace,
   JourneyEstimate,
-  Passenger,
-  Pending,
   Place,
-  Scheduled,
-  Subcontracted
-} from '@domain';
+  Regular
+} from '@definitions';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { FormControl, FormGroup } from '@angular/forms';
 import { EDIT_FARE_FORM, EditFareFields, FareToEditPresentation, setEditFareErrorToForm } from './edit-fare.form';
@@ -74,7 +73,7 @@ export class ManageFarePage {
   public readonly editFareForm: FormGroup<EditFareFields> = EDIT_FARE_FORM;
 
   //TODO Type to Observable<Error | Entity & Scheduled>
-  public readonly editFare$ = (): Observable<[Entity & Scheduled, (Entity & Pending)?]> =>
+  public readonly editFare$ = (): Observable<FaresEdited> =>
     // TODO Had to use EDIT_FARE_FORM.getRawValue() instead of EDIT_FARE_FORM.value for the latest controls value to be retreived
     this._editFareAction$(toFareToEdit(EDIT_FARE_FORM.getRawValue() as FareToEditPresentation));
 
@@ -83,10 +82,9 @@ export class ManageFarePage {
     EDIT_FARE_FORM.valid && triggerAction();
   };
 
-  public onEditFareActionSuccess = async (payload: unknown): Promise<void> => {
+  public onEditFareActionSuccess = async (fares: FaresEdited): Promise<void> => {
     EDIT_FARE_FORM.reset();
-    // TODO Type action and modify returned payload
-    this._toaster.toast(toEditFareSuccessToast(payload as { rows: (Entity & Scheduled)[] }[]));
+    this._toaster.toast(toEditFareSuccessToast(fares));
     await this._router.navigate(['..'], { relativeTo: this._route });
   };
 
@@ -99,7 +97,7 @@ export class ManageFarePage {
   //region subcontract
   public readonly subcontractFareForm: FormGroup<SubcontractFareFields> = SUBCONTRACT_FARE_FORM;
 
-  public readonly subcontractFare$ = (): Observable<Entity & Subcontracted> =>
+  public readonly subcontractFare$ = (): Observable<FaresSubcontracted> =>
     // TODO Had to use SUBCONTRACT_FARE_FORM.getRawValue() instead of SUBCONTRACT_FARE_FORM.value for the latest controls value to be retreived
     this._subcontractFareAction$(
       toFareToSubcontract(
@@ -113,10 +111,9 @@ export class ManageFarePage {
     SUBCONTRACT_FARE_FORM.valid && triggerAction();
   };
 
-  public onSubcontractFareActionSuccess = async (payload: unknown): Promise<void> => {
+  public onSubcontractFareActionSuccess = async (fares: FaresSubcontracted): Promise<void> => {
     SUBCONTRACT_FARE_FORM.reset();
-    // TODO Type action and modify returned payload
-    this._toaster.toast(toSubcontractFareSuccessToast(payload as { rows: (Entity & Subcontracted)[] }[]));
+    this._toaster.toast(toSubcontractFareSuccessToast(fares));
     await this._router.navigate(['..'], { relativeTo: this._route });
   };
 
@@ -127,17 +124,15 @@ export class ManageFarePage {
   //endregion
 
   //region delete
-  public readonly deleteFare$ = (): Observable<[Entity & Scheduled, (Entity & Pending)?]> =>
+  public readonly deleteFare$ = (): Observable<FaresDeleted> =>
     this.selectedSessionContext$.pipe(
       switchMap(
-        (
-          context: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>
-        ): Observable<[Entity & Scheduled, (Entity & Pending)?]> => this._deleteFareAction$(context.sessionContext.id)
+        (context: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>): Observable<FaresDeleted> =>
+          this._deleteFareAction$(context.sessionContext.id)
       )
     );
 
-  public onDeleteFareActionSuccess = async (payload: [Entity & Scheduled, (Entity & Pending)?]): Promise<void> => {
-    // TODO Type action and modify returned payload
+  public onDeleteFareActionSuccess = async (payload: FaresDeleted): Promise<void> => {
     this._toaster.toast(toDeleteFareSuccessToast(payload));
     await this._router.navigate(['..'], { relativeTo: this._route });
   };
@@ -167,12 +162,12 @@ export class ManageFarePage {
     this._driverDisplay$.next(driver.identifier);
   }
 
-  public onSelectPassengerChange(passenger: Passenger): void {
-    this.editFareForm.controls.passenger.setValue(passenger.passenger);
-    this.editFareForm.controls.phoneToCall.setValue(passenger.phone);
+  public onSelectRegularChange(regular: Regular): void {
+    this.editFareForm.controls.passenger.setValue(`${regular.lastname} ${regular.firstname}`);
+    this.editFareForm.controls.phoneToCall.setValue(regular.phone);
   }
 
-  public onSearchPassengerTermChange(search: string): void {
+  public onSearchRegularTermChange(search: string): void {
     this.editFareForm.controls.passenger.setValue(search);
   }
   //endregion

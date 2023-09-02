@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { EstimateJourneyQuery } from '@features/common/journey';
-import { Journey, JourneyEstimate } from '@domain';
+import { Journey, JourneyEstimate } from '@definitions';
 
-const estimateJourneyUrl = (): string => `https://taxi-gestion.com/api/estimate-journey`;
+const estimateJourneyUrl = (): string => `/api/journey/estimate`;
 
 export const estimateJourneyQuery$ =
   (http: HttpClient): EstimateJourneyQuery =>

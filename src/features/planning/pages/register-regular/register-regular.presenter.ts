@@ -1,18 +1,13 @@
 import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
 import { RegisterRegularPresentation } from './register-regular.form';
-import { Entity, Regular } from '@domain';
+import { Regular, RegularRegistered } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 
-export const toRegisterRegularSuccessToast = (payload: { rows: (Entity & Regular)[] }[]): Toast => {
-  // TODO Adapt & type api response to return right payload
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const regular: Entity & Regular = payload[0]!.rows[0]!;
-  return {
-    content: `Nouveau passager, ${regular.firstname} ${regular.lastname} - ${regular.phone} enregistré`,
-    status: 'success',
-    title: `Un passager a été enregistré`
-  };
-};
+export const toRegisterRegularSuccessToast = (regular: RegularRegistered): Toast => ({
+  content: `Nouveau passager, ${regular.regularRegistered.firstname} ${regular.regularRegistered.lastname} - ${regular.regularRegistered.phone} enregistré`,
+  status: 'success',
+  title: `Un passager a été enregistré`
+});
 export const toRegular = (formValues: RegisterRegularPresentation): Regular => ({
   firstname: formValues.firstname,
   lastname: formValues.lastname,

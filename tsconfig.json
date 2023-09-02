@@ -14,10 +14,10 @@
       "@features/public": ["src/features/public"],
       "@features/common/recurrence": ["src/features/common/recurrence"],
       "@features/common/driver": ["src/features/common/driver"],
-      "@features/common/passenger": ["src/features/common/passenger"],
+      "@features/common/regular": ["src/features/common/regular"],
       "@features/common/client": ["src/features/common/client"],
       "@features/common/journey": ["src/features/common/journey"],
-      "@domain": ["src/domain"],
+      "@definitions": ["src/definitions"],
       "@codecs": ["src/codecs"]
     },
     "baseUrl": "./",

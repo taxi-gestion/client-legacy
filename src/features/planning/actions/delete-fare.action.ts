@@ -1,58 +1,45 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, map, Observable, tap, throwError } from 'rxjs';
+import { catchError, map, Observable, throwError } from 'rxjs';
 import { DeleteFareAction } from '../providers';
-import { Entity, Pending, Scheduled } from '@domain';
+import { FaresDeleted } from '@definitions';
 import { ValidationFailedAfterApiCallError } from '../errors';
 import { pipe as fpPipe } from 'fp-ts/function';
-import { externalTypeCheckFor, scheduledFareAndOptionalPendingReturnCodec } from '@codecs';
+import { externalTypeCheckFor, faresDeletedCodec } from '@codecs';
 import { fold } from 'fp-ts/Either';
 
-const deleteFareUrl = (fareId: string): string => `https://taxi-gestion.com/api/delete-fare/${fareId}`;
+const deleteFareUrl = (fareId: string): string => `/api/fare/delete/${fareId}`;
 
 export const validatedDeleteFareAction$ =
   (httpClient: HttpClient): DeleteFareAction =>
-  (fareId: string): Observable<[Entity & Scheduled, (Entity & Pending)?]> =>
+  (fareId: string): Observable<FaresDeleted> =>
     httpClient.delete<unknown>(deleteFareUrl(fareId)).pipe(
-      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type,no-console,@typescript-eslint/typedef
-      tap((x) => console.log('delete raw return', x)),
       map(deletedFareAndReturnValidation),
       catchError(
-        (error: Error | HttpErrorResponse, caught: Observable<[Entity & Scheduled, (Entity & Pending)?]>): Observable<never> =>
+        (error: Error | HttpErrorResponse, caught: Observable<FaresDeleted>): Observable<never> =>
           handleDeletedFareAndReturnError$(error, caught)
       )
     );
 
 const handleDeletedFareAndReturnError$ = (
   error: Error | HttpErrorResponse,
-  caught: Observable<[Entity & Scheduled, (Entity & Pending)?]>
+  caught: Observable<FaresDeleted>
 ): Observable<never> => {
   if (error instanceof ValidationFailedAfterApiCallError) return throwError((): Error => error);
 
   switch ((error as HttpErrorResponse).error.__type) {
     default:
-      return throwError((): Observable<[Entity & Scheduled, (Entity & Pending)?]> => caught);
+      return throwError((): Observable<FaresDeleted> => caught);
   }
 };
 
-const deletedFareAndReturnValidation = (transfer: unknown): [Entity & Scheduled, (Entity & Pending)?] =>
+const deletedFareAndReturnValidation = (transfer: unknown): FaresDeleted =>
   fpPipe(
     transfer,
-    extractRows,
-    externalTypeCheckFor<[Entity & Scheduled, (Entity & Pending)?]>(scheduledFareAndOptionalPendingReturnCodec),
+    externalTypeCheckFor<FaresDeleted>(faresDeletedCodec),
     fold(
-      // TODO Share error reporter between projects
       (): never => {
         throw new ValidationFailedAfterApiCallError(`Faudrait mettre le HttpReporter...`);
       },
-      (validatedTransfer: [Entity & Scheduled, (Entity & Pending)?]): [Entity & Scheduled, (Entity & Pending)?] =>
-        validatedTransfer
+      (validatedTransfer: FaresDeleted): FaresDeleted => validatedTransfer
     )
   );
-
-// TODO Remove ASAP
-const extractRows = (transfer: unknown): unknown => [
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  (transfer as { rows: object[] }[])[0]!.rows[0]!,
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-non-null-assertion
-  ...[(transfer as { rows: object[] }[])[1] === undefined ? [] : (transfer as { rows: object[] }[])[1]!.rows[0]!]
-];

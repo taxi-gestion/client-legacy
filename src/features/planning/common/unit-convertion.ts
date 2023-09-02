@@ -1,6 +1,6 @@
 import { utcToZonedTime, format } from 'date-fns-tz';
 import { getHours, getMinutes } from 'date-fns';
-import { DurationDistance, JourneyEstimate } from '@domain';
+import { DurationDistance, JourneyEstimate } from '@definitions';
 
 export const toStandardDateFormat = (date: Date): string => format(date, 'yyyy-MM-dd');
 

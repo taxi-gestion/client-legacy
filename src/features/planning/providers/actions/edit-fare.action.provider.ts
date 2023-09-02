@@ -1,8 +1,8 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Entity, FareToEdit, Pending, Scheduled } from '@domain';
+import { Entity, FaresEdited, ToEdit } from '@definitions';
 
-export type EditFareAction = (fareToEdit: Entity & FareToEdit) => Observable<[Entity & Scheduled, (Entity & Pending)?]>;
+export type EditFareAction = (fareToEdit: Entity & ToEdit) => Observable<FaresEdited>;
 
 export const EDIT_FARE_ACTION: symbol = Symbol('planning.edit-fare.action');
 

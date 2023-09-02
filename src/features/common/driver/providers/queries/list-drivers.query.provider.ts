@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { FactoryProvider } from '@angular/core';
-import { Driver, Entity } from '@domain';
+import { Driver, Entity } from '@definitions';
 
 export type SearchDriverQuery = (search: string) => Observable<(Driver & Entity)[]>;
 

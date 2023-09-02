@@ -1,4 +1,4 @@
-import { Entity, Pending, Place } from '@domain';
+import { Entity, Pending, Place } from '@definitions';
 import { EstimateJourneyValues } from '../components';
 
 export type PendingPresentation = EstimateJourneyValues & {

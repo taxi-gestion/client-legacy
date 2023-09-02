@@ -11,7 +11,7 @@ import {
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter, map, Observable, Subject, switchMap } from 'rxjs';
 import { LIST_DRIVERS_QUERY, SearchDriverQuery } from '../../providers';
-import { Driver, Entity } from '@domain';
+import { Driver, Entity } from '@definitions';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,6 +1,6 @@
-import { Type, type as ioType, string as ioString, number as ioNumber } from 'io-ts';
+import { number as ioNumber, string as ioString, Type, type as ioType } from 'io-ts';
 import { placeCodec } from './place.codec';
-import { Journey, JourneyEstimate } from '@domain';
+import { Journey, JourneyEstimate } from '../../definitions';
 
 export const journeyCodec: Type<Journey> = ioType({
   origin: placeCodec,

@@ -1,20 +1,20 @@
 import { HttpClient } from '@angular/common/http';
 import { FactoryProvider, ValueProvider } from '@angular/core';
 import {
-  validatedDeleteFareAction$,
   deleteFareActionProvider,
-  validatedScheduledFaresForDateQuery$,
+  editFareActionProvider,
   pendingReturnsForDateQueryProvider,
   registerRegularActionProvider,
   scheduledFaresForDateQueryProvider,
   scheduleFareActionProvider,
-  scheduleReturnActionProvider,
+  schedulePendingActionProvider,
+  subcontractFareActionProvider,
+  validatedDeleteFareAction$,
   validatedPendingReturnsForDateQuery$,
   validatedRegisterRegularAction$,
+  validatedScheduledFaresForDateQuery$,
   validatedScheduleFareAction$,
-  validatedScheduleReturnAction$,
-  editFareActionProvider,
-  subcontractFareActionProvider
+  validatedSchedulePendingAction$
 } from '@features/planning';
 
 import {
@@ -24,10 +24,10 @@ import {
   listDriversQueryProvider,
   predictRecurrenceQuery$,
   predictRecurrenceQueryProvider,
-  searchPassengerQueryProvider,
-  searchPassengersQuery$,
   searchPlaceQuery$,
-  searchPlaceQueryProvider
+  searchPlaceQueryProvider,
+  searchRegularQueryProvider,
+  searchRegularsQuery$
 } from '@features/common';
 import { validatedEditFareAction$ } from '../../features/planning/actions/edit-fare.action';
 import { validatedSubcontractFareAction$ } from '../../features/planning/actions/subcontract-fare.action';
@@ -35,13 +35,13 @@ import { validatedSubcontractFareAction$ } from '../../features/planning/actions
 export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   scheduleFareActionProvider(validatedScheduleFareAction$, [HttpClient]),
   registerRegularActionProvider(validatedRegisterRegularAction$, [HttpClient]),
-  scheduleReturnActionProvider(validatedScheduleReturnAction$, [HttpClient]),
+  schedulePendingActionProvider(validatedSchedulePendingAction$, [HttpClient]),
   predictRecurrenceQueryProvider(predictRecurrenceQuery$, [HttpClient]),
   scheduledFaresForDateQueryProvider(validatedScheduledFaresForDateQuery$, [HttpClient]),
   pendingReturnsForDateQueryProvider(validatedPendingReturnsForDateQuery$, [HttpClient]),
   searchPlaceQueryProvider(searchPlaceQuery$, [HttpClient]),
   listDriversQueryProvider(listDriversQuery$, [HttpClient]),
-  searchPassengerQueryProvider(searchPassengersQuery$, [HttpClient]),
+  searchRegularQueryProvider(searchRegularsQuery$, [HttpClient]),
   estimateJourneyQueryProvider(estimateJourneyQuery$, [HttpClient]),
   deleteFareActionProvider(validatedDeleteFareAction$, [HttpClient]),
   editFareActionProvider(validatedEditFareAction$, [HttpClient]),

@@ -1,3 +1,4 @@
 export * from './common';
-export * from './domain.codec';
+export * from './domain';
+export * from './endpoints.codecs';
 export * from './predict-recurrence.codec';

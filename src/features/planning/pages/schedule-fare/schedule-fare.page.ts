@@ -11,7 +11,7 @@ import {
 } from './schedule-fare.form';
 import { formatScheduleFareError, toFareToSchedule, toScheduleFareSuccessToast } from './schedule-fare.presenter';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common/journey';
-import { Driver, DurationDistance, Entity, isValidPlace, JourneyEstimate, Passenger, Place, Scheduled } from '@domain';
+import { Driver, DurationDistance, FaresScheduled, isValidPlace, JourneyEstimate, Place, Regular } from '@definitions';
 import { toDisplayDurationDistance } from '../../common/unit-convertion';
 import { DailyPlanningLayout } from '../../layouts';
 import { SlotContext } from '../../components/planning/planning-row/planning-row.component';
@@ -31,8 +31,7 @@ export class ScheduleFarePage {
 
   @Output() public scheduleFareError: EventEmitter<Error> = new EventEmitter<Error>();
 
-  //TODO Type to Observable<Error | Entity & Scheduled>
-  public readonly scheduleFare$ = (): Observable<object> =>
+  public readonly scheduleFare$ = (): Observable<FaresScheduled> =>
     // TODO Had to use SCHEDULE_FARE_FORM.getRawValue() instead of SCHEDULE_FARE_FORM.value for the latest controls value to be retreived
     this._scheduleFareAction$(toFareToSchedule(SCHEDULE_FARE_FORM.getRawValue() as FareToSchedulePresentation));
 
@@ -72,12 +71,12 @@ export class ScheduleFarePage {
     this.scheduleFareForm.controls.driver.setValue(driver.identifier);
   }
 
-  public onSelectPassengerChange(passenger: Passenger): void {
-    this.scheduleFareForm.controls.passenger.setValue(passenger.passenger);
-    this.scheduleFareForm.controls.phoneToCall.setValue(passenger.phone);
+  public onSelectRegularChange(regular: Regular): void {
+    this.scheduleFareForm.controls.passenger.setValue(`${regular.lastname} ${regular.firstname}`);
+    this.scheduleFareForm.controls.phoneToCall.setValue(regular.phone);
   }
 
-  public onSearchPassengerTermChange(search: string): void {
+  public onSearchRegularTermChange(search: string): void {
     this.scheduleFareForm.controls.passenger.setValue(search);
   }
 
@@ -114,10 +113,10 @@ export class ScheduleFarePage {
     SCHEDULE_FARE_FORM.valid && triggerAction();
   };
 
-  public onScheduleFareActionSuccess = async (payload: unknown): Promise<void> => {
+  public onScheduleFareActionSuccess = async (fares: FaresScheduled): Promise<void> => {
     SCHEDULE_FARE_FORM.reset();
     // TODO Type action and modify returned payload
-    this._toaster.toast(toScheduleFareSuccessToast(payload as { rows: (Entity & Scheduled)[] }[]));
+    this._toaster.toast(toScheduleFareSuccessToast(fares));
     await this._router.navigate(['..'], { relativeTo: this._route });
   };
 

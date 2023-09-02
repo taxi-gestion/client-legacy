@@ -3,13 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { CanMatchOneUserGroupGuard } from '@features/authentication';
 import { DailyPlanningLayout } from '../layouts';
 import {
-  ScheduleReturnPage,
   DriverAgendaPage,
+  ManageFarePage,
   ManagerDriverChoicePage,
   MissingAdminConfigurationPage,
-  ScheduleFarePage,
   RegisterRegularPage,
-  ManageFarePage
+  ScheduleFarePage,
+  SchedulePendingPage
 } from '../pages';
 import { CanActivatePlanningRedirectGuard } from '../guards';
 
@@ -36,7 +36,7 @@ const DAILY_PAGES: Routes = [
   },
   {
     path: 'schedule-return',
-    component: ScheduleReturnPage
+    component: SchedulePendingPage
   }
 ];
 

@@ -1,5 +1,5 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Entity, Place, Subcontractor } from '@domain';
+import { Entity, Place, Subcontractor } from '@definitions';
 import { EstimateJourneyValues } from '../../components';
 
 export type FareToSubcontractPresentation = Entity &

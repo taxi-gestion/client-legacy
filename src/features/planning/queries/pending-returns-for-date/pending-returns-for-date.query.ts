@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
-import { Entity, Pending } from '@domain';
+import { Entity, Pending } from '@definitions';
 import { PendingReturnsForDateQuery } from '../../providers';
 import { pipe as fpPipe } from 'fp-ts/function';
 import { externalTypeCheckFor, pendingReturnsCodec } from '@codecs';
@@ -10,7 +10,7 @@ import { ValidationFailedAfterApiCallError } from '../../errors';
 export const validatedPendingReturnsForDateQuery$ =
   (httpClient: HttpClient): PendingReturnsForDateQuery =>
   (date: string): Observable<(Entity & Pending)[]> =>
-    httpClient.get<unknown>(`/api/pending-returns-for-date/${date}`).pipe(
+    httpClient.get<unknown>(`/api/pending/${date}`).pipe(
       map(pendingReturnsValidation),
       catchError(
         (error: Error | HttpErrorResponse, caught: Observable<(Entity & Pending)[]>): Observable<never> =>

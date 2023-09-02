@@ -11,7 +11,7 @@ import {
 import { formatRegisterRegularError, toRegisterRegularSuccessToast, toRegular } from './register-regular.presenter';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Entity, Regular } from '@domain';
+import { RegularRegistered } from '@definitions';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,7 +24,7 @@ export class RegisterRegularPage {
 
   @Output() public registerRegularError: EventEmitter<Error> = new EventEmitter<Error>();
 
-  public readonly registerRegular$ = (): Observable<object> =>
+  public readonly registerRegular$ = (): Observable<RegularRegistered> =>
     this._registerRegularAction$(toRegular(REGISTER_REGULAR_FORM.value as RegisterRegularPresentation));
 
   public readonly registerRegularForm: FormGroup<RegisterRegularFields> = REGISTER_REGULAR_FORM;
@@ -41,9 +41,9 @@ export class RegisterRegularPage {
     REGISTER_REGULAR_FORM.valid && triggerAction();
   };
 
-  public onRegisterRegularActionSuccess = async (payload: unknown): Promise<void> => {
+  public onRegisterRegularActionSuccess = async (regular: RegularRegistered): Promise<void> => {
     REGISTER_REGULAR_FORM.reset();
-    this._toaster.toast(toRegisterRegularSuccessToast(payload as { rows: (Entity & Regular)[] }[]));
+    this._toaster.toast(toRegisterRegularSuccessToast(regular));
     await this._router.navigate(['..'], { relativeTo: this._route });
   };
 

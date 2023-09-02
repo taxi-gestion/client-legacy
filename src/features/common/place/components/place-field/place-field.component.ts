@@ -11,7 +11,7 @@ import {
 import { FormControl, FormGroup } from '@angular/forms';
 import { SEARCH_PLACE_QUERY, SearchPlaceQuery } from '@features/common/place';
 import { debounceTime, distinctUntilChanged, filter, map, Observable, Subject, switchMap } from 'rxjs';
-import { Place } from '@domain';
+import { Place } from '@definitions';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

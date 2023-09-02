@@ -5,7 +5,7 @@ import { SCHEDULED_FARES_FOR_DATE_QUERY, ScheduledFaresForDateQuery } from '@fea
 import { Session, SESSION_PERSISTENCE } from '../../../authentication';
 import { filterByPlanning, toScheduledFaresPresentation } from '../../common/fares.presenter';
 import { toStandardDateFormat } from '../../common/unit-convertion';
-import { Entity, Scheduled } from '@domain';
+import { Entity, Scheduled } from '@definitions';
 import { ScheduledPresentation } from '../../common/fares.presentation';
 import { sortByDatetime, toAgendaFares } from './driver-agenda.presenter';
 

@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { ScheduledFaresForDateQuery } from '../../providers';
-import { Entity, Scheduled } from '@domain';
+import { Entity, Scheduled } from '@definitions';
 import { pipe as fpPipe } from 'fp-ts/function';
 import { externalTypeCheckFor, scheduledFaresCodec } from '@codecs';
 import { fold } from 'fp-ts/Either';
@@ -10,7 +10,7 @@ import { ValidationFailedAfterApiCallError } from '../../errors';
 export const validatedScheduledFaresForDateQuery$ =
   (httpClient: HttpClient): ScheduledFaresForDateQuery =>
   (date: string): Observable<(Entity & Scheduled)[]> =>
-    httpClient.get<unknown>(`/api/scheduled-fares-for-date/${date}`).pipe(
+    httpClient.get<unknown>(`/api/scheduled/${date}`).pipe(
       map(scheduledFaresValidation),
       catchError(
         (error: Error | HttpErrorResponse, caught: Observable<(Entity & Scheduled)[]>): Observable<never> =>
