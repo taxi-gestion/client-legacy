@@ -5,9 +5,9 @@ import {
   DriverServiceModule,
   JourneyQueriesModule,
   LoadUiModule,
-  PassengerServiceModule,
   PlaceComponentModule,
-  RecurrenceServiceModule
+  RecurrenceServiceModule,
+  RegularServiceModule
 } from '@features/common';
 import { NavbarUiModule } from '../../../root/components';
 import { COMPONENTS } from '../components';
@@ -26,12 +26,12 @@ import { DIRECTIVES } from '../directives';
     FormsModule,
     ReactiveFormsModule,
     LoadUiModule,
-    PassengerServiceModule,
     PlaceComponentModule,
     JourneyQueriesModule,
     PlanningFeatureRoutingModule,
     RecurrenceServiceModule,
     DriverServiceModule,
+    RegularServiceModule,
     NavbarUiModule
   ],
   providers: [CanActivatePlanningRedirectGuard]

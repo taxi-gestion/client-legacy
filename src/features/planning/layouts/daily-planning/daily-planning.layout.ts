@@ -10,7 +10,7 @@ import {
   SCHEDULED_FARES_FOR_DATE_QUERY,
   ScheduledFaresForDateQuery
 } from '../../providers';
-import { Driver, Entity, Pending, Scheduled } from '@domain';
+import { Driver, Entity, Pending, Scheduled } from '@definitions';
 import { DailyDriverPlanning, ScheduledPlanningSession } from '../../common/fares.presentation';
 import { LIST_DRIVERS_QUERY, SearchDriverQuery } from '@features/common/driver';
 import { paramsToDateDayString } from './daily-planning.presenter';

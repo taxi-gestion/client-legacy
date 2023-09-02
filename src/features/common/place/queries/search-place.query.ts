@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SearchPlaceQuery } from '../providers';
-import { Place } from '@domain';
+import { Place } from '@definitions';
 
-const searchPlaceUrl = (search: string): string => `https://taxi-gestion.com/api/search-place/${encodeURI(search)}`;
+const searchPlaceUrl = (search: string): string => `/api/place/search/${encodeURI(search)}`;
 
 export const searchPlaceQuery$ =
   (http: HttpClient): SearchPlaceQuery =>

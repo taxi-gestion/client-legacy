@@ -4,7 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { PREDICT_RECURRENCE_QUERY, PredictRecurrenceQuery } from '../../providers';
 import { PREDICT_RECURRENCE_FORM, PredictRecurrenceFields, setPredictRecurrenceErrorToForm } from './predict-recurrence.form';
 import { formatPredictRecurrenceError, getNextOccurrences } from './predict-recurrence.presenter';
-import { PredictedRecurrence } from '@domain';
+import { PredictedRecurrence } from '@definitions';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

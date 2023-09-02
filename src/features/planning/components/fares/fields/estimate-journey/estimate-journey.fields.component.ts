@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { DurationDistance } from '@domain';
+import { DurationDistance } from '@definitions';
 
 export type EstimateJourneyValues = {
   driveDuration: number;

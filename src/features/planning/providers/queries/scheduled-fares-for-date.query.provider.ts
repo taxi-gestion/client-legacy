@@ -1,6 +1,6 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Entity, Scheduled } from '@domain';
+import { Entity, Scheduled } from '@definitions';
 
 export const SCHEDULED_FARES_FOR_DATE_QUERY: 'planning.scheduled-fares-for-date.query' =
   'planning.scheduled-fares-for-date.query' as const;

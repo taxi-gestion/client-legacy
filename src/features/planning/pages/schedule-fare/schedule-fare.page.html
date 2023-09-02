@@ -14,9 +14,9 @@
   (ngSubmit)="onSubmitFareToSchedule(loadAction.start)">
   <div class="mb-3">
     <label for="passenger" class="form-label">Identité du passager</label>
-    <app-passenger-field
-      (selectPassenger)="onSelectPassengerChange($event)"
-      (searchPassengerTerm)="onSearchPassengerTermChange($event)"></app-passenger-field>
+    <app-regular-field
+      (selectRegular)="onSelectRegularChange($event)"
+      (searchRegularTerm)="onSearchRegularTermChange($event)"></app-regular-field>
     <input id="passenger" type="hidden" name="passenger" formControlName="passenger" />
 
     <div class="row align-items-center mt-3">

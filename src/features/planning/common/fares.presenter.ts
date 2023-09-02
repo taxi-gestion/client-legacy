@@ -6,7 +6,7 @@ import {
   timeInTimezone
 } from './unit-convertion';
 import { addMinutes, format, secondsToMinutes, subHours } from 'date-fns';
-import { Driver, Entity, Journey, Place, Scheduled } from '@domain';
+import { Driver, Entity, Journey, Place, Scheduled } from '@definitions';
 
 export const defaultPlaceValue: Place = {
   context: '',

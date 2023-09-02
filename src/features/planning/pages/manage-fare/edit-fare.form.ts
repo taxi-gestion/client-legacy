@@ -1,5 +1,5 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Entity, Place } from '@domain';
+import { Entity, Place } from '@definitions';
 import { defaultPlaceValue } from '../../common/fares.presenter';
 import { ESTIMATE_JOURNEY_FORM_CONTROLS, EstimateJourneyFields, EstimateJourneyValues } from '../../components';
 

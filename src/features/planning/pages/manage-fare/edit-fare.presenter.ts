@@ -1,5 +1,5 @@
 import { VALIDATION_FAILED_AFTER_API_CALL_ERROR_NAME, VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
-import { Entity, FareToEdit, Scheduled } from '@domain';
+import { Entity, FaresEdited, ToEdit } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { toLocalTime } from '../../common/fares.presenter';
 import { datetimeLocalToIso8601UTCString, kilometersToMeters, minutesToSeconds } from '../../common/unit-convertion';
@@ -10,18 +10,15 @@ import { DailyDriverPlanning, ScheduledPlanningSession } from '../../common/fare
 export const passengerFromContext = (context: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>): string =>
   context.sessionContext.passenger;
 
-export const toEditFareSuccessToast = (payload: { rows: (Entity & Scheduled)[] }[]): Toast => {
-  // TODO Adapt & type api response to return right payload
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const fare: Entity & Scheduled = payload[0]!.rows[0]!;
-  return {
-    content: `Course pour ${fare.passenger} par ${fare.driver} à ${toLocalTime(fare.datetime)} planifiée`,
-    status: 'success',
-    title: 'Une course a été planifiée'
-  };
-};
+export const toEditFareSuccessToast = (fares: FaresEdited): Toast => ({
+  content: `Course pour ${fares.scheduledEdited.passenger} par ${fares.scheduledEdited.driver} à ${toLocalTime(
+    fares.scheduledEdited.datetime
+  )} planifiée`,
+  status: 'success',
+  title: 'Une course a été planifiée'
+});
 
-export const toFareToEdit = (formValues: FareToEditPresentation): Entity & FareToEdit => ({
+export const toFareToEdit = (formValues: FareToEditPresentation): Entity & ToEdit => ({
   id: formValues.id,
   //recurrence: formValues.recurrence,
   destination: formValues.arrivalPlace,

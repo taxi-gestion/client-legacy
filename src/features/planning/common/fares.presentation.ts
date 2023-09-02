@@ -1,5 +1,5 @@
 import { PlanningSession } from '../components/planning/planning-row/planning-row.component';
-import { Driver, Entity, Scheduled } from '@domain';
+import { Driver, Entity, Scheduled } from '@definitions';
 
 export type DailyDriverPlanning = {
   driver: Driver & Entity;

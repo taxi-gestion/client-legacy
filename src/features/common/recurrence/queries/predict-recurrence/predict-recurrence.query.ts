@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { PredictRecurrenceQuery } from '../../providers';
 
-const predictRecurrenceUrl = (): string => `https://taxi-gestion.com/api/predict-recurrence`;
+const predictRecurrenceUrl = (): string => `/api/predict/recurrence`;
 
 const handlePredictRecurrenceError$ =
   () =>
