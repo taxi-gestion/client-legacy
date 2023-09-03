@@ -1,4 +1,4 @@
-import { array as ioArray, type as ioType, Type, union as ioUnion } from 'io-ts';
+import { array as ioArray, type as ioType, Type, union as ioUnion, undefined as ioUndefined } from 'io-ts';
 import {
   Entity,
   FaresDeleted,
@@ -14,56 +14,27 @@ import {
 } from '../definitions';
 import { pendingReturnCodec, regularPassengerEntityCodec, scheduledFareCodec, subcontractedFareCodec } from './domain';
 
-export const fareScheduledCodec: Type<FaresScheduled> = ioUnion([
-  ioType({
-    scheduledCreated: scheduledFareCodec
-  }),
-  ioType({
-    scheduledCreated: scheduledFareCodec,
-    pendingCreated: pendingReturnCodec
-  })
-]);
+export const fareScheduledCodec: Type<FaresScheduled> = ioType({
+  scheduledCreated: scheduledFareCodec,
+  pendingCreated: ioUnion([pendingReturnCodec, ioUndefined])
+});
 
-export const faresDeletedCodec: Type<FaresDeleted> = ioUnion([
-  ioType({
-    scheduledDeleted: scheduledFareCodec
-  }),
-  ioType({
-    scheduledDeleted: scheduledFareCodec,
-    pendingDeleted: pendingReturnCodec
-  })
-]);
+export const faresDeletedCodec: Type<FaresDeleted> = ioType({
+  scheduledDeleted: scheduledFareCodec,
+  pendingDeleted: ioUnion([pendingReturnCodec, ioUndefined])
+});
 
-export const faresSubcontractedCodec: Type<FaresSubcontracted> = ioUnion([
-  ioType({
-    subcontracted: subcontractedFareCodec,
-    scheduledDeleted: scheduledFareCodec
-  }),
-  ioType({
-    subcontracted: subcontractedFareCodec,
-    scheduledDeleted: scheduledFareCodec,
-    pendingDeleted: pendingReturnCodec
-  })
-]);
+export const faresSubcontractedCodec: Type<FaresSubcontracted> = ioType({
+  subcontracted: subcontractedFareCodec,
+  scheduledDeleted: scheduledFareCodec,
+  pendingDeleted: ioUnion([pendingReturnCodec, ioUndefined])
+});
 
-export const faresEditedCodec: Type<FaresEdited> = ioUnion([
-  ioType({
-    scheduledEdited: scheduledFareCodec
-  }),
-  ioType({
-    scheduledEdited: scheduledFareCodec,
-    pendingCreated: pendingReturnCodec
-  }),
-  ioType({
-    scheduledEdited: scheduledFareCodec,
-    pendingCreated: pendingReturnCodec,
-    pendingDeleted: pendingReturnCodec
-  }),
-  ioType({
-    scheduledEdited: scheduledFareCodec,
-    pendingDeleted: pendingReturnCodec
-  })
-]);
+export const faresEditedCodec: Type<FaresEdited> = ioType({
+  scheduledEdited: scheduledFareCodec,
+  pendingCreated: ioUnion([pendingReturnCodec, ioUndefined]),
+  pendingDeleted: ioUnion([pendingReturnCodec, ioUndefined])
+});
 
 export const regularRegisteredCodec: Type<RegularRegistered> = ioType({
   regularRegistered: regularPassengerEntityCodec
