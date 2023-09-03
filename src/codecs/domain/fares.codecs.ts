@@ -9,13 +9,13 @@ import {
 import {
   Drive,
   Entity,
-  ToSubcontract,
   Pending,
   ReturnDrive,
   Scheduled,
   Subcontracted,
   ToEdit,
-  ToSchedule
+  ToSchedule,
+  ToSubcontract
 } from '../../definitions';
 import { placeCodec } from '../common';
 import { driveCodec, durationDistanceCodec, entityCodec, passengerCodec } from './traits.codecs';
