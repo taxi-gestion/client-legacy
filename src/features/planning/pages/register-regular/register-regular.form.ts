@@ -1,23 +1,36 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Civility, Place } from '@definitions';
+import { defaultPlaceValue } from '../../common/fares.presenter';
+import { PHONE_NUMBERS_FORM_CONTROLS, PhonesField, PhoneNumberValues } from '../../components/regular/phone-numbers.component';
 
 export type RegisterRegularPresentation = {
+  civility: Civility;
   firstname: string;
   lastname: string;
-  phoneToAutocomplete: string;
+  homeAddress: Place;
+  commentary: string;
+  subcontractedClient: string;
+} & { phones: PhoneNumberValues[] };
+
+export type RegisterRegularFields = PhonesField & {
+  civility: FormControl<Civility | null>;
+  firstname: FormControl<string | null>;
+  lastname: FormControl<string | null>;
+  homeAddress: FormControl<Place | null>;
+  commentary: FormControl<string | null>;
+  subcontractedClient: FormControl<string | null>;
 };
 
-export type RegisterRegularFields = {
-  firstname: FormControl<string>;
-  lastname: FormControl<string>;
-  phoneToAutocomplete: FormControl<string>;
-};
+export const DEFAULT_CIVILITY: Civility = 'Mr';
 
-export const REGISTER_REGULAR_FORM: FormGroup<Record<keyof RegisterRegularPresentation, FormControl>> = new FormGroup<
-  Record<keyof RegisterRegularPresentation, FormControl>
->({
+export const REGISTER_REGULAR_FORM: FormGroup<RegisterRegularFields> = new FormGroup<RegisterRegularFields>({
+  civility: new FormControl<RegisterRegularPresentation['civility']>(DEFAULT_CIVILITY, [Validators.required]),
   firstname: new FormControl<RegisterRegularPresentation['firstname']>('', [Validators.required]),
   lastname: new FormControl<RegisterRegularPresentation['lastname']>('', [Validators.required]),
-  phoneToAutocomplete: new FormControl<RegisterRegularPresentation['phoneToAutocomplete']>('', [Validators.required])
+  ...PHONE_NUMBERS_FORM_CONTROLS,
+  homeAddress: new FormControl<RegisterRegularPresentation['homeAddress']>(defaultPlaceValue, []),
+  commentary: new FormControl<RegisterRegularPresentation['commentary']>('', []),
+  subcontractedClient: new FormControl<RegisterRegularPresentation['subcontractedClient']>('', [])
 });
 
 export const setRegisterRegularErrorToForm = (handledError: { field?: string; errors: Record<string, unknown> }): void =>

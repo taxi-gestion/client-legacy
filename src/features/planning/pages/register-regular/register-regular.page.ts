@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { FormArray, FormGroup } from '@angular/forms';
+import { Observable, of } from 'rxjs';
 import { REGISTER_REGULAR_ACTION, RegisterRegularAction } from '../../providers';
 import {
   REGISTER_REGULAR_FORM,
@@ -8,10 +8,11 @@ import {
   RegisterRegularPresentation,
   setRegisterRegularErrorToForm
 } from './register-regular.form';
-import { formatRegisterRegularError, toRegisterRegularSuccessToast, toRegular } from './register-regular.presenter';
+import { formatRegisterRegularError, toRegisterRegularSuccessToast, toRegularDetails } from './register-regular.presenter';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RegularRegistered } from '@definitions';
+import { PhoneNumberFields, PhoneNumberValues } from '../../components/regular/phone-numbers.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,9 +26,12 @@ export class RegisterRegularPage {
   @Output() public registerRegularError: EventEmitter<Error> = new EventEmitter<Error>();
 
   public readonly registerRegular$ = (): Observable<RegularRegistered> =>
-    this._registerRegularAction$(toRegular(REGISTER_REGULAR_FORM.value as RegisterRegularPresentation));
+    this._registerRegularAction$(toRegularDetails(REGISTER_REGULAR_FORM.value as RegisterRegularPresentation));
 
   public readonly registerRegularForm: FormGroup<RegisterRegularFields> = REGISTER_REGULAR_FORM;
+
+  // TODO Search and edit
+  public phones$: Observable<PhoneNumberValues[]> = of([]);
 
   public constructor(
     private readonly _toaster: ToasterPresenter,
@@ -36,13 +40,20 @@ export class RegisterRegularPage {
     @Inject(REGISTER_REGULAR_ACTION) private readonly _registerRegularAction$: RegisterRegularAction
   ) {}
 
-  public onSubmitFareToSchedule = (triggerAction: () => void): void => {
-    REGISTER_REGULAR_FORM.markAllAsTouched();
-    REGISTER_REGULAR_FORM.valid && triggerAction();
+  // form-binding
+  public updatePhonesFields($event: FormArray<FormGroup<PhoneNumberFields>>): void {
+    this.registerRegularForm.controls.phones = $event;
+  }
+  // endregion
+
+  // register-regular
+  public onSubmitRegisterRegular = (triggerAction: () => void): void => {
+    this.registerRegularForm.markAllAsTouched();
+    this.registerRegularForm.valid && triggerAction();
   };
 
   public onRegisterRegularActionSuccess = async (regular: RegularRegistered): Promise<void> => {
-    REGISTER_REGULAR_FORM.reset();
+    this.registerRegularForm.reset();
     this._toaster.toast(toRegisterRegularSuccessToast(regular));
     await this._router.navigate(['..'], { relativeTo: this._route });
   };
@@ -51,4 +62,9 @@ export class RegisterRegularPage {
     setRegisterRegularErrorToForm(formatRegisterRegularError(error));
     this._toaster.toast({ content: "Échec de l'enregistrement", status: 'danger', title: 'Opération échouée' });
   };
+  // endregion
+
+  public getPhones(): FormArray {
+    return this.registerRegularForm.controls.phones;
+  }
 }

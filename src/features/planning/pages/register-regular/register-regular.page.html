@@ -1,17 +1,28 @@
 <div class="d-flex">
-  <h2 class="pt-2 pb-4 text-primary">Enregistrer un passager régulier</h2>
+  <h2 class="pt-2 pb-4 text-primary">Fiche passager</h2>
   <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
     <i class="ri-close-line ri-2x" aria-hidden="true"></i>
     <span class="visually-hidden">Fermer</span>
   </a>
 </div>
+<div class="mb-3">
+  <label class="form-label">Rechercher un passager pour modification</label>
+  <!--    (selectRegular)="onSelectRegularChange($event)"
+      (searchRegularTerm)="onSearchRegularTermChange($event)"-->
+  <app-regular-field></app-regular-field>
+</div>
+<hr />
 <form
   [formGroup]="registerRegularForm"
   [appLoadAction]="registerRegular$"
   #loadAction="loadAction"
   (actionSuccess)="onRegisterRegularActionSuccess($event)"
   (actionError)="onRegisterRegularActionError($event)"
-  (ngSubmit)="onSubmitFareToSchedule(loadAction.start)">
+  (ngSubmit)="onSubmitRegisterRegular(loadAction.start)">
+  <select name="civility" class="form-select w-auto d-inline-block" formControlName="civility">
+    <option value="Mr">Mr</option>
+    <option value="Mrs">Mme</option>
+  </select>
   <div class="mb-3">
     <label for="firstname" class="form-label">Prénom</label>
     <input class="form-control" id="firstname" type="text" name="firstname" formControlName="firstname" placeholder="Jean" />
@@ -21,14 +32,40 @@
     <input class="form-control" id="lastname" type="text" name="lastname" formControlName="lastname" placeholder="Dupont" />
   </div>
   <div class="mb-3">
-    <label for="phoneToAutocomplete" class="form-label">Téléphone à autocompléter</label>
-    <input
-      id="phoneToAutocomplete"
+    <label for="phones" class="form-label">Téléphones</label>
+    <app-phone-numbers
+      id="phones"
+      [parentArray]="getPhones()"
+      [phones]="phones$ | async"
+      (formControlUpdated)="updatePhonesFields($event)"></app-phone-numbers>
+  </div>
+  <div class="mb-3">
+    <label for="homeAddress" class="form-label">Domicile</label>
+    <!--(selectPlace)="onSelectHomeAddressChange($event)"-->
+    <app-place-field></app-place-field>
+    <input id="homeAddress" type="hidden" name="homeAddress" formControlName="homeAddress" />
+  </div>
+  <div class="mb-3">
+    <label for="commentary" class="form-label">Commentaire</label>
+    <textarea
+      id="commentary"
       type="text"
-      placeholder="(+33)/(0) 6 XX XX XX XX"
+      placeholder="Commentaire..."
       class="form-control"
-      name="phoneToAutocomplete"
-      formControlName="phoneToAutocomplete" />
+      name="commentary"
+      cols="30"
+      rows="5"
+      formControlName="commentary"></textarea>
+  </div>
+  <div class="mb-3">
+    <label for="subcontractedClient" class="form-label">Client d'une autre société</label>
+    <input
+      id="subcontractedClient"
+      type="text"
+      placeholder="Client de..."
+      class="form-control"
+      name="subcontractedClient"
+      formControlName="subcontractedClient" />
   </div>
   <button
     [appLoadActionDisplay]="loadAction.isLoading$ | async"
@@ -36,7 +73,7 @@
     type="submit"
     class="btn mt-3 btn-primary w-100"
     [disabled]="loadActionDisplay.isLoading">
-    <ng-container slot="loadActionDisplayIdle">Enregistrer le passager</ng-container>
+    <ng-container slot="loadActionDisplayIdle">Enregistrer un nouveau passager</ng-container>
     <ng-container slot="loadActionDisplayLoading">
       <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
       Enregistrement en cours...

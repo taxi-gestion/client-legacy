@@ -1,17 +1,33 @@
 import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
 import { RegisterRegularPresentation } from './register-regular.form';
-import { Regular, RegularRegistered } from '@definitions';
+import { Phone, RegularDetails, RegularRegistered } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
+import { PhoneNumberValues } from '../../components/regular/phone-numbers.component';
 
 export const toRegisterRegularSuccessToast = (regular: RegularRegistered): Toast => ({
-  content: `Nouveau passager, ${regular.regularRegistered.firstname} ${regular.regularRegistered.lastname} - ${regular.regularRegistered.phone} enregistré`,
+  content: `Nouveau passager, ${regular.regularRegistered.firstname} ${regular.regularRegistered.lastname} enregistré`,
   status: 'success',
   title: `Un passager a été enregistré`
 });
-export const toRegular = (formValues: RegisterRegularPresentation): Regular => ({
+
+const isEmptyOrWhitespace = (str: string): boolean => str === '' || str.trim() === '';
+
+export const toRegularDetails = (formValues: RegisterRegularPresentation): RegularDetails => ({
+  civility: formValues.civility,
   firstname: formValues.firstname,
   lastname: formValues.lastname,
-  phone: formValues.phoneToAutocomplete
+  phones: formValues.phones.length === 0 ? undefined : formValues.phones.map(toPhone),
+  home: formValues.homeAddress,
+  commentary: isEmptyOrWhitespace(formValues.commentary) ? undefined : formValues.commentary,
+  // TODO WIP
+  destinations: [],
+  subcontractedClient: isEmptyOrWhitespace(formValues.subcontractedClient) ? undefined : formValues.subcontractedClient
+});
+
+export const toPhone = (phoneNumberValue: PhoneNumberValues): Phone => ({
+  name: phoneNumberValue.phoneName,
+  // eslint-disable-next-line id-denylist
+  number: phoneNumberValue.phoneNumber
 });
 
 // TODO Réfléchir à la mutualisation des erreurs communes
