@@ -1,4 +1,4 @@
-import { Pending, Regular, Scheduled, Subcontracted } from './index';
+import { Pending, Regular, RegularDetails, Scheduled, Subcontracted } from './index';
 
 export type ScheduledPersistence = Scheduled;
 
@@ -9,3 +9,8 @@ export type PendingPersistence = Pending & {
 };
 
 export type RegularPersistence = Regular;
+
+export type RegularDetailsPersistence = Omit<RegularDetails, 'subcontractedClient'> & {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  subcontracted_client: string | undefined;
+};

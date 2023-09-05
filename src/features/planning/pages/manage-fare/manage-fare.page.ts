@@ -164,7 +164,8 @@ export class ManageFarePage {
 
   public onSelectRegularChange(regular: Regular): void {
     this.editFareForm.controls.passenger.setValue(`${regular.lastname} ${regular.firstname}`);
-    this.editFareForm.controls.phoneToCall.setValue(regular.phone);
+    // TODO Adapt Regular
+    //this.editFareForm.controls.phoneToCall.setValue(regular.phone);
   }
 
   public onSearchRegularTermChange(search: string): void {

@@ -1,0 +1,28 @@
+<div class="mb-3">
+  <div>
+    <button type="button" (click)="addPhone(undefined)">Ajouter un téléphone</button>
+  </div>
+  <div *ngFor="let phone of parentArray.controls; let i = index">
+    <div class="input-group p-2">
+      <label for="phoneName" class="form-label p-1">Nom:</label>
+      <input
+        id="phoneName"
+        placeholder="portable, travail..."
+        type="text"
+        class="form-control"
+        name="phoneName"
+        [formControl]="phone.controls.phoneName"
+        (change)="onFormChange()" />
+      <label for="phoneNumber" class="form-label p-1">Numéro:</label>
+      <input
+        id="phoneNumber"
+        type="text"
+        placeholder="(+33)/(0) 6 XX XX XX XX"
+        class="form-control"
+        name="phoneNumber"
+        [formControl]="phone.controls.phoneNumber"
+        (change)="onFormChange()" />
+      <button type="button" (click)="removePhoneNumber(i)">Supprimer</button>
+    </div>
+  </div>
+</div>

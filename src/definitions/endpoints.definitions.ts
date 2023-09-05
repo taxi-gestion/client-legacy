@@ -1,4 +1,4 @@
-import { Entity, Pending, Regular, Scheduled, Subcontracted } from './domain.definitions';
+import { Entity, Pending, RegularDetails, Scheduled, Subcontracted } from './domain.definitions';
 
 export type FaresScheduled = {
   scheduledCreated: Entity & Scheduled;
@@ -28,5 +28,5 @@ export type PendingScheduled = {
 };
 
 export type RegularRegistered = {
-  regularRegistered: Entity & Regular;
+  regularRegistered: Entity & RegularDetails;
 };

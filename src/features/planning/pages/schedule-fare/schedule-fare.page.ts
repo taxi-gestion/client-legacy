@@ -73,7 +73,8 @@ export class ScheduleFarePage {
 
   public onSelectRegularChange(regular: Regular): void {
     this.scheduleFareForm.controls.passenger.setValue(`${regular.lastname} ${regular.firstname}`);
-    this.scheduleFareForm.controls.phoneToCall.setValue(regular.phone);
+    //TODO Adapt Regular
+    //this.scheduleFareForm.controls.phoneToCall.setValue('PHONE');
   }
 
   public onSearchRegularTermChange(search: string): void {

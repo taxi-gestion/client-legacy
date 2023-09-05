@@ -18,14 +18,13 @@
       (selectRegular)="onSelectRegularChange($event)"
       (searchRegularTerm)="onSearchRegularTermChange($event)"></app-regular-field>
     <input id="passenger" type="hidden" name="passenger" formControlName="passenger" />
-
     <div class="row align-items-center mt-3">
       <div class="col-auto">
         <div>ou</div>
       </div>
       <div class="col-auto">
         <a class="btn btn-secondary" ariaCurrentWhenActive="page" routerLinkActive="active" [routerLink]="'register-regular'">
-          Enregistrer un passager régulier
+          Fiches passager
         </a>
       </div>
     </div>
@@ -51,7 +50,6 @@
       name="departureDatetime"
       formControlName="departureDatetime" />
   </div>
-
   <div class="mb-3">
     <label for="departurePlace" class="form-label">Lieu de départ</label>
     <app-place-field (selectPlace)="onSelectDepartureChange($event)"></app-place-field>

@@ -5,7 +5,7 @@ import { pipe as fpPipe } from 'fp-ts/function';
 import { fold } from 'fp-ts/Either';
 import { ValidationFailedAfterApiCallError, ValidationFailedBeforeApiCallError } from '../errors';
 import { Regular, RegularRegistered } from '@definitions';
-import { externalTypeCheckFor, regularPassengerCodec, regularRegisteredCodec } from '@codecs';
+import { externalTypeCheckFor, regularDetailsCodec, regularRegisteredCodec } from '@codecs';
 
 const registerRegularUrl = (): string => `/api/regular/register`;
 
@@ -13,7 +13,7 @@ export const validatedRegisterRegularAction$ =
   (http: HttpClient): RegisterRegularAction =>
   (regular: Regular): Observable<RegularRegistered> =>
     fpPipe(
-      regularPassengerCodec.decode(regular),
+      regularDetailsCodec.decode(regular),
       fold(
         (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCallError()),
         (validatedTransfer: Regular): Observable<RegularRegistered> =>

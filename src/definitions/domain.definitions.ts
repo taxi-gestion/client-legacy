@@ -27,7 +27,23 @@ export type Passenger = {
 export type Regular = {
   firstname: string;
   lastname: string;
-  phone: string;
+};
+
+export type Civility = 'Mr' | 'Mrs';
+
+export type Phone = {
+  name: string;
+  // eslint-disable-next-line id-denylist
+  number: string;
+};
+
+export type RegularDetails = Regular & {
+  civility: Civility;
+  phones: Phone[] | undefined;
+  home: Place | undefined;
+  destinations: Place[] | undefined;
+  commentary: string | undefined;
+  subcontractedClient: string | undefined;
 };
 
 export type Nature = {
