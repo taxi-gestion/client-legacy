@@ -41,8 +41,7 @@
   </div>
   <div class="mb-3">
     <label for="homeAddress" class="form-label">Domicile</label>
-    <!--(selectPlace)="onSelectHomeAddressChange($event)"-->
-    <app-place-field></app-place-field>
+    <app-place-field (selectPlace)="onSelectHomeAddressChange($event)"></app-place-field>
     <input id="homeAddress" type="hidden" name="homeAddress" formControlName="homeAddress" />
   </div>
   <div class="mb-3">

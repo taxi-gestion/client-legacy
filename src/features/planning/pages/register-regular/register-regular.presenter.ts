@@ -3,6 +3,7 @@ import { RegisterRegularPresentation } from './register-regular.form';
 import { Phone, RegularDetails, RegularRegistered } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { PhoneNumberValues } from '../../components/regular/phone-numbers.component';
+import { defaultPlaceValue } from '../../common/fares.presenter';
 
 export const toRegisterRegularSuccessToast = (regular: RegularRegistered): Toast => ({
   content: `Nouveau passager, ${regular.regularRegistered.firstname} ${regular.regularRegistered.lastname} enregistré`,
@@ -17,7 +18,8 @@ export const toRegularDetails = (formValues: RegisterRegularPresentation): Regul
   firstname: formValues.firstname,
   lastname: formValues.lastname,
   phones: formValues.phones.length === 0 ? undefined : formValues.phones.map(toPhone),
-  home: formValues.homeAddress,
+  // TODO Value should be undefined from the component if place not valid
+  home: formValues.homeAddress === defaultPlaceValue ? undefined : formValues.homeAddress,
   commentary: isEmptyOrWhitespace(formValues.commentary) ? undefined : formValues.commentary,
   // TODO WIP
   destinations: [],
