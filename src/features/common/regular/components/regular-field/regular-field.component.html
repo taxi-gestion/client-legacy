@@ -49,8 +49,9 @@
         (click)="setRegularSuggestion(regular); regularResultsDropdown.reduce()">
         <b>{{ regular.lastname }} {{ regular.firstname }}</b>
         <br />
-        <!-- TODO Adapt field -->
-        <!--<small>{{ regular.phones[0] }}</small>-->
+        <small>Tèl : {{ regular.phones && regular.phones[0] && regular.phones[0].number }}</small>
+        <br />
+        <small>Domicile: {{ regular.home && regular.home.context }}</small>
       </button>
     </li>
   </ul>

@@ -11,7 +11,7 @@ import {
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter, map, Observable, Subject, switchMap } from 'rxjs';
 import { SEARCH_REGULAR_QUERY, SearchRegularQuery } from '../../providers';
-import { Regular } from '@definitions';
+import { Regular, RegularDetails } from '@definitions';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,7 +22,7 @@ export class RegularFieldComponent implements OnChanges {
   @Input() public minSearchTermLength: number = 2;
   @Input() public searchDebounceTime: number = 300;
 
-  @Output() public readonly selectRegular: EventEmitter<Regular> = new EventEmitter<Regular>();
+  @Output() public readonly selectRegular: EventEmitter<RegularDetails> = new EventEmitter<RegularDetails>();
 
   @Output() public readonly searchRegularTerm: EventEmitter<string> = new EventEmitter<string>();
 
@@ -36,12 +36,12 @@ export class RegularFieldComponent implements OnChanges {
 
   private readonly _searchRegularTerm$: Subject<string> = new Subject<string>();
 
-  public regularsFound$: Observable<Regular[]> = this._searchRegularTerm$.pipe(
+  public regularsFound$: Observable<RegularDetails[]> = this._searchRegularTerm$.pipe(
     map((searchRegularTerm: string): string => searchRegularTerm.trim()),
     filter((searchRegularTerm: string): boolean => searchRegularTerm.length >= this.minSearchTermLength),
     debounceTime(this.searchDebounceTime),
     distinctUntilChanged(),
-    switchMap((searchRegularTerm: string): Observable<Regular[]> => this._searchRegularQuery(searchRegularTerm))
+    switchMap((searchRegularTerm: string): Observable<RegularDetails[]> => this._searchRegularQuery(searchRegularTerm))
   );
 
   public constructor(@Inject(SEARCH_REGULAR_QUERY) private readonly _searchRegularQuery: SearchRegularQuery) {}
@@ -57,7 +57,7 @@ export class RegularFieldComponent implements OnChanges {
     this.searchRegularTerm.next(regularInput);
   }
 
-  public setRegularSuggestion(regular: Regular): void {
+  public setRegularSuggestion(regular: RegularDetails): void {
     this.formGroup.get('regular')?.setValue(`${regular.lastname} ${regular.firstname}`);
     this.selectRegular.next(regular);
   }

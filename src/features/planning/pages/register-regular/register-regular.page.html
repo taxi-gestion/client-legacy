@@ -7,9 +7,7 @@
 </div>
 <div class="mb-3">
   <label class="form-label">Rechercher un passager pour modification</label>
-  <!--    (selectRegular)="onSelectRegularChange($event)"
-      (searchRegularTerm)="onSearchRegularTermChange($event)"-->
-  <app-regular-field></app-regular-field>
+  <app-regular-field (selectRegular)="onSelectRegularChange($event)"></app-regular-field>
 </div>
 <hr />
 <form
@@ -41,7 +39,9 @@
   </div>
   <div class="mb-3">
     <label for="homeAddress" class="form-label">Domicile</label>
-    <app-place-field (selectPlace)="onSelectHomeAddressChange($event)"></app-place-field>
+    <app-place-field
+      (selectPlace)="onSelectHomeAddressChange($event)"
+      [defaultValue]="(homeAddressDisplay$ | async) ?? ''"></app-place-field>
     <input id="homeAddress" type="hidden" name="homeAddress" formControlName="homeAddress" />
   </div>
   <div class="mb-3">
