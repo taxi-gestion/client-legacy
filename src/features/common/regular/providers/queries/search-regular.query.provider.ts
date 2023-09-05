@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
 import { FactoryProvider } from '@angular/core';
-import { Regular } from '@definitions';
+import { RegularDetails } from '@definitions';
 
-export type SearchRegularQuery = (search: string) => Observable<Regular[]>;
+export type SearchRegularQuery = (search: string) => Observable<RegularDetails[]>;
 
 export const SEARCH_REGULAR_QUERY: symbol = Symbol('regular.search-regular.queries');
 

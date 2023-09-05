@@ -1,18 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { SearchRegularQuery } from '../../providers';
-import { Entity, Regular } from '@definitions';
+import { Entity, RegularDetails } from '@definitions';
 
 export const searchRegularsQuery$ =
   (httpClient: HttpClient): SearchRegularQuery =>
-  (search: string): Observable<(Entity & Regular)[]> =>
-    httpClient.get<(Entity & Regular)[]>(`/api/regular/list`).pipe(map(filterByterm(search)));
+  (search: string): Observable<(Entity & RegularDetails)[]> =>
+    httpClient.get<(Entity & RegularDetails)[]>(`/api/regular/list`).pipe(map(filterByterm(search)));
 
 const filterByterm =
   (search: string) =>
-  (regulars: (Entity & Regular)[]): (Entity & Regular)[] =>
+  (regulars: (Entity & RegularDetails)[]): (Entity & RegularDetails)[] =>
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    regulars.filter((regular: Entity & Regular): boolean =>
+    regulars.filter((regular: Entity & RegularDetails): boolean =>
       `${regular.lastname} ${regular.firstname}`.toLowerCase().includes(search.toLowerCase())
     );
 /*

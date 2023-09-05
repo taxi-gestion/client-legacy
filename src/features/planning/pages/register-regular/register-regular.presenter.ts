@@ -26,6 +26,15 @@ export const toRegularDetails = (formValues: RegisterRegularPresentation): Regul
   subcontractedClient: isEmptyOrWhitespace(formValues.subcontractedClient) ? undefined : formValues.subcontractedClient
 });
 
+export const regularToPhoneNumbers = (regular: RegularDetails): PhoneNumberValues[] =>
+  regular.phones?.map(toPhoneNumbers) ?? [];
+export const regularToHomeAddressDisplay = (regular: RegularDetails): string | undefined => regular.home?.context;
+
+export const toPhoneNumbers = (phone: Phone): PhoneNumberValues => ({
+  phoneName: phone.name,
+  // eslint-disable-next-line id-denylist
+  phoneNumber: phone.number
+});
 export const toPhone = (phoneNumberValue: PhoneNumberValues): Phone => ({
   name: phoneNumberValue.phoneName,
   // eslint-disable-next-line id-denylist

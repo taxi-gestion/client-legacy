@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
-import { Observable, of } from 'rxjs';
+import { map, Observable, Subject, tap } from 'rxjs';
 import { REGISTER_REGULAR_ACTION, RegisterRegularAction } from '../../providers';
 import {
   REGISTER_REGULAR_FORM,
@@ -8,10 +8,16 @@ import {
   RegisterRegularPresentation,
   setRegisterRegularErrorToForm
 } from './register-regular.form';
-import { formatRegisterRegularError, toRegisterRegularSuccessToast, toRegularDetails } from './register-regular.presenter';
+import {
+  formatRegisterRegularError,
+  regularToHomeAddressDisplay,
+  regularToPhoneNumbers,
+  toRegisterRegularSuccessToast,
+  toRegularDetails
+} from './register-regular.presenter';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Place, RegularRegistered } from '@definitions';
+import { Place, RegularDetails, RegularRegistered } from '@definitions';
 import { PhoneNumberFields, PhoneNumberValues } from '../../components/regular/phone-numbers.component';
 
 @Component({
@@ -30,8 +36,26 @@ export class RegisterRegularPage {
 
   public readonly registerRegularForm: FormGroup<RegisterRegularFields> = REGISTER_REGULAR_FORM;
 
-  // TODO Search and edit
-  public phones$: Observable<PhoneNumberValues[]> = of([]);
+  //region form subject
+  private readonly _regular$: Subject<RegularDetails> = new Subject<RegularDetails>();
+
+  public regular$: Observable<RegularDetails> = this._regular$.asObservable().pipe(
+    tap((regular: RegularDetails): void => {
+      this.registerRegularForm.controls.civility.setValue(regular.civility);
+      this.registerRegularForm.controls.firstname.setValue(regular.firstname);
+      this.registerRegularForm.controls.lastname.setValue(regular.lastname);
+      this.registerRegularForm.controls.commentary.setValue(regular.commentary ?? null);
+      this.registerRegularForm.controls.subcontractedClient.setValue(regular.subcontractedClient ?? null);
+    })
+  );
+  public phones$: Observable<PhoneNumberValues[]> = this.regular$.pipe(map(regularToPhoneNumbers));
+
+  public homeAddressDisplay$: Observable<string | undefined> = this.regular$.pipe(
+    tap((regular: RegularDetails): void => {
+      this.registerRegularForm.controls.homeAddress.setValue(regular.home ?? null);
+    }),
+    map(regularToHomeAddressDisplay)
+  );
 
   public constructor(
     private readonly _toaster: ToasterPresenter,
@@ -40,7 +64,13 @@ export class RegisterRegularPage {
     @Inject(REGISTER_REGULAR_ACTION) private readonly _registerRegularAction$: RegisterRegularAction
   ) {}
 
-  // form-binding
+  //region search-regular
+  public onSelectRegularChange(regular: RegularDetails): void {
+    this._regular$.next(regular);
+  }
+  //endregion
+
+  //region form-binding
   public updatePhonesFields($event: FormArray<FormGroup<PhoneNumberFields>>): void {
     this.registerRegularForm.controls.phones = $event;
   }
@@ -48,9 +78,13 @@ export class RegisterRegularPage {
   public onSelectHomeAddressChange(place: Place): void {
     this.registerRegularForm.controls.homeAddress.setValue(place);
   }
+
+  public getPhones(): FormArray {
+    return this.registerRegularForm.controls.phones;
+  }
   // endregion
 
-  // register-regular
+  //region register-regular
   public onSubmitRegisterRegular = (triggerAction: () => void): void => {
     this.registerRegularForm.markAllAsTouched();
     this.registerRegularForm.valid && triggerAction();
@@ -67,8 +101,4 @@ export class RegisterRegularPage {
     this._toaster.toast({ content: "Échec de l'enregistrement", status: 'danger', title: 'Opération échouée' });
   };
   // endregion
-
-  public getPhones(): FormArray {
-    return this.registerRegularForm.controls.phones;
-  }
 }
