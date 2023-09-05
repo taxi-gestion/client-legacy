@@ -11,7 +11,7 @@ import {
 import { formatRegisterRegularError, toRegisterRegularSuccessToast, toRegularDetails } from './register-regular.presenter';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RegularRegistered } from '@definitions';
+import { Place, RegularRegistered } from '@definitions';
 import { PhoneNumberFields, PhoneNumberValues } from '../../components/regular/phone-numbers.component';
 
 @Component({
@@ -43,6 +43,10 @@ export class RegisterRegularPage {
   // form-binding
   public updatePhonesFields($event: FormArray<FormGroup<PhoneNumberFields>>): void {
     this.registerRegularForm.controls.phones = $event;
+  }
+
+  public onSelectHomeAddressChange(place: Place): void {
+    this.registerRegularForm.controls.homeAddress.setValue(place);
   }
   // endregion
 
