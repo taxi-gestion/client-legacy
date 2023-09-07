@@ -31,12 +31,12 @@ export const regularToPhoneNumbers = (regular: RegularDetails): PhoneNumberValue
 export const regularToHomeAddressDisplay = (regular: RegularDetails): string | undefined => regular.home?.context;
 
 export const toPhoneNumbers = (phone: Phone): PhoneNumberValues => ({
-  phoneName: phone.name,
+  phoneType: phone.type,
   // eslint-disable-next-line id-denylist
   phoneNumber: phone.number
 });
 export const toPhone = (phoneNumberValue: PhoneNumberValues): Phone => ({
-  name: phoneNumberValue.phoneName,
+  type: phoneNumberValue.phoneType,
   // eslint-disable-next-line id-denylist
   number: phoneNumberValue.phoneNumber
 });

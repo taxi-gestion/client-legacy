@@ -1,5 +1,5 @@
-import { number as ioNumber, string as ioString, type as ioType, Type } from 'io-ts';
-import { Drive, Driver, DurationDistance, Entity, Passenger } from '../../definitions';
+import { keyof as ioKeyof, number as ioNumber, string as ioString, type as ioType, Type } from 'io-ts';
+import { Drive, Driver, DurationDistance, Entity, Kind, Nature, Passenger } from '../../definitions';
 import { placeCodec } from '../common';
 
 export const entityCodec: Type<Entity> = ioType({
@@ -9,6 +9,15 @@ export const entityCodec: Type<Entity> = ioType({
 export const driverCodec: Type<Driver> = ioType({
   identifier: ioString,
   username: ioString
+});
+
+export const kindCodec: Type<Kind> = ioType({
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  kind: ioKeyof({ 'one-way': null, 'two-way': null })
+});
+
+export const natureCodec: Type<Nature> = ioType({
+  nature: ioKeyof({ medical: null, standard: null })
 });
 
 export const driveCodec: Type<Drive> = ioType({

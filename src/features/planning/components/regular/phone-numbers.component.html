@@ -4,14 +4,14 @@
   </div>
   <div *ngFor="let phone of parentArray.controls; let i = index">
     <div class="input-group p-2">
-      <label for="phoneName" class="form-label p-1">Nom:</label>
+      <label for="phoneType" class="form-label p-1">Type:</label>
       <input
-        id="phoneName"
+        id="phoneType"
         placeholder="portable, travail..."
         type="text"
         class="form-control"
-        name="phoneName"
-        [formControl]="phone.controls.phoneName"
+        name="phoneType"
+        [formControl]="phone.controls.phoneType"
         (change)="onFormChange()" />
       <label for="phoneNumber" class="form-label p-1">Numéro:</label>
       <input

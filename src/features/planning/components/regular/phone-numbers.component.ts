@@ -3,12 +3,12 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { phoneNumberValidator } from './phone-numbers.validator';
 
 export type PhoneNumberValues = {
-  phoneName: string;
+  phoneType: string;
   phoneNumber: string;
 };
 
 export type PhoneNumberFields = {
-  phoneName: FormControl<PhoneNumberValues['phoneName'] | null>;
+  phoneType: FormControl<PhoneNumberValues['phoneType'] | null>;
   phoneNumber: FormControl<PhoneNumberValues['phoneNumber'] | null>;
 };
 
@@ -20,7 +20,7 @@ export const PHONE_NUMBERS_FORM_CONTROLS: Record<keyof PhonesField, FormArray<Fo
   phones: new FormArray([
     new FormGroup<PhoneNumberFields>(
       {
-        phoneName: new FormControl<PhoneNumberValues['phoneName']>('', [Validators.required]),
+        phoneType: new FormControl<PhoneNumberValues['phoneType']>('', [Validators.required]),
         phoneNumber: new FormControl<PhoneNumberValues['phoneNumber']>('', [Validators.required])
       },
       []
@@ -64,7 +64,7 @@ export class PhoneNumbersComponent implements OnInit {
 
   public createPhoneNumberGroup(phone: PhoneNumberValues | undefined): FormGroup<PhoneNumberFields> {
     return this.formBuilder.group({
-      phoneName: [phone?.phoneName ?? '', [Validators.required]],
+      phoneType: [phone?.phoneType ?? '', [Validators.required]],
       phoneNumber: [phone?.phoneNumber ?? '', [Validators.required, phoneNumberValidator]]
     });
   }

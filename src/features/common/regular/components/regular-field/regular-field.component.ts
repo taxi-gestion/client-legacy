@@ -58,7 +58,9 @@ export class RegularFieldComponent implements OnChanges {
   }
 
   public setRegularSuggestion(regular: RegularDetails): void {
-    this.formGroup.get('regular')?.setValue(`${regular.lastname} ${regular.firstname}`);
+    this.formGroup
+      .get('regular')
+      ?.setValue(`${regular.lastname}${regular.firstname === undefined ? '' : ` ${regular.firstname}`}`);
     this.selectRegular.next(regular);
   }
 
