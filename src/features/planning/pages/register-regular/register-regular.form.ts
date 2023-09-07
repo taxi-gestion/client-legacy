@@ -5,7 +5,7 @@ import { PHONE_NUMBERS_FORM_CONTROLS, PhonesField, PhoneNumberValues } from '../
 
 export type RegisterRegularPresentation = {
   civility: Civility;
-  firstname: string;
+  firstname: string | undefined;
   lastname: string;
   homeAddress: Place;
   commentary: string;
@@ -14,7 +14,7 @@ export type RegisterRegularPresentation = {
 
 export type RegisterRegularFields = PhonesField & {
   civility: FormControl<Civility | null>;
-  firstname: FormControl<string | null>;
+  firstname: FormControl<string | null | undefined>;
   lastname: FormControl<string | null>;
   homeAddress: FormControl<Place | null>;
   commentary: FormControl<string | null>;

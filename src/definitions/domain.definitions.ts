@@ -25,23 +25,30 @@ export type Passenger = {
 };
 
 export type Regular = {
-  firstname: string;
+  firstname: string | undefined;
   lastname: string;
 };
 
-export type Civility = 'Mr' | 'Mrs';
+export type Civility = 'Child' | 'Company' | 'Couple' | 'Mr' | 'Mrs' | 'Other';
 
 export type Phone = {
-  name: string;
+  type: string;
   // eslint-disable-next-line id-denylist
   number: string;
 };
+
+export type Destination = Kind &
+  Nature & {
+    place: Place;
+    name: string;
+    comment: string | undefined;
+  };
 
 export type RegularDetails = Regular & {
   civility: Civility;
   phones: Phone[] | undefined;
   home: Place | undefined;
-  destinations: Place[] | undefined;
+  destinations: Destination[] | undefined;
   commentary: string | undefined;
   subcontractedClient: string | undefined;
 };
@@ -50,19 +57,23 @@ export type Nature = {
   nature: 'medical' | 'standard';
 };
 
+export type Kind = {
+  kind: 'one-way' | 'two-way';
+};
+
 export type ToSchedule = Drive &
   DurationDistance &
+  Kind &
   Nature &
   Passenger & {
-    kind: 'one-way' | 'two-way';
     status: 'to-schedule';
   };
 
 export type ToEdit = Drive &
   DurationDistance &
+  Kind &
   Nature &
   Passenger & {
-    kind: 'one-way' | 'two-way';
     status: 'to-edit';
   };
 
@@ -80,9 +91,9 @@ export type Pending = Drive &
 
 export type Scheduled = Drive &
   DurationDistance &
+  Kind &
   Nature &
   Passenger & {
-    kind: 'one-way' | 'two-way';
     status: 'scheduled';
   };
 
@@ -96,10 +107,10 @@ export type ToSubcontract = Subcontractor & {
 
 // TODO Refactor Drive to exclude driver
 export type Subcontracted = DurationDistance &
+  Kind &
   Nature &
   Omit<Drive, 'driver'> &
   Passenger &
   Subcontractor & {
-    kind: 'one-way' | 'two-way';
     status: 'subcontracted';
   };
