@@ -1,28 +1,39 @@
 <div class="mb-3">
-  <div>
-    <button type="button" (click)="addPhone(undefined)">Ajouter un téléphone</button>
+  <div class="mb-2">
+    <button type="button" class="btn btn-primary" (click)="addPhone(undefined)">Ajouter un téléphone</button>
   </div>
-  <div *ngFor="let phone of parentArray.controls; let i = index">
-    <div class="input-group p-2">
-      <label for="phoneType" class="form-label p-1">Type:</label>
-      <input
-        id="phoneType"
-        placeholder="portable, travail..."
-        type="text"
-        class="form-control"
-        name="phoneType"
-        [formControl]="phone.controls.phoneType"
-        (change)="onFormChange()" />
-      <label for="phoneNumber" class="form-label p-1">Numéro:</label>
-      <input
-        id="phoneNumber"
-        type="text"
-        placeholder="(+33)/(0) 6 XX XX XX XX"
-        class="form-control"
-        name="phoneNumber"
-        [formControl]="phone.controls.phoneNumber"
-        (change)="onFormChange()" />
-      <button type="button" (click)="removePhoneNumber(i)">Supprimer</button>
+
+  <div *ngFor="let phone of parentArray.controls; let i = index" class="border p-3 my-2 rounded">
+    <div class="mb-3">
+      <div class="input-group mb-1">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="phoneTypeLabel">Type:</span>
+        </div>
+        <input
+          id="phoneType"
+          placeholder="portable, travail..."
+          type="text"
+          class="form-control"
+          aria-describedby="phoneTypeLabel"
+          name="phoneType"
+          [formControl]="phone.controls.phoneType"
+          (change)="onFormChange()" />
+      </div>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="phoneNumberLabel">Numéro:</span>
+        </div>
+        <input
+          id="phoneNumber"
+          type="text"
+          placeholder="(+33)/(0) 6 XX XX XX XX"
+          class="form-control"
+          aria-describedby="phoneNumberLabel"
+          name="phoneNumber"
+          [formControl]="phone.controls.phoneNumber"
+          (change)="onFormChange()" />
+      </div>
     </div>
+    <button type="button" class="btn btn-danger" (click)="removePhoneNumber(i)">Supprimer</button>
   </div>
 </div>

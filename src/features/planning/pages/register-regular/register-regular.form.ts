@@ -2,6 +2,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Civility, Place } from '@definitions';
 import { defaultPlaceValue } from '../../common/fares.presenter';
 import { PHONES_FORM_CONTROLS, PhoneValues, PhonesFields } from '../../components/regular/phones/phones.component';
+import {
+  DESTINATIONS_FORM_CONTROLS,
+  DestinationsFields,
+  DestinationValues
+} from '../../components/regular/destinations/destinations.component';
 
 export type RegisterRegularPresentation = {
   civility: Civility;
@@ -10,7 +15,7 @@ export type RegisterRegularPresentation = {
   homeAddress: Place;
   commentary: string;
   subcontractedClient: string;
-} & { phones: PhoneValues[] };
+} & { destinations: DestinationValues[] } & { phones: PhoneValues[] };
 
 export type RegisterRegularFields = {
   civility: FormControl<Civility | null>;
@@ -19,7 +24,7 @@ export type RegisterRegularFields = {
   homeAddress: FormControl<Place | null>;
   commentary: FormControl<string | null>;
   subcontractedClient: FormControl<string | null>;
-} & { phones: PhonesFields };
+} & { destinations: DestinationsFields } & { phones: PhonesFields };
 
 export const DEFAULT_CIVILITY: Civility = 'Mr';
 
@@ -29,6 +34,7 @@ export const REGISTER_REGULAR_FORM: FormGroup<RegisterRegularFields> = new FormG
   lastname: new FormControl<RegisterRegularPresentation['lastname']>('', [Validators.required]),
   ...PHONES_FORM_CONTROLS,
   homeAddress: new FormControl<RegisterRegularPresentation['homeAddress']>(defaultPlaceValue, []),
+  ...DESTINATIONS_FORM_CONTROLS,
   commentary: new FormControl<RegisterRegularPresentation['commentary']>('', []),
   subcontractedClient: new FormControl<RegisterRegularPresentation['subcontractedClient']>('', [])
 });
