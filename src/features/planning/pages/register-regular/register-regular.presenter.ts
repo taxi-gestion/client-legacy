@@ -2,7 +2,7 @@ import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
 import { RegisterRegularPresentation } from './register-regular.form';
 import { Phone, RegularDetails, RegularRegistered } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
-import { PhoneNumberValues } from '../../components/regular/phone-numbers.component';
+import { PhoneValues } from '../../components/regular/phones/phones.component';
 import { defaultPlaceValue } from '../../common/fares.presenter';
 
 export const toRegisterRegularSuccessToast = (regular: RegularRegistered): Toast => ({
@@ -26,16 +26,15 @@ export const toRegularDetails = (formValues: RegisterRegularPresentation): Regul
   subcontractedClient: isEmptyOrWhitespace(formValues.subcontractedClient) ? undefined : formValues.subcontractedClient
 });
 
-export const regularToPhoneNumbers = (regular: RegularDetails): PhoneNumberValues[] =>
-  regular.phones?.map(toPhoneNumbers) ?? [];
+export const regularToPhoneNumbers = (regular: RegularDetails): PhoneValues[] => regular.phones?.map(toPhoneNumbers) ?? [];
 export const regularToHomeAddressDisplay = (regular: RegularDetails): string | undefined => regular.home?.context;
 
-export const toPhoneNumbers = (phone: Phone): PhoneNumberValues => ({
+export const toPhoneNumbers = (phone: Phone): PhoneValues => ({
   phoneType: phone.type,
   // eslint-disable-next-line id-denylist
   phoneNumber: phone.number
 });
-export const toPhone = (phoneNumberValue: PhoneNumberValues): Phone => ({
+export const toPhone = (phoneNumberValue: PhoneValues): Phone => ({
   type: phoneNumberValue.phoneType,
   // eslint-disable-next-line id-denylist
   number: phoneNumberValue.phoneNumber

@@ -35,11 +35,11 @@
   </div>
   <div class="mb-3">
     <label for="phones" class="form-label">Téléphones</label>
-    <app-phone-numbers
+    <app-phones
       id="phones"
-      [parentArray]="getPhones()"
+      [parentArray]="getPhonesFormArray()"
       [phones]="phones$ | async"
-      (formControlUpdated)="updatePhonesFields($event)"></app-phone-numbers>
+      (formControlUpdated)="updatePhonesFields($event)"></app-phones>
   </div>
   <div class="mb-3">
     <label for="homeAddress" class="form-label">Domicile</label>
