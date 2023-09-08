@@ -30,7 +30,7 @@ export class PlaceFieldComponent implements OnChanges {
 
   @Input() public displayReset: boolean = false;
 
-  @Input() public defaultValue?: string;
+  @Input() public defaultValue?: Place | string | null;
 
   private readonly _searchPlaceTerm$: Subject<string> = new Subject<string>();
 
@@ -47,7 +47,7 @@ export class PlaceFieldComponent implements OnChanges {
   public formGroup: FormGroup = new FormGroup({ place: new FormControl() });
 
   public ngOnChanges(simpleChanges: SimpleChanges): void {
-    simpleChanges['defaultValue'] != null && this.formGroup.get('place')?.setValue(this.defaultValue ?? '');
+    simpleChanges['defaultValue'] != null && this.formGroup.get('place')?.setValue(toPlaceString(this.defaultValue));
   }
 
   public search(placeInput: string): void {
@@ -68,3 +68,7 @@ export class PlaceFieldComponent implements OnChanges {
     this.resetPlace.emit();
   }
 }
+
+const toPlaceString = (placeOrString: Place | string | null | undefined): string =>
+  // eslint-disable-next-line no-nested-ternary
+  placeOrString == null ? '' : typeof placeOrString === 'string' ? placeOrString : placeOrString.context;

@@ -1,0 +1,72 @@
+<div class="mb-3">
+  <div class="mb-2">
+    <button type="button" class="btn btn-primary" (click)="addDestination(undefined)">Ajouter une destination</button>
+  </div>
+
+  <div *ngFor="let destination of parentArray.controls; let i = index" class="border p-3 my-2 rounded">
+    <div class="mb-3">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="nameLabel">Nom:</span>
+        </div>
+        <input
+          id="name"
+          placeholder="clinique, dialyse ..."
+          type="text"
+          class="form-control"
+          aria-describedby="nameLabel"
+          name="name"
+          [formControl]="destination.controls.name"
+          (change)="onFormChange()" />
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="place" class="form-label d-block">Adresse:</label>
+      <app-place-field
+        (selectPlace)="onSelectPlaceChange($event, i)"
+        [defaultValue]="destination.controls.place.value"></app-place-field>
+      <input id="place" type="hidden" name="place" [formControl]="destination.controls.place" />
+    </div>
+
+    <div class="form-check form-switch mb-2">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        id="isTwoWayDrive"
+        name="isTwoWayDrive"
+        [formControl]="destination.controls.isTwoWayDrive"
+        checked />
+      <label class="form-check-label" for="isTwoWayDrive">Avec retour ?</label>
+    </div>
+
+    <div class="form-check form-switch mb-3">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        id="isMedicalDrive"
+        name="isMedicalDrive"
+        [formControl]="destination.controls.isMedicalDrive"
+        checked />
+      <label class="form-check-label" for="isMedicalDrive">Médical</label>
+    </div>
+
+    <div class="mb-3">
+      <div class="input-group">
+        <textarea
+          id="comment"
+          placeholder="Commentaire trajet..."
+          class="form-control"
+          aria-describedby="commentLabel"
+          name="comment"
+          cols="30"
+          rows="2"
+          [formControl]="destination.controls.comment"></textarea>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-danger" (click)="removeDestination(i)">Supprimer</button>
+  </div>
+</div>

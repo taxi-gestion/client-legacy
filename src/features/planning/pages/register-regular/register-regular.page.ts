@@ -10,6 +10,7 @@ import {
 } from './register-regular.form';
 import {
   formatRegisterRegularError,
+  regularToDestinationsValues,
   regularToHomeAddressDisplay,
   regularToPhoneNumbers,
   toRegisterRegularSuccessToast,
@@ -18,7 +19,8 @@ import {
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Place, RegularDetails, RegularRegistered } from '@definitions';
-import { PhoneFields, PhoneValues } from '../../components/regular/phones/phones.component';
+import { PhonesFields, PhoneValues } from '../../components/regular/phones/phones.component';
+import { DestinationsFields, DestinationValues } from '../../components/regular/destinations/destinations.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -48,7 +50,10 @@ export class RegisterRegularPage {
       this.registerRegularForm.controls.subcontractedClient.setValue(regular.subcontractedClient ?? null);
     })
   );
+
   public phones$: Observable<PhoneValues[]> = this.regular$.pipe(map(regularToPhoneNumbers));
+
+  public destinations$: Observable<DestinationValues[]> = this.regular$.pipe(map(regularToDestinationsValues));
 
   public homeAddressDisplay$: Observable<string | undefined> = this.regular$.pipe(
     tap((regular: RegularDetails): void => {
@@ -71,16 +76,24 @@ export class RegisterRegularPage {
   //endregion
 
   //region form-binding
-  public updatePhonesFields($event: FormArray<FormGroup<PhoneFields>>): void {
-    this.registerRegularForm.controls.phones = $event;
-  }
-
   public onSelectHomeAddressChange(place: Place): void {
     this.registerRegularForm.controls.homeAddress.setValue(place);
   }
 
+  public updatePhonesFields($event: PhonesFields): void {
+    this.registerRegularForm.controls.phones = $event;
+  }
+
   public getPhonesFormArray(): FormArray {
     return this.registerRegularForm.controls.phones;
+  }
+
+  public updateDestinationsFields($event: DestinationsFields): void {
+    this.registerRegularForm.controls.destinations = $event;
+  }
+
+  public getDestinationsFormArray(): FormArray {
+    return this.registerRegularForm.controls.destinations;
   }
   // endregion
 

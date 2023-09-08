@@ -1,9 +1,10 @@
 import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
 import { RegisterRegularPresentation } from './register-regular.form';
-import { Phone, RegularDetails, RegularRegistered } from '@definitions';
+import { Destination, Phone, RegularDetails, RegularRegistered } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { PhoneValues } from '../../components/regular/phones/phones.component';
 import { defaultPlaceValue } from '../../common/fares.presenter';
+import { DestinationValues } from '../../components/regular/destinations/destinations.component';
 
 export const toRegisterRegularSuccessToast = (regular: RegularRegistered): Toast => ({
   content: `Nouveau passager, ${regular.regularRegistered.firstname} ${regular.regularRegistered.lastname} enregistré`,
@@ -21,12 +22,14 @@ export const toRegularDetails = (formValues: RegisterRegularPresentation): Regul
   // TODO Value should be undefined from the component if place not valid
   home: formValues.homeAddress === defaultPlaceValue ? undefined : formValues.homeAddress,
   commentary: isEmptyOrWhitespace(formValues.commentary) ? undefined : formValues.commentary,
-  // TODO WIP
-  destinations: [],
+  destinations: formValues.destinations.map(toDestination),
   subcontractedClient: isEmptyOrWhitespace(formValues.subcontractedClient) ? undefined : formValues.subcontractedClient
 });
 
 export const regularToPhoneNumbers = (regular: RegularDetails): PhoneValues[] => regular.phones?.map(toPhoneNumbers) ?? [];
+export const regularToDestinationsValues = (regular: RegularDetails): DestinationValues[] =>
+  regular.destinations?.map(toDestinationValues) ?? [];
+
 export const regularToHomeAddressDisplay = (regular: RegularDetails): string | undefined => regular.home?.context;
 
 export const toPhoneNumbers = (phone: Phone): PhoneValues => ({
@@ -34,10 +37,27 @@ export const toPhoneNumbers = (phone: Phone): PhoneValues => ({
   // eslint-disable-next-line id-denylist
   phoneNumber: phone.number
 });
+
 export const toPhone = (phoneNumberValue: PhoneValues): Phone => ({
   type: phoneNumberValue.phoneType,
   // eslint-disable-next-line id-denylist
   number: phoneNumberValue.phoneNumber
+});
+
+export const toDestinationValues = (destination: Destination): DestinationValues => ({
+  name: destination.name,
+  place: destination.place,
+  isMedicalDrive: destination.nature === 'medical',
+  isTwoWayDrive: destination.kind === 'two-way',
+  comment: destination.comment
+});
+
+export const toDestination = (destination: DestinationValues): Destination => ({
+  name: destination.name,
+  place: destination.place,
+  nature: destination.isMedicalDrive ? 'medical' : 'standard',
+  kind: destination.isTwoWayDrive ? 'two-way' : 'one-way',
+  comment: destination.comment
 });
 
 // TODO Réfléchir à la mutualisation des erreurs communes
