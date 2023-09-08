@@ -18,7 +18,7 @@ import {
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Place, RegularDetails, RegularRegistered } from '@definitions';
-import { PhoneNumberFields, PhoneNumberValues } from '../../components/regular/phone-numbers.component';
+import { PhoneFields, PhoneValues } from '../../components/regular/phones/phones.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -48,7 +48,7 @@ export class RegisterRegularPage {
       this.registerRegularForm.controls.subcontractedClient.setValue(regular.subcontractedClient ?? null);
     })
   );
-  public phones$: Observable<PhoneNumberValues[]> = this.regular$.pipe(map(regularToPhoneNumbers));
+  public phones$: Observable<PhoneValues[]> = this.regular$.pipe(map(regularToPhoneNumbers));
 
   public homeAddressDisplay$: Observable<string | undefined> = this.regular$.pipe(
     tap((regular: RegularDetails): void => {
@@ -71,7 +71,7 @@ export class RegisterRegularPage {
   //endregion
 
   //region form-binding
-  public updatePhonesFields($event: FormArray<FormGroup<PhoneNumberFields>>): void {
+  public updatePhonesFields($event: FormArray<FormGroup<PhoneFields>>): void {
     this.registerRegularForm.controls.phones = $event;
   }
 
@@ -79,7 +79,7 @@ export class RegisterRegularPage {
     this.registerRegularForm.controls.homeAddress.setValue(place);
   }
 
-  public getPhones(): FormArray {
+  public getPhonesFormArray(): FormArray {
     return this.registerRegularForm.controls.phones;
   }
   // endregion
