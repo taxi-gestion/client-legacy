@@ -4,19 +4,19 @@ import { RegisterRegularAction } from '../providers';
 import { pipe as fpPipe } from 'fp-ts/function';
 import { fold } from 'fp-ts/Either';
 import { ValidationFailedAfterApiCallError, ValidationFailedBeforeApiCallError } from '../errors';
-import { Regular, RegularRegistered } from '@definitions';
+import { RegularDetails, RegularRegistered } from '@definitions';
 import { externalTypeCheckFor, regularDetailsCodec, regularRegisteredCodec } from '@codecs';
 
 const registerRegularUrl = (): string => `/api/regular/register`;
 
 export const validatedRegisterRegularAction$ =
   (http: HttpClient): RegisterRegularAction =>
-  (regular: Regular): Observable<RegularRegistered> =>
+  (regularDetails: RegularDetails): Observable<RegularRegistered> =>
     fpPipe(
-      regularDetailsCodec.decode(regular),
+      regularDetailsCodec.decode(regularDetails),
       fold(
         (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCallError()),
-        (validatedTransfer: Regular): Observable<RegularRegistered> =>
+        (validatedTransfer: RegularDetails): Observable<RegularRegistered> =>
           http.post<unknown>(registerRegularUrl(), validatedTransfer).pipe(
             map(registeredRegularValidation),
             catchError(
@@ -50,16 +50,3 @@ const handleRegisteredRegularError$ = (
       return throwError((): Observable<RegularRegistered> => caught);
   }
 };
-
-/*export const validatedRegisterRegularAction$ =
-  (http: HttpClient): RegisterRegularAction =>
-  (regular: Regular): Observable<RegularRegistered> =>
-    fpPipe(
-      regularPassengerCodec.decode(regular),
-      fold(
-        (): Observable<never> =>
-          throwError((): Error => new ValidationFailedBeforeApiCallError()).pipe(catchError(handleRegisterRegularError$)),
-        (validatedTransfer: Regular): Observable<RegularRegistered> =>
-          http.post(registerRegularUrl(), validatedTransfer).pipe(catchError(handleRegisterRegularError$))
-      )
-    );*/

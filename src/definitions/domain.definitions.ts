@@ -24,10 +24,10 @@ export type Passenger = {
   phone: string;
 };
 
-export type Regular = {
+/*export type Regular = {
   firstname: string | undefined;
   lastname: string;
-};
+};*/
 
 export type Civility = 'Child' | 'Company' | 'Couple' | 'Mr' | 'Mrs' | 'Other';
 
@@ -44,7 +44,9 @@ export type Destination = Kind &
     comment: string | undefined;
   };
 
-export type RegularDetails = Regular & {
+export type RegularDetails = {
+  firstname: string | undefined;
+  lastname: string;
   civility: Civility;
   phones: Phone[] | undefined;
   home: Place | undefined;
