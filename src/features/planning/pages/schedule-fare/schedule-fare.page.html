@@ -13,18 +13,20 @@
   (actionError)="onScheduleFareActionError($event)"
   (ngSubmit)="onSubmitFareToSchedule(loadAction.start)">
   <div class="mb-3">
-    <label for="passenger" class="form-label">Identité du passager</label>
+    <label for="passenger" class="form-label">Sélectionner le passager</label>
     <app-regular-field
       (selectRegular)="onSelectRegularChange($event)"
       (searchRegularTerm)="onSearchRegularTermChange($event)"></app-regular-field>
     <input id="passenger" type="hidden" name="passenger" formControlName="passenger" />
     <div class="row align-items-center mt-3">
       <div class="col-auto">
-        <div>ou</div>
+        <a class="btn btn-secondary" ariaCurrentWhenActive="page" routerLinkActive="active" [routerLink]="'manage-regular'">
+          Fiches passager
+        </a>
       </div>
       <div class="col-auto">
         <a class="btn btn-secondary" ariaCurrentWhenActive="page" routerLinkActive="active" [routerLink]="'register-regular'">
-          Fiches passager
+          Nouveau passager
         </a>
       </div>
     </div>

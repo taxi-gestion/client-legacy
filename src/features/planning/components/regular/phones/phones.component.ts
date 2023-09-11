@@ -33,7 +33,7 @@ export const PHONES_FORM_CONTROLS: Record<keyof { phones: PhonesFields }, Phones
 export class PhonesComponent implements OnInit {
   @Input({ required: true }) public parentArray!: PhonesFields;
 
-  @Input({ required: true }) public set phones(phones: PhoneValues[] | null) {
+  @Input() public set phones(phones: PhoneValues[] | null) {
     phones != null && this.onPhonesReceived(phones);
   }
 

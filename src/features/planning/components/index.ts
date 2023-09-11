@@ -10,6 +10,7 @@ import { PhonesComponent } from './regular/phones/phones.component';
 import { DestinationsComponent } from './regular/destinations/destinations.component';
 
 export * from './fares/fields';
+export * from './regular/destinations';
 
 // eslint-disable-next-line @typescript-eslint/typedef
 export const COMPONENTS = [

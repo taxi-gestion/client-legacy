@@ -2,7 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { FactoryProvider, ValueProvider } from '@angular/core';
 import {
   deleteFareActionProvider,
+  deleteRegularActionProvider,
   editFareActionProvider,
+  editRegularActionProvider,
   pendingReturnsForDateQueryProvider,
   registerRegularActionProvider,
   scheduledFaresForDateQueryProvider,
@@ -10,11 +12,15 @@ import {
   schedulePendingActionProvider,
   subcontractFareActionProvider,
   validatedDeleteFareAction$,
+  validatedDeleteRegularAction$,
+  validatedEditFareAction$,
+  validatedEditRegularAction$,
   validatedPendingReturnsForDateQuery$,
   validatedRegisterRegularAction$,
   validatedScheduledFaresForDateQuery$,
   validatedScheduleFareAction$,
-  validatedSchedulePendingAction$
+  validatedSchedulePendingAction$,
+  validatedSubcontractFareAction$
 } from '@features/planning';
 
 import {
@@ -29,21 +35,21 @@ import {
   searchRegularQueryProvider,
   searchRegularsQuery$
 } from '@features/common';
-import { validatedEditFareAction$ } from '../../features/planning/actions/edit-fare.action';
-import { validatedSubcontractFareAction$ } from '../../features/planning/actions/subcontract-fare.action';
 
 export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
-  scheduleFareActionProvider(validatedScheduleFareAction$, [HttpClient]),
-  registerRegularActionProvider(validatedRegisterRegularAction$, [HttpClient]),
-  schedulePendingActionProvider(validatedSchedulePendingAction$, [HttpClient]),
-  predictRecurrenceQueryProvider(predictRecurrenceQuery$, [HttpClient]),
-  scheduledFaresForDateQueryProvider(validatedScheduledFaresForDateQuery$, [HttpClient]),
-  pendingReturnsForDateQueryProvider(validatedPendingReturnsForDateQuery$, [HttpClient]),
-  searchPlaceQueryProvider(searchPlaceQuery$, [HttpClient]),
-  listDriversQueryProvider(listDriversQuery$, [HttpClient]),
-  searchRegularQueryProvider(searchRegularsQuery$, [HttpClient]),
-  estimateJourneyQueryProvider(estimateJourneyQuery$, [HttpClient]),
   deleteFareActionProvider(validatedDeleteFareAction$, [HttpClient]),
+  deleteRegularActionProvider(validatedDeleteRegularAction$, [HttpClient]),
   editFareActionProvider(validatedEditFareAction$, [HttpClient]),
+  editRegularActionProvider(validatedEditRegularAction$, [HttpClient]),
+  estimateJourneyQueryProvider(estimateJourneyQuery$, [HttpClient]),
+  listDriversQueryProvider(listDriversQuery$, [HttpClient]),
+  pendingReturnsForDateQueryProvider(validatedPendingReturnsForDateQuery$, [HttpClient]),
+  predictRecurrenceQueryProvider(predictRecurrenceQuery$, [HttpClient]),
+  registerRegularActionProvider(validatedRegisterRegularAction$, [HttpClient]),
+  scheduledFaresForDateQueryProvider(validatedScheduledFaresForDateQuery$, [HttpClient]),
+  scheduleFareActionProvider(validatedScheduleFareAction$, [HttpClient]),
+  schedulePendingActionProvider(validatedSchedulePendingAction$, [HttpClient]),
+  searchPlaceQueryProvider(searchPlaceQuery$, [HttpClient]),
+  searchRegularQueryProvider(searchRegularsQuery$, [HttpClient]),
   subcontractFareActionProvider(validatedSubcontractFareAction$, [HttpClient])
 ];

@@ -1,4 +1,4 @@
-import { array as ioArray, type as ioType, Type, union as ioUnion, undefined as ioUndefined } from 'io-ts';
+import { array as ioArray, type as ioType, Type, undefined as ioUndefined, union as ioUnion } from 'io-ts';
 import {
   Entity,
   FaresDeleted,
@@ -8,7 +8,9 @@ import {
   Pending,
   PendingScheduled,
   Regular,
+  RegularDeleted,
   RegularDetails,
+  RegularEdited,
   RegularRegistered,
   Scheduled,
   Subcontracted
@@ -45,6 +47,14 @@ export const faresEditedCodec: Type<FaresEdited> = ioType({
 
 export const regularRegisteredCodec: Type<RegularRegistered> = ioType({
   regularRegistered: regularDetailsEntityCodec
+});
+
+export const regularDeletedCodec: Type<RegularDeleted> = ioType({
+  regularDeleted: regularDetailsEntityCodec
+});
+
+export const regularEditedCodec: Type<RegularEdited> = ioType({
+  regularEdited: regularDetailsEntityCodec
 });
 
 export const pendingScheduledCodec: Type<PendingScheduled> = ioType({
