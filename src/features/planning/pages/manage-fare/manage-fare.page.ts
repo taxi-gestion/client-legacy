@@ -22,7 +22,7 @@ import {
   isValidPlace,
   JourneyEstimate,
   Place,
-  Regular
+  RegularDetails
 } from '@definitions';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -54,9 +54,8 @@ export class ManageFarePage {
 
   public selectedSessionPassenger$: Observable<string> = this.selectedSessionContext$.pipe(map(passengerFromContext));
 
-  private readonly _departure: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
-
-  private readonly _destination: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
+  private readonly _departure$: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
+  private readonly _destination$: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
 
   public constructor(
     private readonly _toaster: ToasterPresenter,
@@ -147,6 +146,12 @@ export class ManageFarePage {
   //endregion
 
   //region formEvents
+  public onSelectRegularChange(regular: RegularDetails): void {
+    this.editFareForm.controls.passenger.setValue(`${regular.lastname} ${regular.firstname}`);
+    this.editFareForm.controls.phoneToCall.setValue(regular.phones?.[0]?.number ?? '');
+    // TODO Adapt Regular
+  }
+
   public onSelectDepartureChange(place: Place): void {
     this.editFareForm.controls.departurePlace.setValue(place);
     this._departure$.next(place);
@@ -162,19 +167,13 @@ export class ManageFarePage {
     this._driverDisplay$.next(driver.identifier);
   }
 
-  public onSelectRegularChange(regular: Regular): void {
-    this.editFareForm.controls.passenger.setValue(`${regular.lastname} ${regular.firstname}`);
-    // TODO Adapt Regular
-    //this.editFareForm.controls.phoneToCall.setValue(regular.phone);
-  }
-
   public onSearchRegularTermChange(search: string): void {
     this.editFareForm.controls.passenger.setValue(search);
   }
   //endregion
 
   //region estimateJourney
-  public readonly estimateJourney$: Observable<DurationDistance> = combineLatest([this._departure, this._destination]).pipe(
+  public readonly estimateJourney$: Observable<DurationDistance> = combineLatest([this._departure$, this._destination$]).pipe(
     filter(([departure, destination]: [Place, Place]): boolean => isValidPlace(departure) && isValidPlace(destination)),
     switchMap(
       (): Observable<JourneyEstimate> =>
@@ -189,13 +188,10 @@ export class ManageFarePage {
   }
   //endregion
 
-  private readonly _departure$: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
-
   public departureDisplay$: Observable<string> = this._departure$
     .asObservable()
     .pipe(map((place: Place): string => place.context));
 
-  private readonly _destination$: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
   public destinationDisplay$: Observable<string> = this._destination$
     .asObservable()
     .pipe(map((place: Place): string => place.context));

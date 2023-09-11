@@ -11,7 +11,7 @@ import {
 } from './schedule-fare.form';
 import { formatScheduleFareError, toFareToSchedule, toScheduleFareSuccessToast } from './schedule-fare.presenter';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common/journey';
-import { Driver, DurationDistance, FaresScheduled, isValidPlace, JourneyEstimate, Place, Regular } from '@definitions';
+import { Driver, DurationDistance, FaresScheduled, isValidPlace, JourneyEstimate, Place, RegularDetails } from '@definitions';
 import { toDisplayDurationDistance } from '../../common/unit-convertion';
 import { DailyPlanningLayout } from '../../layouts';
 import { SlotContext } from '../../components/planning/planning-row/planning-row.component';
@@ -37,12 +37,12 @@ export class ScheduleFarePage {
 
   public readonly scheduleFareForm: FormGroup<ScheduleFareFields> = SCHEDULE_FARE_FORM;
 
-  private readonly _departure: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
+  private readonly _departure$: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
 
-  private readonly _destination: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
+  private readonly _destination$: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
 
   //region estimateJourney
-  public readonly estimateJourney$: Observable<DurationDistance> = combineLatest([this._departure, this._destination]).pipe(
+  public readonly estimateJourney$: Observable<DurationDistance> = combineLatest([this._departure$, this._destination$]).pipe(
     filter(([departure, destination]: [Place, Place]): boolean => isValidPlace(departure) && isValidPlace(destination)),
     switchMap(
       (): Observable<JourneyEstimate> =>
@@ -59,22 +59,22 @@ export class ScheduleFarePage {
 
   public onSelectDepartureChange(place: Place): void {
     this.scheduleFareForm.controls.departurePlace.setValue(place);
-    this._departure.next(place);
+    this._departure$.next(place);
   }
 
   public onSelectArrivalChange(place: Place): void {
     this.scheduleFareForm.controls.arrivalPlace.setValue(place);
-    this._destination.next(place);
+    this._destination$.next(place);
   }
 
   public onSelectDriverChange(driver: Driver): void {
     this.scheduleFareForm.controls.driver.setValue(driver.identifier);
   }
 
-  public onSelectRegularChange(regular: Regular): void {
+  public onSelectRegularChange(regular: RegularDetails): void {
     this.scheduleFareForm.controls.passenger.setValue(`${regular.lastname} ${regular.firstname}`);
-    //TODO Adapt Regular
-    //this.scheduleFareForm.controls.phoneToCall.setValue('PHONE');
+    this.scheduleFareForm.controls.phoneToCall.setValue(regular.phones?.[0]?.number ?? '');
+    // TODO Finish autofill
   }
 
   public onSearchRegularTermChange(search: string): void {

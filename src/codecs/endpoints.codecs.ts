@@ -7,7 +7,6 @@ import {
   FaresSubcontracted,
   Pending,
   PendingScheduled,
-  Regular,
   RegularDeleted,
   RegularDetails,
   RegularEdited,
@@ -15,13 +14,7 @@ import {
   Scheduled,
   Subcontracted
 } from '../definitions';
-import {
-  pendingReturnCodec,
-  regularDetailsEntityCodec,
-  regularPassengerEntityCodec,
-  scheduledFareCodec,
-  subcontractedFareCodec
-} from './domain';
+import { pendingReturnCodec, regularDetailsEntityCodec, scheduledFareCodec, subcontractedFareCodec } from './domain';
 
 export const fareScheduledCodec: Type<FaresScheduled> = ioType({
   scheduledCreated: scheduledFareCodec,
@@ -62,7 +55,6 @@ export const pendingScheduledCodec: Type<PendingScheduled> = ioType({
   pendingDeleted: pendingReturnCodec
 });
 
-export const regularsCodec: Type<(Entity & Regular)[]> = ioArray(regularPassengerEntityCodec);
 export const regularsDetailsCodec: Type<(Entity & RegularDetails)[]> = ioArray(regularDetailsEntityCodec);
 export const pendingReturnsCodec: Type<(Entity & Pending)[]> = ioArray(pendingReturnCodec);
 export const scheduledFaresCodec: Type<(Entity & Scheduled)[]> = ioArray(scheduledFareCodec);
