@@ -1,16 +1,17 @@
 import {
+  array as ioArray,
   intersection as ioIntersection,
+  keyof as ioKeyOf,
   string as ioString,
   type as ioType,
   Type,
-  array as ioArray,
-  union as ioUnion,
-  keyof as ioKeyOf,
-  undefined as ioUndefined
+  undefined as ioUndefined,
+  union as ioUnion
 } from 'io-ts';
-import { Destination, Entity, Phone, Regular, RegularDetails } from '../../definitions';
-import { entityCodec, kindCodec, natureCodec } from './traits.codecs';
+import { Entity, Phone, Regular, RegularDetails } from '../../definitions';
+import { entityCodec } from './traits.codecs';
 import { placeCodec } from '../common';
+import { destinationCodec } from './destination.codec';
 
 export const regularCodec: Type<Regular> = ioType({
   firstname: ioUnion([ioString, ioUndefined]),
@@ -22,16 +23,6 @@ export const phoneCodec: Type<Phone> = ioType({
   // eslint-disable-next-line id-denylist
   number: ioString
 });
-
-export const destinationCodec: Type<Destination> = ioIntersection([
-  kindCodec,
-  natureCodec,
-  ioType({
-    place: placeCodec,
-    comment: ioUnion([ioString, ioUndefined]),
-    name: ioString
-  })
-]);
 
 export const regularDetailsCodec: Type<RegularDetails> = ioType({
   // eslint-disable-next-line @typescript-eslint/naming-convention
