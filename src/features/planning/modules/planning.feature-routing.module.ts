@@ -6,6 +6,7 @@ import {
   DriverAgendaPage,
   ManageFarePage,
   ManagerDriverChoicePage,
+  ManageRegularPage,
   MissingAdminConfigurationPage,
   RegisterRegularPage,
   ScheduleFarePage,
@@ -19,8 +20,8 @@ const DAILY_PAGES: Routes = [
     component: ManageFarePage
   },
   {
-    path: 'manage-fare/register-regular',
-    component: RegisterRegularPage
+    path: 'manage-regular',
+    component: ManageRegularPage
   },
   {
     path: 'register-regular',

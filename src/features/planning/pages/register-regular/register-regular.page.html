@@ -1,15 +1,10 @@
 <div class="d-flex">
-  <h2 class="pt-2 pb-4 text-primary">Fiche passager</h2>
+  <h2 class="pt-2 pb-4 text-primary">Enregistrer un passager</h2>
   <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
     <i class="ri-close-line ri-2x" aria-hidden="true"></i>
     <span class="visually-hidden">Fermer</span>
   </a>
 </div>
-<div class="mb-3">
-  <label class="form-label">Rechercher un passager pour modification</label>
-  <app-regular-field (selectRegular)="onSelectRegularChange($event)"></app-regular-field>
-</div>
-<hr />
 <form
   [formGroup]="registerRegularForm"
   [appLoadAction]="registerRegular$"
@@ -35,17 +30,11 @@
   </div>
   <div class="mb-3">
     <label for="phones" class="form-label">Téléphones</label>
-    <app-phones
-      id="phones"
-      [parentArray]="getPhonesFormArray()"
-      [phones]="phones$ | async"
-      (formControlUpdated)="updatePhonesFields($event)"></app-phones>
+    <app-phones id="phones" [parentArray]="getPhonesFormArray()" (formControlUpdated)="updatePhonesFields($event)"></app-phones>
   </div>
   <div class="mb-3">
     <label for="homeAddress" class="form-label">Domicile</label>
-    <app-place-field
-      (selectPlace)="onSelectHomeAddressChange($event)"
-      [defaultValue]="(homeAddressDisplay$ | async) ?? ''"></app-place-field>
+    <app-place-field (selectPlace)="onSelectHomeAddressChange($event)"></app-place-field>
     <input id="homeAddress" type="hidden" name="homeAddress" formControlName="homeAddress" />
   </div>
   <div class="mb-3">
@@ -53,7 +42,6 @@
     <app-destinations
       id="destinations"
       [parentArray]="getDestinationsFormArray()"
-      [destinations]="destinations$ | async"
       (formControlUpdated)="updateDestinationsFields($event)"></app-destinations>
   </div>
   <div class="mb-3">

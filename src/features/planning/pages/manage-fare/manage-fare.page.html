@@ -22,17 +22,6 @@
       (searchRegularTerm)="onSearchRegularTermChange($event)"
       [defaultValue]="(selectedSessionPassenger$ | async) ?? ''"></app-regular-field>
     <input id="passenger" type="hidden" name="passenger" formControlName="passenger" />
-
-    <div class="row align-items-center mt-3">
-      <div class="col-auto">
-        <div>ou</div>
-      </div>
-      <div class="col-auto">
-        <a class="btn btn-secondary" ariaCurrentWhenActive="page" routerLinkActive="active" [routerLink]="'register-regular'">
-          Fiches passagers
-        </a>
-      </div>
-    </div>
   </div>
   <div class="mb-3">
     <label for="phoneToCall" class="form-label">Téléphone à appeler</label>

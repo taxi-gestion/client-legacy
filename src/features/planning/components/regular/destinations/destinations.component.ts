@@ -43,7 +43,7 @@ export const DESTINATIONS_FORM_CONTROLS: Record<keyof { destinations: Destinatio
 export class DestinationsComponent implements OnInit {
   @Input({ required: true }) public parentArray!: DestinationsFields;
 
-  @Input({ required: true }) public set destinations(destinations: DestinationValues[] | null) {
+  @Input() public set destinations(destinations: DestinationValues[] | null) {
     destinations != null && this.onDestinationsReceived(destinations);
   }
 

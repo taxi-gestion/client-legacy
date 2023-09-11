@@ -5,6 +5,7 @@ import { MissingAdminConfigurationPage } from './missing-admin-configuration/mis
 import { RegisterRegularPage } from './register-regular/register-regular.page';
 import { ManageFarePage } from './manage-fare/manage-fare.page';
 import { SchedulePendingPage } from './schedule-pending/schedule-pending.page';
+import { ManageRegularPage } from './manage-regular/manage-regular.page';
 
 export * from './schedule-pending/schedule-pending.page';
 export * from './driver-agenda/driver-agenda.page';
@@ -13,6 +14,7 @@ export * from './manager-driver-choice/manager-driver-choice.page';
 export * from './schedule-fare/schedule-fare.page';
 export * from './register-regular/register-regular.page';
 export * from './manage-fare/manage-fare.page';
+export * from './manage-regular/manage-regular.page';
 
 // eslint-disable-next-line @typescript-eslint/typedef
 export const PAGES = [
@@ -22,5 +24,6 @@ export const PAGES = [
   ManagerDriverChoicePage,
   ScheduleFarePage,
   RegisterRegularPage,
-  ManageFarePage
+  ManageFarePage,
+  ManageRegularPage
 ];
