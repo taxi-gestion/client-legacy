@@ -1,7 +1,7 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Civility, Place } from '@definitions';
 import { defaultPlaceValue } from '../../common/fares.presenter';
-import { PHONES_FORM_CONTROLS, PhoneValues, PhonesFields } from '../../components/regular/phones/phones.component';
+import { PHONES_FORM_CONTROLS, PhonesFields, PhoneValues } from '../../components/regular/phones/phones.component';
 import {
   DESTINATIONS_FORM_CONTROLS,
   DestinationsFields,
@@ -30,7 +30,7 @@ export const DEFAULT_CIVILITY: Civility = 'Mr';
 
 export const REGISTER_REGULAR_FORM: FormGroup<RegisterRegularFields> = new FormGroup<RegisterRegularFields>({
   civility: new FormControl<RegisterRegularPresentation['civility']>(DEFAULT_CIVILITY, [Validators.required]),
-  firstname: new FormControl<RegisterRegularPresentation['firstname']>('', [Validators.required]),
+  firstname: new FormControl<RegisterRegularPresentation['firstname']>('', []),
   lastname: new FormControl<RegisterRegularPresentation['lastname']>('', [Validators.required]),
   ...PHONES_FORM_CONTROLS,
   homeAddress: new FormControl<RegisterRegularPresentation['homeAddress']>(defaultPlaceValue, []),

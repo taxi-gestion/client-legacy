@@ -1,18 +1,18 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { DeleteRegularAction } from '../providers';
-import { RegularDeleted } from '@definitions';
+import { Entity, RegularDeleted } from '@definitions';
 import { ValidationFailedAfterApiCallError } from '../errors';
 import { pipe as fpPipe } from 'fp-ts/function';
 import { externalTypeCheckFor, regularDeletedCodec } from '@codecs';
 import { fold } from 'fp-ts/Either';
 
-const deleteRegularUrl = (regularId: string): string => `/api/regular/delete/${regularId}`;
+const deleteRegularUrl = (regular: Entity): string => `/api/regular/delete/${regular.id}`;
 
 export const validatedDeleteRegularAction$ =
   (httpClient: HttpClient): DeleteRegularAction =>
-  (regularId: string): Observable<RegularDeleted> =>
-    httpClient.delete<unknown>(deleteRegularUrl(regularId)).pipe(
+  (regularToDelete: Entity): Observable<RegularDeleted> =>
+    httpClient.delete<unknown>(deleteRegularUrl(regularToDelete)).pipe(
       map(deletedRegularAndReturnValidation),
       catchError(
         (error: Error | HttpErrorResponse, caught: Observable<RegularDeleted>): Observable<never> =>

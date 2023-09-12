@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { phoneNumberValidator } from './phones.validator';
+import { string as ioString, type as ioType, Type } from 'io-ts';
 
 export type PhonesFields = FormArray<FormGroup<PhoneFields>>;
 
@@ -14,23 +15,27 @@ export type PhoneValues = {
   phoneNumber: string;
 };
 
-const PHONE_FORM_GROUP: FormGroup<PhoneFields> = new FormGroup<PhoneFields>(
-  {
-    phoneType: new FormControl<PhoneValues['phoneType']>('', [Validators.required]),
-    phoneNumber: new FormControl<PhoneValues['phoneNumber']>('', [Validators.required])
-  },
-  []
-);
+export const phoneValuesCodec: Type<PhoneValues> = ioType({
+  phoneType: ioString,
+  phoneNumber: ioString
+});
+
+//const PHONE_FORM_GROUP: FormGroup<PhoneFields> = new FormGroup<PhoneFields>(
+//  {
+//    phoneType: new FormControl<PhoneValues['phoneType']>('', [Validators.required]),
+//    phoneNumber: new FormControl<PhoneValues['phoneNumber']>('', [Validators.required, phoneNumberValidator])
+//  }
+//);
 
 export const PHONES_FORM_CONTROLS: Record<keyof { phones: PhonesFields }, PhonesFields> = {
-  phones: new FormArray([PHONE_FORM_GROUP])
+  phones: new FormArray<FormGroup<PhoneFields>>([])
 };
 
 @Component({
   selector: 'app-phones',
   templateUrl: './phones.component.html'
 })
-export class PhonesComponent implements OnInit {
+export class PhonesComponent {
   @Input({ required: true }) public parentArray!: PhonesFields;
 
   @Input() public set phones(phones: PhoneValues[] | null) {
@@ -53,10 +58,6 @@ export class PhonesComponent implements OnInit {
   }
 
   public constructor(private readonly formBuilder: FormBuilder) {}
-
-  public ngOnInit(): void {
-    if (this.parentArray.length === 0) this.addPhone(undefined);
-  }
 
   public createPhoneNumberGroup(phone: PhoneValues | undefined): FormGroup<PhoneFields> {
     return this.formBuilder.group({

@@ -1,0 +1,11 @@
+/* Style for the repeating phone div */
+.phone-card {
+  position: relative; /* Set the phone container's position to relative */
+}
+
+/* Style for the icon */
+.validity-icon {
+  position: absolute; /* Position the icon absolutely within the phone container */
+  top: 5px; /* Adjust this value for desired vertical position */
+  right: 5px; /* Adjust this value for desired horizontal distance from the right edge */
+}

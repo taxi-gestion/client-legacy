@@ -1,10 +1,13 @@
-import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
-import { EditRegularPresentation } from './edit-regular.form';
+import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME, ValidationFailedBeforeApiCallError } from '../../errors';
 import { Destination, Entity, Phone, RegularDeleted, RegularDetails, RegularEdited } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { PhoneValues } from '../../components/regular/phones/phones.component';
-import { defaultPlaceValue } from '../../common/fares.presenter';
 import { DestinationValues } from '../../components';
+import { editRegularFormCodec, EditRegularValues } from './edit-regular.form';
+import { Errors } from 'io-ts';
+import { fold as eitherFold } from 'fp-ts/Either';
+import { pipe as fpPipe } from 'fp-ts/function';
+import { entityCodec } from '@codecs';
 
 export const toDeleteRegularSuccessToast = (regular: RegularDeleted): Toast => ({
   content: `Passager ${regular.regularDeleted.lastname} ${regular.regularDeleted.firstname} supprimé`,
@@ -20,18 +23,41 @@ export const toEditRegularSuccessToast = (regular: RegularEdited): Toast => ({
 
 const isEmptyOrWhitespace = (str: string): boolean => str === '' || str.trim() === '';
 
-export const toRegularDetailsEntity = (formValues: EditRegularPresentation): Entity & RegularDetails => ({
-  id: formValues.regularId,
-  civility: formValues.civility,
-  firstname: formValues.firstname,
-  lastname: formValues.lastname,
-  phones: formValues.phones.length === 0 ? undefined : formValues.phones.map(toPhone),
-  // TODO Value should be undefined from the component if place not valid
-  home: formValues.homeAddress === defaultPlaceValue ? undefined : formValues.homeAddress,
-  commentary: isEmptyOrWhitespace(formValues.commentary) ? undefined : formValues.commentary,
-  destinations: formValues.destinations.map(toDestination),
-  subcontractedClient: isEmptyOrWhitespace(formValues.subcontractedClient) ? undefined : formValues.subcontractedClient
-});
+export const checkIsEntity = (rawValue: unknown): Entity =>
+  fpPipe(
+    entityCodec.decode(rawValue),
+    eitherFold(
+      (errors: Errors): never => {
+        throw new ValidationFailedBeforeApiCallError(JSON.stringify(errors, null, 2));
+      },
+      (entity: Entity): Entity => entity
+    )
+  );
+
+export const toRegularDetailsEntity = (rawFormValues: unknown): Entity & RegularDetails =>
+  fpPipe(
+    editRegularFormCodec.decode(rawFormValues),
+    eitherFold(
+      (errors: Errors): never => {
+        throw new ValidationFailedBeforeApiCallError(JSON.stringify(errors, null, 2));
+      },
+      (formValues: EditRegularValues): Entity & RegularDetails => ({
+        id: formValues.regularId,
+        civility: formValues.civility,
+        firstname: formValues.firstname,
+        lastname: formValues.lastname,
+        phones: formValues.phones?.map(toPhone),
+        home: formValues.homeAddress,
+        commentary:
+          formValues.commentary === undefined || isEmptyOrWhitespace(formValues.commentary) ? undefined : formValues.commentary,
+        destinations: formValues.destinations?.map(toDestination),
+        subcontractedClient:
+          formValues.subcontractedClient === undefined || isEmptyOrWhitespace(formValues.subcontractedClient)
+            ? undefined
+            : formValues.subcontractedClient
+      })
+    )
+  );
 
 export const regularToPhoneNumbers = (regular: RegularDetails): PhoneValues[] => regular.phones?.map(toPhoneNumbers) ?? [];
 

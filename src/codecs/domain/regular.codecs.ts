@@ -1,7 +1,6 @@
 import {
   array as ioArray,
   intersection as ioIntersection,
-  keyof as ioKeyOf,
   string as ioString,
   type as ioType,
   Type,
@@ -9,7 +8,7 @@ import {
   union as ioUnion
 } from 'io-ts';
 import { Entity, Phone, RegularDetails } from '../../definitions';
-import { entityCodec } from './traits.codecs';
+import { civilityCodec, entityCodec } from './traits.codecs';
 import { placeCodec } from '../common';
 import { destinationCodec } from './destination.codec';
 
@@ -20,8 +19,7 @@ export const phoneCodec: Type<Phone> = ioType({
 });
 
 export const regularDetailsCodec: Type<RegularDetails> = ioType({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  civility: ioKeyOf({ Child: null, Company: null, Couple: null, Mr: null, Mrs: null, Other: null }),
+  civility: civilityCodec,
   firstname: ioUnion([ioString, ioUndefined]),
   lastname: ioString,
   phones: ioUnion([ioArray(phoneCodec), ioUndefined]),
