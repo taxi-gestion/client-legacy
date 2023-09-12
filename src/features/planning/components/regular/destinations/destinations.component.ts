@@ -1,7 +1,16 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Place } from '@definitions';
 import { defaultPlaceValue } from '../../../common/fares.presenter';
+import {
+  boolean as ioBoolean,
+  string as ioString,
+  Type,
+  type as ioType,
+  undefined as ioUndefined,
+  union as ioUnion
+} from 'io-ts';
+import { placeCodec } from '@codecs';
 
 export type DestinationsFields = FormArray<FormGroup<DestinationFields>>;
 
@@ -21,26 +30,34 @@ export type DestinationValues = {
   comment: string | undefined;
 };
 
-const DESTINATION_FORM_GROUP: FormGroup<DestinationFields> = new FormGroup<DestinationFields>(
-  {
-    name: new FormControl<DestinationValues['name']>('', [Validators.required]),
-    place: new FormControl<DestinationValues['place']>(defaultPlaceValue, [Validators.required]),
-    isTwoWayDrive: new FormControl<DestinationValues['isTwoWayDrive']>(true, [Validators.required]),
-    isMedicalDrive: new FormControl<DestinationValues['isMedicalDrive']>(true, [Validators.required]),
-    comment: new FormControl<DestinationValues['comment']>('', [])
-  },
-  []
-);
+export const destinationValuesCodec: Type<DestinationValues> = ioType({
+  isTwoWayDrive: ioBoolean,
+  isMedicalDrive: ioBoolean,
+  place: placeCodec,
+  comment: ioUnion([ioString, ioUndefined]),
+  name: ioString
+});
+
+//const DESTINATION_FORM_GROUP: FormGroup<DestinationFields> = new FormGroup<DestinationFields>(
+//  {
+//    name: new FormControl<DestinationValues['name']>('', [Validators.required]),
+//    place: new FormControl<DestinationValues['place']>(defaultPlaceValue, [Validators.required]),
+//    isTwoWayDrive: new FormControl<DestinationValues['isTwoWayDrive']>(true, [Validators.required]),
+//    isMedicalDrive: new FormControl<DestinationValues['isMedicalDrive']>(true, [Validators.required]),
+//    comment: new FormControl<DestinationValues['comment']>('', [])
+//  },
+//  []
+//);
 
 export const DESTINATIONS_FORM_CONTROLS: Record<keyof { destinations: DestinationsFields }, DestinationsFields> = {
-  destinations: new FormArray([DESTINATION_FORM_GROUP])
+  destinations: new FormArray<FormGroup<DestinationFields>>([])
 };
 
 @Component({
   selector: 'app-destinations',
   templateUrl: './destinations.component.html'
 })
-export class DestinationsComponent implements OnInit {
+export class DestinationsComponent {
   @Input({ required: true }) public parentArray!: DestinationsFields;
 
   @Input() public set destinations(destinations: DestinationValues[] | null) {
@@ -63,10 +80,6 @@ export class DestinationsComponent implements OnInit {
   }
 
   public constructor(private readonly formBuilder: FormBuilder) {}
-
-  public ngOnInit(): void {
-    if (this.parentArray.length === 0) this.addDestination(undefined);
-  }
 
   public createDestinationGroup(destination: DestinationValues | undefined): FormGroup<DestinationFields> {
     return this.formBuilder.group({
