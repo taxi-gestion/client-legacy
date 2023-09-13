@@ -27,9 +27,16 @@
     <label for="firstname" class="form-label">Prénom</label>
     <input class="form-control" id="firstname" type="text" name="firstname" formControlName="firstname" placeholder="Jean" />
   </div>
-  <div class="mb-3" appFormControlError="lastname">
+  <div class="mb-3">
     <label for="lastname" class="form-label">Nom de famille*</label>
-    <input class="form-control" id="lastname" type="text" name="lastname" formControlName="lastname" placeholder="Dupont" />
+    <input
+      class="form-control"
+      [ngClass]="validation(registerRegularForm.controls.lastname)"
+      id="lastname"
+      type="text"
+      name="lastname"
+      formControlName="lastname"
+      placeholder="Dupont" />
     <!--<app-form-errors formControlError="lastname"></app-form-errors>-->
   </div>
   <!-- Avec viewChild appFormArrayError-->

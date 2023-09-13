@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import { map, Observable, Subject, tap } from 'rxjs';
 import { DELETE_REGULAR_ACTION, DeleteRegularAction, EDIT_REGULAR_ACTION, EditRegularAction } from '../../providers';
 import { EDIT_REGULAR_FORM, EditRegularFields, EditRegularValues, setEditRegularErrorToForm } from './edit-regular.form';
@@ -14,13 +14,15 @@ import {
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Entity, Place, RegularDeleted, RegularDetails, RegularEdited } from '@definitions';
-import { nullToUndefined } from '../../common/forms.presenter';
+import { bootstrapValidationClasses, BootstrapValidationClasses, nullToUndefined } from '../../common/forms.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './manage-regular.page.html'
 })
 export class ManageRegularPage {
+  public validation: (control: AbstractControl) => BootstrapValidationClasses = bootstrapValidationClasses;
+
   @Output() public editRegularSubmitted: EventEmitter<void> = new EventEmitter<void>();
 
   @Output() public editRegularSuccess: EventEmitter<void> = new EventEmitter<void>();

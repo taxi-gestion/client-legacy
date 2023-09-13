@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { REGISTER_REGULAR_ACTION, RegisterRegularAction } from '../../providers';
 import { REGISTER_REGULAR_FORM, RegisterRegularFields, setRegisterRegularErrorToForm } from './register-regular.form';
@@ -7,13 +7,15 @@ import { formatRegisterRegularError, toRegisterRegular, toRegisterRegularSuccess
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Place, RegularRegistered } from '@definitions';
-import { nullToUndefined } from '../../common/forms.presenter';
+import { bootstrapValidationClasses, BootstrapValidationClasses, nullToUndefined } from '../../common/forms.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './register-regular.page.html'
 })
 export class RegisterRegularPage {
+  public validation: (control: AbstractControl) => BootstrapValidationClasses = bootstrapValidationClasses;
+
   @Output() public registerRegularSubmitted: EventEmitter<void> = new EventEmitter<void>();
 
   @Output() public registerRegularSuccess: EventEmitter<void> = new EventEmitter<void>();
