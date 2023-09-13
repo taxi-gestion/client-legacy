@@ -1,23 +1,19 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { map, Observable, Subject, tap } from 'rxjs';
 import { DELETE_REGULAR_ACTION, DeleteRegularAction, EDIT_REGULAR_ACTION, EditRegularAction } from '../../providers';
-import { EDIT_REGULAR_FORM, EditRegularFields, setEditRegularErrorToForm } from './edit-regular.form';
+import { EDIT_REGULAR_FORM, EditRegularFields, EditRegularValues, setEditRegularErrorToForm } from './edit-regular.form';
 import {
   checkIsEntity,
   formatEditRegularError,
-  regularToDestinationsValues,
-  regularToHomeAddressDisplay,
-  regularToPhoneNumbers,
   toDeleteRegularSuccessToast,
+  toEditRegularPresentation,
   toEditRegularSuccessToast,
   toRegularDetailsEntity
 } from './manage-regular.presenter';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Entity, Place, RegularDeleted, RegularDetails, RegularEdited } from '@definitions';
-import { PhonesFields, PhoneValues } from '../../components/regular/phones/phones.component';
-import { DestinationsFields, DestinationValues } from '../../components/regular/destinations/destinations.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,7 +35,7 @@ export class ManageRegularPage {
   private readonly _regular$: Subject<Entity & RegularDetails> = new Subject<Entity & RegularDetails>();
   private _selectedRegular: Entity | null = null;
 
-  public regular$: Observable<Entity & RegularDetails> = this._regular$.asObservable().pipe(
+  public regular$: Observable<EditRegularValues> = this._regular$.asObservable().pipe(
     tap((regular: Entity & RegularDetails): void => {
       this.editRegularForm.controls.regularId.setValue(regular.id);
       this.editRegularForm.controls.civility.setValue(regular.civility);
@@ -49,12 +45,9 @@ export class ManageRegularPage {
       this.editRegularForm.controls.subcontractedClient.setValue(regular.subcontractedClient);
       this.editRegularForm.controls.homeAddress.setValue(regular.home);
       this._selectedRegular = { id: regular.id };
-    })
+    }),
+    map(toEditRegularPresentation)
   );
-
-  public phones$: Observable<PhoneValues[]> = this.regular$.pipe(map(regularToPhoneNumbers));
-  public destinations$: Observable<DestinationValues[]> = this.regular$.pipe(map(regularToDestinationsValues));
-  public homeAddressDisplay$: Observable<string | undefined> = this.regular$.pipe(map(regularToHomeAddressDisplay));
 
   public constructor(
     private readonly _toaster: ToasterPresenter,
@@ -73,22 +66,6 @@ export class ManageRegularPage {
   //region form-binding
   public onSelectHomeAddressChange(place: Place): void {
     this.editRegularForm.controls.homeAddress.setValue(place);
-  }
-
-  public updatePhonesFields($event: PhonesFields): void {
-    this.editRegularForm.controls.phones = $event;
-  }
-
-  public getPhonesFormArray(): FormArray {
-    return this.editRegularForm.controls.phones;
-  }
-
-  public updateDestinationsFields($event: DestinationsFields): void {
-    this.editRegularForm.controls.destinations = $event;
-  }
-
-  public getDestinationsFormArray(): FormArray {
-    return this.editRegularForm.controls.destinations;
   }
   // endregion
 

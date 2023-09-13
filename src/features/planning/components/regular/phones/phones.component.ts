@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Input } from '@angular/core';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { phoneNumberValidator } from './phones.validator';
 import { string as ioString, type as ioType, Type } from 'io-ts';
 
@@ -20,16 +20,9 @@ export const phoneValuesCodec: Type<PhoneValues> = ioType({
   phoneNumber: ioString
 });
 
-//const PHONE_FORM_GROUP: FormGroup<PhoneFields> = new FormGroup<PhoneFields>(
-//  {
-//    phoneType: new FormControl<PhoneValues['phoneType']>('', [Validators.required]),
-//    phoneNumber: new FormControl<PhoneValues['phoneNumber']>('', [Validators.required, phoneNumberValidator])
-//  }
-//);
-
-export const PHONES_FORM_CONTROLS: Record<keyof { phones: PhonesFields }, PhonesFields> = {
+export const phonesFormControls = (): Record<keyof { phones: PhonesFields }, PhonesFields> => ({
   phones: new FormArray<FormGroup<PhoneFields>>([])
-};
+});
 
 @Component({
   selector: 'app-phones',
@@ -38,31 +31,24 @@ export const PHONES_FORM_CONTROLS: Record<keyof { phones: PhonesFields }, Phones
 export class PhonesComponent {
   @Input({ required: true }) public parentArray!: PhonesFields;
 
-  @Input() public set phones(phones: PhoneValues[] | null) {
+  @Input() public set phones(phones: (PhoneValues[] | undefined) | null) {
     phones != null && this.onPhonesReceived(phones);
   }
-
-  @Output() public formControlUpdated: EventEmitter<PhonesFields> = new EventEmitter<PhonesFields>();
 
   public onPhonesReceived(phoneNumberValues: PhoneValues[]): void {
     this.parentArray.clear();
     phoneNumberValues.forEach((phone: PhoneValues): void => {
       this.addPhone(phone);
     });
-    this.formControlUpdated.emit(new FormArray(this.parentArray.controls.filter(onlyValidControl)));
   }
-
-  public onFormChange(): void {
-    if (!this.parentArray.valid) return;
-    this.formControlUpdated.emit(new FormArray(this.parentArray.controls.filter(onlyValidControl)));
-  }
-
-  public constructor(private readonly formBuilder: FormBuilder) {}
 
   public createPhoneNumberGroup(phone: PhoneValues | undefined): FormGroup<PhoneFields> {
-    return this.formBuilder.group({
-      phoneType: [phone?.phoneType ?? '', [Validators.required]],
-      phoneNumber: [phone?.phoneNumber ?? '', [Validators.required, phoneNumberValidator]]
+    return new FormGroup<PhoneFields>({
+      phoneType: new FormControl<PhoneValues['phoneType']>(phone?.phoneType ?? '', [Validators.required]),
+      phoneNumber: new FormControl<PhoneValues['phoneNumber']>(phone?.phoneNumber ?? '', [
+        Validators.required,
+        phoneNumberValidator
+      ])
     });
   }
 
@@ -74,5 +60,3 @@ export class PhonesComponent {
     this.parentArray.removeAt(index);
   }
 }
-
-const onlyValidControl = (phoneNumberFormControl: FormGroup<PhoneFields>): boolean => phoneNumberFormControl.valid;

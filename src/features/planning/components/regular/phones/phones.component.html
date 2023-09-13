@@ -19,11 +19,10 @@
           class="form-control"
           aria-describedby="phoneTypeLabel"
           name="phoneType"
-          [formControl]="phone.controls.phoneType"
-          (change)="onFormChange()" />
+          [formControl]="phone.controls.phoneType" />
       </div>
       <div *ngIf="phone.controls.phoneType.invalid && (phone.controls.phoneType.dirty || phone.controls.phoneType.touched)">
-        <small class="text-danger" *ngIf="phone.controls.phoneType.errors && phone.controls.phoneNumber.errors?.['required']">
+        <small class="text-danger" *ngIf="phone.controls.phoneType.errors && phone.controls.phoneType.errors?.['required']">
           Une valeur est nécessaire
         </small>
       </div>
@@ -38,8 +37,7 @@
           class="form-control"
           aria-describedby="phoneNumberLabel"
           name="phoneNumber"
-          [formControl]="phone.controls.phoneNumber"
-          (change)="onFormChange()" />
+          [formControl]="phone.controls.phoneNumber" />
       </div>
     </div>
     <div *ngIf="phone.controls.phoneNumber.invalid && (phone.controls.phoneNumber.dirty || phone.controls.phoneNumber.touched)">
