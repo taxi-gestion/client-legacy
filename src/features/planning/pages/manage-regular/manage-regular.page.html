@@ -9,7 +9,7 @@
   <label class="form-label">Sélectionner un passager</label>
   <app-regular-field (selectRegular)="onSelectRegularChange($event)"></app-regular-field>
 </div>
-<ng-container *ngIf="regular$ | async">
+<ng-container *ngIf="(regular$ | async) as regular">
   <h3 class="mb-3 text-primary h5">Modifier le passager</h3>
   <form
     [formGroup]="editRegularForm"
@@ -52,26 +52,19 @@
     </div>
     <div class="mb-3">
       <label for="phones" class="form-label">Téléphones</label>
-      <app-phones
-        id="phones"
-        [parentArray]="getPhonesFormArray()"
-        [phones]="phones$ | async"
-        (formControlUpdated)="updatePhonesFields($event)"></app-phones>
+      <app-phones id="phones" [parentArray]="editRegularForm.controls.phones" [phones]="regular.phones"></app-phones>
     </div>
     <div class="mb-3">
       <label for="homeAddress" class="form-label">Domicile</label>
-      <app-place-field
-        (selectPlace)="onSelectHomeAddressChange($event)"
-        [defaultValue]="(homeAddressDisplay$ | async) ?? ''"></app-place-field>
+      <app-place-field (selectPlace)="onSelectHomeAddressChange($event)" [defaultValue]="regular.homeAddress"></app-place-field>
       <input id="homeAddress" type="hidden" name="homeAddress" formControlName="homeAddress" />
     </div>
     <div class="mb-3">
       <label for="destinations" class="form-label">Destinations</label>
       <app-destinations
         id="destinations"
-        [parentArray]="getDestinationsFormArray()"
-        [destinations]="destinations$ | async"
-        (formControlUpdated)="updateDestinationsFields($event)"></app-destinations>
+        [parentArray]="editRegularForm.controls.destinations"
+        [destinations]="regular.destinations"></app-destinations>
     </div>
     <div class="mb-3">
       <label for="commentary" class="form-label">Commentaire client</label>

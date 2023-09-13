@@ -33,9 +33,11 @@
     <label for="firstname" class="form-label">Prénom</label>
     <input class="form-control" id="firstname" type="text" name="firstname" formControlName="firstname" placeholder="Jean" />
   </div>
+  <!-- Avec viewChild appFormControlError="lastname" -->
   <div class="mb-3">
     <label for="lastname" class="form-label">Nom de famille*</label>
     <input class="form-control" id="lastname" type="text" name="lastname" formControlName="lastname" placeholder="Dupont" />
+    <!--<app-form-errors formControlError="lastname"> TODO Injecter le formgroup [formGroup]="registerRegularForm" dans le construction </app-form-errors> -->
     <div
       *ngIf="registerRegularForm.controls.lastname.invalid && (registerRegularForm.controls.lastname.dirty || registerRegularForm.controls.lastname.touched)">
       <small class="text-danger" *ngIf="registerRegularForm.controls.lastname.errors?.['required']">
@@ -43,9 +45,10 @@
       </small>
     </div>
   </div>
+  <!-- Avec viewChild appFormArrayError-->
   <div class="mb-3">
     <label for="phones" class="form-label">Téléphones</label>
-    <app-phones id="phones" [parentArray]="getPhonesFormArray()" (formControlUpdated)="updatePhonesFields($event)"></app-phones>
+    <app-phones id="phones" [parentArray]="registerRegularForm.controls.phones"></app-phones>
   </div>
   <div class="mb-3">
     <label for="homeAddress" class="form-label">Domicile</label>
@@ -54,10 +57,7 @@
   </div>
   <div class="mb-3">
     <label for="destinations" class="form-label">Destinations</label>
-    <app-destinations
-      id="destinations"
-      [parentArray]="getDestinationsFormArray()"
-      (formControlUpdated)="updateDestinationsFields($event)"></app-destinations>
+    <app-destinations id="destinations" [parentArray]="registerRegularForm.controls.destinations"></app-destinations>
   </div>
   <div class="mb-3">
     <label for="commentary" class="form-label">Commentaire client</label>

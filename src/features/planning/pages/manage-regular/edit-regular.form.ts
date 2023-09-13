@@ -1,18 +1,18 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Civility, Place } from '@definitions';
 import {
-  PHONES_FORM_CONTROLS,
   PhonesFields,
+  phonesFormControls,
   PhoneValues,
   phoneValuesCodec
 } from '../../components/regular/phones/phones.component';
 import {
-  DESTINATIONS_FORM_CONTROLS,
   DestinationsFields,
+  destinationsFormControls,
   DestinationValues,
   destinationValuesCodec
 } from '../../components/regular/destinations/destinations.component';
-import { Type, type as ioType, string as ioString, union as ioUnion, undefined as ioUndefined, array as ioArray } from 'io-ts';
+import { array as ioArray, string as ioString, Type, type as ioType, undefined as ioUndefined, union as ioUnion } from 'io-ts';
 import { civilityCodec, placeCodec } from '@codecs';
 
 export type EditRegularValues = {
@@ -61,9 +61,9 @@ export const EDIT_REGULAR_FORM: FormGroup<EditRegularFields> = new FormGroup<Edi
   }),
   firstname: new FormControl<EditRegularValues['firstname']>(undefined, { nonNullable: true, validators: [] }),
   lastname: new FormControl<EditRegularValues['lastname']>('', { nonNullable: true, validators: [Validators.required] }),
-  ...PHONES_FORM_CONTROLS,
+  ...phonesFormControls(),
   homeAddress: new FormControl<EditRegularValues['homeAddress']>(undefined, { nonNullable: true, validators: [] }),
-  ...DESTINATIONS_FORM_CONTROLS,
+  ...destinationsFormControls(),
   commentary: new FormControl<EditRegularValues['commentary']>(undefined, { nonNullable: true, validators: [] }),
   subcontractedClient: new FormControl<EditRegularValues['subcontractedClient']>(undefined, {
     nonNullable: true,

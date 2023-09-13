@@ -30,7 +30,7 @@ export class PlaceFieldComponent implements OnChanges {
 
   @Input() public displayReset: boolean = false;
 
-  @Input() public defaultValue?: Place | string | null;
+  @Input() public defaultValue?: (Place | string | undefined) | null;
 
   private readonly _searchPlaceTerm$: Subject<string> = new Subject<string>();
 

@@ -34,37 +34,42 @@ export const checkIsEntity = (rawValue: unknown): Entity =>
     )
   );
 
-export const toRegularDetailsEntity = (rawFormValues: unknown): Entity & RegularDetails =>
-  fpPipe(
-    editRegularFormCodec.decode(rawFormValues),
-    eitherFold(
-      (errors: Errors): never => {
-        throw new ValidationFailedBeforeApiCallError(JSON.stringify(errors, null, 2));
-      },
-      (formValues: EditRegularValues): Entity & RegularDetails => ({
-        id: formValues.regularId,
-        civility: formValues.civility,
-        firstname: formValues.firstname,
-        lastname: formValues.lastname,
-        phones: formValues.phones?.map(toPhone),
-        home: formValues.homeAddress,
-        commentary:
-          formValues.commentary === undefined || isEmptyOrWhitespace(formValues.commentary) ? undefined : formValues.commentary,
-        destinations: formValues.destinations?.map(toDestination),
-        subcontractedClient:
-          formValues.subcontractedClient === undefined || isEmptyOrWhitespace(formValues.subcontractedClient)
-            ? undefined
-            : formValues.subcontractedClient
-      })
-    )
+const toDomain = (formValues: EditRegularValues): Entity & RegularDetails => ({
+  id: formValues.regularId,
+  civility: formValues.civility,
+  firstname: formValues.firstname,
+  lastname: formValues.lastname,
+  phones: formValues.phones?.map(toPhone),
+  home: formValues.homeAddress,
+  commentary:
+    formValues.commentary === undefined || isEmptyOrWhitespace(formValues.commentary) ? undefined : formValues.commentary,
+  destinations: formValues.destinations?.map(toDestination),
+  subcontractedClient:
+    formValues.subcontractedClient === undefined || isEmptyOrWhitespace(formValues.subcontractedClient)
+      ? undefined
+      : formValues.subcontractedClient
+});
+
+const throwDecodeError = (rawFormValues: unknown) => (): never => {
+  throw new ValidationFailedBeforeApiCallError(
+    `editRegularFormCodec decode error with payload ${JSON.stringify(rawFormValues, null, 2)}`
   );
+};
 
-export const regularToPhoneNumbers = (regular: RegularDetails): PhoneValues[] => regular.phones?.map(toPhoneNumbers) ?? [];
+export const toRegularDetailsEntity = (rawFormValues: unknown): Entity & RegularDetails =>
+  fpPipe(editRegularFormCodec.decode(rawFormValues), eitherFold(throwDecodeError(rawFormValues), toDomain));
 
-export const regularToDestinationsValues = (regular: RegularDetails): DestinationValues[] =>
-  regular.destinations?.map(toDestinationValues) ?? [];
-
-export const regularToHomeAddressDisplay = (regular: RegularDetails): string | undefined => regular.home?.context;
+export const toEditRegularPresentation = (regular: Entity & RegularDetails): EditRegularValues => ({
+  regularId: regular.id,
+  civility: regular.civility,
+  firstname: regular.firstname,
+  lastname: regular.lastname,
+  phones: regular.phones?.map(toPhoneNumbers),
+  homeAddress: regular.home,
+  commentary: regular.commentary,
+  destinations: regular.destinations?.map(toDestinationValues),
+  subcontractedClient: regular.subcontractedClient
+});
 
 export const toPhoneNumbers = (phone: Phone): PhoneValues => ({
   phoneType: phone.type,

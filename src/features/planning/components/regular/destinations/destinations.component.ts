@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Input } from '@angular/core';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Place } from '@definitions';
 import { defaultPlaceValue } from '../../../common/fares.presenter';
 import {
@@ -11,6 +11,7 @@ import {
   union as ioUnion
 } from 'io-ts';
 import { placeCodec } from '@codecs';
+import { destinationValidator, placeValidator } from './destinations.validator';
 
 export type DestinationsFields = FormArray<FormGroup<DestinationFields>>;
 
@@ -38,20 +39,9 @@ export const destinationValuesCodec: Type<DestinationValues> = ioType({
   name: ioString
 });
 
-//const DESTINATION_FORM_GROUP: FormGroup<DestinationFields> = new FormGroup<DestinationFields>(
-//  {
-//    name: new FormControl<DestinationValues['name']>('', [Validators.required]),
-//    place: new FormControl<DestinationValues['place']>(defaultPlaceValue, [Validators.required]),
-//    isTwoWayDrive: new FormControl<DestinationValues['isTwoWayDrive']>(true, [Validators.required]),
-//    isMedicalDrive: new FormControl<DestinationValues['isMedicalDrive']>(true, [Validators.required]),
-//    comment: new FormControl<DestinationValues['comment']>('', [])
-//  },
-//  []
-//);
-
-export const DESTINATIONS_FORM_CONTROLS: Record<keyof { destinations: DestinationsFields }, DestinationsFields> = {
+export const destinationsFormControls = (): Record<keyof { destinations: DestinationsFields }, DestinationsFields> => ({
   destinations: new FormArray<FormGroup<DestinationFields>>([])
-};
+});
 
 @Component({
   selector: 'app-destinations',
@@ -60,35 +50,44 @@ export const DESTINATIONS_FORM_CONTROLS: Record<keyof { destinations: Destinatio
 export class DestinationsComponent {
   @Input({ required: true }) public parentArray!: DestinationsFields;
 
-  @Input() public set destinations(destinations: DestinationValues[] | null) {
+  @Input() public set destinations(destinations: (DestinationValues[] | undefined) | null) {
     destinations != null && this.onDestinationsReceived(destinations);
   }
-
-  @Output() public formControlUpdated: EventEmitter<DestinationsFields> = new EventEmitter<DestinationsFields>();
 
   public onDestinationsReceived(destinationValues: DestinationValues[]): void {
     this.parentArray.clear();
     destinationValues.forEach((destination: DestinationValues): void => {
       this.addDestination(destination);
     });
-    this.formControlUpdated.emit(new FormArray(this.parentArray.controls.filter(onlyValidControl)));
   }
 
-  public onFormChange(): void {
-    if (!this.parentArray.valid) return;
-    this.formControlUpdated.emit(new FormArray(this.parentArray.controls.filter(onlyValidControl)));
-  }
-
-  public constructor(private readonly formBuilder: FormBuilder) {}
-
+  // eslint-disable-next-line max-lines-per-function
   public createDestinationGroup(destination: DestinationValues | undefined): FormGroup<DestinationFields> {
-    return this.formBuilder.group({
-      name: [destination?.name ?? '', [Validators.required]],
-      place: [destination?.place ?? defaultPlaceValue, [Validators.required]],
-      isTwoWayDrive: [destination?.isTwoWayDrive ?? true, [Validators.required]],
-      isMedicalDrive: [destination?.isMedicalDrive ?? true, [Validators.required]],
-      comment: [destination?.comment, []]
-    });
+    return new FormGroup<DestinationFields>(
+      {
+        name: new FormControl<DestinationValues['name']>(destination?.name ?? '', {
+          nonNullable: true,
+          validators: [Validators.required]
+        }),
+        place: new FormControl<DestinationValues['place']>(destination?.place ?? defaultPlaceValue, {
+          nonNullable: true,
+          validators: [Validators.required, placeValidator]
+        }),
+        isTwoWayDrive: new FormControl<DestinationValues['isTwoWayDrive']>(destination?.isTwoWayDrive ?? true, {
+          nonNullable: true,
+          validators: [Validators.required]
+        }),
+        isMedicalDrive: new FormControl<DestinationValues['isMedicalDrive']>(destination?.isMedicalDrive ?? true, {
+          nonNullable: true,
+          validators: [Validators.required]
+        }),
+        comment: new FormControl<DestinationValues['comment']>(destination?.comment ?? '', {
+          nonNullable: true,
+          validators: []
+        })
+      },
+      [destinationValidator]
+    );
   }
 
   public addDestination(destination: DestinationValues | undefined): void {
@@ -103,5 +102,3 @@ export class DestinationsComponent {
     (this.parentArray.controls[index] as FormGroup).controls['place']?.setValue(place);
   }
 }
-
-const onlyValidControl = (destinationFormControl: FormGroup<DestinationFields>): boolean => destinationFormControl.valid;

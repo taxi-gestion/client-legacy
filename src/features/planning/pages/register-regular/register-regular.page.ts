@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { REGISTER_REGULAR_ACTION, RegisterRegularAction } from '../../providers';
 import {
@@ -12,8 +12,6 @@ import { formatRegisterRegularError, toRegisterRegularSuccessToast, toRegularDet
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Place, RegularRegistered } from '@definitions';
-import { PhonesFields } from '../../components/regular/phones/phones.component';
-import { DestinationsFields } from '../../components/regular/destinations/destinations.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,22 +40,6 @@ export class RegisterRegularPage {
   //region form-binding
   public onSelectHomeAddressChange(place: Place): void {
     this.registerRegularForm.controls.homeAddress.setValue(place);
-  }
-
-  public updatePhonesFields($event: PhonesFields): void {
-    this.registerRegularForm.controls.phones = $event;
-  }
-
-  public getPhonesFormArray(): FormArray {
-    return this.registerRegularForm.controls.phones;
-  }
-
-  public updateDestinationsFields($event: DestinationsFields): void {
-    this.registerRegularForm.controls.destinations = $event;
-  }
-
-  public getDestinationsFormArray(): FormArray {
-    return this.registerRegularForm.controls.destinations;
   }
   // endregion
 
