@@ -1,4 +1,6 @@
 /* eslint-disable id-denylist */
+import { AbstractControl } from '@angular/forms';
+
 // eslint-disable-next-line max-statements
 export const nullToUndefined = (obj: unknown): unknown => {
   if (obj === null) return undefined;
@@ -19,3 +21,9 @@ export const nullToUndefined = (obj: unknown): unknown => {
 
   return obj;
 };
+
+export type BootstrapValidationClasses = '' | 'is-invalid' | 'is-valid';
+
+export const bootstrapValidationClasses = (control: AbstractControl): BootstrapValidationClasses =>
+  // eslint-disable-next-line no-nested-ternary, @typescript-eslint/no-unnecessary-boolean-literal-compare
+  control.touched === false ? '' : control.valid ? 'is-valid' : 'is-invalid';
