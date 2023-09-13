@@ -21,6 +21,7 @@ import { DIRECTIVES } from '../directives';
 @NgModule({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   declarations: [...LAYOUTS, ...PAGES, ...COMPONENTS, ...PIPES, ...DIRECTIVES],
+  exports: [...DIRECTIVES],
   imports: [
     CommonModule,
     FormsModule,

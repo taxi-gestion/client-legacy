@@ -22,28 +22,15 @@
       <option value="Company">Société</option>
       <option value="Other">Autre</option>
     </select>
-    <div
-      *ngIf="registerRegularForm.controls.civility.invalid && (registerRegularForm.controls.civility.dirty || registerRegularForm.controls.civility.touched)">
-      <small class="text-danger" *ngIf="registerRegularForm.controls.civility.errors?.['required']">
-        Une valeur est nécessaire
-      </small>
-    </div>
   </div>
   <div class="mb-3">
     <label for="firstname" class="form-label">Prénom</label>
     <input class="form-control" id="firstname" type="text" name="firstname" formControlName="firstname" placeholder="Jean" />
   </div>
-  <!-- Avec viewChild appFormControlError="lastname" -->
-  <div class="mb-3">
+  <div class="mb-3" appFormControlError="lastname">
     <label for="lastname" class="form-label">Nom de famille*</label>
     <input class="form-control" id="lastname" type="text" name="lastname" formControlName="lastname" placeholder="Dupont" />
-    <!--<app-form-errors formControlError="lastname"> TODO Injecter le formgroup [formGroup]="registerRegularForm" dans le construction </app-form-errors> -->
-    <div
-      *ngIf="registerRegularForm.controls.lastname.invalid && (registerRegularForm.controls.lastname.dirty || registerRegularForm.controls.lastname.touched)">
-      <small class="text-danger" *ngIf="registerRegularForm.controls.lastname.errors?.['required']">
-        Une valeur est nécessaire
-      </small>
-    </div>
+    <!--<app-form-errors formControlError="lastname"></app-form-errors>-->
   </div>
   <!-- Avec viewChild appFormArrayError-->
   <div class="mb-3">
