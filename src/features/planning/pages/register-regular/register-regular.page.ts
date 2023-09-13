@@ -2,16 +2,12 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { REGISTER_REGULAR_ACTION, RegisterRegularAction } from '../../providers';
-import {
-  REGISTER_REGULAR_FORM,
-  RegisterRegularFields,
-  RegisterRegularPresentation,
-  setRegisterRegularErrorToForm
-} from './register-regular.form';
-import { formatRegisterRegularError, toRegisterRegularSuccessToast, toRegularDetails } from './register-regular.presenter';
+import { REGISTER_REGULAR_FORM, RegisterRegularFields, setRegisterRegularErrorToForm } from './register-regular.form';
+import { formatRegisterRegularError, toRegisterRegular, toRegisterRegularSuccessToast } from './register-regular.presenter';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Place, RegularRegistered } from '@definitions';
+import { nullToUndefined } from '../../common/forms.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,7 +21,7 @@ export class RegisterRegularPage {
   @Output() public registerRegularError: EventEmitter<Error> = new EventEmitter<Error>();
 
   public readonly registerRegular$ = (): Observable<RegularRegistered> =>
-    this._registerRegularAction$(toRegularDetails(REGISTER_REGULAR_FORM.value as RegisterRegularPresentation));
+    this._registerRegularAction$(toRegisterRegular(nullToUndefined(REGISTER_REGULAR_FORM.value)));
 
   public readonly registerRegularForm: FormGroup<RegisterRegularFields> = REGISTER_REGULAR_FORM;
 
@@ -57,7 +53,11 @@ export class RegisterRegularPage {
 
   public onRegisterRegularActionError = (error: Error): void => {
     setRegisterRegularErrorToForm(formatRegisterRegularError(error));
-    this._toaster.toast({ content: "Échec de l'enregistrement", status: 'danger', title: 'Opération échouée' });
+    this._toaster.toast({
+      content: `Échec de l'enregistrement : ${error.name} ${error.message}`,
+      status: 'danger',
+      title: 'Opération échouée'
+    });
   };
   // endregion
 }

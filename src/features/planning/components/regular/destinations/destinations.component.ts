@@ -81,7 +81,7 @@ export class DestinationsComponent {
           nonNullable: true,
           validators: [Validators.required]
         }),
-        comment: new FormControl<DestinationValues['comment']>(destination?.comment ?? '', {
+        comment: new FormControl<DestinationValues['comment']>(destination?.comment, {
           nonNullable: true,
           validators: []
         })
