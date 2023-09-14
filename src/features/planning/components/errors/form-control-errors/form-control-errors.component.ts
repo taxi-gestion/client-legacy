@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormGroupDirective } from '@angular/forms';
-import { BehaviorSubject, filter, map, merge, Observable, switchMap } from 'rxjs';
+import { AbstractControl, FormControlStatus, FormGroupDirective } from '@angular/forms';
+import { BehaviorSubject, filter, map, combineLatest, Observable, switchMap, tap } from 'rxjs';
 import { FORM_CONTROL_ERROR_MESSAGES, FormControlErrorsNames } from './form-control-errors.presenter';
 
 @Component({
@@ -19,7 +19,12 @@ export class FormControlErrorsComponent implements OnInit {
     filter(Boolean),
     switchMap(
       (control: AbstractControl): Observable<boolean> =>
-        merge(control.valueChanges, control.statusChanges).pipe(map((): boolean => control.touched && control.invalid))
+        combineLatest([control.valueChanges, control.statusChanges]).pipe(
+          tap(([controlValue, _]: [unknown, FormControlStatus]): void => {
+            this.errorMessage = FORM_CONTROL_ERROR_MESSAGES[this.formControlErrors](controlValue);
+          }),
+          map((): boolean => control.touched && control.invalid)
+        )
     )
   );
 
@@ -29,7 +34,6 @@ export class FormControlErrorsComponent implements OnInit {
     const control: AbstractControl | null = this.formGroupDirective.form.get(this.formControlErrors);
     if (control === null) throw new Error(`Could not bind formControl error to ${this.formControlErrors}`);
 
-    this.errorMessage = FORM_CONTROL_ERROR_MESSAGES[this.formControlErrors];
     this._control.next(control);
   }
 }
