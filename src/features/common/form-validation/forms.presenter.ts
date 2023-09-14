@@ -1,6 +1,6 @@
 /* eslint-disable id-denylist */
-import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 
+import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 // eslint-disable-next-line max-statements
 export const nullToUndefined = (obj: unknown): unknown => {
   if (obj === null) return undefined;

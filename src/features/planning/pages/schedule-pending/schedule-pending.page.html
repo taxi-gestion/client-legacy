@@ -30,16 +30,12 @@
   </div>
   <div class="mb-3">
     <label for="departurePlace" class="form-label">Lieu de départ</label>
-    <app-place-field
-      (selectPlace)="onSelectDepartureChange($event)"
-      [defaultValue]="(departureDisplay$ | async) ?? ''"></app-place-field>
+    <app-place-field (selectPlace)="onSelectDepartureChange($event)" [defaultValue]="departure$ | async"></app-place-field>
     <input id="departurePlace" type="hidden" name="departurePlace" formControlName="departurePlace" />
   </div>
   <div class="mb-3">
     <label for="arrivalPlace" class="form-label">Lieu d'arrivée</label>
-    <app-place-field
-      (selectPlace)="onSelectArrivalChange($event)"
-      [defaultValue]="(destinationDisplay$ | async) ?? ''"></app-place-field>
+    <app-place-field (selectPlace)="onSelectArrivalChange($event)" [defaultValue]="destination$ | async"></app-place-field>
     <input id="arrivalPlace" type="hidden" name="arrivalPlace" formControlName="arrivalPlace" />
   </div>
   <app-estimate-journey-fields

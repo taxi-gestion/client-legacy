@@ -17,6 +17,7 @@
       "@features/common/regular": ["src/features/common/regular"],
       "@features/common/client": ["src/features/common/client"],
       "@features/common/journey": ["src/features/common/journey"],
+      "@features/common/validation": ["src/features/common/validation"],
       "@definitions": ["src/definitions"],
       "@codecs": ["src/codecs"]
     },

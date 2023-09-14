@@ -8,11 +8,11 @@ import { ToasterPresenter } from '../../../../root/components/toaster/toaster.pr
 import { ActivatedRoute, Router } from '@angular/router';
 import { Place, RegularRegistered } from '@definitions';
 import {
-  bootstrapValidationClasses,
   BootstrapValidationClasses,
+  bootstrapValidationClasses,
   forceControlRevalidation,
   nullToUndefined
-} from '../../common/forms.presenter';
+} from '@features/common';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

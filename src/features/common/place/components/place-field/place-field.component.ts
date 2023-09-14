@@ -1,24 +1,33 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Inject,
-  Input,
-  OnChanges,
-  Output,
-  SimpleChanges
-} from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, Output } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { SEARCH_PLACE_QUERY, SearchPlaceQuery } from '@features/common/place';
-import { debounceTime, distinctUntilChanged, filter, map, Observable, Subject, switchMap } from 'rxjs';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, map, Observable, Subject, switchMap, tap } from 'rxjs';
 import { Place } from '@definitions';
+import { bootstrapValidationClasses, BootstrapValidationClasses, FORM_CONTROL_ERROR_MESSAGES_TOKEN } from '@features/common';
+import { placeValidator } from './place-validator.validator';
+import { PLACE_FORM_CONTROL_ERROR_MESSAGES } from '../../errors/form-errors-messages.token';
+
+export type PlaceValues = {
+  place: string;
+};
+export type PlaceFields = {
+  place: FormControl<PlaceValues['place']>;
+};
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-place-field',
-  templateUrl: './place-field.component.html'
+  templateUrl: './place-field.component.html',
+  providers: [
+    {
+      provide: FORM_CONTROL_ERROR_MESSAGES_TOKEN,
+      useValue: PLACE_FORM_CONTROL_ERROR_MESSAGES
+    }
+  ]
 })
-export class PlaceFieldComponent implements OnChanges {
+export class PlaceFieldComponent {
+  public validation: (control: AbstractControl) => BootstrapValidationClasses = bootstrapValidationClasses;
+
   @Input() public minSearchTermLength: number = 3;
   @Input() public searchDebounceTime: number = 300;
 
@@ -30,9 +39,20 @@ export class PlaceFieldComponent implements OnChanges {
 
   @Input() public displayReset: boolean = false;
 
-  @Input() public defaultValue?: (Place | string | undefined) | null;
+  @Input() public set defaultValue(place: (Place | undefined) | null) {
+    place != null && this.setPlaceSuggestion(place);
+  }
 
   private readonly _searchPlaceTerm$: Subject<string> = new Subject<string>();
+
+  private readonly _selectedPlace$: BehaviorSubject<Place> = new BehaviorSubject<Place>(emptyPlaceValue);
+
+  public selectedPlace$: Observable<Place> = this._selectedPlace$.asObservable().pipe(
+    tap((place: Place): void => {
+      this.formGroup.controls.place.setValidators(placeValidator(place));
+      this.formGroup.controls.place.updateValueAndValidity();
+    })
+  );
 
   public placesFound$: Observable<Place[]> = this._searchPlaceTerm$.pipe(
     map((searchPlaceTerm: string): string => searchPlaceTerm.trim()),
@@ -44,19 +64,22 @@ export class PlaceFieldComponent implements OnChanges {
 
   public constructor(@Inject(SEARCH_PLACE_QUERY) private readonly _searchPlaceQuery: SearchPlaceQuery) {}
 
-  public formGroup: FormGroup = new FormGroup({ place: new FormControl() });
-
-  public ngOnChanges(simpleChanges: SimpleChanges): void {
-    simpleChanges['defaultValue'] != null && this.formGroup.get('place')?.setValue(toPlaceString(this.defaultValue));
-  }
+  public readonly formGroup: FormGroup<PlaceFields> = new FormGroup<PlaceFields>({
+    place: new FormControl<PlaceValues['place']>('', {
+      nonNullable: true,
+      validators: []
+    })
+  });
 
   public search(placeInput: string): void {
     this._searchPlaceTerm$.next(placeInput);
+    this._selectedPlace$.next(emptyPlaceValue);
   }
 
   public setPlaceSuggestion(place: Place): void {
-    this.formGroup.get('place')?.setValue(place.label);
-    this.selectPlace.next(place);
+    this.formGroup.get('place')?.setValue(place.context);
+    this._selectedPlace$.next(place);
+    this.selectPlace.emit(place);
   }
 
   public trackByPlaceName(_: number, place: Place): string {
@@ -69,6 +92,11 @@ export class PlaceFieldComponent implements OnChanges {
   }
 }
 
-const toPlaceString = (placeOrString: Place | string | null | undefined): string =>
-  // eslint-disable-next-line no-nested-ternary
-  placeOrString == null ? '' : typeof placeOrString === 'string' ? placeOrString : placeOrString.context;
+const emptyPlaceValue: Place = {
+  context: '',
+  label: '',
+  location: {
+    latitude: NaN,
+    longitude: NaN
+  }
+};

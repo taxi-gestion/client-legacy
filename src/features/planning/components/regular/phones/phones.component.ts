@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { phoneNumberValidator } from './phones.validator';
 import { string as ioString, type as ioType, Type } from 'io-ts';
-import { bootstrapValidationClasses, BootstrapValidationClasses } from '../../../common/forms.presenter';
+import { BootstrapValidationClasses, bootstrapValidationClasses } from '@features/common';
 
 export type PhonesFields = FormArray<FormGroup<PhoneFields>>;
 

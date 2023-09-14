@@ -188,13 +188,9 @@ export class ManageFarePage {
   }
   //endregion
 
-  public departureDisplay$: Observable<string> = this._departure$
-    .asObservable()
-    .pipe(map((place: Place): string => place.context));
+  public departure$: Observable<Place> = this._departure$.asObservable();
 
-  public destinationDisplay$: Observable<string> = this._destination$
-    .asObservable()
-    .pipe(map((place: Place): string => place.context));
+  public destination$: Observable<Place> = this._destination$.asObservable();
 
   private readonly _driverDisplay$: BehaviorSubject<string> = new BehaviorSubject<string>('');
   public driverDisplay$: Observable<string> = this._driverDisplay$.asObservable();
