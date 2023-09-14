@@ -8,6 +8,7 @@ import { PendingReturnFieldComponent } from './fares/pending-return-field/pendin
 import { PendingReturnResultsDropdownComponent } from './fares/pending-return-results-dropdown/pending-return-results-dropdown.component';
 import { PhonesComponent } from './regular/phones/phones.component';
 import { DestinationsComponent } from './regular/destinations/destinations.component';
+import { FormControlErrorsComponent } from './errors/form-control-errors/form-control-errors.component';
 
 export * from './fares/fields';
 export * from './regular/destinations';
@@ -23,5 +24,6 @@ export const COMPONENTS = [
   PendingReturnResultsDropdownComponent,
   EstimateJourneyFieldsComponent,
   PhonesComponent,
-  DestinationsComponent
+  DestinationsComponent,
+  FormControlErrorsComponent
 ];

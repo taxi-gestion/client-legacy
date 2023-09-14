@@ -7,7 +7,12 @@ import { formatRegisterRegularError, toRegisterRegular, toRegisterRegularSuccess
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Place, RegularRegistered } from '@definitions';
-import { bootstrapValidationClasses, BootstrapValidationClasses, nullToUndefined } from '../../common/forms.presenter';
+import {
+  bootstrapValidationClasses,
+  BootstrapValidationClasses,
+  forceControlRevalidation,
+  nullToUndefined
+} from '../../common/forms.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -44,7 +49,7 @@ export class RegisterRegularPage {
   //region register-regular
   public onSubmitRegisterRegular = (triggerAction: () => void): void => {
     this.registerRegularForm.markAllAsTouched();
-    this.registerRegularForm.valid && triggerAction();
+    this.registerRegularForm.valid ? triggerAction() : forceControlRevalidation(this.registerRegularForm);
   };
 
   public onRegisterRegularActionSuccess = async (regular: RegularRegistered): Promise<void> => {

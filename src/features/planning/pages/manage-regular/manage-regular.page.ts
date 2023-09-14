@@ -14,7 +14,12 @@ import {
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Entity, Place, RegularDeleted, RegularDetails, RegularEdited } from '@definitions';
-import { bootstrapValidationClasses, BootstrapValidationClasses, nullToUndefined } from '../../common/forms.presenter';
+import {
+  bootstrapValidationClasses,
+  BootstrapValidationClasses,
+  forceControlRevalidation,
+  nullToUndefined
+} from '../../common/forms.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -71,7 +76,7 @@ export class ManageRegularPage {
 
   public onSubmitEditRegular = (triggerAction: () => void): void => {
     this.editRegularForm.markAllAsTouched();
-    this.editRegularForm.valid && triggerAction();
+    this.editRegularForm.valid ? triggerAction() : forceControlRevalidation(this.editRegularForm);
   };
 
   public onEditRegularActionSuccess = async (regular: RegularEdited): Promise<void> => {

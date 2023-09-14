@@ -1,0 +1,4 @@
+<ng-content></ng-content>
+<div *ngIf="displayError$ | async" class="text-danger">
+  {{ errorMessage }}
+</div>
