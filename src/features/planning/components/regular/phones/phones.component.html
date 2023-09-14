@@ -2,50 +2,40 @@
   <div class="mb-2">
     <button type="button" class="btn btn-primary" (click)="addPhone(undefined)">Ajouter un téléphone</button>
   </div>
-  <div *ngFor="let phone of parentArray.controls; let i = index" class="border p-3 my-2 rounded phone-card">
-    <i
-      class="ri-lg validity-icon"
-      [ngClass]="phone.valid ? 'ri-eye-off-line text-success' : 'ri-eye-line text-danger'"
-      aria-hidden="true"></i>
+  <div *ngFor="let phone of parentArray.controls; let i = index" class="border p-3 my-2 rounded">
     <div class="mb-3">
-      <div class="input-group mb-1">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="phoneTypeLabel">Type:</span>
+      <div class="mb-1" formControlErrors="phoneType" [formArrayErrors]="parentArray" [formArrayErrorsIndex]="i">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="phoneTypeLabel">Type:</span>
+          </div>
+          <input
+            id="phoneType"
+            placeholder="portable, travail..."
+            type="text"
+            class="form-control"
+            [ngClass]="validation(phone.controls.phoneType)"
+            aria-describedby="phoneTypeLabel"
+            name="phoneType"
+            [formControl]="phone.controls.phoneType" />
         </div>
-        <input
-          id="phoneType"
-          placeholder="portable, travail..."
-          type="text"
-          class="form-control"
-          aria-describedby="phoneTypeLabel"
-          name="phoneType"
-          [formControl]="phone.controls.phoneType" />
       </div>
-      <div *ngIf="phone.controls.phoneType.invalid && (phone.controls.phoneType.dirty || phone.controls.phoneType.touched)">
-        <small class="text-danger" *ngIf="phone.controls.phoneType.errors && phone.controls.phoneType.errors?.['required']">
-          Une valeur est nécessaire
-        </small>
-      </div>
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="phoneNumberLabel">Numéro:</span>
+      <div class="mb-1" formControlErrors="phoneNumber" [formArrayErrors]="parentArray" [formArrayErrorsIndex]="i">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="phoneNumberLabel">Numéro:</span>
+          </div>
+          <input
+            id="phoneNumber"
+            type="text"
+            placeholder="(+33)/(0) 6 XX XX XX XX"
+            class="form-control"
+            [ngClass]="validation(phone.controls.phoneNumber)"
+            aria-describedby="phoneNumberLabel"
+            name="phoneNumber"
+            [formControl]="phone.controls.phoneNumber" />
         </div>
-        <input
-          id="phoneNumber"
-          type="text"
-          placeholder="(+33)/(0) 6 XX XX XX XX"
-          class="form-control"
-          aria-describedby="phoneNumberLabel"
-          name="phoneNumber"
-          [formControl]="phone.controls.phoneNumber" />
       </div>
-    </div>
-    <div *ngIf="phone.controls.phoneNumber.invalid && (phone.controls.phoneNumber.dirty || phone.controls.phoneNumber.touched)">
-      <small
-        class="text-danger"
-        *ngIf="phone.controls.phoneNumber.errors && phone.controls.phoneNumber.errors?.['invalidPhoneNumber']">
-        Le numéro ne respecte pas le format français
-      </small>
     </div>
     <button type="button" class="btn btn-danger" (click)="removePhoneNumber(i)">Supprimer</button>
   </div>

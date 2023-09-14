@@ -2,32 +2,23 @@
   <div class="mb-2">
     <button type="button" class="btn btn-primary" (click)="addDestination(undefined)">Ajouter une destination</button>
   </div>
-  <div *ngFor="let destination of parentArray.controls; let i = index" class="border p-3 my-2 rounded phone-card">
-    <i
-      class="ri-lg validity-icon"
-      [ngClass]="destination.valid ? 'ri-eye-off-line text-success' : 'ri-eye-line text-danger'"
-      aria-hidden="true"></i>
-    <div class="mb-3">
+  <div *ngFor="let destination of parentArray.controls; let i = index" class="border p-3 my-2 rounded">
+    <div class="mb-3" formControlErrors="destinationName" [formArrayErrors]="parentArray" [formArrayErrorsIndex]="i">
       <div class="input-group">
         <div class="input-group-prepend">
           <span class="input-group-text" id="nameLabel">Nom:</span>
         </div>
         <input
-          id="name"
+          id="destinationName"
           placeholder="clinique, dialyse ..."
           type="text"
           class="form-control"
-          aria-describedby="nameLabel"
-          name="name"
-          [formControl]="destination.controls.name" />
-      </div>
-      <div *ngIf="destination.controls.name.invalid && (destination.controls.name.dirty || destination.controls.name.touched)">
-        <small class="text-danger" *ngIf="destination.controls.name.errors && destination.controls.name.errors?.['required']">
-          Une valeur est nécessaire
-        </small>
+          [ngClass]="validation(destination.controls.destinationName)"
+          aria-describedby="destinationNameLabel"
+          name="destinationName"
+          [formControl]="destination.controls.destinationName" />
       </div>
     </div>
-
     <div class="mb-3">
       <label for="place" class="form-label d-block">Adresse:</label>
       <app-place-field
