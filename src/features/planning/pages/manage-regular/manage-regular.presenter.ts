@@ -57,7 +57,7 @@ export const toPhoneNumbers = (phone: Phone): PhoneValues => ({
 });
 
 export const toDestinationValues = (destination: Destination): DestinationValues => ({
-  name: destination.name,
+  destinationName: destination.name,
   place: destination.place,
   isMedicalDrive: destination.nature === 'medical',
   isTwoWayDrive: destination.kind === 'two-way',

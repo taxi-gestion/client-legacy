@@ -1,7 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { phoneNumberValidator } from './phones.validator';
 import { string as ioString, type as ioType, Type } from 'io-ts';
+import { bootstrapValidationClasses, BootstrapValidationClasses } from '../../../common/forms.presenter';
 
 export type PhonesFields = FormArray<FormGroup<PhoneFields>>;
 
@@ -29,6 +30,8 @@ export const phonesFormControls = (): Record<keyof { phones: PhonesFields }, Pho
   templateUrl: './phones.component.html'
 })
 export class PhonesComponent {
+  public validation: (control: AbstractControl) => BootstrapValidationClasses = bootstrapValidationClasses;
+
   @Input({ required: true }) public parentArray!: PhonesFields;
 
   @Input() public set phones(phones: (PhoneValues[] | undefined) | null) {

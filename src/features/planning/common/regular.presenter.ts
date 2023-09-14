@@ -34,7 +34,7 @@ const toPhone = (phoneNumberValue: PhoneValues): Phone => ({
 });
 
 const toDestination = (destination: DestinationValues): Destination => ({
-  name: destination.name,
+  name: destination.destinationName,
   place: destination.place,
   nature: destination.isMedicalDrive ? 'medical' : 'standard',
   kind: destination.isTwoWayDrive ? 'two-way' : 'one-way',

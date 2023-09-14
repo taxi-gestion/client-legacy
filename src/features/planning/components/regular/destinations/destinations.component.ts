@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Place } from '@definitions';
 import { defaultPlaceValue } from '../../../common/fares.presenter';
 import {
@@ -12,11 +12,12 @@ import {
 } from 'io-ts';
 import { placeCodec } from '@codecs';
 import { destinationValidator, placeValidator } from './destinations.validator';
+import { bootstrapValidationClasses, BootstrapValidationClasses } from '../../../common/forms.presenter';
 
 export type DestinationsFields = FormArray<FormGroup<DestinationFields>>;
 
 export type DestinationFields = {
-  name: FormControl<DestinationValues['name'] | null>;
+  destinationName: FormControl<DestinationValues['destinationName'] | null>;
   place: FormControl<DestinationValues['place'] | null>;
   isTwoWayDrive: FormControl<DestinationValues['isTwoWayDrive'] | null>;
   isMedicalDrive: FormControl<DestinationValues['isMedicalDrive'] | null>;
@@ -24,7 +25,7 @@ export type DestinationFields = {
 };
 
 export type DestinationValues = {
-  name: string;
+  destinationName: string;
   place: Place;
   isTwoWayDrive: boolean;
   isMedicalDrive: boolean;
@@ -36,7 +37,7 @@ export const destinationValuesCodec: Type<DestinationValues> = ioType({
   isMedicalDrive: ioBoolean,
   place: placeCodec,
   comment: ioUnion([ioString, ioUndefined]),
-  name: ioString
+  destinationName: ioString
 });
 
 export const destinationsFormControls = (): Record<keyof { destinations: DestinationsFields }, DestinationsFields> => ({
@@ -48,6 +49,8 @@ export const destinationsFormControls = (): Record<keyof { destinations: Destina
   templateUrl: './destinations.component.html'
 })
 export class DestinationsComponent {
+  public validation: (control: AbstractControl) => BootstrapValidationClasses = bootstrapValidationClasses;
+
   @Input({ required: true }) public parentArray!: DestinationsFields;
 
   @Input() public set destinations(destinations: (DestinationValues[] | undefined) | null) {
@@ -65,7 +68,7 @@ export class DestinationsComponent {
   public createDestinationGroup(destination: DestinationValues | undefined): FormGroup<DestinationFields> {
     return new FormGroup<DestinationFields>(
       {
-        name: new FormControl<DestinationValues['name']>(destination?.name ?? '', {
+        destinationName: new FormControl<DestinationValues['destinationName']>(destination?.destinationName ?? '', {
           nonNullable: true,
           validators: [Validators.required]
         }),
