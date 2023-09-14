@@ -4,3 +4,4 @@ export * from './journey';
 export * from './regular';
 export * from './place';
 export * from './recurrence';
+export * from './form-validation';

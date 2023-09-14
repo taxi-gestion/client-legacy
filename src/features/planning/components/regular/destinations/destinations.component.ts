@@ -12,7 +12,7 @@ import {
 } from 'io-ts';
 import { placeCodec } from '@codecs';
 import { destinationValidator, placeValidator } from './destinations.validator';
-import { bootstrapValidationClasses, BootstrapValidationClasses } from '../../../common/forms.presenter';
+import { BootstrapValidationClasses, bootstrapValidationClasses } from '@features/common';
 
 export type DestinationsFields = FormArray<FormGroup<DestinationFields>>;
 
