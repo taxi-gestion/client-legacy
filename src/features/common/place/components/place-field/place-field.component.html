@@ -11,7 +11,7 @@
         placeholder="Entrez une adresse, un lieu-dit..."
         name="place"
         id="place"
-        class="form-control border-start-0"
+        class="form-control border-start-0 position-relative"
         [ngClass]="validation(formGroup.controls.place)"
         autocomplete="off"
         aria-describedby="place"
@@ -36,7 +36,7 @@
       appPlaceResultsDropdown
       [dropdownControl]="placeInput"
       [class.show]="placeResultsDropdown.expanded$ | async"
-      class="dropdown-menu position-absolute mt-1"
+      class="dropdown-menu position-sticky mt-1"
       aria-labelledby="place">
       <li #results *ngFor="let place of (placesFound$ | async) ?? []; index as placeIndex; trackBy: trackByPlaceName">
         <button
