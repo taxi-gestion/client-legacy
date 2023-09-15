@@ -1,4 +1,6 @@
-import { Pending, RegularDetails, Scheduled, Subcontracted } from './index';
+import { Driver, Pending, RegularDetails, Scheduled, Subcontracted } from './index';
+
+export type DriverPersistence = Driver;
 
 export type ScheduledPersistence = Scheduled;
 

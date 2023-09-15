@@ -1,48 +1,84 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { keyof as ioKeyOf, keyof as ioKeyof, number as ioNumber, string as ioString, type as ioType, Type } from 'io-ts';
-import { Civility, Drive, Driver, DurationDistance, Entity, Kind, Nature, Passenger } from '../../definitions';
+import {
+  intersection as ioIntersection,
+  keyof as ioKeyOf,
+  number as ioNumber,
+  string as ioString,
+  type as ioType,
+  Type
+} from 'io-ts';
+import { Civility, Drive, DurationDistance, Entity, Kind, Nature, Passenger, Phone } from '../../definitions';
 import { placeCodec } from '../common';
 
-export const entityCodec: Type<Entity> = ioType({
-  id: ioString
-});
+export const entityCodec: Type<Entity> = ioType(
+  {
+    id: ioString
+  },
+  'entityCodec'
+);
 
-export const driverCodec: Type<Driver> = ioType({
-  identifier: ioString,
-  username: ioString
-});
+export const civilityCodec: Type<Civility> = ioKeyOf(
+  {
+    Child: null,
+    Company: null,
+    Couple: null,
+    Mr: null,
+    Mrs: null,
+    Other: null
+  },
+  'civilityCodec'
+);
 
-export const civilityCodec: Type<Civility> = ioKeyOf({
-  Child: null,
-  Company: null,
-  Couple: null,
-  Mr: null,
-  Mrs: null,
-  Other: null
-});
+export const kindCodec: Type<Kind> = ioType(
+  {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    kind: ioKeyOf({ 'one-way': null, 'two-way': null })
+  },
+  'kindCodec'
+);
 
-export const kindCodec: Type<Kind> = ioType({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  kind: ioKeyof({ 'one-way': null, 'two-way': null })
-});
+export const natureCodec: Type<Nature> = ioType(
+  {
+    nature: ioKeyOf({ medical: null, standard: null })
+  },
+  'natureCodec'
+);
 
-export const natureCodec: Type<Nature> = ioType({
-  nature: ioKeyof({ medical: null, standard: null })
-});
+export const driveCodec: Type<Drive> = ioType(
+  {
+    datetime: ioString,
+    departure: placeCodec,
+    destination: placeCodec
+  },
+  'driveCodec'
+);
 
-export const driveCodec: Type<Drive> = ioType({
-  datetime: ioString,
-  departure: placeCodec,
-  destination: placeCodec,
-  driver: ioString
-});
+export const durationDistanceCodec: Type<DurationDistance> = ioType(
+  {
+    duration: ioNumber,
+    distance: ioNumber
+  },
+  'durationDistanceCodec'
+);
 
-export const durationDistanceCodec: Type<DurationDistance> = ioType({
-  duration: ioNumber,
-  distance: ioNumber
-});
+export const phoneCodec: Type<Phone> = ioType(
+  {
+    type: ioString,
+    // eslint-disable-next-line id-denylist
+    number: ioString
+  },
+  'phoneCodec'
+);
 
-export const passengerCodec: Type<Passenger> = ioType({
-  passenger: ioString,
-  phone: ioString
-});
+export const passengerCodec: Type<Passenger> = ioType(
+  {
+    identity: ioString,
+    phone: phoneCodec
+  },
+  'passengerCodec'
+);
+
+export const passengerEntityCodec: Type<Entity & Passenger> = ioIntersection(
+  [entityCodec, passengerCodec],
+  'passengerEntityCodec'
+);

@@ -4,7 +4,7 @@ import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { pipe as fpPipe } from 'fp-ts/function';
 import { registerRegularFormCodec } from './register-regular.form';
 import { fold as eitherFold } from 'fp-ts/Either';
-import { regularIdentity, throwDecodeError, toRegularDetails } from '../../common/regular.presenter';
+import { passengerIdentity, throwDecodeError, toRegularDetails } from '../../common/regular.presenter';
 
 export const toRegisterRegular = (rawFormValues: unknown): RegularDetails =>
   fpPipe(
@@ -13,7 +13,7 @@ export const toRegisterRegular = (rawFormValues: unknown): RegularDetails =>
   );
 
 export const toRegisterRegularSuccessToast = (regular: RegularRegistered): Toast => ({
-  content: `Nouveau passager enregistré: ${regularIdentity(regular.regularRegistered)}`,
+  content: `Nouveau passager enregistré: ${passengerIdentity(regular.regularRegistered)}`,
   status: 'success',
   title: `Un passager a été enregistré`
 });

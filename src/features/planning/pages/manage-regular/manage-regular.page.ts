@@ -45,6 +45,8 @@ export class ManageRegularPage {
   ) {}
 
   //region form-binding
+  private readonly _regular$: Subject<Entity & RegularDetails> = new Subject<Entity & RegularDetails>();
+
   public onSelectRegularChange(regular: Entity & RegularDetails): void {
     this._regular$.next(regular);
   }
@@ -52,13 +54,6 @@ export class ManageRegularPage {
   public onSelectHomeAddressChange(place: Place): void {
     this.editRegularForm.controls.homeAddress.setValue(place);
   }
-  // endregion
-
-  //region action edit regular
-  private readonly _regular$: Subject<Entity & RegularDetails> = new Subject<Entity & RegularDetails>();
-
-  public readonly editRegular$ = (): Observable<RegularEdited> =>
-    this._editRegularAction$(toEditRegular(nullToUndefined(EDIT_REGULAR_FORM.value)));
 
   public regular$: Observable<EditRegularValues> = this._regular$.asObservable().pipe(
     tap((regular: Entity & RegularDetails): void => {
@@ -73,6 +68,11 @@ export class ManageRegularPage {
     }),
     map(toEditRegularPresentation)
   );
+  //
+
+  //region action edit regular
+  public readonly editRegular$ = (): Observable<RegularEdited> =>
+    this._editRegularAction$(toEditRegular(nullToUndefined(EDIT_REGULAR_FORM.value)));
 
   public onSubmitEditRegular = (triggerAction: () => void): void => {
     this.editRegularForm.markAllAsTouched();

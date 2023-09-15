@@ -5,12 +5,12 @@ import { toLocalTime } from '../../common/fares.presenter';
 export const toDeleteFareSuccessToast = (fares: FaresDeleted): Toast => {
   const content: string =
     fares.pendingDeleted === undefined
-      ? `Course pour ${fares.scheduledDeleted.passenger} par ${fares.scheduledDeleted.driver} à ${toLocalTime(
+      ? `Course pour ${fares.scheduledDeleted.passenger.identity} par ${fares.scheduledDeleted.driver.username} à ${toLocalTime(
           fares.scheduledDeleted.datetime
         )} supprimée`
-      : `Course et Retour pour ${fares.scheduledDeleted.passenger} par ${fares.scheduledDeleted.driver} à ${toLocalTime(
-          fares.scheduledDeleted.datetime
-        )} supprimés`;
+      : `Course et Retour pour ${fares.scheduledDeleted.passenger.identity} par ${
+          fares.scheduledDeleted.driver.username
+        } à ${toLocalTime(fares.scheduledDeleted.datetime)} supprimés`;
 
   const title: string =
     fares.pendingDeleted === undefined ? 'Une course a été supprimée' : 'Une course et son retour on étés supprimés';

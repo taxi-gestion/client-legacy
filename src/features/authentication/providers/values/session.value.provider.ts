@@ -14,6 +14,7 @@ export type Session = {
   refresh: () => string | null;
   remainingTime: () => number;
   username: () => string;
+  userId: () => string;
   groups: () => string[];
 };
 

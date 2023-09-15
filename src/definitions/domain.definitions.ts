@@ -11,7 +11,6 @@ export type Drive = {
   departure: Place;
   destination: Place;
   datetime: string;
-  driver: string;
 };
 
 export type DurationDistance = {
@@ -20,14 +19,13 @@ export type DurationDistance = {
 };
 
 export type Passenger = {
-  passenger: string;
-  phone: string;
+  identity: string;
+  phone: {
+    type: string;
+    // eslint-disable-next-line id-denylist
+    number: string;
+  };
 };
-
-/*export type Regular = {
-  firstname: string | undefined;
-  lastname: string;
-};*/
 
 export type Civility = 'Child' | 'Company' | 'Couple' | 'Mr' | 'Mrs' | 'Other';
 
@@ -63,56 +61,42 @@ export type Kind = {
   kind: 'one-way' | 'two-way';
 };
 
-export type ToSchedule = Drive &
-  DurationDistance &
-  Kind &
-  Nature &
-  Passenger & {
-    status: 'to-schedule';
-  };
+export type Fare = Drive & DurationDistance & Kind & Nature & { driver: Driver & Entity } & { passenger: Entity & Passenger };
 
-export type ToEdit = Drive &
-  DurationDistance &
-  Kind &
-  Nature &
-  Passenger & {
-    status: 'to-edit';
-  };
+export type ToSchedule = Fare & {
+  status: 'to-schedule';
+};
+
+export type ToEdit = Fare & {
+  status: 'to-edit';
+};
+
+export type Scheduled = Fare & {
+  status: 'scheduled';
+};
 
 export type ReturnDrive = Drive &
   DurationDistance & {
     status: 'return-drive';
-  };
+  } & { driver: Driver & Entity };
 
 export type Pending = Drive &
-  Nature &
-  Passenger & {
+  Nature & {
     kind: 'two-way';
     status: 'pending-return';
-  };
-
-export type Scheduled = Drive &
-  DurationDistance &
-  Kind &
-  Nature &
-  Passenger & {
-    status: 'scheduled';
-  };
+  } & { driver: Driver & Entity } & { passenger: Entity & Passenger };
 
 export type Subcontractor = {
-  subcontractor: string;
-};
-// TODO Refactor Drive to exclude driver
-export type ToSubcontract = Subcontractor & {
-  status: 'to-subcontract';
+  identity: string;
 };
 
-// TODO Refactor Drive to exclude driver
-export type Subcontracted = DurationDistance &
+export type ToSubcontract = {
+  status: 'to-subcontract';
+} & { subcontractor: Subcontractor };
+
+export type Subcontracted = Drive &
+  DurationDistance &
   Kind &
-  Nature &
-  Omit<Drive, 'driver'> &
-  Passenger &
-  Subcontractor & {
+  Nature & {
     status: 'subcontracted';
-  };
+  } & { passenger: Entity & Passenger } & { subcontractor: Subcontractor };

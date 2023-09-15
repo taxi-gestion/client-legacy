@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
-  DriverServiceModule,
+  DriverComponentModule,
   JourneyQueriesModule,
   LoadUiModule,
   PlaceComponentModule,
@@ -34,7 +34,7 @@ import { PLANNING_FORM_CONTROL_ERROR_MESSAGES } from '../errors/form-errors-mess
     JourneyQueriesModule,
     PlanningFeatureRoutingModule,
     RecurrenceServiceModule,
-    DriverServiceModule,
+    DriverComponentModule,
     RegularServiceModule,
     NavbarUiModule,
     FormValidationComponentModule

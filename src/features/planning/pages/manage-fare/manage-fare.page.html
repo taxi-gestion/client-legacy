@@ -19,7 +19,6 @@
     <label for="passenger" class="form-label">Identité du passager</label>
     <app-regular-field
       (selectRegular)="onSelectRegularChange($event)"
-      (searchRegularTerm)="onSearchRegularTermChange($event)"
       [defaultValue]="(selectedSessionPassenger$ | async) ?? ''"></app-regular-field>
     <input id="passenger" type="hidden" name="passenger" formControlName="passenger" />
   </div>
@@ -59,9 +58,7 @@
   <div class="mb-3">
     <label for="driver" class="form-label">Chauffeur</label>
     <!-- TODO Find a better way to link observable to view -->
-    <app-driver-field
-      (selectDriver)="onSelectDriverChange($event)"
-      [defaultValue]="(driverDisplay$ | async) ?? ''"></app-driver-field>
+    <app-driver-field (selectDriver)="onSelectDriverChange($event)"></app-driver-field>
     <input id="driver" type="hidden" name="driver" formControlName="driver" />
   </div>
   <div class="mb-3">

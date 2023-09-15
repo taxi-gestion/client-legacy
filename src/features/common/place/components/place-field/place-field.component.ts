@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
-import { SEARCH_PLACE_QUERY, SearchPlaceQuery } from '@features/common/place';
+import { selectedPlaceValidator, SEARCH_PLACE_QUERY, SearchPlaceQuery } from '@features/common/place';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, map, Observable, Subject, switchMap, tap } from 'rxjs';
 import { Place } from '@definitions';
 import { bootstrapValidationClasses, BootstrapValidationClasses, FORM_CONTROL_ERROR_MESSAGES_TOKEN } from '@features/common';
-import { placeValidator } from './place-validator.validator';
 import { PLACE_FORM_CONTROL_ERROR_MESSAGES } from '../../errors/form-errors-messages.token';
 
 export type PlaceValues = {
@@ -49,7 +48,7 @@ export class PlaceFieldComponent {
 
   public selectedPlace$: Observable<Place> = this._selectedPlace$.asObservable().pipe(
     tap((place: Place): void => {
-      this.formGroup.controls.place.setValidators(placeValidator(place));
+      this.formGroup.controls.place.setValidators(selectedPlaceValidator(place));
       this.formGroup.controls.place.updateValueAndValidity();
     })
   );

@@ -10,12 +10,15 @@ import { Destination } from '../../definitions';
 import { kindCodec, natureCodec } from './traits.codecs';
 import { placeCodec } from '../common';
 
-export const destinationCodec: Type<Destination> = ioIntersection([
-  kindCodec,
-  natureCodec,
-  ioType({
-    place: placeCodec,
-    comment: ioUnion([ioString, ioUndefined]),
-    name: ioString
-  })
-]);
+export const destinationCodec: Type<Destination> = ioIntersection(
+  [
+    kindCodec,
+    natureCodec,
+    ioType({
+      place: placeCodec,
+      comment: ioUnion([ioString, ioUndefined]),
+      name: ioString
+    })
+  ],
+  'destinationCodec'
+);

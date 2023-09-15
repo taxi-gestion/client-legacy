@@ -8,5 +8,6 @@ export const inMemorySession = (): Session => ({
   expiresIn: (): number => NaN,
   remainingTime: (): number => 1000,
   username: (): string => 'alfred.martin',
+  userId: (): string => 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
   groups: (): string[] => ['admin']
 });

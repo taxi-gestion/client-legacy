@@ -1,28 +1,29 @@
 import { VALIDATION_FAILED_AFTER_API_CALL_ERROR_NAME, VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
-import { Entity, FaresSubcontracted, Subcontractor, ToSubcontract } from '@definitions';
+import { Entity, FaresSubcontracted, ToSubcontract } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { toLocalTime } from '../../common/fares.presenter';
-import { FareToEditPresentation } from './edit-fare.form';
-import { SessionContext } from '../../components/planning/planning-row/planning-row.component';
-import { DailyDriverPlanning, ScheduledPlanningSession } from '../../common/fares.presentation';
+import { FareToEditValues } from './edit-fare.form';
 
-export const passengerFromContext = (context: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>): string =>
-  context.sessionContext.passenger;
+/*export const passengerFromContext = (context: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>): string =>
+  // TODO verify if ok
+  context.sessionContext.passenger.passenger;*/
 
 export const toSubcontractFareSuccessToast = (fares: FaresSubcontracted): Toast => ({
-  content: `Course pour ${fares.subcontracted.passenger} à ${toLocalTime(fares.subcontracted.datetime)} sous-traité à ${
-    fares.subcontracted.subcontractor
-  }`,
+  content: `Course pour ${fares.subcontracted.passenger.identity} à ${toLocalTime(
+    fares.subcontracted.datetime
+  )} sous-traité à ${fares.subcontracted.subcontractor.identity}`,
   status: 'success',
   title: 'Une course a été sous-traitée'
 });
 
 export const toFareToSubcontract = (
-  subcontractFormValues: Subcontractor,
-  editFareFormValues: FareToEditPresentation
+  subcontractFormValues: { subcontractor: string },
+  editFareFormValues: FareToEditValues
 ): Entity & ToSubcontract => ({
   id: editFareFormValues.id,
-  subcontractor: subcontractFormValues.subcontractor,
+  subcontractor: {
+    identity: subcontractFormValues.subcontractor
+  },
   status: 'to-subcontract'
 });
 

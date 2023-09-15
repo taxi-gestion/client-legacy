@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { map, Observable, switchMap } from 'rxjs';
-import { SCHEDULED_FARES_FOR_DATE_QUERY, ScheduledFaresForDateQuery } from '@features/planning';
+import { DRIVER_AGENDA_FOR_DATE_QUERY, DriverAgendaForDateQuery } from '@features/planning';
 import { Session, SESSION_PERSISTENCE } from '../../../authentication';
-import { filterByPlanning, toScheduledFaresPresentation } from '../../common/fares.presenter';
+import { toScheduledFaresPresentation } from '../../common/fares.presenter';
 import { toStandardDateFormat } from '../../common/unit-convertion';
 import { Entity, Scheduled } from '@definitions';
 import { ScheduledPresentation } from '../../common/fares.presentation';
@@ -20,9 +20,11 @@ export class DriverAgendaPage {
   public planningDate: string = paramsToDateString(this._route.snapshot.params);
 
   public readonly agenda$: Observable<ScheduledPresentation[]> = this._route.params.pipe(
-    switchMap((params: Params): Observable<(Entity & Scheduled)[]> => this._faresForDateQuery(paramsToDateString(params))),
+    switchMap(
+      (params: Params): Observable<(Entity & Scheduled)[]> =>
+        this._driverAgendaForDateQuery({ driver: { id: this._session.userId() }, date: paramsToDateString(params) })
+    ),
     map(toScheduledFaresPresentation),
-    map(filterByPlanning(this._session.username())),
     map(toAgendaFares),
     map(sortByDatetime)
   );
@@ -30,7 +32,7 @@ export class DriverAgendaPage {
   public constructor(
     private readonly _router: Router,
     private readonly _route: ActivatedRoute,
-    @Inject(SCHEDULED_FARES_FOR_DATE_QUERY) private readonly _faresForDateQuery: ScheduledFaresForDateQuery,
+    @Inject(DRIVER_AGENDA_FOR_DATE_QUERY) private readonly _driverAgendaForDateQuery: DriverAgendaForDateQuery,
     @Inject(SESSION_PERSISTENCE) private readonly _session: Session
   ) {}
 

@@ -7,7 +7,7 @@ import { editRegularFormCodec, EditRegularValues } from './edit-regular.form';
 import { fold as eitherFold } from 'fp-ts/Either';
 import { pipe as fpPipe } from 'fp-ts/function';
 import { entityCodec } from '@codecs';
-import { regularIdentity, throwDecodeError, toRegularDetails } from '../../common/regular.presenter';
+import { passengerIdentity, throwDecodeError, toRegularDetails } from '../../common/regular.presenter';
 
 export const toEditRegular = (rawFormValues: unknown): Entity & RegularDetails =>
   fpPipe(
@@ -22,13 +22,13 @@ export const toDeleteRegular = (rawValue: unknown): Entity =>
   );
 
 export const toDeleteRegularSuccessToast = (regular: RegularDeleted): Toast => ({
-  content: `Passager supprimé: ${regularIdentity(regular.regularDeleted)}`,
+  content: `Passager supprimé: ${passengerIdentity(regular.regularDeleted)}`,
   status: 'success',
   title: `Un passager à été supprimé`
 });
 
 export const toEditRegularSuccessToast = (regular: RegularEdited): Toast => ({
-  content: `Passager modifié: ${regularIdentity(regular.regularEdited)}`,
+  content: `Passager modifié: ${passengerIdentity(regular.regularEdited)}`,
   status: 'success',
   title: `Un passager a été modifié`
 });

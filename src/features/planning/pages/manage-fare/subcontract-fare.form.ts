@@ -1,20 +1,8 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Entity, Place, Subcontractor } from '@definitions';
-import { EstimateJourneyValues } from '../../components';
 
-export type FareToSubcontractPresentation = Entity &
-  EstimateJourneyValues &
-  Subcontractor & {
-    passenger: string;
-    phoneToCall: string;
-    departureDatetime: string;
-    departurePlace: Place;
-    arrivalPlace: Place;
-    isTwoWayDrive: boolean;
-    isMedicalDrive: boolean;
-  };
-
-export type FareToSubcontractValues = Subcontractor;
+export type FareToSubcontractValues = {
+  subcontractor: string;
+};
 
 export type SubcontractFareFields = {
   subcontractor: FormControl<string>;
