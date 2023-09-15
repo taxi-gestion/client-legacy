@@ -16,6 +16,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   Driver,
   DurationDistance,
+  Entity,
   FaresDeleted,
   FaresEdited,
   FaresSubcontracted,
@@ -26,7 +27,7 @@ import {
 } from '@definitions';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { FormControl, FormGroup } from '@angular/forms';
-import { EDIT_FARE_FORM, EditFareFields, FareToEditPresentation, setEditFareErrorToForm } from './edit-fare.form';
+import { EDIT_FARE_FORM, EditFareFields, FareToEditValues, setEditFareErrorToForm } from './edit-fare.form';
 import { formatEditFareError, passengerFromContext, toEditFareSuccessToast, toFareToEdit } from './edit-fare.presenter';
 import { toDeleteFareSuccessToast } from './delete-fare.presenter';
 import { defaultPlaceValue, toJourney } from '../../common/fares.presenter';
@@ -74,7 +75,7 @@ export class ManageFarePage {
   //TODO Type to Observable<Error | Entity & Scheduled>
   public readonly editFare$ = (): Observable<FaresEdited> =>
     // TODO Had to use EDIT_FARE_FORM.getRawValue() instead of EDIT_FARE_FORM.value for the latest controls value to be retreived
-    this._editFareAction$(toFareToEdit(EDIT_FARE_FORM.getRawValue() as FareToEditPresentation));
+    this._editFareAction$(toFareToEdit(EDIT_FARE_FORM.getRawValue() as FareToEditValues));
 
   public onSubmitFareToEdit = (triggerAction: () => void): void => {
     EDIT_FARE_FORM.markAllAsTouched();
@@ -101,7 +102,7 @@ export class ManageFarePage {
     this._subcontractFareAction$(
       toFareToSubcontract(
         SUBCONTRACT_FARE_FORM.getRawValue() as { subcontractor: string },
-        EDIT_FARE_FORM.getRawValue() as FareToEditPresentation
+        EDIT_FARE_FORM.getRawValue() as FareToEditValues
       )
     );
 
@@ -162,8 +163,8 @@ export class ManageFarePage {
     this._destination$.next(place);
   }
 
-  public onSelectDriverChange(driver: Driver): void {
-    this.editFareForm.controls.driver.setValue(driver.identifier);
+  public onSelectDriverChange(driver: Driver & Entity): void {
+    this.editFareForm.controls.driver.setValue(driver);
     this._driverDisplay$.next(driver.identifier);
   }
 
@@ -177,7 +178,7 @@ export class ManageFarePage {
     filter(([departure, destination]: [Place, Place]): boolean => isValidPlace(departure) && isValidPlace(destination)),
     switchMap(
       (): Observable<JourneyEstimate> =>
-        this._estimateJourneyQuery$(toJourney(EDIT_FARE_FORM.getRawValue() as FareToEditPresentation))
+        this._estimateJourneyQuery$(toJourney(EDIT_FARE_FORM.getRawValue() as FareToEditValues))
     ),
     map(toDisplayDurationDistance)
   );
@@ -200,8 +201,8 @@ export class ManageFarePage {
     selectedSession: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>
   ): void {
     this.editFareForm.controls.id.setValue(selectedSession.sessionContext.id);
-    this.editFareForm.controls.passenger.setValue(selectedSession.sessionContext.passenger);
-    this.editFareForm.controls.phoneToCall.setValue(selectedSession.sessionContext.phone);
+    this.editFareForm.controls.passenger.setValue(selectedSession.sessionContext.passenger.passenger);
+    this.editFareForm.controls.phoneToCall.setValue(selectedSession.sessionContext.passenger.phone);
     this.editFareForm.controls.departureDatetime.setValue(
       formatDateToDatetimeLocalString(new Date(selectedSession.sessionContext.datetime))
     );
@@ -214,6 +215,6 @@ export class ManageFarePage {
     this.editFareForm.controls.isMedicalDrive.setValue(selectedSession.sessionContext.nature === 'medical');
     this._departure$.next(selectedSession.sessionContext.departure);
     this._destination$.next(selectedSession.sessionContext.destination);
-    this._driverDisplay$.next(selectedSession.sessionContext.driver);
+    //this._driverDisplay$.next(selectedSession.sessionContext.driver);
   }
 }

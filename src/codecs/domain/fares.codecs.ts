@@ -19,12 +19,14 @@ import {
 } from '../../definitions';
 import { placeCodec } from '../common';
 import { driveCodec, durationDistanceCodec, entityCodec, passengerCodec } from './traits.codecs';
+import { driverEntityCodec } from './driver.codecs';
 
 export const toScheduleCodec: Type<ToSchedule> = ioIntersection([
   driveCodec,
   durationDistanceCodec,
-  passengerCodec,
   ioType({
+    driver: driverEntityCodec,
+    passenger: passengerCodec,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     kind: ioKeyof({ 'one-way': null, 'two-way': null }),
     status: ioLiteral('to-schedule'),
@@ -36,6 +38,7 @@ export const returnDriveCodec: Type<ReturnDrive> = ioIntersection([
   driveCodec,
   durationDistanceCodec,
   ioType({
+    driver: driverEntityCodec,
     status: ioLiteral('return-drive')
   })
 ]);
@@ -43,8 +46,9 @@ export const returnDriveCodec: Type<ReturnDrive> = ioIntersection([
 export const toEditCodec: Type<ToEdit> = ioIntersection([
   driveCodec,
   durationDistanceCodec,
-  passengerCodec,
   ioType({
+    driver: driverEntityCodec,
+    passenger: passengerCodec,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     kind: ioKeyof({ 'one-way': null, 'two-way': null }),
     status: ioLiteral('to-edit'),
@@ -67,10 +71,11 @@ export const pendingReturnCodec: Type<Entity & Pending> = ioIntersection([
 
 export const scheduledFareCodec: Type<Entity & Scheduled> = ioIntersection([
   entityCodec,
-  passengerCodec,
   driveCodec,
   durationDistanceCodec,
   ioType({
+    driver: driverEntityCodec,
+    passenger: passengerCodec,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     kind: ioKeyof({ 'one-way': null, 'two-way': null }),
     status: ioLiteral('scheduled'),

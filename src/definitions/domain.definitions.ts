@@ -11,7 +11,6 @@ export type Drive = {
   departure: Place;
   destination: Place;
   datetime: string;
-  driver: string;
 };
 
 export type DurationDistance = {
@@ -63,40 +62,30 @@ export type Kind = {
   kind: 'one-way' | 'two-way';
 };
 
-export type ToSchedule = Drive &
-  DurationDistance &
-  Kind &
-  Nature &
-  Passenger & {
-    status: 'to-schedule';
-  };
+export type Fare = Drive & DurationDistance & Kind & Nature & { driver: Driver & Entity } & { passenger: Passenger };
 
-export type ToEdit = Drive &
-  DurationDistance &
-  Kind &
-  Nature &
-  Passenger & {
-    status: 'to-edit';
-  };
+export type ToSchedule = Fare & {
+  status: 'to-schedule';
+};
+
+export type ToEdit = Fare & {
+  status: 'to-edit';
+};
+
+export type Scheduled = Fare & {
+  status: 'scheduled';
+};
 
 export type ReturnDrive = Drive &
   DurationDistance & {
     status: 'return-drive';
-  };
+  } & { driver: Driver & Entity };
 
 export type Pending = Drive &
   Nature &
   Passenger & {
     kind: 'two-way';
     status: 'pending-return';
-  };
-
-export type Scheduled = Drive &
-  DurationDistance &
-  Kind &
-  Nature &
-  Passenger & {
-    status: 'scheduled';
   };
 
 export type Subcontractor = {

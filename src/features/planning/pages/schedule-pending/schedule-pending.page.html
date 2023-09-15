@@ -44,9 +44,7 @@
     (formControlUpdated)="updateEstimateFields($event)"></app-estimate-journey-fields>
   <div class="mb-3">
     <label for="driver" class="form-label">Chauffeur</label>
-    <app-driver-field
-      (selectDriver)="onSelectDriverChange($event)"
-      [defaultValue]="(driverDisplay$ | async) ?? ''"></app-driver-field>
+    <app-driver-field (selectDriver)="onSelectDriverChange($event)"></app-driver-field>
     <input id="driver" type="hidden" name="driver" formControlName="driver" />
   </div>
   <button

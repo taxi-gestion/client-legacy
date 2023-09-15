@@ -1,5 +1,6 @@
-import { Entity, Pending, Place } from '@definitions';
+import { Driver, Entity, Pending, Place } from '@definitions';
 import { EstimateJourneyValues } from '../components';
+import { defaultDriverValue } from './driver.presenter';
 
 export type PendingPresentation = EstimateJourneyValues & {
   passenger: string;
@@ -7,7 +8,7 @@ export type PendingPresentation = EstimateJourneyValues & {
   departureDatetime: string;
   departurePlace: Place;
   arrivalPlace: Place;
-  driver: string;
+  driver: Driver & Entity;
 };
 
 export const toPendingReturnsForDatePresentation = (returnsToSchedule: (Entity & Pending)[]): PendingPresentation[] =>
@@ -21,5 +22,5 @@ const toPendingForDatePresentation = (pendingReturn: Entity & Pending): PendingP
   arrivalPlace: pendingReturn.destination,
   driveDuration: 0,
   driveDistance: 0,
-  driver: pendingReturn.driver
+  driver: defaultDriverValue
 });

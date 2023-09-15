@@ -7,9 +7,9 @@ import { toLocalTime } from '../../common/fares.presenter';
 import { max } from 'date-fns';
 
 export const toSchedulePendingSuccessToast = (pending: PendingScheduled): Toast => ({
-  content: `Course de retour pour ${pending.scheduledCreated.passenger} par ${pending.scheduledCreated.driver} à ${toLocalTime(
-    pending.scheduledCreated.datetime
-  )} planifiée`,
+  content: `Course de retour pour ${pending.scheduledCreated.passenger.passenger} par ${
+    pending.scheduledCreated.driver.username
+  } à ${toLocalTime(pending.scheduledCreated.datetime)} planifiée`,
   status: 'success',
   title: 'Un retour a été planifié'
 });

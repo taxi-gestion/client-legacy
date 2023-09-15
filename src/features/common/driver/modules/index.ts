@@ -1,1 +1,1 @@
-export * from './driver.service.module';
+export * from './driver.component.module';

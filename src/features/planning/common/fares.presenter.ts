@@ -6,7 +6,9 @@ import {
   timeInTimezone
 } from './unit-convertion';
 import { addMinutes, format, secondsToMinutes, subHours } from 'date-fns';
-import { Driver, Entity, Journey, Place, Scheduled } from '@definitions';
+import { Driver, Entity, Journey, Passenger, Place, Scheduled } from '@definitions';
+import { FareToScheduleValues } from '../pages/schedule-fare/schedule-fare.form';
+import { regularIdentity } from './regular.presenter';
 
 export const defaultPlaceValue: Place = {
   context: '',
@@ -25,20 +27,13 @@ export const toJourney = (formValues: { departurePlace: Place; arrivalPlace: Pla
 
 export function toDailyDriverPlanning(drivers: (Driver & Entity)[], fares: (Entity & Scheduled)[]): DailyDriverPlanning[] {
   return drivers.map((driver: Driver & Entity): DailyDriverPlanning => {
-    const associatedFares: (Entity & Scheduled)[] = fares.filter(
-      (fare: Entity & Scheduled): boolean => fare.driver === driver.identifier
-    );
+    const associatedFares: (Entity & Scheduled)[] = fares.filter((fare: Entity & Scheduled): boolean => fare.driver === driver);
     return {
       driver,
       fares: toFaresForDatePlanningSession(toScheduledFaresPresentation(associatedFares))
     };
   });
 }
-
-export const filterByPlanning =
-  (planningToKeep: string) =>
-  (faresList: ScheduledPresentation[]): ScheduledPresentation[] =>
-    faresList.filter((fare: ScheduledPresentation): boolean => fare.driver === planningToKeep);
 
 export const toScheduledFaresPresentation = (fares: (Entity & Scheduled)[]): ScheduledPresentation[] =>
   fares.map(toScheduledFarePresentation);
@@ -55,7 +50,6 @@ export const toScheduledFarePresentation = (fare: Entity & Scheduled): Scheduled
   duration: fare.duration,
   kind: fare.kind,
   nature: fare.nature,
-  phone: fare.phone.replace(' ', ''),
   driver: fare.driver,
   status: fare.status,
   datetime: fare.datetime,
@@ -71,7 +65,6 @@ export const toScheduledPlanningSession = (fare: ScheduledPresentation): Schedul
   duration: secondsToMinutes(fare.duration),
   kind: fare.kind,
   nature: fare.nature,
-  phone: fare.phone,
   driver: fare.driver,
   status: fare.status,
   datetime: fare.datetime,
@@ -83,3 +76,10 @@ export const toLocalTime = (datetime: string): string => format(new Date(datetim
 
 export const toLocalDatetimeString = (dateString: string, timeInMinutes: number): string =>
   formatDateToDatetimeLocalString(subHours(addMinutes(new Date(dateString), timeInMinutes), 2));
+
+export const regularOrStringToPassenger = (formValues: FareToScheduleValues): Passenger =>
+  typeof formValues.passenger === 'string'
+    ? { passenger: formValues.passenger, phone: formValues.phoneToCall }
+    : { passenger: regularIdentity(formValues.passenger), phone: formValues.phoneToCall };
+
+export const localDatetimeString = (): string => formatDateToDatetimeLocalString(new Date());

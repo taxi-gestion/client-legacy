@@ -59,9 +59,7 @@
   <div class="mb-3">
     <label for="driver" class="form-label">Chauffeur</label>
     <!-- TODO Find a better way to link observable to view -->
-    <app-driver-field
-      (selectDriver)="onSelectDriverChange($event)"
-      [defaultValue]="(driverDisplay$ | async) ?? ''"></app-driver-field>
+    <app-driver-field (selectDriver)="onSelectDriverChange($event)"></app-driver-field>
     <input id="driver" type="hidden" name="driver" formControlName="driver" />
   </div>
   <div class="mb-3">

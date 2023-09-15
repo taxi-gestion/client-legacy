@@ -1,15 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { keyof as ioKeyOf, keyof as ioKeyof, number as ioNumber, string as ioString, type as ioType, Type } from 'io-ts';
-import { Civility, Drive, Driver, DurationDistance, Entity, Kind, Nature, Passenger } from '../../definitions';
+import { Civility, Drive, DurationDistance, Entity, Kind, Nature, Passenger } from '../../definitions';
 import { placeCodec } from '../common';
 
 export const entityCodec: Type<Entity> = ioType({
   id: ioString
-});
-
-export const driverCodec: Type<Driver> = ioType({
-  identifier: ioString,
-  username: ioString
 });
 
 export const civilityCodec: Type<Civility> = ioKeyOf({
@@ -33,8 +28,7 @@ export const natureCodec: Type<Nature> = ioType({
 export const driveCodec: Type<Drive> = ioType({
   datetime: ioString,
   departure: placeCodec,
-  destination: placeCodec,
-  driver: ioString
+  destination: placeCodec
 });
 
 export const durationDistanceCodec: Type<DurationDistance> = ioType({

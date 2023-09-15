@@ -74,6 +74,7 @@ export const cognitoSession = (): Session => ({
     getFromJWTPayload(localStorage.getItem(ID_TOKEN_STORAGE_KEY), 'email') ??
     getFromJWTPayload(localStorage.getItem(ID_TOKEN_STORAGE_KEY), 'phone_number') ??
     '',
+  userId: (): string => getFromJWTPayload(localStorage.getItem(ID_TOKEN_STORAGE_KEY), 'sub') ?? '',
   groups: (): string[] => getFromJWTPayload(localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY), 'cognito:groups') ?? []
 });
 

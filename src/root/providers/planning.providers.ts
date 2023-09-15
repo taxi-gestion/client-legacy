@@ -3,6 +3,7 @@ import { FactoryProvider, ValueProvider } from '@angular/core';
 import {
   deleteFareActionProvider,
   deleteRegularActionProvider,
+  driverAgendaForDateQueryProvider,
   editFareActionProvider,
   editRegularActionProvider,
   pendingReturnsForDateQueryProvider,
@@ -13,6 +14,7 @@ import {
   subcontractFareActionProvider,
   validatedDeleteFareAction$,
   validatedDeleteRegularAction$,
+  validatedDriverAgendaForDateQuery$,
   validatedEditFareAction$,
   validatedEditRegularAction$,
   validatedPendingReturnsForDateQuery$,
@@ -26,7 +28,6 @@ import {
 import {
   estimateJourneyQuery$,
   estimateJourneyQueryProvider,
-  listDriversQuery$,
   listDriversQueryProvider,
   predictRecurrenceQuery$,
   predictRecurrenceQueryProvider,
@@ -35,10 +36,12 @@ import {
   searchRegularQueryProvider,
   searchRegularsQuery$
 } from '@features/common';
+import { listDriversQuery$ } from '../../features/common/driver/queries/list-drivers';
 
 export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   deleteFareActionProvider(validatedDeleteFareAction$, [HttpClient]),
   deleteRegularActionProvider(validatedDeleteRegularAction$, [HttpClient]),
+  driverAgendaForDateQueryProvider(validatedDriverAgendaForDateQuery$, [HttpClient]),
   editFareActionProvider(validatedEditFareAction$, [HttpClient]),
   editRegularActionProvider(validatedEditRegularAction$, [HttpClient]),
   estimateJourneyQueryProvider(estimateJourneyQuery$, [HttpClient]),
