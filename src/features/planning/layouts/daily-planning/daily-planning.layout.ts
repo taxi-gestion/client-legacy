@@ -12,7 +12,7 @@ import {
 } from '../../providers';
 import { Driver, Entity, Pending, Scheduled } from '@definitions';
 import { DailyDriverPlanning, ScheduledPlanningSession } from '../../common/fares.presentation';
-import { LIST_DRIVERS_QUERY, SearchDriverQuery } from '@features/common/driver';
+import { LIST_DRIVERS_QUERY, ListDriversQuery } from '@features/common/driver';
 import { paramsToDateDayString } from './daily-planning.presenter';
 import { SessionContext, SlotContext } from '../../components/planning/planning-row/planning-row.component';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
@@ -56,7 +56,7 @@ export class DailyPlanningLayout {
     this._selectedSessionContext$.asObservable();
 
   public readonly drivers$: Observable<(Driver & Entity)[]> = of([]).pipe(
-    switchMap((): Observable<(Driver & Entity)[]> => this._listDriversQuery('')),
+    switchMap((): Observable<(Driver & Entity)[]> => this._listDriversQuery()),
     take(1)
   );
 
@@ -106,7 +106,7 @@ export class DailyPlanningLayout {
     private readonly _route: ActivatedRoute,
     @Inject(SCHEDULED_FARES_FOR_DATE_QUERY) private readonly _faresForDateQuery: ScheduledFaresForDateQuery,
     @Inject(PENDING_RETURNS_FOR_DATE_QUERY) private readonly _pendingReturnsForDateQuery: PendingReturnsForDateQuery,
-    @Inject(LIST_DRIVERS_QUERY) private readonly _listDriversQuery: SearchDriverQuery
+    @Inject(LIST_DRIVERS_QUERY) private readonly _listDriversQuery: ListDriversQuery
   ) {}
 
   public async onPlanningDateChange(planningDate: string): Promise<void> {

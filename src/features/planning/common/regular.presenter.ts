@@ -1,5 +1,5 @@
 import { ValidationFailedBeforeApiCallError } from '../errors';
-import { Destination, Phone, RegularDetails } from '@definitions';
+import { Destination, Entity, Phone, RegularDetails } from '@definitions';
 import { PhoneValues } from '../components/regular/phones/phones.component';
 import { DestinationValues } from '../components';
 import { RegularValues } from './regular.presentation';
@@ -41,6 +41,20 @@ const toDestination = (destination: DestinationValues): Destination => ({
   comment: destination.comment
 });
 
-export const firstnameOrEmpty = (regular: RegularDetails): string =>
+export const firstnameOrEmpty = (regular: { firstname: string | undefined }): string =>
   regular.firstname === undefined ? '' : `${regular.firstname} `;
-export const regularIdentity = (regular: RegularDetails): string => `${firstnameOrEmpty(regular)}${regular.lastname}`;
+
+export const passengerIdentity = (passenger: Entity & Pick<RegularDetails, 'civility' | 'firstname' | 'lastname'>): string =>
+  `${passenger.civility} ${firstnameOrEmpty(passenger)}${passenger.lastname}`;
+
+export const defaultPassengerValue: Entity & RegularDetails = {
+  civility: 'Mr',
+  commentary: undefined,
+  destinations: undefined,
+  firstname: undefined,
+  home: undefined,
+  id: '',
+  lastname: '',
+  phones: undefined,
+  subcontractedClient: undefined
+};

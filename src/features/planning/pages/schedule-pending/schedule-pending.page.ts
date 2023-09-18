@@ -44,8 +44,8 @@ export class SchedulePendingPage {
   private readonly _destination$: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
   public destination$: Observable<Place> = this._destination$.asObservable();
 
-  private readonly _driverDisplay$: BehaviorSubject<string> = new BehaviorSubject<string>('');
-  public driverDisplay$: Observable<string> = this._driverDisplay$.asObservable();
+  //private readonly _driverDisplay$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  //public driverDisplay$: Observable<string> = this._driverDisplay$.asObservable();
 
   public readonly estimateJourney$: Observable<DurationDistance> = combineLatest([this._departure$, this._destination$]).pipe(
     filter(([departure, destination]: [Place, Place]): boolean => isValidPlace(departure) && isValidPlace(destination)),
@@ -75,8 +75,7 @@ export class SchedulePendingPage {
     this.schedulePendingForm.controls.pendingReturnId.setValue(pendingReturn.pendingReturnId);
     this.onSelectDepartureChange(pendingReturn.departurePlace);
     this.onSelectArrivalChange(pendingReturn.arrivalPlace);
-    // TODO Have full entity
-    this.onSelectDriverChange({ identifier: pendingReturn.driver, username: pendingReturn.driver });
+    this.onSelectDriverChange(pendingReturn.driver);
   }
 
   public onSelectDepartureChange(place: Place): void {
@@ -90,8 +89,7 @@ export class SchedulePendingPage {
   }
 
   public onSelectDriverChange(driver: Driver): void {
-    this.schedulePendingForm.controls.driver.setValue(driver.identifier);
-    this._driverDisplay$.next(driver.identifier);
+    this.schedulePendingForm.controls.driver.setValue(driver);
   }
 
   public onSubmitReturnToSchedule = (triggerAction: () => void): void => {

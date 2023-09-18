@@ -1,8 +1,9 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { defaultPlaceValue } from '../../common/fares.presenter';
-import { Place } from '@definitions';
+import { Driver, Place } from '@definitions';
 import { PendingPresentation } from '../../common';
-import { ESTIMATE_JOURNEY_FORM_CONTROLS, EstimateJourneyFields } from '../../components';
+import { EstimateJourneyFields, estimateJourneyFormControls } from '../../components';
+import { defaultDriverValue } from '../../common/driver.presenter';
 
 export type SchedulePendingFields = EstimateJourneyFields & {
   pendingReturnId: FormControl<string>;
@@ -11,7 +12,7 @@ export type SchedulePendingFields = EstimateJourneyFields & {
   arrivalPlace: FormControl<Place>;
   driveDuration: FormControl<number>;
   driveDistance: FormControl<number>;
-  driver: FormControl<string>;
+  driver: FormControl<Driver>;
 };
 
 export const SCHEDULE_RETURN_FORM: FormGroup<Record<keyof Omit<PendingPresentation, 'passenger'>, FormControl>> = new FormGroup<
@@ -21,8 +22,8 @@ export const SCHEDULE_RETURN_FORM: FormGroup<Record<keyof Omit<PendingPresentati
   departureDatetime: new FormControl<PendingPresentation['departureDatetime']>('', [Validators.required]),
   departurePlace: new FormControl<PendingPresentation['departurePlace']>(defaultPlaceValue, [Validators.required]),
   arrivalPlace: new FormControl<PendingPresentation['arrivalPlace']>(defaultPlaceValue, [Validators.required]),
-  ...ESTIMATE_JOURNEY_FORM_CONTROLS,
-  driver: new FormControl<PendingPresentation['driver']>('', [Validators.required])
+  ...estimateJourneyFormControls(),
+  driver: new FormControl<PendingPresentation['driver']>(defaultDriverValue, [Validators.required])
 });
 
 export const setSchedulePendingErrorToForm = (handledError: { field?: string; errors: Record<string, unknown> }): void =>

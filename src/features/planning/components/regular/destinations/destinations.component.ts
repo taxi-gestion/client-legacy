@@ -11,8 +11,9 @@ import {
   union as ioUnion
 } from 'io-ts';
 import { placeCodec } from '@codecs';
-import { destinationValidator, placeValidator } from './destinations.validator';
+import { destinationValidator } from './destinations.validator';
 import { BootstrapValidationClasses, bootstrapValidationClasses } from '@features/common';
+import { placeValidator } from '../../../validators/place.validator';
 
 export type DestinationsFields = FormArray<FormGroup<DestinationFields>>;
 

@@ -1,45 +1,18 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Entity, Place } from '@definitions';
-import { defaultPlaceValue } from '../../common/fares.presenter';
-import { ESTIMATE_JOURNEY_FORM_CONTROLS, EstimateJourneyFields, EstimateJourneyValues } from '../../components';
+import { Entity } from '@definitions';
+import { FareFields, fareFormControls, FareValues } from '../../common/fares.presentation';
 
-export type FareToEditPresentation = Entity &
-  EstimateJourneyValues & {
-    passenger: string;
-    phoneToCall: string;
-    departureDatetime: string;
-    departurePlace: Place;
-    arrivalPlace: Place;
-    driver: string;
-    isTwoWayDrive: boolean;
-    isMedicalDrive: boolean;
-  };
+export type FareToEditValues = Entity & FareValues;
 
-export type EditFareFields = EstimateJourneyFields & {
+export type EditFareFields = FareFields & {
   id: FormControl<string>;
-  passenger: FormControl<string>;
-  phoneToCall: FormControl<string>;
-  departureDatetime: FormControl<string>;
-  departurePlace: FormControl<Place>;
-  arrivalPlace: FormControl<Place>;
-  driver: FormControl<string>;
-  isTwoWayDrive: FormControl<boolean>;
-  isMedicalDrive: FormControl<boolean>;
 };
 
-export const EDIT_FARE_FORM: FormGroup<Record<keyof FareToEditPresentation, FormControl>> = new FormGroup<
-  Record<keyof FareToEditPresentation, FormControl>
+export const EDIT_FARE_FORM: FormGroup<Record<keyof FareToEditValues, FormControl>> = new FormGroup<
+  Record<keyof FareToEditValues, FormControl>
 >({
-  id: new FormControl<FareToEditPresentation['id']>('', [Validators.required]),
-  passenger: new FormControl<FareToEditPresentation['passenger']>('', [Validators.required]),
-  phoneToCall: new FormControl<FareToEditPresentation['phoneToCall']>('', [Validators.required]),
-  departureDatetime: new FormControl<FareToEditPresentation['departureDatetime']>('', [Validators.required]),
-  departurePlace: new FormControl<FareToEditPresentation['departurePlace']>(defaultPlaceValue, [Validators.required]),
-  arrivalPlace: new FormControl<FareToEditPresentation['arrivalPlace']>(defaultPlaceValue, [Validators.required]),
-  ...ESTIMATE_JOURNEY_FORM_CONTROLS,
-  driver: new FormControl<FareToEditPresentation['driver']>('', [Validators.required]),
-  isTwoWayDrive: new FormControl<FareToEditPresentation['isTwoWayDrive']>(true, [Validators.required]),
-  isMedicalDrive: new FormControl<FareToEditPresentation['isMedicalDrive']>(true, [Validators.required])
+  id: new FormControl<FareToEditValues['id']>('', [Validators.required]),
+  ...fareFormControls()
 });
 
 export const setEditFareErrorToForm = (handledError: { field?: string; errors: Record<string, unknown> }): void =>
