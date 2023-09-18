@@ -10,7 +10,7 @@ import { ValidationFailedAfterApiCallError } from '../../errors';
 export const validatedDriverAgendaForDateQuery$ =
   (httpClient: HttpClient): DriverAgendaForDateQuery =>
   ({ driver, date }: { driver: Entity; date: string }): Observable<(Entity & Scheduled)[]> =>
-    httpClient.get<unknown>(`/api/agenda/${driver.id}/${date}`).pipe(
+    httpClient.get<unknown>(`/api/driver-agenda/${driver.id}/${date}`).pipe(
       map(scheduledFaresValidation),
       catchError(
         (error: Error | HttpErrorResponse, caught: Observable<(Entity & Scheduled)[]>): Observable<never> =>
