@@ -1,8 +1,8 @@
 import { ValidationFailedBeforeApiCallError } from '../errors';
-import { Destination, Entity, Phone, RegularDetails } from '@definitions';
-import { PhoneValues } from '../components/regular/phones/phones.component';
+import { Destination, Entity, RegularDetails } from '@definitions';
 import { DestinationValues } from '../components';
 import { RegularValues } from './regular.presentation';
+import { toPhone } from '../../common/phone';
 
 export const throwDecodeError = (codecName: string, rawFormValues: unknown) => (): never => {
   throw new ValidationFailedBeforeApiCallError(
@@ -25,12 +25,6 @@ export const toRegularDetails = (formValues: RegularValues): RegularDetails => (
     formValues.subcontractedClient === undefined || isEmptyOrWhitespace(formValues.subcontractedClient)
       ? undefined
       : formValues.subcontractedClient
-});
-
-const toPhone = (phoneNumberValue: PhoneValues): Phone => ({
-  type: phoneNumberValue.phoneType,
-  // eslint-disable-next-line id-denylist
-  number: phoneNumberValue.phoneNumber
 });
 
 const toDestination = (destination: DestinationValues): Destination => ({

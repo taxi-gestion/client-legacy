@@ -1,13 +1,13 @@
 import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
-import { Destination, Entity, Phone, RegularDeleted, RegularDetails, RegularEdited } from '@definitions';
+import { Destination, Entity, RegularDeleted, RegularDetails, RegularEdited } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
-import { PhoneValues } from '../../components/regular/phones/phones.component';
 import { DestinationValues } from '../../components';
 import { editRegularFormCodec, EditRegularValues } from './edit-regular.form';
 import { fold as eitherFold } from 'fp-ts/Either';
 import { pipe as fpPipe } from 'fp-ts/function';
 import { entityCodec } from '@codecs';
 import { passengerIdentity, throwDecodeError, toRegularDetails } from '../../common/regular.presenter';
+import { toPhoneValues } from '../../../common/phone';
 
 export const toEditRegular = (rawFormValues: unknown): Entity & RegularDetails =>
   fpPipe(
@@ -38,7 +38,7 @@ export const toEditRegularPresentation = (regular: Entity & RegularDetails): Edi
   civility: regular.civility,
   firstname: regular.firstname,
   lastname: regular.lastname,
-  phones: regular.phones?.map(toPhoneNumbers),
+  phones: regular.phones?.map(toPhoneValues),
   homeAddress: regular.home,
   commentary: regular.commentary,
   destinations: regular.destinations?.map(toDestinationValues),
@@ -48,12 +48,6 @@ export const toEditRegularPresentation = (regular: Entity & RegularDetails): Edi
 const toDomain = (formValues: EditRegularValues): Entity & RegularDetails => ({
   id: formValues.regularId,
   ...toRegularDetails(formValues)
-});
-
-export const toPhoneNumbers = (phone: Phone): PhoneValues => ({
-  phoneType: phone.type,
-  // eslint-disable-next-line id-denylist
-  phoneNumber: phone.number
 });
 
 export const toDestinationValues = (destination: Destination): DestinationValues => ({

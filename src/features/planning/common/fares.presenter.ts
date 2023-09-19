@@ -9,6 +9,7 @@ import { addMinutes, format, secondsToMinutes, subHours } from 'date-fns';
 import { Driver, Entity, Journey, Passenger, Place, RegularDetails, Scheduled } from '@definitions';
 import { FareToScheduleValues } from '../pages/schedule-fare/schedule-fare.form';
 import { passengerIdentity } from './regular.presenter';
+import { toPhone } from '../../common/phone';
 
 export const defaultPlaceValue: Place = {
   context: '',
@@ -25,9 +26,10 @@ export const toJourney = (formValues: { departurePlace: Place; arrivalPlace: Pla
   departureTime: datetimeLocalToIso8601UTCString(formValues.departureDatetime)
 });
 
-function matchDriver(driver: Driver & Entity) {
-  return (fare: Entity & Scheduled): boolean => fare.driver.id === driver.id;
-}
+const matchDriver =
+  (driver: Driver & Entity) =>
+  (fare: Entity & Scheduled): boolean =>
+    fare.driver.id === driver.id;
 
 export function toDailyDriverPlanning(drivers: (Driver & Entity)[], fares: (Entity & Scheduled)[]): DailyDriverPlanning[] {
   return drivers.map((driver: Driver & Entity): DailyDriverPlanning => {
@@ -84,9 +86,7 @@ export const toLocalDatetimeString = (dateString: string, timeInMinutes: number)
 export const regularToPassenger = (formValues: FareToScheduleValues): Entity & Passenger => ({
   id: formValues.passenger.id,
   identity: passengerIdentity(formValues.passenger),
-  // TODO Finish to adapt phone field
-  // eslint-disable-next-line id-denylist
-  phone: { type: 'tel', number: formValues.phoneToCall }
+  phone: toPhone(formValues.phoneToCall)
 });
 
 export const localDatetimeString = (): string => formatDateToDatetimeLocalString(new Date());

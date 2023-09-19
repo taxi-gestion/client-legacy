@@ -31,16 +31,12 @@
     </div>
   </div>
   <ng-container *ngIf="(regular$ | async) as regular">
-    <div class="mb-3" formControlErrors="phoneToCall">
-      <label for="phoneToCall" class="form-label">Téléphone à appeler</label>
-      <input
-        id="phoneToCall"
-        type="text"
-        placeholder="(+33)/(0) 6 XX XX XX XX"
-        class="form-control"
-        name="phoneToCall"
-        formControlName="phoneToCall"
-        [ngClass]="validation(scheduleFareForm.controls.phoneToCall)" />
+    <div class="mb-3">
+      <label class="form-label">Téléphone à appeler</label>
+      <app-phone-field
+        [phoneFieldControl]="scheduleFareForm.controls.phoneToCall"
+        [phone]="regular.phone"
+        [prefilled]="regular.phones"></app-phone-field>
     </div>
     <div class="mb-3" formControlErrors="departureDatetime">
       <!-- TODO: Create sub-component -->
