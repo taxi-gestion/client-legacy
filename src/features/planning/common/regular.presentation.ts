@@ -1,10 +1,10 @@
 import { Civility, Place } from '@definitions';
 import { DestinationsFields, destinationsFormControls, DestinationValues, destinationValuesCodec } from '../components';
-import { PhonesFields, phonesFormControls, PhoneValues, phoneValuesCodec } from '../components/regular/phones/phones.component';
 import { array as ioArray, string as ioString, type as ioType, Type, undefined as ioUndefined, union as ioUnion } from 'io-ts';
 import { civilityCodec, placeCodec } from '@codecs';
 import { FormControl, Validators } from '@angular/forms';
 import { RegisterRegularValues } from '../pages/register-regular/register-regular.form';
+import { PhonesFields, phonesFormControls, PhoneValues, phoneValuesCodec } from '../../common/phone';
 
 export const DEFAULT_CIVILITY: Civility = 'Mr';
 

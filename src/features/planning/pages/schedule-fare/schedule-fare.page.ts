@@ -38,12 +38,13 @@ import {
 } from '@features/common';
 import { DestinationValues, EstimateJourneyValues } from '../../components';
 import { toDisplayDurationDistance } from '../../common/unit-convertion';
-import { PhoneValues } from '../../components/regular/phones/phones.component';
+import { PhoneValues, toPhonesValues } from '../../../common/phone';
 
-type RegularInitialValues = {
+type RegularValues = {
   phone: PhoneValues | undefined;
   destination: DestinationValues | undefined;
   departure: Place | undefined;
+  phones: PhoneValues[];
 };
 
 @Component({
@@ -81,17 +82,18 @@ export class ScheduleFarePage {
     this.scheduleFareForm.controls.passenger.setValue(regular);
   }
 
-  public regular$: Observable<RegularInitialValues> = this._regular$.asObservable().pipe(
+  public regular$: Observable<RegularValues> = this._regular$.asObservable().pipe(
     tap(updateRegularLinkedControls(this.scheduleFareForm)),
     map(
-      (regular: Entity & RegularDetails): RegularInitialValues => ({
+      (regular: Entity & RegularDetails): RegularValues => ({
         phone: toFirstPhone(regular),
         destination: toFirstDestination(regular),
-        departure: regular.home
+        departure: regular.home,
+        phones: toPhonesValues(regular.phones)
       })
     ),
     // TODO This may probably be improved
-    tap((regularInitialValues: RegularInitialValues): void => {
+    tap((regularInitialValues: RegularValues): void => {
       this._departure$.next(regularInitialValues.departure ?? defaultPlaceValue);
       this._destination$.next(regularInitialValues.destination?.place ?? defaultPlaceValue);
     })

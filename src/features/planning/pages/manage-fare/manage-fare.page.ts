@@ -36,6 +36,7 @@ import { EstimateJourneyValues } from '../../components';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common';
 import { formatSubcontractFareError, toFareToSubcontract, toSubcontractFareSuccessToast } from './subcontract-fare.presenter';
 import { setSubcontractFareErrorToForm, SUBCONTRACT_FARE_FORM, SubcontractFareFields } from './subcontract-fare.form';
+import { phoneEmptyValue, toPhoneValues } from '../../../common/phone';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -149,7 +150,9 @@ export class ManageFarePage {
   //region formEvents
   public onSelectRegularChange(regular: Entity & RegularDetails): void {
     this.editFareForm.controls.passenger.setValue(toFormPassenger(regular));
-    this.editFareForm.controls.phoneToCall.setValue(regular.phones?.[0]?.number ?? '');
+    this.editFareForm.controls.phoneToCall.setValue(
+      regular.phones?.[0] === undefined ? phoneEmptyValue : toPhoneValues(regular.phones[0])
+    );
     // TODO Adapt Regular
   }
 
@@ -200,7 +203,7 @@ export class ManageFarePage {
     // TODO Fix
     //this.editFareForm.controls.passenger.setValue(selectedSession.sessionContext.passenger);
     // TODO Adapt phoneToCall field
-    this.editFareForm.controls.phoneToCall.setValue(selectedSession.sessionContext.passenger.phone.number);
+    this.editFareForm.controls.phoneToCall.setValue(toPhoneValues(selectedSession.sessionContext.passenger.phone));
     this.editFareForm.controls.departureDatetime.setValue(
       formatDateToDatetimeLocalString(new Date(selectedSession.sessionContext.datetime))
     );

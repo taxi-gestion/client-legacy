@@ -1,0 +1,56 @@
+<form [formGroup]="formGroup">
+  <div formControlErrors="search">
+    <label [for]="search" class="visually-hidden"><ng-content></ng-content></label>
+    <div class="input-group">
+      <span class="input-group-text pe-0">
+        <i class="text-muted ri-search-line" aria-hidden="true"></i>
+      </span>
+      <input
+        #templatedInput
+        type="search"
+        [placeholder]="placeholder"
+        [name]="search"
+        [id]="search"
+        class="form-control border-start-0 position-relative"
+        [ngClass]="validation(formGroup.controls.search)"
+        autocomplete="off"
+        aria-haspopup="true"
+        formControlName="search"
+        [attr.aria-expanded]="resultsDropdown.expanded$ | async"
+        (input)="
+          search(templatedInput.value);
+          templatedInput.value.length >= minSearchTermLength ? resultsDropdown.expand() : resultsDropdown.reduce()
+        "
+        (focus)="
+          initResults();
+          templatedInput.value.length >= minSearchTermLength ? resultsDropdown.expand() : resultsDropdown.reduce()
+        "
+        (keyup.escape)="resultsDropdown.reduce()"
+        (keyup.enter)="resultsDropdown.activeIndex = 0; resultsDropdown.focus()" />
+      <ng-content></ng-content>
+    </div>
+    <ul
+      #resultsDropdown="autocompleteResultsDropdown"
+      appAutocompleteResultsDropdown
+      [dropdownControl]="templatedInput"
+      [class.show]="resultsDropdown.expanded$ | async"
+      class="dropdown-menu position-sticky mt-1"
+      aria-labelledby="place">
+      <li #results *ngFor="let templatedValue of (found$ | async) ?? []; index as placeIndex; trackBy: toTrackBy">
+        <button
+          type="button"
+          class="dropdown-item"
+          [class.active]="resultsDropdown.activeIndex === placeIndex"
+          [attr.aria-current]="resultsDropdown.activeIndex === placeIndex ? true : null"
+          (focusin)="resultsDropdown.setIndex(placeIndex)"
+          (focusout)="resultsDropdown.setIndex(-1)"
+          (click)="setSuggestion(templatedValue); resultsDropdown.reduce()">
+          <ng-container *ngTemplateOutlet="resultTemplate; context: { $implicit: templatedValue }"></ng-container>
+        </button>
+      </li>
+    </ul>
+    <ng-container *ngIf="selected$ | async as selectedValue">
+      <ng-container *ngTemplateOutlet="selectedValueTemplate; context: { $implicit: selectedValue }"></ng-container>
+    </ng-container>
+  </div>
+</form>

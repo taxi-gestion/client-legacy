@@ -1,0 +1,24 @@
+<app-autocomplete-field
+  placeholder="Sélectionner un numéro de téléphone"
+  [emptyValue]="phoneEmptyValue"
+  [toSearchTerm]="toSearchTerm"
+  [toTrackBy]="toTrackBy"
+  [query]="query"
+  [formGroup]="searchFormGroup"
+  [validator]="phoneValuesValidator"
+  [revalidate]="phoneFieldControl.statusChanges | async"
+  [prefilled]="prefilled"
+  [resultFilter]="resultsFilter"
+  [setDefaultSelectedValue]="defaultValue">
+  <ng-template #resultTemplate let-templatedValue>
+    <b>{{ templatedValue.phoneType }}</b>
+    -
+    <b>{{ templatedValue.phoneNumber }}</b>
+  </ng-template>
+  <ng-template #selectedValueTemplate let-selectedValue>
+    <ng-container *ngIf="selectedValue.phoneType === ''"><small>Pas de téléphone sélectionné</small></ng-container>
+    <ng-container *ngIf="selectedValue.phoneType !== ''">
+      <small>Téléphone sélectionné: {{ selectedValue.phoneType }}</small>
+    </ng-container>
+  </ng-template>
+</app-autocomplete-field>

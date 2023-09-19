@@ -1,29 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { phoneNumberValidator } from './phones.validator';
-import { string as ioString, type as ioType, Type } from 'io-ts';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BootstrapValidationClasses, bootstrapValidationClasses } from '@features/common';
-
-export type PhonesFields = FormArray<FormGroup<PhoneFields>>;
-
-export type PhoneFields = {
-  phoneType: FormControl<PhoneValues['phoneType'] | null>;
-  phoneNumber: FormControl<PhoneValues['phoneNumber'] | null>;
-};
-
-export type PhoneValues = {
-  phoneType: string;
-  phoneNumber: string;
-};
-
-export const phoneValuesCodec: Type<PhoneValues> = ioType({
-  phoneType: ioString,
-  phoneNumber: ioString
-});
-
-export const phonesFormControls = (): Record<keyof { phones: PhonesFields }, PhonesFields> => ({
-  phones: new FormArray<FormGroup<PhoneFields>>([])
-});
+import { PhoneValues } from '../../definitions/phone.definition';
+import { PhoneFields, PhonesFields } from './phones.form';
+import { phoneNumberValidator } from '../../validators';
 
 @Component({
   selector: 'app-phones',

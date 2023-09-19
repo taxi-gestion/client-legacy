@@ -5,13 +5,14 @@ import { FareFields, fareFormControls, FareValues } from '../../common/fares.pre
 export type FareToEditValues = Entity & FareValues;
 
 export type EditFareFields = FareFields & {
-  id: FormControl<string>;
+  id: FormControl<FareToEditValues['id']>;
 };
 
-export const EDIT_FARE_FORM: FormGroup<Record<keyof FareToEditValues, FormControl>> = new FormGroup<
-  Record<keyof FareToEditValues, FormControl>
->({
-  id: new FormControl<FareToEditValues['id']>('', [Validators.required]),
+export const EDIT_FARE_FORM: FormGroup<EditFareFields> = new FormGroup<EditFareFields>({
+  id: new FormControl<FareToEditValues['id']>('', {
+    nonNullable: true,
+    validators: [Validators.required]
+  }),
   ...fareFormControls()
 });
 

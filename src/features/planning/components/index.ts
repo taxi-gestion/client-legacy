@@ -6,7 +6,6 @@ import { FarePlanningSessionComponent } from './fares/fare-planning-session/fare
 import { FareCardComponent } from './fares/fare-card/fare-card.component';
 import { PendingReturnFieldComponent } from './fares/pending-return-field/pending-return-field.component';
 import { PendingReturnResultsDropdownComponent } from './fares/pending-return-results-dropdown/pending-return-results-dropdown.component';
-import { PhonesComponent } from './regular/phones/phones.component';
 import { DestinationsComponent } from './regular/destinations/destinations.component';
 
 export * from './fares/fields';
@@ -22,6 +21,5 @@ export const COMPONENTS = [
   PendingReturnFieldComponent,
   PendingReturnResultsDropdownComponent,
   EstimateJourneyFieldsComponent,
-  PhonesComponent,
   DestinationsComponent
 ];

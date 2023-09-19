@@ -5,3 +5,4 @@ export * from './regular';
 export * from './place';
 export * from './recurrence';
 export * from './form-validation';
+export * from './autocomplete';

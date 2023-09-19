@@ -18,8 +18,8 @@ import { driverEntityCodec } from '../../../codecs/domain/driver.codecs';
 import { defaultDriverValue } from './driver.presenter';
 import { placeValidator } from '../validators/place.validator';
 import { notEmptyDriverValidator } from '../validators/driver.validator';
-import { phoneNumberValidator } from '../components/regular/phones/phones.validator';
 import { defaultPassengerValue } from './regular.presenter';
+import { PhoneField, phoneFieldFormControl, PhoneValues, phoneValuesCodec } from '../../common/phone';
 
 export type DailyDriverPlanning = {
   driver: Driver & Entity;
@@ -32,7 +32,7 @@ export type ScheduledPlanningSession = PlanningSession & ScheduledPresentation;
 
 export type FareValues = EstimateJourneyValues & {
   passenger: Entity & Pick<RegularDetails, 'civility' | 'firstname' | 'lastname'>;
-  phoneToCall: string;
+  phoneToCall: PhoneValues;
   departureDatetime: string;
   departurePlace: Place;
   arrivalPlace: Place;
@@ -50,7 +50,7 @@ export const fareFormCodec: Type<FareValues> = ioType({
       lastname: ioString
     })
   ]),
-  phoneToCall: ioString,
+  phoneToCall: phoneValuesCodec,
   departureDatetime: ioString,
   departurePlace: placeCodec,
   driveDuration: ioNumber,
@@ -61,16 +61,16 @@ export const fareFormCodec: Type<FareValues> = ioType({
   isMedicalDrive: ioBoolean
 });
 
-export type FareFields = EstimateJourneyFields & {
-  passenger: FormControl<FareValues['passenger']>;
-  phoneToCall: FormControl<FareValues['phoneToCall']>;
-  departureDatetime: FormControl<FareValues['departureDatetime']>;
-  departurePlace: FormControl<FareValues['departurePlace']>;
-  arrivalPlace: FormControl<FareValues['arrivalPlace']>;
-  driver: FormControl<FareValues['driver']>;
-  isTwoWayDrive: FormControl<FareValues['isTwoWayDrive']>;
-  isMedicalDrive: FormControl<FareValues['isMedicalDrive']>;
-};
+export type FareFields = EstimateJourneyFields &
+  PhoneField<'phoneToCall'> & {
+    passenger: FormControl<FareValues['passenger']>;
+    departureDatetime: FormControl<FareValues['departureDatetime']>;
+    departurePlace: FormControl<FareValues['departurePlace']>;
+    arrivalPlace: FormControl<FareValues['arrivalPlace']>;
+    driver: FormControl<FareValues['driver']>;
+    isTwoWayDrive: FormControl<FareValues['isTwoWayDrive']>;
+    isMedicalDrive: FormControl<FareValues['isMedicalDrive']>;
+  };
 
 // eslint-disable-next-line max-lines-per-function
 export const fareFormControls = (): FareFields => ({
@@ -78,10 +78,7 @@ export const fareFormControls = (): FareFields => ({
     nonNullable: true,
     validators: [Validators.required]
   }),
-  phoneToCall: new FormControl<FareValues['phoneToCall']>('', {
-    nonNullable: true,
-    validators: [Validators.required, phoneNumberValidator]
-  }),
+  ...phoneFieldFormControl('phoneToCall'),
   departureDatetime: new FormControl<FareValues['departureDatetime']>('', {
     nonNullable: true,
     validators: [Validators.required]

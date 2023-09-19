@@ -7,11 +7,11 @@ import { defaultPlaceValue, regularToPassenger, toFormPassenger, toLocalTime } f
 import { pipe as fpPipe } from 'fp-ts/function';
 import { fold as eitherFold } from 'fp-ts/Either';
 import { throwDecodeError } from '../../common/regular.presenter';
-import { PhoneValues } from '../../components/regular/phones/phones.component';
-import { toDestinationValues, toPhoneNumbers } from '../manage-regular/manage-regular.presenter';
+import { toDestinationValues } from '../manage-regular/manage-regular.presenter';
 import { DestinationValues } from '../../components';
 import { FormGroup } from '@angular/forms';
 import { FareFields } from '../../common/fares.presentation';
+import { PhoneValues, toPhoneValues } from '../../../common/phone';
 
 export const toScheduleFareSuccessToast = (fares: FaresScheduled): Toast => ({
   content: `Course pour ${fares.scheduledCreated.passenger.identity} par ${
@@ -44,8 +44,6 @@ export const updateRegularLinkedControls =
   (form: FormGroup<FareFields>) =>
   (regular: Entity & RegularDetails): void => {
     form.controls.passenger.setValue(toFormPassenger(regular));
-    // TODO Adapt phone field
-    form.controls.phoneToCall.setValue(toFirstPhone(regular)?.phoneNumber ?? '');
     form.controls.departurePlace.setValue(regular.home ?? defaultPlaceValue);
     const firstDestination: DestinationValues | undefined = toFirstDestination(regular);
     form.controls.arrivalPlace.setValue(firstDestination?.place ?? defaultPlaceValue);
@@ -55,7 +53,7 @@ export const updateRegularLinkedControls =
 
 export const toFirstPhone = (regular: RegularDetails): PhoneValues | undefined =>
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  regular.phones === undefined || regular.phones.length === 0 ? undefined : toPhoneNumbers(regular.phones.at(0)!);
+  regular.phones === undefined || regular.phones.length === 0 ? undefined : toPhoneValues(regular.phones.at(0)!);
 
 export const toFirstDestination = (regular: RegularDetails): DestinationValues | undefined =>
   regular.destinations === undefined || regular.destinations.length === 0
