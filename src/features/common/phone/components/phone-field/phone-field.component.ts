@@ -29,16 +29,15 @@ export class PhoneFieldComponent {
     search: new FormControl<string>('', { nonNullable: true, validators: [] })
   });
 
-  // TODO Is this input necessary ?
   @Input() public set phone(phone: (PhoneValues | undefined) | null) {
-    phone != null && this.onPhoneReceived(phone);
+    phone !== null && this.onPhoneReceived(phone ?? phoneEmptyValue);
   }
 
-  public onPhoneReceived(phoneNumberValue: PhoneValues): void {
+  public onPhoneReceived(phoneNumberValue: PhoneValues | undefined): void {
     this.defaultValue = phoneNumberValue;
   }
 
-  public defaultValue: PhoneValues = phoneEmptyValue;
+  public defaultValue: PhoneValues | undefined = phoneEmptyValue;
 
   public phoneEmptyValue: PhoneValues = phoneEmptyValue;
 
