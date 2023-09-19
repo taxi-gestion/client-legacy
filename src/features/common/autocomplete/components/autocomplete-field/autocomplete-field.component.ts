@@ -38,6 +38,10 @@ export class AutocompleteFieldComponent<TValue> {
   @Input({ required: true }) public formGroup!: FormGroup<{ search: FormControl<string> }>;
 
   @Input() public set setDefaultSelectedValue(value: (TValue | undefined) | null) {
+    if (value === null) return;
+
+    if (value === undefined) this.formGroup.reset();
+
     value != null && this.setSuggestion(value);
   }
 
