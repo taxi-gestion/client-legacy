@@ -1,8 +1,9 @@
 import { ValidationFailedBeforeApiCallError } from '../errors';
 import { Destination, Entity, RegularDetails } from '@definitions';
-import { DestinationValues } from '../components';
 import { RegularValues } from './regular.presentation';
-import { toPhone } from '../../common/phone';
+import { toPhone } from '@features/common/phone';
+import { DestinationValues } from '@features/common/destination';
+import { PlaceValues } from '@features/common/place';
 
 export const throwDecodeError = (codecName: string, rawFormValues: unknown) => (): never => {
   throw new ValidationFailedBeforeApiCallError(
@@ -17,7 +18,7 @@ export const toRegularDetails = (formValues: RegularValues): RegularDetails => (
   firstname: formValues.firstname,
   lastname: formValues.lastname,
   phones: formValues.phones?.map(toPhone),
-  home: formValues.homeAddress,
+  home: formValues.homeAddress === undefined ? undefined : setHomeLabel(formValues.homeAddress),
   commentary:
     formValues.commentary === undefined || isEmptyOrWhitespace(formValues.commentary) ? undefined : formValues.commentary,
   destinations: formValues.destinations?.map(toDestination),
@@ -25,6 +26,11 @@ export const toRegularDetails = (formValues: RegularValues): RegularDetails => (
     formValues.subcontractedClient === undefined || isEmptyOrWhitespace(formValues.subcontractedClient)
       ? undefined
       : formValues.subcontractedClient
+});
+
+const setHomeLabel = (home: PlaceValues): PlaceValues => ({
+  ...home,
+  label: 'Domicile'
 });
 
 const toDestination = (destination: DestinationValues): Destination => ({

@@ -1,5 +1,6 @@
-type FormControlErrorsNames = 'place';
+type FormControlErrorsNames = 'place' | 'search';
 
 export const PLACE_FORM_CONTROL_ERROR_MESSAGES: Record<FormControlErrorsNames, (controlValue: unknown) => string> = {
-  place: (): string => `L'adresse est invalide`
+  place: (controlValue: unknown): string => `L'adresse "${String(controlValue)}" est invalide`,
+  search: (controlValue: unknown): string => `L'adresse "${String(controlValue)}" est invalide`
 };

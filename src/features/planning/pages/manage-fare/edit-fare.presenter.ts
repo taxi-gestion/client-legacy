@@ -6,6 +6,8 @@ import { datetimeLocalToIso8601UTCString, kilometersToMeters, minutesToSeconds }
 import { FareToEditValues } from './edit-fare.form';
 import { SessionContext } from '../../components/planning/planning-row/planning-row.component';
 import { DailyDriverPlanning, ScheduledPlanningSession } from '../../common/fares.presentation';
+import { toPlace } from '@features/common/place';
+import { toDriver } from '../../../common/driver/driver.presenter';
 
 export const passengerFromContext = (context: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>): string =>
   //TODO Verify if ok
@@ -22,11 +24,11 @@ export const toEditFareSuccessToast = (fares: FaresEdited): Toast => ({
 export const toFareToEdit = (formValues: FareToEditValues): Entity & ToEdit => ({
   id: formValues.id,
   //recurrence: formValues.recurrence,
-  destination: formValues.arrivalPlace,
+  destination: toPlace(formValues.arrivalPlace.place),
   datetime: datetimeLocalToIso8601UTCString(formValues.departureDatetime),
-  departure: formValues.departurePlace,
+  departure: toPlace(formValues.departurePlace),
   distance: kilometersToMeters(formValues.driveDistance),
-  driver: formValues.driver,
+  driver: toDriver(formValues.driver),
   duration: minutesToSeconds(formValues.driveDuration),
   kind: formValues.isTwoWayDrive ? 'two-way' : 'one-way',
   nature: formValues.isMedicalDrive ? 'medical' : 'standard',

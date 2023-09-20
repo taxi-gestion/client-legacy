@@ -33,10 +33,10 @@ import { toDeleteFareSuccessToast } from './delete-fare.presenter';
 import { defaultPlaceValue, toFormPassenger, toJourney } from '../../common/fares.presenter';
 import { formatDateToDatetimeLocalString, toDisplayDurationDistance } from '../../common/unit-convertion';
 import { EstimateJourneyValues } from '../../components';
-import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common';
+import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common/journey';
 import { formatSubcontractFareError, toFareToSubcontract, toSubcontractFareSuccessToast } from './subcontract-fare.presenter';
 import { setSubcontractFareErrorToForm, SUBCONTRACT_FARE_FORM, SubcontractFareFields } from './subcontract-fare.form';
-import { phoneEmptyValue, toPhoneValues } from '../../../common/phone';
+import { phoneEmptyValue, toPhoneValues } from '@features/common/phone';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -76,7 +76,7 @@ export class ManageFarePage {
   //TODO Type to Observable<Error | Entity & Scheduled>
   public readonly editFare$ = (): Observable<FaresEdited> =>
     // TODO Had to use EDIT_FARE_FORM.getRawValue() instead of EDIT_FARE_FORM.value for the latest controls value to be retreived
-    this._editFareAction$(toFareToEdit(EDIT_FARE_FORM.getRawValue() as FareToEditValues));
+    this._editFareAction$(toFareToEdit(EDIT_FARE_FORM.getRawValue() as unknown as FareToEditValues));
 
   public onSubmitFareToEdit = (triggerAction: () => void): void => {
     EDIT_FARE_FORM.markAllAsTouched();
@@ -99,11 +99,11 @@ export class ManageFarePage {
   public readonly subcontractFareForm: FormGroup<SubcontractFareFields> = SUBCONTRACT_FARE_FORM;
 
   public readonly subcontractFare$ = (): Observable<FaresSubcontracted> =>
-    // TODO Had to use SUBCONTRACT_FARE_FORM.getRawValue() instead of SUBCONTRACT_FARE_FORM.value for the latest controls value to be retreived
+    // TODO REFACTOR
     this._subcontractFareAction$(
       toFareToSubcontract(
         SUBCONTRACT_FARE_FORM.getRawValue() as { subcontractor: string },
-        EDIT_FARE_FORM.getRawValue() as FareToEditValues
+        EDIT_FARE_FORM.getRawValue() as unknown as FareToEditValues
       )
     );
 
@@ -156,16 +156,6 @@ export class ManageFarePage {
     // TODO Adapt Regular
   }
 
-  public onSelectDepartureChange(place: Place): void {
-    this.editFareForm.controls.departurePlace.setValue(place);
-    this._departure$.next(place);
-  }
-
-  public onSelectArrivalChange(place: Place): void {
-    this.editFareForm.controls.arrivalPlace.setValue(place);
-    this._destination$.next(place);
-  }
-
   public onSelectDriverChange(driver: Driver & Entity): void {
     this.editFareForm.controls.driver.setValue(driver);
     this._driverDisplay$.next(driver.identifier);
@@ -177,7 +167,8 @@ export class ManageFarePage {
     filter(([departure, destination]: [Place, Place]): boolean => isValidPlace(departure) && isValidPlace(destination)),
     switchMap(
       (): Observable<JourneyEstimate> =>
-        this._estimateJourneyQuery$(toJourney(EDIT_FARE_FORM.getRawValue() as FareToEditValues))
+        // TODO REFACTOR
+        this._estimateJourneyQuery$(toJourney(EDIT_FARE_FORM.getRawValue() as unknown as FareToEditValues))
     ),
     map(toDisplayDurationDistance)
   );
@@ -208,7 +199,7 @@ export class ManageFarePage {
       formatDateToDatetimeLocalString(new Date(selectedSession.sessionContext.datetime))
     );
     this.editFareForm.controls.departurePlace.setValue(selectedSession.sessionContext.departure);
-    this.editFareForm.controls.arrivalPlace.setValue(selectedSession.sessionContext.destination);
+    //this.editFareForm.controls.arrivalPlace.setValue(selectedSession.sessionContext.destination);
     this.editFareForm.controls.driveDuration.setValue(selectedSession.sessionContext.duration);
     this.editFareForm.controls.driveDistance.setValue(selectedSession.sessionContext.distance);
     this.editFareForm.controls.driver.setValue(selectedSession.sessionContext.driver);

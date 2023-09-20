@@ -1,5 +1,5 @@
 import { PlanningSession } from '../components/planning/planning-row/planning-row.component';
-import { Driver, Entity, Place, RegularDetails, Scheduled } from '@definitions';
+import { Driver, Entity, RegularDetails, Scheduled } from '@definitions';
 import {
   boolean as ioBoolean,
   intersection as ioIntersection,
@@ -10,16 +10,22 @@ import {
   undefined as ioUndefined,
   union as ioUnion
 } from 'io-ts';
-import { civilityCodec, entityCodec, placeCodec } from '@codecs';
-import { DestinationValues, EstimateJourneyFields, estimateJourneyFormControls, EstimateJourneyValues } from '../components';
+import { civilityCodec, entityCodec } from '@codecs';
+import { EstimateJourneyFields, estimateJourneyFormControls, EstimateJourneyValues } from '../components';
 import { FormControl, Validators } from '@angular/forms';
-import { defaultPlaceValue } from './fares.presenter';
-import { driverEntityCodec } from '../../../codecs/domain/driver.codecs';
-import { defaultDriverValue } from './driver.presenter';
-import { placeValidator } from '../validators/place.validator';
-import { notEmptyDriverValidator } from '../validators/driver.validator';
 import { defaultPassengerValue } from './regular.presenter';
-import { PhoneField, phoneFieldFormControl, PhoneValues, phoneValuesCodec } from '../../common/phone';
+import { PhoneField, phoneFieldFormControl, PhoneValues, phoneValuesCodec } from '@features/common/phone';
+import { PlaceField, placeFieldFormControl } from '../../common/place/components/place-field/place-field.form';
+import { placeValuesCodec } from '../../common/place/codecs';
+import { PlaceValues } from '@features/common/place';
+import {
+  DestinationField,
+  destinationFieldFormControl,
+  DestinationValues,
+  destinationValuesCodec
+} from '@features/common/destination';
+import { DriverField, driverFieldFormControl } from '../../common/driver/components/driver-field/driver-field.form';
+import { DriverValues, driverValuesCodec } from '@features/common/driver';
 
 export type DailyDriverPlanning = {
   driver: Driver & Entity;
@@ -31,12 +37,13 @@ export type ScheduledPresentation = Entity & Scheduled & { localTime: string };
 export type ScheduledPlanningSession = PlanningSession & ScheduledPresentation;
 
 export type FareValues = EstimateJourneyValues & {
+  // TODO Replace with Values type
   passenger: Entity & Pick<RegularDetails, 'civility' | 'firstname' | 'lastname'>;
   phoneToCall: PhoneValues;
   departureDatetime: string;
-  departurePlace: Place;
-  arrivalPlace: Place;
-  driver: Driver & Entity;
+  departurePlace: PlaceValues;
+  arrivalPlace: DestinationValues;
+  driver: DriverValues;
   isTwoWayDrive: boolean;
   isMedicalDrive: boolean;
 };
@@ -52,22 +59,23 @@ export const fareFormCodec: Type<FareValues> = ioType({
   ]),
   phoneToCall: phoneValuesCodec,
   departureDatetime: ioString,
-  departurePlace: placeCodec,
+  departurePlace: placeValuesCodec,
   driveDuration: ioNumber,
   driveDistance: ioNumber,
-  arrivalPlace: placeCodec,
-  driver: driverEntityCodec,
+  arrivalPlace: destinationValuesCodec,
+  driver: driverValuesCodec,
   isTwoWayDrive: ioBoolean,
   isMedicalDrive: ioBoolean
 });
 
-export type FareFields = EstimateJourneyFields &
-  PhoneField<'phoneToCall'> & {
+export type FareFields = DestinationField<'arrivalPlace'> &
+  DriverField<'driver'> &
+  EstimateJourneyFields &
+  PhoneField<'phoneToCall'> &
+  PlaceField<'departurePlace'> & {
     passenger: FormControl<FareValues['passenger']>;
     departureDatetime: FormControl<FareValues['departureDatetime']>;
-    departurePlace: FormControl<FareValues['departurePlace']>;
-    arrivalPlace: FormControl<FareValues['arrivalPlace']>;
-    driver: FormControl<FareValues['driver']>;
+    //arrivalPlace: FormControl<FareValues['arrivalPlace']>;
     isTwoWayDrive: FormControl<FareValues['isTwoWayDrive']>;
     isMedicalDrive: FormControl<FareValues['isMedicalDrive']>;
   };
@@ -83,18 +91,9 @@ export const fareFormControls = (): FareFields => ({
     nonNullable: true,
     validators: [Validators.required]
   }),
-  driver: new FormControl<FareValues['driver']>(defaultDriverValue, {
-    nonNullable: true,
-    validators: [Validators.required, notEmptyDriverValidator]
-  }),
-  departurePlace: new FormControl<FareValues['departurePlace']>(defaultPlaceValue, {
-    nonNullable: true,
-    validators: [Validators.required, placeValidator]
-  }),
-  arrivalPlace: new FormControl<FareValues['arrivalPlace']>(defaultPlaceValue, {
-    nonNullable: true,
-    validators: [Validators.required, placeValidator]
-  }),
+  ...driverFieldFormControl('driver'),
+  ...placeFieldFormControl('departurePlace'),
+  ...destinationFieldFormControl('arrivalPlace'),
   ...estimateJourneyFormControls(),
   isTwoWayDrive: new FormControl<DestinationValues['isTwoWayDrive']>(true, {
     nonNullable: true,

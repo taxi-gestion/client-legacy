@@ -1,4 +1,8 @@
-import { Driver, Entity } from '@definitions';
+import { DriverValues } from '../../definitions/driver.definition';
 
-export const filterOnDriverUsername = ([searchDriverTerm, drivers]: [string, (Driver & Entity)[]]): (Driver & Entity)[] =>
-  drivers.filter((driver: Driver & Entity): boolean => driver.username.toLowerCase().includes(searchDriverTerm.toLowerCase()));
+export const filterOnDriverValuesProperties =
+  (searchTerm: string) =>
+  (combinedResults: DriverValues[]): DriverValues[] =>
+    combinedResults.filter((driverValue: DriverValues): boolean =>
+      `${driverValue.identifier}${driverValue.username}`.includes(searchTerm)
+    );

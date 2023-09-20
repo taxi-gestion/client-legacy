@@ -1,0 +1,35 @@
+<app-autocomplete-field
+  placeholder="Rechercher une adresse, un lieu-dit..."
+  [emptyValue]="destinationEmptyValue"
+  [toSearchTerm]="toSearchTerm"
+  [toTrackBy]="toTrackBy"
+  [query$]="query$"
+  [formGroup]="searchFormGroup"
+  [validator]="destinationValuesValidator"
+  [revalidate]="{ status: destinationFieldControl.statusChanges | async, touched: destinationFieldControl.touched }"
+  [prefilled]="prefilled"
+  [resultFilter]="resultsFilter"
+  [setDefaultSelectedValue]="defaultValue"
+  (selectedValue)="onSelectedValueChange($event)">
+  <ng-template #resultTemplate let-templatedValue>
+    <b>{{ templatedValue.destinationName }}</b>
+    <br />
+    <small>Adresse: {{ templatedValue.place.label }} - {{ templatedValue.place.context }}</small>
+    <br />
+    <small>
+      Medical: {{ templatedValue.isMedicalDrive ? 'oui' : 'non' }} - Aller-Retour:
+      {{ templatedValue.isTwoWayDrive ? 'oui' : 'non' }}
+    </small>
+  </ng-template>
+  <ng-template #selectedValueTemplate let-selectedValue>
+    <ng-container *ngIf="selectedValue.destinationName === ''"><small>Pas de destination</small></ng-container>
+    <ng-container *ngIf="selectedValue.destinationName !== ''">
+      <small>Adresse: {{ selectedValue.place.context }}</small>
+      <br />
+      <small>
+        Medical: {{ selectedValue.isMedicalDrive ? 'oui' : 'non' }} - Aller-Retour:
+        {{ selectedValue.isTwoWayDrive ? 'oui' : 'non' }}
+      </small>
+    </ng-container>
+  </ng-template>
+</app-autocomplete-field>

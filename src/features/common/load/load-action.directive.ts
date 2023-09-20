@@ -1,6 +1,6 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { catchError, map, mergeWith, Observable, Subject, switchMap, tap } from 'rxjs';
-import { START_LOADING, STOP_LOADING, whileLoading } from '@features/common';
+import { START_LOADING, STOP_LOADING, whileLoading } from '@features/common/load';
 
 @Directive({
   selector: '[appLoadAction]',

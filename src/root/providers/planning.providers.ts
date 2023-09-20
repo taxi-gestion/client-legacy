@@ -25,18 +25,12 @@ import {
   validatedSubcontractFareAction$
 } from '@features/planning';
 
-import {
-  estimateJourneyQuery$,
-  estimateJourneyQueryProvider,
-  listDriversQueryProvider,
-  predictRecurrenceQuery$,
-  predictRecurrenceQueryProvider,
-  searchPlaceQuery$,
-  searchPlaceQueryProvider,
-  searchRegularQueryProvider,
-  searchRegularsQuery$
-} from '@features/common';
 import { listDriversQuery$ } from '../../features/common/driver/queries/list-drivers';
+import { estimateJourneyQuery$, estimateJourneyQueryProvider } from '@features/common/journey';
+import { listDriversQueryProvider } from '@features/common/driver';
+import { searchRegularQueryProvider, searchRegularsQuery$ } from '@features/common/regular';
+import { searchPlaceQuery$, searchPlaceQueryProvider } from '@features/common/place';
+import { predictRecurrenceQuery$, predictRecurrenceQueryProvider } from '@features/common/recurrence';
 
 export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   deleteFareActionProvider(validatedDeleteFareAction$, [HttpClient]),

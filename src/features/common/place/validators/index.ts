@@ -1,1 +1,1 @@
-export * from './place-validator.validator';
+export * from './place.validator';

@@ -3,13 +3,14 @@
   [emptyValue]="phoneEmptyValue"
   [toSearchTerm]="toSearchTerm"
   [toTrackBy]="toTrackBy"
-  [query]="query"
+  [query$]="query$"
   [formGroup]="searchFormGroup"
   [validator]="phoneValuesValidator"
-  [revalidate]="phoneFieldControl.statusChanges | async"
+  [revalidate]="{ status: phoneFieldControl.statusChanges | async, touched: phoneFieldControl.touched }"
   [prefilled]="prefilled"
   [resultFilter]="resultsFilter"
-  [setDefaultSelectedValue]="defaultValue">
+  [setDefaultSelectedValue]="defaultValue"
+  (selectedValue)="onSelectedValueChange($event)">
   <ng-template #resultTemplate let-templatedValue>
     <b>{{ templatedValue.phoneType }}</b>
     -

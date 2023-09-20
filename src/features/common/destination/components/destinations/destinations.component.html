@@ -20,11 +20,10 @@
       </div>
     </div>
     <div class="mb-3">
-      <label for="place" class="form-label d-block">Adresse:</label>
+      <label class="form-label d-block">Adresse:</label>
       <app-place-field
-        (selectPlace)="onSelectPlaceChange($event, i)"
-        [defaultValue]="destination.controls.place.value"></app-place-field>
-      <input id="place" type="hidden" name="place" [formControl]="destination.controls.place" />
+        [placeFieldControl]="destination.controls.place"
+        [place]="destination.controls.place.value"></app-place-field>
     </div>
 
     <div class="form-check form-switch mb-2">

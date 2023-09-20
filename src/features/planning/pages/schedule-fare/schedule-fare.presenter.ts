@@ -3,15 +3,16 @@ import { FareToScheduleValues, scheduleFareFormCodec } from './schedule-fare.for
 import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
 import { Entity, FaresScheduled, RegularDetails, ToSchedule } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
-import { defaultPlaceValue, regularToPassenger, toFormPassenger, toLocalTime } from '../../common/fares.presenter';
+import { regularToPassenger, toFormPassenger, toLocalTime } from '../../common/fares.presenter';
 import { pipe as fpPipe } from 'fp-ts/function';
 import { fold as eitherFold } from 'fp-ts/Either';
 import { throwDecodeError } from '../../common/regular.presenter';
-import { toDestinationValues } from '../manage-regular/manage-regular.presenter';
-import { DestinationValues } from '../../components';
 import { FormGroup } from '@angular/forms';
 import { FareFields } from '../../common/fares.presentation';
-import { PhoneValues, toPhoneValues } from '../../../common/phone';
+import { PhoneValues, toPhoneValues } from '@features/common/phone';
+import { DestinationValues, toDestinationValues } from '@features/common/destination';
+import { toPlace } from '@features/common/place';
+import { toDriver } from '../../../common/driver/driver.presenter';
 
 export const toScheduleFareSuccessToast = (fares: FaresScheduled): Toast => ({
   content: `Course pour ${fares.scheduledCreated.passenger.identity} par ${
@@ -28,11 +29,11 @@ export const toFareToSchedule = (rawFormValues: unknown): ToSchedule =>
   );
 
 export const toDomain = (formValues: FareToScheduleValues): ToSchedule => ({
-  destination: formValues.arrivalPlace,
+  destination: toPlace(formValues.arrivalPlace.place),
   datetime: datetimeLocalToIso8601UTCString(formValues.departureDatetime),
-  departure: formValues.departurePlace,
+  departure: toPlace(formValues.departurePlace),
   distance: kilometersToMeters(formValues.driveDistance),
-  driver: formValues.driver,
+  driver: toDriver(formValues.driver),
   duration: minutesToSeconds(formValues.driveDuration),
   kind: formValues.isTwoWayDrive ? 'two-way' : 'one-way',
   nature: formValues.isMedicalDrive ? 'medical' : 'standard',
@@ -44,11 +45,6 @@ export const updateRegularLinkedControls =
   (form: FormGroup<FareFields>) =>
   (regular: Entity & RegularDetails): void => {
     form.controls.passenger.setValue(toFormPassenger(regular));
-    form.controls.departurePlace.setValue(regular.home ?? defaultPlaceValue);
-    const firstDestination: DestinationValues | undefined = toFirstDestination(regular);
-    form.controls.arrivalPlace.setValue(firstDestination?.place ?? defaultPlaceValue);
-    form.controls.isMedicalDrive.setValue(firstDestination?.isMedicalDrive ?? true);
-    form.controls.isTwoWayDrive.setValue(firstDestination?.isTwoWayDrive ?? true);
   };
 
 export const toFirstPhone = (regular: RegularDetails): PhoneValues | undefined =>

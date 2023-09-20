@@ -4,7 +4,7 @@ import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { BehaviorSubject, combineLatest, filter, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
 import { defaultPlaceValue, localDatetimeString, toJourney, toLocalDatetimeString } from '../../common/fares.presenter';
 import { SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../providers';
-import { FareToScheduleValues, SCHEDULE_FARE_FORM, ScheduleFareFields, setScheduleFareErrorToForm } from './schedule-fare.form';
+import { SCHEDULE_FARE_FORM, ScheduleFareFields, setScheduleFareErrorToForm } from './schedule-fare.form';
 import {
   formatScheduleFareError,
   toFareToSchedule,
@@ -13,37 +13,34 @@ import {
   toScheduleFareSuccessToast,
   updateRegularLinkedControls
 } from './schedule-fare.presenter';
-import {
-  Driver,
-  DurationDistance,
-  Entity,
-  FaresScheduled,
-  isValidPlace,
-  JourneyEstimate,
-  Place,
-  RegularDetails
-} from '@definitions';
+import { Driver, DurationDistance, Entity, FaresScheduled, isValidPlace, JourneyEstimate, RegularDetails } from '@definitions';
 import { DailyPlanningLayout } from '../../layouts';
 import { SlotContext } from '../../components/planning/planning-row/planning-row.component';
 import { DailyDriverPlanning } from '../../common/fares.presentation';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { EstimateJourneyValues } from '../../components';
+import { toDisplayDurationDistance } from '../../common/unit-convertion';
+import { PhoneValues, toPhonesValues } from '@features/common/phone';
 import {
   bootstrapValidationClasses,
   BootstrapValidationClasses,
-  ESTIMATE_JOURNEY_QUERY,
-  EstimateJourneyQuery,
   forceControlRevalidation,
   nullToUndefined
-} from '@features/common';
-import { DestinationValues, EstimateJourneyValues } from '../../components';
-import { toDisplayDurationDistance } from '../../common/unit-convertion';
-import { PhoneValues, toPhonesValues } from '../../../common/phone';
+} from '@features/common/form-validation';
+import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common/journey';
+import { PlaceValues, toPlacesValues, toPlaceValuesOrUndefined } from '@features/common/place';
+import { DestinationValues, toDestinationsValues } from '@features/common/destination';
+import { DriverValues } from '@features/common/driver';
+import { toDriversValues } from '../../../common/driver/driver.presenter';
 
 type RegularValues = {
   phone: PhoneValues | undefined;
   destination: DestinationValues | undefined;
-  departure: Place | undefined;
+  destinations: DestinationValues[];
+  departure: PlaceValues | undefined;
+  departures: PlaceValues[];
   phones: PhoneValues[];
 };
 
@@ -77,6 +74,8 @@ export class ScheduleFarePage {
   //region form-bindings
   private readonly _regular$: Subject<Entity & RegularDetails> = new Subject<Entity & RegularDetails>();
 
+  public drivers$: Observable<DriverValues[]> = this._planning.drivers$.pipe(map(toDriversValues));
+
   public onSelectRegularChange(regular: Entity & RegularDetails): void {
     this._regular$.next(regular);
     this.scheduleFareForm.controls.passenger.setValue(regular);
@@ -87,45 +86,42 @@ export class ScheduleFarePage {
     map(
       (regular: Entity & RegularDetails): RegularValues => ({
         phone: toFirstPhone(regular),
+        departure: toPlaceValuesOrUndefined(regular.home),
+        departures: toPlacesValues(regular.home),
+        phones: toPhonesValues(regular.phones),
         destination: toFirstDestination(regular),
-        departure: regular.home,
-        phones: toPhonesValues(regular.phones)
+        destinations: toDestinationsValues(regular.destinations)
       })
-    ),
-    // TODO This may probably be improved
-    tap((regularInitialValues: RegularValues): void => {
-      this._departure$.next(regularInitialValues.departure ?? defaultPlaceValue);
-      this._destination$.next(regularInitialValues.destination?.place ?? defaultPlaceValue);
-    })
+    )
   );
 
-  private readonly _departure$: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
-  private readonly _destination$: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
+  // TODO Refactor estimate field by passing the formcontrols ?
+  private readonly _departure$: BehaviorSubject<PlaceValues> = new BehaviorSubject<PlaceValues>(defaultPlaceValue);
+  private readonly _destination$: BehaviorSubject<PlaceValues> = new BehaviorSubject<PlaceValues>(defaultPlaceValue);
 
   public updateEstimateFields($event: Record<keyof EstimateJourneyValues, FormControl<number>>): void {
     this.scheduleFareForm.controls.driveDuration = $event.driveDuration;
     this.scheduleFareForm.controls.driveDistance = $event.driveDistance;
   }
 
-  public onSelectDepartureChange(place: Place): void {
-    this.scheduleFareForm.controls.departurePlace.setValue(place);
+  public onDepartureSelectedValueChange(place: PlaceValues): void {
     this._departure$.next(place);
   }
 
-  public onSelectArrivalChange(place: Place): void {
-    this.scheduleFareForm.controls.arrivalPlace.setValue(place);
-    this._destination$.next(place);
+  public onDestinationSelectedValueChange(destinationValues: DestinationValues): void {
+    this._destination$.next(destinationValues.place);
+    this.scheduleFareForm.controls.isMedicalDrive.setValue(destinationValues.isMedicalDrive);
+    this.scheduleFareForm.controls.isTwoWayDrive.setValue(destinationValues.isTwoWayDrive);
   }
-
   public onSelectDriverChange(driver: Driver & Entity): void {
     this.scheduleFareForm.controls.driver.setValue(driver);
   }
   public readonly estimateJourney$: Observable<DurationDistance> = combineLatest([this._departure$, this._destination$]).pipe(
-    filter(([departure, destination]: [Place, Place]): boolean => isValidPlace(departure) && isValidPlace(destination)),
+    filter(
+      ([departure, destination]: [PlaceValues, PlaceValues]): boolean => isValidPlace(departure) && isValidPlace(destination)
+    ),
     switchMap(
-      (): Observable<JourneyEstimate> =>
-        // TODO Remove as
-        this._estimateJourneyQuery$(toJourney(nullToUndefined(this.scheduleFareForm.value) as FareToScheduleValues))
+      (): Observable<JourneyEstimate> => this._estimateJourneyQuery$(toJourney(nullToUndefined(this.scheduleFareForm.value)))
     ),
     map(toDisplayDurationDistance)
   );
@@ -155,9 +151,6 @@ export class ScheduleFarePage {
   }
   //endregion
 
-  //region
-
-  //region action schedule fare
   public onSubmitFareToSchedule = (triggerAction: () => void): void => {
     this.scheduleFareForm.markAllAsTouched();
     this.scheduleFareForm.valid ? triggerAction() : forceControlRevalidation(this.scheduleFareForm);
@@ -171,7 +164,10 @@ export class ScheduleFarePage {
 
   public onScheduleFareActionError = (error: Error): void => {
     setScheduleFareErrorToForm(formatScheduleFareError(error));
-    this._toaster.toast({ content: 'Échec de la planification de la course', status: 'danger', title: 'Opération échouée' });
+    this._toaster.toast({
+      content: `Échec de la planification de la course: ${error.name} | ${error.message}`,
+      status: 'danger',
+      title: 'Opération échouée'
+    });
   };
-  //endregion
 }

@@ -18,7 +18,7 @@ export const validatedScheduleFareAction$ =
         (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCallError()),
         (validatedTransfer: ToSchedule): Observable<FaresScheduled> =>
           http.post<unknown>(scheduleFareUrl(), validatedTransfer).pipe(
-            map(editedFareAndReturnValidation),
+            map(scheduledFareAndReturnValidation),
             catchError(
               (error: Error | HttpErrorResponse, caught: Observable<FaresScheduled>): Observable<never> =>
                 handleEditedFareAndReturnError$(error, caught)
@@ -27,7 +27,7 @@ export const validatedScheduleFareAction$ =
       )
     );
 
-const editedFareAndReturnValidation = (transfer: unknown): FaresScheduled =>
+const scheduledFareAndReturnValidation = (transfer: unknown): FaresScheduled =>
   fpPipe(
     transfer,
     externalTypeCheckFor<FaresScheduled>(fareScheduledCodec),

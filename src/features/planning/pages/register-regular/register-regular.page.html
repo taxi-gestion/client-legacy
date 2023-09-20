@@ -38,15 +38,13 @@
       placeholder="Dupont"
       [ngClass]="validation(registerRegularForm.controls.lastname)" />
   </div>
-  <!-- Avec viewChild appFormArrayError-->
   <div class="mb-3">
     <label for="phones" class="form-label">Téléphones</label>
     <app-phones id="phones" [parentArray]="registerRegularForm.controls.phones"></app-phones>
   </div>
   <div class="mb-3">
     <label for="homeAddress" class="form-label">Domicile</label>
-    <app-place-field (selectPlace)="onSelectHomeAddressChange($event)"></app-place-field>
-    <input id="homeAddress" type="hidden" name="homeAddress" formControlName="homeAddress" />
+    <app-place-field [placeFieldControl]="registerRegularForm.controls.homeAddress"></app-place-field>
   </div>
   <div class="mb-3">
     <label for="destinations" class="form-label">Destinations</label>

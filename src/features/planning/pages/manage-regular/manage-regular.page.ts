@@ -13,13 +13,13 @@ import {
 } from './manage-regular.presenter';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Entity, Place, RegularDeleted, RegularDetails, RegularEdited } from '@definitions';
+import { Entity, RegularDeleted, RegularDetails, RegularEdited } from '@definitions';
 import {
   BootstrapValidationClasses,
   bootstrapValidationClasses,
   forceControlRevalidation,
   nullToUndefined
-} from '@features/common';
+} from '@features/common/form-validation';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -51,10 +51,6 @@ export class ManageRegularPage {
     this._regular$.next(regular);
   }
 
-  public onSelectHomeAddressChange(place: Place): void {
-    this.editRegularForm.controls.homeAddress.setValue(place);
-  }
-
   public regular$: Observable<EditRegularValues> = this._regular$.asObservable().pipe(
     tap((regular: Entity & RegularDetails): void => {
       this.editRegularForm.controls.regularId.setValue(regular.id);
@@ -63,7 +59,6 @@ export class ManageRegularPage {
       this.editRegularForm.controls.lastname.setValue(regular.lastname);
       this.editRegularForm.controls.commentary.setValue(regular.commentary);
       this.editRegularForm.controls.subcontractedClient.setValue(regular.subcontractedClient);
-      this.editRegularForm.controls.homeAddress.setValue(regular.home);
       this._selectedRegular = { id: regular.id };
     }),
     map(toEditRegularPresentation)

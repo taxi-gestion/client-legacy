@@ -1,19 +1,12 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, Output } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
-import { LIST_DRIVERS_QUERY, ListDriversQuery } from '@features/common/driver';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, Observable, Subject, take, tap } from 'rxjs';
-import { Driver, Entity } from '@definitions';
-import { bootstrapValidationClasses, BootstrapValidationClasses, FORM_CONTROL_ERROR_MESSAGES_TOKEN } from '@features/common';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { DRIVER_FORM_CONTROL_ERROR_MESSAGES } from '../../errors/form-errors-messages.token';
-import { filterOnDriverUsername } from './driver-field.presenter';
-import { selectedDriverValidator } from '../../validators/driver-validator.validator';
-
-export type DriverValues = {
-  driver: string;
-};
-export type DriverFields = {
-  driver: FormControl<DriverValues['driver']>;
-};
+import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
+import { Observable, of } from 'rxjs';
+import { DriverValues } from '../../definitions/driver.definition';
+import { FORM_CONTROL_ERROR_MESSAGES_TOKEN } from '@features/common/form-validation';
+import { selectedDriverValidator } from '../../validators/driver.validator';
+import { driverEmptyValue } from '../../driver.presenter';
+import { filterOnDriverValuesProperties } from './driver-field.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,82 +20,41 @@ export type DriverFields = {
   ]
 })
 export class DriverFieldComponent {
-  public validation: (control: AbstractControl) => BootstrapValidationClasses = bootstrapValidationClasses;
+  @Input({ required: true }) public driverFieldControl!: FormControl<DriverValues>;
 
-  @Input() public minSearchTermLength: number = 2;
-  @Input() public searchDebounceTime: number = 300;
+  @Input() public prefilled: DriverValues[] = [];
 
-  @Output() public readonly selectDriver: EventEmitter<Driver & Entity> = new EventEmitter<Driver & Entity>();
-
-  @Output() public readonly resetDriver: EventEmitter<void> = new EventEmitter<void>();
-
-  @Input() public driverNotFound: boolean = false;
-
-  @Input() public displayReset: boolean = false;
-
-  @Input() public set defaultValue(driver: ((Driver & Entity) | undefined) | null) {
-    driver != null && this.setDriverSuggestion(driver);
-  }
-
-  private readonly _searchDriverTerm$: Subject<string> = new Subject<string>();
-
-  public searchDriverTerm$: Observable<string> = this._searchDriverTerm$.pipe(
-    map((searchDriverTerm: string): string => searchDriverTerm.trim()),
-    filter((searchDriverTerm: string): boolean => searchDriverTerm.length >= this.minSearchTermLength),
-    distinctUntilChanged()
-  );
-
-  private readonly _selectedDriver$: BehaviorSubject<Driver & Entity> = new BehaviorSubject<Driver & Entity>(emptyDriverValue);
-
-  public driversList$: Observable<(Driver & Entity)[]> = this._listDriversQuery().pipe(take(1));
-
-  public selectedDriver$: Observable<Driver & Entity> = combineLatest([
-    this._selectedDriver$.asObservable(),
-    this.driversList$
-  ]).pipe(
-    tap(([driver, drivers]: [Driver & Entity, (Driver & Entity)[]]): void => {
-      this.formGroup.controls.driver.setValidators(selectedDriverValidator(driver, drivers));
-      this.formGroup.controls.driver.updateValueAndValidity();
-    }),
-    map(([driver, _]: [Driver & Entity, (Driver & Entity)[]]): Driver & Entity => driver)
-  );
-
-  public driversFound$: Observable<(Driver & Entity)[]> = combineLatest([this.searchDriverTerm$, this.driversList$]).pipe(
-    map(filterOnDriverUsername)
-  );
-
-  public constructor(@Inject(LIST_DRIVERS_QUERY) private readonly _listDriversQuery: ListDriversQuery) {}
-
-  public readonly formGroup: FormGroup<DriverFields> = new FormGroup<DriverFields>({
-    driver: new FormControl<DriverValues['driver']>('', {
-      nonNullable: true,
-      validators: []
-    })
+  public searchFormGroup: FormGroup<{ search: FormControl<string> }> = new FormGroup<{ search: FormControl<string> }>({
+    search: new FormControl<string>('', { nonNullable: true, validators: [] })
   });
 
-  public search(driverInput: string): void {
-    this._searchDriverTerm$.next(driverInput);
-    this._selectedDriver$.next(emptyDriverValue);
+  @Input() public set driver(driver: (DriverValues | undefined) | null) {
+    driver !== null && this.onDriverReceived(driver ?? driverEmptyValue);
   }
 
-  public setDriverSuggestion(driver: Driver & Entity): void {
-    this.formGroup.get('driver')?.setValue(driver.username);
-    this._selectedDriver$.next(driver);
-    this.selectDriver.emit(driver);
+  @Output() public readonly selectedValue: EventEmitter<DriverValues> = new EventEmitter<DriverValues>();
+
+  public onSelectedValueChange(driver: DriverValues): void {
+    this.driverFieldControl.setValue(driver);
+    this.selectedValue.emit(driver);
   }
 
-  public trackByDriverId(_: number, driver: Driver & Entity): string {
-    return `${driver.id}`;
+  public onDriverReceived(driverNumberValue: DriverValues | undefined): void {
+    this.defaultValue = driverNumberValue;
   }
 
-  public clear(): void {
-    this.formGroup.get('driver')?.reset();
-    this.resetDriver.emit();
-  }
+  public defaultValue: DriverValues | undefined = driverEmptyValue;
+
+  public driverEmptyValue: DriverValues = driverEmptyValue;
+
+  public toSearchTerm = (driverValues: DriverValues): string => driverValues.username;
+
+  public toTrackBy: (index: number, driverValues: DriverValues) => string = (_: number, driverValues: DriverValues): string =>
+    `${driverValues.id}`;
+
+  public driverValuesValidator: (driverValues: DriverValues | undefined) => ValidatorFn = selectedDriverValidator;
+
+  public resultFilter: (searchTerm: string) => (results: DriverValues[]) => DriverValues[] = filterOnDriverValuesProperties;
+
+  public query$ = (_searchTerm: string): Observable<DriverValues[]> => of([]);
 }
-
-const emptyDriverValue: Driver & Entity = {
-  id: '',
-  username: '',
-  identifier: ''
-};
