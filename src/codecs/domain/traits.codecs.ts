@@ -5,7 +5,9 @@ import {
   number as ioNumber,
   string as ioString,
   type as ioType,
-  Type
+  Type,
+  undefined as ioUndefined,
+  union as ioUnion
 } from 'io-ts';
 import { Civility, Drive, DurationDistance, Entity, Kind, Nature, Passenger, Phone } from '../../definitions';
 import { placeCodec } from '../common';
@@ -71,7 +73,9 @@ export const phoneCodec: Type<Phone> = ioType(
 
 export const passengerCodec: Type<Passenger> = ioType(
   {
-    identity: ioString,
+    civility: civilityCodec,
+    firstname: ioUnion([ioString, ioUndefined]),
+    lastname: ioString,
     phone: phoneCodec
   },
   'passengerCodec'

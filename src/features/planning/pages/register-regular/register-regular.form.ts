@@ -1,6 +1,7 @@
 import { FormGroup } from '@angular/forms';
 import { Type } from 'io-ts';
-import { RegularFields, regularFormCodec, regularFormControls, RegularValues } from '../../common/regular.presentation';
+import { RegularFields, regularFormCodec, regularFormControls } from '../../common/regular.presentation';
+import { RegularValues } from '@features/common/regular';
 
 export type RegisterRegularValues = RegularValues;
 

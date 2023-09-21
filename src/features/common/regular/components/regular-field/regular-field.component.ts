@@ -1,77 +1,66 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Inject,
-  Input,
-  OnChanges,
-  Output,
-  SimpleChanges
-} from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, filter, map, Observable, Subject, switchMap } from 'rxjs';
-import { SEARCH_REGULAR_QUERY, SearchRegularQuery } from '../../providers';
-import { Entity, RegularDetails } from '@definitions';
+import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, Output } from '@angular/core';
+import { firstnameOrEmpty, SEARCH_REGULAR_QUERY, SearchRegularQuery, toRegularsValues } from '@features/common/regular';
+import { REGULAR_FORM_CONTROL_ERROR_MESSAGES } from '../../errors/form-errors-messages.token';
+import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
+import { map, Observable } from 'rxjs';
+import { selectedRegularValidator } from '../../validators';
+import { regularEmptyValue } from '../../regular.presenter';
+import { RegularValues } from '../../definitions/regular.definition';
+import { FORM_CONTROL_ERROR_MESSAGES_TOKEN } from '@features/common/form-validation';
+import { Entity } from '@definitions';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-regular-field',
-  templateUrl: './regular-field.component.html'
+  templateUrl: './regular-field.component.html',
+  providers: [
+    {
+      provide: FORM_CONTROL_ERROR_MESSAGES_TOKEN,
+      useValue: REGULAR_FORM_CONTROL_ERROR_MESSAGES
+    }
+  ]
 })
-export class RegularFieldComponent implements OnChanges {
-  @Input() public minSearchTermLength: number = 2;
-  @Input() public searchDebounceTime: number = 300;
+export class RegularFieldComponent {
+  @Input({ required: true }) public regularFieldControl!: FormControl<Entity & RegularValues>;
 
-  @Output() public readonly selectRegular: EventEmitter<Entity & RegularDetails> = new EventEmitter<Entity & RegularDetails>();
+  @Input() public prefilled: (Entity & RegularValues)[] = [];
 
-  @Output() public readonly searchRegularTerm: EventEmitter<string> = new EventEmitter<string>();
+  public searchFormGroup: FormGroup<{ search: FormControl<string> }> = new FormGroup<{ search: FormControl<string> }>({
+    search: new FormControl<string>('', { nonNullable: true, validators: [] })
+  });
 
-  @Output() public readonly resetRegular: EventEmitter<void> = new EventEmitter<void>();
+  @Input() public set regular(regular: ((Entity & RegularValues) | undefined) | null) {
+    regular !== null && this.onRegularReceived(regular ?? regularEmptyValue);
+  }
 
-  @Input() public regularNotFound: boolean = false;
+  @Output() public readonly selectedValue: EventEmitter<Entity & RegularValues> = new EventEmitter<Entity & RegularValues>();
 
-  @Input() public displayReset: boolean = false;
-
-  @Input() public defaultValue?: string;
-
-  private readonly _searchRegularTerm$: Subject<string> = new Subject<string>();
-
-  public regularsFound$: Observable<(Entity & RegularDetails)[]> = this._searchRegularTerm$.pipe(
-    map((searchRegularTerm: string): string => searchRegularTerm.trim()),
-    filter((searchRegularTerm: string): boolean => searchRegularTerm.length >= this.minSearchTermLength),
-    debounceTime(this.searchDebounceTime),
-    distinctUntilChanged(),
-    switchMap(
-      (searchRegularTerm: string): Observable<(Entity & RegularDetails)[]> => this._searchRegularQuery(searchRegularTerm)
-    )
-  );
+  public onSelectedValueChange(regular: Entity & RegularValues): void {
+    this.regularFieldControl.setValue(regular);
+    this.selectedValue.emit(regular);
+  }
 
   public constructor(@Inject(SEARCH_REGULAR_QUERY) private readonly _searchRegularQuery: SearchRegularQuery) {}
 
-  public formGroup: FormGroup = new FormGroup({ regular: new FormControl() });
-
-  public ngOnChanges(simpleChanges: SimpleChanges): void {
-    simpleChanges['defaultValue'] != null && this.formGroup.get('regular')?.setValue(this.defaultValue ?? '');
+  public onRegularReceived(regularNumberValue: (Entity & RegularValues) | undefined): void {
+    this.defaultValue = regularNumberValue;
   }
 
-  public search(regularInput: string): void {
-    this._searchRegularTerm$.next(regularInput);
-    this.searchRegularTerm.next(regularInput);
-  }
+  public defaultValue: (Entity & RegularValues) | undefined = regularEmptyValue;
 
-  public setRegularSuggestion(regular: Entity & RegularDetails): void {
-    this.formGroup
-      .get('regular')
-      ?.setValue(`${regular.lastname}${regular.firstname === undefined ? '' : ` ${regular.firstname}`}`);
-    this.selectRegular.next(regular);
-  }
+  public regularEmptyValue: Entity & RegularValues = regularEmptyValue;
 
-  public trackByRegularName(_: number, regular: RegularDetails): string {
-    return `${regular.lastname} ${regular.firstname}`;
-  }
+  public toSearchTerm = (regularValues: Entity & RegularValues): string =>
+    `${regularValues.lastname} ${firstnameOrEmpty(regularValues)}`.trim();
 
-  public clear(): void {
-    this.formGroup.get('regular')?.reset();
-    this.resetRegular.emit();
-  }
+  public toTrackBy: (index: number, regularValues: Entity & RegularValues) => string = (
+    _: number,
+    regularValues: Entity & RegularValues
+  ): string => `${regularValues.id}`;
+
+  public regularValuesValidator: (regularValues: (Entity & RegularValues) | undefined) => ValidatorFn =
+    selectedRegularValidator;
+
+  public query$ = (searchTerm: string): Observable<(Entity & RegularValues)[]> =>
+    this._searchRegularQuery(searchTerm).pipe(map(toRegularsValues));
 }

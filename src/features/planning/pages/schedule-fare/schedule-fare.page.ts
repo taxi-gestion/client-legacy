@@ -5,15 +5,8 @@ import { BehaviorSubject, combineLatest, filter, map, Observable, of, Subject, s
 import { defaultPlaceValue, localDatetimeString, toJourney, toLocalDatetimeString } from '../../common/fares.presenter';
 import { SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../providers';
 import { SCHEDULE_FARE_FORM, ScheduleFareFields, setScheduleFareErrorToForm } from './schedule-fare.form';
-import {
-  formatScheduleFareError,
-  toFareToSchedule,
-  toFirstDestination,
-  toFirstPhone,
-  toScheduleFareSuccessToast,
-  updateRegularLinkedControls
-} from './schedule-fare.presenter';
-import { Driver, DurationDistance, Entity, FaresScheduled, isValidPlace, JourneyEstimate, RegularDetails } from '@definitions';
+import { formatScheduleFareError, toFareToSchedule, toScheduleFareSuccessToast } from './schedule-fare.presenter';
+import { Driver, DurationDistance, Entity, FaresScheduled, isValidPlace, JourneyEstimate } from '@definitions';
 import { DailyPlanningLayout } from '../../layouts';
 import { SlotContext } from '../../components/planning/planning-row/planning-row.component';
 import { DailyDriverPlanning } from '../../common/fares.presentation';
@@ -22,7 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { EstimateJourneyValues } from '../../components';
 import { toDisplayDurationDistance } from '../../common/unit-convertion';
-import { PhoneValues, toPhonesValues } from '@features/common/phone';
+import { PhoneValues } from '@features/common/phone';
 import {
   bootstrapValidationClasses,
   BootstrapValidationClasses,
@@ -30,12 +23,14 @@ import {
   nullToUndefined
 } from '@features/common/form-validation';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common/journey';
-import { PlaceValues, toPlacesValues, toPlaceValuesOrUndefined } from '@features/common/place';
-import { DestinationValues, toDestinationsValues } from '@features/common/destination';
+import { PlaceValues, toPlacesValues } from '@features/common/place';
+import { DestinationValues } from '@features/common/destination';
 import { DriverValues } from '@features/common/driver';
 import { toDriversValues } from '../../../common/driver/driver.presenter';
+import { regularHasId, RegularValues } from '@features/common/regular';
 
-type RegularValues = {
+type RegularPresentation = {
+  id: string;
   phone: PhoneValues | undefined;
   destination: DestinationValues | undefined;
   destinations: DestinationValues[];
@@ -43,6 +38,16 @@ type RegularValues = {
   departures: PlaceValues[];
   phones: PhoneValues[];
 };
+
+const toRegularPresentation = (regular: Entity & RegularValues): RegularPresentation => ({
+  id: regular.id,
+  phone: regular.phones === undefined ? undefined : regular.phones[0],
+  departure: regular.homeAddress,
+  departures: toPlacesValues(regular.homeAddress),
+  phones: regular.phones === undefined ? [] : regular.phones,
+  destination: regular.destinations === undefined ? undefined : regular.destinations[0],
+  destinations: regular.destinations === undefined ? [] : regular.destinations
+});
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -72,28 +77,19 @@ export class ScheduleFarePage {
   ) {}
 
   //region form-bindings
-  private readonly _regular$: Subject<Entity & RegularDetails> = new Subject<Entity & RegularDetails>();
+  private readonly _regular$: Subject<Entity & RegularValues> = new Subject<Entity & RegularValues>();
 
   public drivers$: Observable<DriverValues[]> = this._planning.drivers$.pipe(map(toDriversValues));
 
-  public onSelectRegularChange(regular: Entity & RegularDetails): void {
+  public onSelectRegularChange(regular: Entity & RegularValues): void {
     this._regular$.next(regular);
-    this.scheduleFareForm.controls.passenger.setValue(regular);
   }
 
-  public regular$: Observable<RegularValues> = this._regular$.asObservable().pipe(
-    tap(updateRegularLinkedControls(this.scheduleFareForm)),
-    map(
-      (regular: Entity & RegularDetails): RegularValues => ({
-        phone: toFirstPhone(regular),
-        departure: toPlaceValuesOrUndefined(regular.home),
-        departures: toPlacesValues(regular.home),
-        phones: toPhonesValues(regular.phones),
-        destination: toFirstDestination(regular),
-        destinations: toDestinationsValues(regular.destinations)
-      })
-    )
-  );
+  public regular$: Observable<RegularPresentation> = this._regular$.asObservable().pipe(map(toRegularPresentation));
+
+  public validRegular$: Observable<boolean> = this._regular$
+    .asObservable()
+    .pipe(map((regular: Entity & RegularValues): boolean => regularHasId(regular)));
 
   // TODO Refactor estimate field by passing the formcontrols ?
   private readonly _departure$: BehaviorSubject<PlaceValues> = new BehaviorSubject<PlaceValues>(defaultPlaceValue);

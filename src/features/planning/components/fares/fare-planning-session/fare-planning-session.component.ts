@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DailyDriverPlanning, ScheduledPlanningSession, ScheduledPresentation } from '../../../common/fares.presentation';
 import { SessionContext } from '../../planning/planning-row/planning-row.component';
 import { toContextualizedSession } from '../../planning/planning-row/planning-row.presenter';
+import { toIdentity } from '@features/common/regular';
+import { Entity, Passenger } from '@definitions';
 
 @Component({
   selector: 'app-fare-planning-session',
@@ -19,5 +21,9 @@ export class FarePlanningSessionComponent {
     this.selectSession.emit(
       toContextualizedSession(sessionContext as ScheduledPlanningSession, rowContext as DailyDriverPlanning)
     );
+  }
+
+  public passengerIdentity(passenger: Entity & Passenger): string {
+    return toIdentity(passenger);
   }
 }

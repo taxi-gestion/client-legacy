@@ -5,9 +5,10 @@ import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { VALIDATION_FAILED_AFTER_API_CALL_ERROR_NAME } from '../../errors';
 import { toLocalTime } from '../../common/fares.presenter';
 import { max } from 'date-fns';
+import { toIdentity } from '@features/common/regular';
 
 export const toSchedulePendingSuccessToast = (pending: PendingScheduled): Toast => ({
-  content: `Course de retour pour ${pending.scheduledCreated.passenger.identity} par ${
+  content: `Course de retour pour ${toIdentity(pending.scheduledCreated.passenger)} par ${
     pending.scheduledCreated.driver.username
   } à ${toLocalTime(pending.scheduledCreated.datetime)} planifiée`,
   status: 'success',

@@ -24,7 +24,7 @@ export class AutocompleteFieldComponent<TValue> {
 
   public validation: (control: AbstractControl) => BootstrapValidationClasses = bootstrapValidationClasses;
 
-  @Input() public minSearchTermLength: number = 0;
+  @Input() public minSearchTermLength: number = 3;
   @Input() public searchDebounceTime: number = 300;
   @Input() public placeholder: string = 'Rechercher...';
 
@@ -41,7 +41,7 @@ export class AutocompleteFieldComponent<TValue> {
       values;
 
   @Input() public set setDefaultSelectedValue(value: (TValue | undefined) | null) {
-    if (value === null) return;
+    if (value === null || this.emptyValue === value) return;
 
     if (value === undefined) this.formGroup.reset();
 
@@ -91,8 +91,9 @@ export class AutocompleteFieldComponent<TValue> {
   );
 
   public search(term: string): void {
-    this._searchTerm$.next(term);
     this._selected$.next(this.emptyValue);
+    this.selectedValue.emit(this.emptyValue);
+    this._searchTerm$.next(term);
   }
 
   public setSuggestion(value: TValue): void {

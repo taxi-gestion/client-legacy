@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, Observable, switchMap } from 'rxjs';
 import {
   DELETE_FARE_ACTION,
   DeleteFareAction,
@@ -14,7 +14,6 @@ import { SessionContext } from '../../components/planning/planning-row/planning-
 import { DailyDriverPlanning, ScheduledPlanningSession } from '../../common/fares.presentation';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  Driver,
   DurationDistance,
   Entity,
   FaresDeleted,
@@ -28,15 +27,19 @@ import {
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { FormControl, FormGroup } from '@angular/forms';
 import { EDIT_FARE_FORM, EditFareFields, FareToEditValues, setEditFareErrorToForm } from './edit-fare.form';
-import { formatEditFareError, passengerFromContext, toEditFareSuccessToast, toFareToEdit } from './edit-fare.presenter';
+import { formatEditFareError, toEditFareSuccessToast, toFareToEdit } from './edit-fare.presenter';
 import { toDeleteFareSuccessToast } from './delete-fare.presenter';
-import { defaultPlaceValue, toFormPassenger, toJourney } from '../../common/fares.presenter';
-import { formatDateToDatetimeLocalString, toDisplayDurationDistance } from '../../common/unit-convertion';
+import { defaultPlaceValue, toJourney } from '../../common/fares.presenter';
+import { toDisplayDurationDistance } from '../../common/unit-convertion';
 import { EstimateJourneyValues } from '../../components';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common/journey';
 import { formatSubcontractFareError, toFareToSubcontract, toSubcontractFareSuccessToast } from './subcontract-fare.presenter';
 import { setSubcontractFareErrorToForm, SUBCONTRACT_FARE_FORM, SubcontractFareFields } from './subcontract-fare.form';
-import { phoneEmptyValue, toPhoneValues } from '@features/common/phone';
+import { RegularValues, SEARCH_REGULAR_QUERY, SearchRegularQuery, toRegularValues } from '@features/common/regular';
+import { PlaceValues } from '@features/common/place';
+import { DestinationValues } from '@features/common/destination';
+import { DriverValues } from '@features/common/driver';
+import { toDriversValues } from '../../../common/driver/driver.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -46,15 +49,25 @@ export class ManageFarePage {
   public selectedSessionContext$: Observable<SessionContext<ScheduledPlanningSession, DailyDriverPlanning>> =
     this._planning.selectedSessionContext$.pipe(filter(Boolean));
 
-  // TODO Use observable to bind field values
-  public selectedSessionToFormValues$: Observable<SessionContext<ScheduledPlanningSession, DailyDriverPlanning>> =
-    this.selectedSessionContext$.pipe(
-      tap((selectedSession: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>): void =>
-        this.initializeFormValuesFromContext(selectedSession)
-      )
-    );
+  // TODO Adapt
+  /*  public selectedSessionToFormValues$: Observable<FareToEditValues> = this.selectedSessionContext$.pipe(
+    tap((selectedSession: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>): void =>
+      this.initializeFormValuesFromContext(selectedSession)
+    ),
+    map(sessionToFaresToEditValues)
+  );*/
 
-  public selectedSessionPassenger$: Observable<string> = this.selectedSessionContext$.pipe(map(passengerFromContext));
+  public drivers$: Observable<DriverValues[]> = this._planning.drivers$.pipe(map(toDriversValues));
+
+  public regular$: Observable<RegularValues> = this.selectedSessionContext$.pipe(
+    switchMap(
+      (
+        selectedSession: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>
+      ): Observable<(Entity & RegularDetails)[]> => this._searchRegularAction$(selectedSession.sessionContext.passenger.id)
+    ),
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    map((regulars: (Entity & RegularDetails)[]): RegularValues => toRegularValues(regulars[0]!))
+  );
 
   private readonly _departure$: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
   private readonly _destination$: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
@@ -64,6 +77,7 @@ export class ManageFarePage {
     private readonly _planning: DailyPlanningLayout,
     private readonly _router: Router,
     private readonly _route: ActivatedRoute,
+    @Inject(SEARCH_REGULAR_QUERY) private readonly _searchRegularAction$: SearchRegularQuery,
     @Inject(DELETE_FARE_ACTION) private readonly _deleteFareAction$: DeleteFareAction,
     @Inject(EDIT_FARE_ACTION) private readonly _editFareAction$: EditFareAction,
     @Inject(SUBCONTRACT_FARE_ACTION) private readonly _subcontractFareAction$: SubcontractFareAction,
@@ -71,6 +85,16 @@ export class ManageFarePage {
   ) {}
 
   //region edit
+  public onDepartureSelectedValueChange(place: PlaceValues): void {
+    this._departure$.next(place);
+  }
+
+  public onDestinationSelectedValueChange(destinationValues: DestinationValues): void {
+    this._destination$.next(destinationValues.place);
+    this.editFareForm.controls.isMedicalDrive.setValue(destinationValues.isMedicalDrive);
+    this.editFareForm.controls.isTwoWayDrive.setValue(destinationValues.isTwoWayDrive);
+  }
+
   public readonly editFareForm: FormGroup<EditFareFields> = EDIT_FARE_FORM;
 
   //TODO Type to Observable<Error | Entity & Scheduled>
@@ -147,21 +171,6 @@ export class ManageFarePage {
   };
   //endregion
 
-  //region formEvents
-  public onSelectRegularChange(regular: Entity & RegularDetails): void {
-    this.editFareForm.controls.passenger.setValue(toFormPassenger(regular));
-    this.editFareForm.controls.phoneToCall.setValue(
-      regular.phones?.[0] === undefined ? phoneEmptyValue : toPhoneValues(regular.phones[0])
-    );
-    // TODO Adapt Regular
-  }
-
-  public onSelectDriverChange(driver: Driver & Entity): void {
-    this.editFareForm.controls.driver.setValue(driver);
-    this._driverDisplay$.next(driver.identifier);
-  }
-  //endregion
-
   //region estimateJourney
   public readonly estimateJourney$: Observable<DurationDistance> = combineLatest([this._departure$, this._destination$]).pipe(
     filter(([departure, destination]: [Place, Place]): boolean => isValidPlace(departure) && isValidPlace(destination)),
@@ -186,7 +195,7 @@ export class ManageFarePage {
   private readonly _driverDisplay$: BehaviorSubject<string> = new BehaviorSubject<string>('');
   public driverDisplay$: Observable<string> = this._driverDisplay$.asObservable();
 
-  // eslint-disable-next-line max-statements
+  /*  // eslint-disable-next-line max-statements
   private initializeFormValuesFromContext(
     selectedSession: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>
   ): void {
@@ -208,5 +217,5 @@ export class ManageFarePage {
     this._departure$.next(selectedSession.sessionContext.departure);
     this._destination$.next(selectedSession.sessionContext.destination);
     //this._driverDisplay$.next(selectedSession.sessionContext.driver);
-  }
+  }*/
 }

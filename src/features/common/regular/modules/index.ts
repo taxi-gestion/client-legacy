@@ -1,1 +1,1 @@
-export * from './regular.service.module';
+export * from './regular.component.module';

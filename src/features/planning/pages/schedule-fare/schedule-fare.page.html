@@ -14,9 +14,9 @@
   (ngSubmit)="onSubmitFareToSchedule(loadAction.start)">
   <div class="mb-4">
     <label class="form-label">Sélectionner le passager</label>
-    <app-regular-field (selectRegular)="onSelectRegularChange($event)"></app-regular-field>
-    <!-- TODO Remove hidden input-->
-    <input id="passenger" type="hidden" name="passenger" formControlName="passenger" />
+    <app-regular-field
+      [regularFieldControl]="scheduleFareForm.controls.passenger"
+      (selectedValue)="onSelectRegularChange($event)"></app-regular-field>
     <div class="row align-items-center mt-3">
       <div class="col-auto">
         <a class="btn btn-secondary" ariaCurrentWhenActive="page" routerLinkActive="active" [routerLink]="'manage-regular'">
@@ -31,97 +31,99 @@
     </div>
   </div>
   <ng-container *ngIf="(regular$ | async) as regular">
-    <div class="mb-3">
-      <label class="form-label">Téléphone à appeler</label>
-      <app-phone-field
-        [phoneFieldControl]="scheduleFareForm.controls.phoneToCall"
-        [phone]="regular.phone"
-        [prefilled]="regular.phones"></app-phone-field>
-    </div>
-    <div class="mb-3" formControlErrors="departureDatetime">
-      <!-- TODO: Create sub-component -->
-      <div *ngIf="selectedDateContext$ | async"></div>
-      <label for="departureDatetime" class="form-label">Date et heure du départ</label>
-      <input
-        id="departureDatetime"
-        type="datetime-local"
-        class="form-control"
-        name="departureDatetime"
-        formControlName="departureDatetime"
-        [ngClass]="validation(scheduleFareForm.controls.departureDatetime)" />
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Lieu de départ</label>
-      <app-place-field
-        [placeFieldControl]="scheduleFareForm.controls.departurePlace"
-        [place]="regular.departure"
-        [prefilled]="regular.departures"
-        (selectedValue)="onDepartureSelectedValueChange($event)"></app-place-field>
-    </div>
-    <div class="mb-3" formControlErrors="arrivalPlace">
-      <label class="form-label">Destination</label>
-      <app-destination-field
-        [destinationFieldControl]="scheduleFareForm.controls.arrivalPlace"
-        [destination]="regular.destination"
-        [prefilled]="regular.destinations"
-        (selectedValue)="onDestinationSelectedValueChange($event)"></app-destination-field>
-    </div>
-    <app-estimate-journey-fields
-      [form]="$any(scheduleFareForm)"
-      [estimateJourney]="estimateJourney$ | async"
-      (formControlUpdated)="updateEstimateFields($event)"></app-estimate-journey-fields>
-    <div class="mb-3">
-      <label class="form-label">Chauffeur</label>
-      <app-driver-field
-        [driverFieldControl]="scheduleFareForm.controls.driver"
-        [driver]="(selectedSlotContext$ | async)?.rowContext?.driver"
-        [prefilled]="(drivers$ | async) ?? []"></app-driver-field>
-    </div>
-    <div class="mb-3">
-      <div class="form-check form-switch">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          role="switch"
-          id="isTwoWayDrive"
-          name="isTwoWayDrive"
-          formControlName="isTwoWayDrive"
-          checked />
-        <label class="form-check-label" for="isTwoWayDrive">Ce trajet comporte un retour</label>
+    <ng-container *ngIf="(validRegular$ | async)">
+      <div class="mb-3">
+        <label class="form-label">Téléphone à appeler</label>
+        <app-phone-field
+          [phoneFieldControl]="scheduleFareForm.controls.phoneToCall"
+          [phone]="regular.phone"
+          [prefilled]="regular.phones"></app-phone-field>
       </div>
-    </div>
-    <div class="mb-3">
-      <div class="form-check form-switch">
+      <div class="mb-3" formControlErrors="departureDatetime">
+        <!-- TODO: Create sub-component -->
+        <div *ngIf="selectedDateContext$ | async"></div>
+        <label for="departureDatetime" class="form-label">Date et heure du départ</label>
         <input
-          class="form-check-input"
-          type="checkbox"
-          role="switch"
-          id="isMedicalDrive"
-          name="isMedicalDrive"
-          formControlName="isMedicalDrive"
-          checked />
-        <label class="form-check-label" for="isMedicalDrive">Ce trajet est de nature médicale</label>
+          id="departureDatetime"
+          type="datetime-local"
+          class="form-control"
+          name="departureDatetime"
+          formControlName="departureDatetime"
+          [ngClass]="validation(scheduleFareForm.controls.departureDatetime)" />
       </div>
-    </div>
-    <button
-      [appLoadActionDisplay]="loadAction.isLoading$ | async"
-      #loadActionDisplay
-      type="submit"
-      class="btn mt-3 btn-primary w-100"
-      [disabled]="loadActionDisplay.isLoading">
-      <ng-container slot="loadActionDisplayIdle">Créer la course</ng-container>
-      <ng-container slot="loadActionDisplayLoading">
-        <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
-        Création en cours...
-      </ng-container>
-    </button>
-    <!-- TODO Mutualiser les erreurs communes -->
-    <div class="text-danger mt-2" *ngIf="scheduleFareForm.errors?.['validationFailedBeforeApiCallError']">
-      La structure des données de la requête ne respecte pas le contrat de transfer. La requête ne peut pas être effectuée.
-      Prévenir Romain qu'il va faire des heures supp'.
-    </div>
-    <div class="text-danger mt-2" *ngIf="scheduleFareForm.errors">
-      Une erreur est survenue lors de l'appel au service distant.
-    </div>
+      <div class="mb-3">
+        <label class="form-label">Lieu de départ</label>
+        <app-place-field
+          [placeFieldControl]="scheduleFareForm.controls.departurePlace"
+          [place]="regular.departure"
+          [prefilled]="regular.departures"
+          (selectedValue)="onDepartureSelectedValueChange($event)"></app-place-field>
+      </div>
+      <div class="mb-3" formControlErrors="arrivalPlace">
+        <label class="form-label">Destination</label>
+        <app-destination-field
+          [destinationFieldControl]="scheduleFareForm.controls.arrivalPlace"
+          [destination]="regular.destination"
+          [prefilled]="regular.destinations"
+          (selectedValue)="onDestinationSelectedValueChange($event)"></app-destination-field>
+      </div>
+      <app-estimate-journey-fields
+        [form]="$any(scheduleFareForm)"
+        [estimateJourney]="estimateJourney$ | async"
+        (formControlUpdated)="updateEstimateFields($event)"></app-estimate-journey-fields>
+      <div class="mb-3">
+        <label class="form-label">Chauffeur</label>
+        <app-driver-field
+          [driverFieldControl]="scheduleFareForm.controls.driver"
+          [driver]="(selectedSlotContext$ | async)?.rowContext?.driver"
+          [prefilled]="(drivers$ | async) ?? []"></app-driver-field>
+      </div>
+      <div class="mb-3">
+        <div class="form-check form-switch">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="isTwoWayDrive"
+            name="isTwoWayDrive"
+            formControlName="isTwoWayDrive"
+            checked />
+          <label class="form-check-label" for="isTwoWayDrive">Ce trajet comporte un retour</label>
+        </div>
+      </div>
+      <div class="mb-3">
+        <div class="form-check form-switch">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="isMedicalDrive"
+            name="isMedicalDrive"
+            formControlName="isMedicalDrive"
+            checked />
+          <label class="form-check-label" for="isMedicalDrive">Ce trajet est de nature médicale</label>
+        </div>
+      </div>
+      <button
+        [appLoadActionDisplay]="loadAction.isLoading$ | async"
+        #loadActionDisplay
+        type="submit"
+        class="btn mt-3 btn-primary w-100"
+        [disabled]="loadActionDisplay.isLoading">
+        <ng-container slot="loadActionDisplayIdle">Créer la course</ng-container>
+        <ng-container slot="loadActionDisplayLoading">
+          <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+          Création en cours...
+        </ng-container>
+      </button>
+      <!-- TODO Mutualiser les erreurs communes -->
+      <div class="text-danger mt-2" *ngIf="scheduleFareForm.errors?.['validationFailedBeforeApiCallError']">
+        La structure des données de la requête ne respecte pas le contrat de transfer. La requête ne peut pas être effectuée.
+        Prévenir Romain qu'il va faire des heures supp'.
+      </div>
+      <div class="text-danger mt-2" *ngIf="scheduleFareForm.errors">
+        Une erreur est survenue lors de l'appel au service distant.
+      </div>
+    </ng-container>
   </ng-container>
 </form>

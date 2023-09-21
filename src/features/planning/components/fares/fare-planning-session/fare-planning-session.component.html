@@ -3,7 +3,9 @@
   [routerLink]="'manage-fare'"
   (click)="$event.stopPropagation(); onPlanningSessionClicked(fare, rowContext)">
   <b class="mb-0 text-capitalize d-flex text-nowrap overflow-x-hidden">
-    <span class="text-body cursor" title="Appeler le client au {{ fare.passenger.phone }}">{{ fare.passenger.identity }}</span>
+    <span class="text-body cursor" title="Appeler le client au {{ fare.passenger.phone }}">
+      {{ passengerIdentity(fare.passenger) }}
+    </span>
     <ng-container *ngIf="fare.nature === 'medical'">
       <span class="visually-hidden">Trajet médical</span>
       <i class="ms-auto ri-stethoscope-line small text-muted" aria-hidden="true"></i>

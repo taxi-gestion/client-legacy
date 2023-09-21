@@ -3,13 +3,10 @@ import { Entity, FaresSubcontracted, ToSubcontract } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { toLocalTime } from '../../common/fares.presenter';
 import { FareToEditValues } from './edit-fare.form';
-
-/*export const passengerFromContext = (context: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>): string =>
-  // TODO verify if ok
-  context.sessionContext.passenger.passenger;*/
+import { toIdentity } from '@features/common/regular';
 
 export const toSubcontractFareSuccessToast = (fares: FaresSubcontracted): Toast => ({
-  content: `Course pour ${fares.subcontracted.passenger.identity} à ${toLocalTime(
+  content: `Course pour ${toIdentity(fares.subcontracted.passenger)} à ${toLocalTime(
     fares.subcontracted.datetime
   )} sous-traité à ${fares.subcontracted.subcontractor.identity}`,
   status: 'success',

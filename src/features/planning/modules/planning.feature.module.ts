@@ -17,7 +17,7 @@ import { RecurrenceServiceModule } from '@features/common/recurrence';
 import { DriverComponentModule } from '@features/common/driver';
 import { JourneyQueriesModule } from '@features/common/journey';
 import { DestinationComponentModule } from '@features/common/destination';
-import { RegularServiceModule } from '@features/common/regular';
+import { RegularComponentModule } from '@features/common/regular';
 import { PlaceComponentModule } from '@features/common/place';
 import { LoadUiModule } from '@features/common/load';
 
@@ -35,11 +35,12 @@ import { LoadUiModule } from '@features/common/load';
     PlanningFeatureRoutingModule,
     RecurrenceServiceModule,
     DriverComponentModule,
-    RegularServiceModule,
+    RegularComponentModule,
     NavbarUiModule,
     FormValidationComponentModule,
     PhoneComponentModule,
-    DestinationComponentModule
+    DestinationComponentModule,
+    RegularComponentModule
   ],
   providers: [
     CanActivatePlanningRedirectGuard,
