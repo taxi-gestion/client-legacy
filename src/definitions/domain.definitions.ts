@@ -19,7 +19,9 @@ export type DurationDistance = {
 };
 
 export type Passenger = {
-  identity: string;
+  firstname: string | undefined;
+  lastname: string;
+  civility: Civility;
   phone: {
     type: string;
     number: string;

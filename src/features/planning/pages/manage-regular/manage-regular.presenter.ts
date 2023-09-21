@@ -6,8 +6,7 @@ import { fold as eitherFold } from 'fp-ts/Either';
 import { pipe as fpPipe } from 'fp-ts/function';
 import { entityCodec } from '@codecs';
 import { passengerIdentity, throwDecodeError, toRegularDetails } from '../../common/regular.presenter';
-import { toPhoneValues } from '@features/common/phone';
-import { toDestinationValues } from '@features/common/destination';
+import { RegularValues } from '@features/common/regular';
 
 export const toEditRegular = (rawFormValues: unknown): Entity & RegularDetails =>
   fpPipe(
@@ -33,20 +32,20 @@ export const toEditRegularSuccessToast = (regular: RegularEdited): Toast => ({
   title: `Un passager a été modifié`
 });
 
-export const toEditRegularPresentation = (regular: Entity & RegularDetails): EditRegularValues => ({
-  regularId: regular.id,
+export const toEditRegularPresentation = (regular: Entity & RegularValues): EditRegularValues => ({
+  regular,
   civility: regular.civility,
   firstname: regular.firstname,
   lastname: regular.lastname,
-  phones: regular.phones?.map(toPhoneValues),
-  homeAddress: regular.home,
+  phones: regular.phones,
+  homeAddress: regular.homeAddress,
   commentary: regular.commentary,
-  destinations: regular.destinations?.map(toDestinationValues),
+  destinations: regular.destinations,
   subcontractedClient: regular.subcontractedClient
 });
 
 const toDomain = (formValues: EditRegularValues): Entity & RegularDetails => ({
-  id: formValues.regularId,
+  id: formValues.regular.id,
   ...toRegularDetails(formValues)
 });
 

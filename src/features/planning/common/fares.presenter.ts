@@ -6,15 +6,15 @@ import {
   timeInTimezone
 } from './unit-convertion';
 import { addMinutes, format, secondsToMinutes, subHours } from 'date-fns';
-import { Driver, Entity, Journey, Passenger, Place, RegularDetails, Scheduled } from '@definitions';
-import { FareToScheduleValues } from '../pages/schedule-fare/schedule-fare.form';
-import { passengerIdentity, throwDecodeError } from './regular.presenter';
-import { toPhone } from '@features/common/phone';
+import { Driver, Entity, Journey, Passenger, Place, Scheduled } from '@definitions';
+import { throwDecodeError } from './regular.presenter';
 import { pipe as fpPipe } from 'fp-ts/function';
 import { fold as eitherFold } from 'fp-ts/Either';
 import { journeyCodec } from '@codecs';
 import { PlaceValues } from '@features/common/place';
 import { DestinationValues } from '@features/common/destination';
+import { FareToScheduleValues } from '../pages/schedule-fare/schedule-fare.form';
+import { toPhone } from '@features/common/phone';
 
 export const defaultPlaceValue: Place = {
   context: '',
@@ -104,17 +104,10 @@ export const toLocalDatetimeString = (dateString: string, timeInMinutes: number)
 
 export const regularToPassenger = (formValues: FareToScheduleValues): Entity & Passenger => ({
   id: formValues.passenger.id,
-  identity: passengerIdentity(formValues.passenger),
+  civility: formValues.passenger.civility,
+  firstname: formValues.passenger.firstname,
+  lastname: formValues.passenger.lastname,
   phone: toPhone(formValues.phoneToCall)
 });
 
 export const localDatetimeString = (): string => formatDateToDatetimeLocalString(new Date());
-
-export const toFormPassenger = (
-  regular: Entity & RegularDetails
-): Entity & Pick<RegularDetails, 'civility' | 'firstname' | 'lastname'> => ({
-  id: regular.id,
-  civility: regular.civility,
-  firstname: regular.firstname,
-  lastname: regular.lastname
-});

@@ -1,21 +1,20 @@
 import { datetimeLocalToIso8601UTCString, kilometersToMeters, minutesToSeconds } from '../../common/unit-convertion';
 import { FareToScheduleValues, scheduleFareFormCodec } from './schedule-fare.form';
 import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
-import { Entity, FaresScheduled, RegularDetails, ToSchedule } from '@definitions';
+import { FaresScheduled, RegularDetails, ToSchedule } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
-import { regularToPassenger, toFormPassenger, toLocalTime } from '../../common/fares.presenter';
+import { regularToPassenger, toLocalTime } from '../../common/fares.presenter';
 import { pipe as fpPipe } from 'fp-ts/function';
 import { fold as eitherFold } from 'fp-ts/Either';
 import { throwDecodeError } from '../../common/regular.presenter';
-import { FormGroup } from '@angular/forms';
-import { FareFields } from '../../common/fares.presentation';
 import { PhoneValues, toPhoneValues } from '@features/common/phone';
 import { DestinationValues, toDestinationValues } from '@features/common/destination';
 import { toPlace } from '@features/common/place';
 import { toDriver } from '../../../common/driver/driver.presenter';
+import { toIdentity } from '@features/common/regular';
 
 export const toScheduleFareSuccessToast = (fares: FaresScheduled): Toast => ({
-  content: `Course pour ${fares.scheduledCreated.passenger.identity} par ${
+  content: `Course pour ${toIdentity(fares.scheduledCreated.passenger)} par ${
     fares.scheduledCreated.driver.username
   } à ${toLocalTime(fares.scheduledCreated.datetime)} planifiée`,
   status: 'success',
@@ -40,12 +39,6 @@ export const toDomain = (formValues: FareToScheduleValues): ToSchedule => ({
   passenger: regularToPassenger(formValues),
   status: 'to-schedule'
 });
-
-export const updateRegularLinkedControls =
-  (form: FormGroup<FareFields>) =>
-  (regular: Entity & RegularDetails): void => {
-    form.controls.passenger.setValue(toFormPassenger(regular));
-  };
 
 export const toFirstPhone = (regular: RegularDetails): PhoneValues | undefined =>
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

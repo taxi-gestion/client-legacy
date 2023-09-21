@@ -3,31 +3,18 @@ import { array as ioArray, string as ioString, type as ioType, Type, undefined a
 import { civilityCodec } from '@codecs';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { RegisterRegularValues } from '../pages/register-regular/register-regular.form';
-import { PhonesFields, phonesFormControls, PhoneValues, phoneValuesCodec } from '@features/common/phone';
+import { PhonesFields, phonesFormControls, phoneValuesCodec } from '@features/common/phone';
 import {
   DestinationsArrayElementFields,
   DestinationsArrayField,
   destinationsArrayFormControl,
-  DestinationValues,
   destinationValuesCodec
 } from '@features/common/destination';
-import { PlaceField, placeFieldFormControl, PlaceValues } from '@features/common/place';
+import { PlaceField, placeFieldFormControl } from '@features/common/place';
 import { placeValuesCodec } from '../../common/place/codecs';
+import { RegularValues } from '@features/common/regular';
 
 export const DEFAULT_CIVILITY: Civility = 'Mr';
-
-export type RegularValues = {
-  civility: Civility;
-  lastname: string;
-  firstname: string | undefined;
-  homeAddress: PlaceValues | undefined;
-  commentary: string | undefined;
-  subcontractedClient: string | undefined;
-} & {
-  destinations: DestinationValues[] | undefined;
-} & {
-  phones: PhoneValues[] | undefined;
-};
 
 export const regularFormCodec: Type<RegularValues> = ioType({
   civility: civilityCodec,

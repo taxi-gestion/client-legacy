@@ -1,9 +1,9 @@
 import { ValidationFailedBeforeApiCallError } from '../errors';
 import { Destination, Entity, RegularDetails } from '@definitions';
-import { RegularValues } from './regular.presentation';
 import { toPhone } from '@features/common/phone';
 import { DestinationValues } from '@features/common/destination';
 import { PlaceValues } from '@features/common/place';
+import { RegularValues } from '@features/common/regular';
 
 export const throwDecodeError = (codecName: string, rawFormValues: unknown) => (): never => {
   throw new ValidationFailedBeforeApiCallError(
@@ -44,7 +44,7 @@ const toDestination = (destination: DestinationValues): Destination => ({
 export const firstnameOrEmpty = (regular: { firstname: string | undefined }): string =>
   regular.firstname === undefined ? '' : `${regular.firstname} `;
 
-export const passengerIdentity = (passenger: Entity & Pick<RegularDetails, 'civility' | 'firstname' | 'lastname'>): string =>
+export const passengerIdentity = (passenger: RegularDetails | RegularValues): string =>
   `${passenger.civility} ${firstnameOrEmpty(passenger)}${passenger.lastname}`;
 
 export const defaultPassengerValue: Entity & RegularDetails = {

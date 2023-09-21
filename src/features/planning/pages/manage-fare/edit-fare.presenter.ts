@@ -4,17 +4,29 @@ import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { regularToPassenger, toLocalTime } from '../../common/fares.presenter';
 import { datetimeLocalToIso8601UTCString, kilometersToMeters, minutesToSeconds } from '../../common/unit-convertion';
 import { FareToEditValues } from './edit-fare.form';
-import { SessionContext } from '../../components/planning/planning-row/planning-row.component';
-import { DailyDriverPlanning, ScheduledPlanningSession } from '../../common/fares.presentation';
 import { toPlace } from '@features/common/place';
 import { toDriver } from '../../../common/driver/driver.presenter';
+import { toIdentity } from '@features/common/regular';
 
-export const passengerFromContext = (context: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>): string =>
-  //TODO Verify if ok
-  context.sessionContext.passenger.identity;
+/*export const sessionToFaresToEditValues = (
+  selectedSession: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>
+): FareToEditValues =>
+  ({
+    arrivalPlace: selectedSession.sessionContext.destination, //toDestinationsFromPlace
+    departureDatetime: selectedSession.sessionContext.datetime,
+    departurePlace: selectedSession.sessionContext.departure,
+    driveDistance: 0,
+    driveDuration: 0,
+    driver: selectedSession.sessionContext.driver, //toDriverValues
+    id: selectedSession.sessionContext.id,
+    isMedicalDrive: selectedSession.sessionContext.nature,
+    isTwoWayDrive: selectedSession.sessionContext.kind,
+    passenger: selectedSession.sessionContext.passenger, //toPassengerValues
+    phoneToCall: toPhoneValues(selectedSession.sessionContext.passenger.phone)
+  });*/
 
 export const toEditFareSuccessToast = (fares: FaresEdited): Toast => ({
-  content: `Course pour ${fares.scheduledEdited.passenger.identity} par ${
+  content: `Course pour ${toIdentity(fares.scheduledEdited.passenger)} par ${
     fares.scheduledEdited.driver.username
   } à ${toLocalTime(fares.scheduledEdited.datetime)} planifiée`,
   status: 'success',

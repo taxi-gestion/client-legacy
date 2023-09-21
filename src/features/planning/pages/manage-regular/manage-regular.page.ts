@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
-import { map, Observable, Subject, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { DELETE_REGULAR_ACTION, DeleteRegularAction, EDIT_REGULAR_ACTION, EditRegularAction } from '../../providers';
 import { EDIT_REGULAR_FORM, EditRegularFields, EditRegularValues, setEditRegularErrorToForm } from './edit-regular.form';
 import {
@@ -13,13 +13,14 @@ import {
 } from './manage-regular.presenter';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Entity, RegularDeleted, RegularDetails, RegularEdited } from '@definitions';
+import { Entity, RegularDeleted, RegularEdited } from '@definitions';
 import {
   BootstrapValidationClasses,
   bootstrapValidationClasses,
   forceControlRevalidation,
   nullToUndefined
 } from '@features/common/form-validation';
+import { regularEmptyValue, regularHasId, RegularValues } from '@features/common/regular';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -44,26 +45,28 @@ export class ManageRegularPage {
     @Inject(DELETE_REGULAR_ACTION) private readonly _deleteRegularAction$: DeleteRegularAction
   ) {}
 
-  //region form-binding
-  private readonly _regular$: Subject<Entity & RegularDetails> = new Subject<Entity & RegularDetails>();
+  private readonly _regular$: BehaviorSubject<Entity & RegularValues> = new BehaviorSubject<Entity & RegularValues>(
+    regularEmptyValue
+  );
 
-  public onSelectRegularChange(regular: Entity & RegularDetails): void {
+  public onSelectRegularChange(regular: Entity & RegularValues): void {
     this._regular$.next(regular);
   }
 
   public regular$: Observable<EditRegularValues> = this._regular$.asObservable().pipe(
-    tap((regular: Entity & RegularDetails): void => {
-      this.editRegularForm.controls.regularId.setValue(regular.id);
-      this.editRegularForm.controls.civility.setValue(regular.civility);
-      this.editRegularForm.controls.firstname.setValue(regular.firstname);
-      this.editRegularForm.controls.lastname.setValue(regular.lastname);
-      this.editRegularForm.controls.commentary.setValue(regular.commentary);
-      this.editRegularForm.controls.subcontractedClient.setValue(regular.subcontractedClient);
-      this._selectedRegular = { id: regular.id };
-    }),
-    map(toEditRegularPresentation)
+    map(toEditRegularPresentation),
+    tap((regularValues: EditRegularValues): void => {
+      this.editRegularForm.controls.civility.setValue(regularValues.civility);
+      this.editRegularForm.controls.firstname.setValue(regularValues.firstname);
+      this.editRegularForm.controls.lastname.setValue(regularValues.lastname);
+      this.editRegularForm.controls.commentary.setValue(regularValues.commentary);
+      this.editRegularForm.controls.subcontractedClient.setValue(regularValues.subcontractedClient);
+    })
   );
-  //
+
+  public validRegular$: Observable<boolean> = this._regular$
+    .asObservable()
+    .pipe(map((regular: Entity & RegularValues): boolean => regularHasId(regular)));
 
   //region action edit regular
   public readonly editRegular$ = (): Observable<RegularEdited> =>
@@ -91,9 +94,8 @@ export class ManageRegularPage {
   // endregion
 
   //region action delete regular
-  private _selectedRegular: Entity | null = null;
   public readonly deleteRegular$ = (): Observable<RegularDeleted> =>
-    this._deleteRegularAction$(toDeleteRegular(this._selectedRegular));
+    this._deleteRegularAction$(toDeleteRegular(this._regular$.getValue()));
 
   public onDeleteRegularActionSuccess = async (payload: RegularDeleted): Promise<void> => {
     this._toaster.toast(toDeleteRegularSuccessToast(payload));

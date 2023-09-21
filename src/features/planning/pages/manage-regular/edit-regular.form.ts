@@ -1,24 +1,28 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { RegularFields, regularFormCodec, regularFormControls, RegularValues } from '../../common/regular.presentation';
-import { intersection as ioIntersection, string as ioString, type as ioType, Type } from 'io-ts';
+import { RegularFields, regularFormCodec, regularFormControls } from '../../common/regular.presentation';
+import { intersection as ioIntersection, type as ioType, Type } from 'io-ts';
+import { regularEmptyValue, RegularValues, regularValuesEntityCodec } from '@features/common/regular';
+import { RegularField } from '../../../common/regular/components/regular-field/regular-field.form';
+import { Entity } from '@definitions';
 
 export type EditRegularValues = RegularValues & {
-  regularId: string;
+  regular: Entity & RegularValues;
 };
 
 export const editRegularFormCodec: Type<EditRegularValues> = ioIntersection([
   ioType({
-    regularId: ioString
+    regular: regularValuesEntityCodec
   }),
   regularFormCodec
 ]);
 
-export type EditRegularFields = RegularFields & {
-  regularId: FormControl<EditRegularValues['regularId']>;
-};
+export type EditRegularFields = RegularField<'regular'> & RegularFields;
 
 export const EDIT_REGULAR_FORM: FormGroup<EditRegularFields> = new FormGroup<EditRegularFields>({
-  regularId: new FormControl<EditRegularValues['regularId']>('', { nonNullable: true, validators: [Validators.required] }),
+  regular: new FormControl<EditRegularValues['regular']>(regularEmptyValue, {
+    nonNullable: true,
+    validators: [Validators.required]
+  }),
   ...regularFormControls()
 });
 
