@@ -64,7 +64,6 @@ export const durationDistanceCodec: Type<DurationDistance> = ioType(
 export const phoneCodec: Type<Phone> = ioType(
   {
     type: ioString,
-    // eslint-disable-next-line id-denylist
     number: ioString
   },
   'phoneCodec'

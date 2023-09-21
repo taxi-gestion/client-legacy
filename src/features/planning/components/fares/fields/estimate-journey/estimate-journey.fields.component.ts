@@ -12,11 +12,6 @@ export type EstimateJourneyFields = {
   driveDistance: FormControl<EstimateJourneyValues['driveDistance']>;
 };
 
-//export const ESTIMATE_JOURNEY_FORM_CONTROLS: Record<keyof EstimateJourneyValues, FormControl> = {
-//  driveDuration: new FormControl<EstimateJourneyValues['driveDuration']>(0, [Validators.required]),
-//  driveDistance: new FormControl<EstimateJourneyValues['driveDistance']>(0, [Validators.required])
-//};
-
 export const estimateJourneyFormControls = (): Record<keyof EstimateJourneyValues, FormControl> => ({
   driveDuration: new FormControl<EstimateJourneyValues['driveDuration']>(0, [Validators.required]),
   driveDistance: new FormControl<EstimateJourneyValues['driveDistance']>(0, [Validators.required])

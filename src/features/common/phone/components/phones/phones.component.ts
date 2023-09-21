@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
-import { BootstrapValidationClasses, bootstrapValidationClasses } from '@features/common';
+import { BootstrapValidationClasses, bootstrapValidationClasses } from '@features/common/form-validation';
 import { PhoneValues } from '../../definitions/phone.definition';
 import { PhoneFields, PhonesFields } from './phones.form';
 import { phoneNumberValidator } from '../../validators';

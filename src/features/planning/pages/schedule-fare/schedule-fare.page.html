@@ -50,46 +50,32 @@
         formControlName="departureDatetime"
         [ngClass]="validation(scheduleFareForm.controls.departureDatetime)" />
     </div>
-    <div class="mb-3" formControlErrors="departurePlace">
-      <label for="departurePlace" class="form-label">Lieu de départ</label>
-      <app-place-field (selectPlace)="onSelectDepartureChange($event)" [defaultValue]="regular.departure"></app-place-field>
-      <!-- TODO Remove hidden input-->
-      <input
-        id="departurePlace"
-        type="hidden"
-        name="departurePlace"
-        formControlName="departurePlace"
-        [ngClass]="validation(scheduleFareForm.controls.departurePlace)" />
+    <div class="mb-3">
+      <label class="form-label">Lieu de départ</label>
+      <app-place-field
+        [placeFieldControl]="scheduleFareForm.controls.departurePlace"
+        [place]="regular.departure"
+        [prefilled]="regular.departures"
+        (selectedValue)="onDepartureSelectedValueChange($event)"></app-place-field>
     </div>
     <div class="mb-3" formControlErrors="arrivalPlace">
-      <label for="arrivalPlace" class="form-label">Lieu d'arrivée</label>
-      <app-place-field
-        (selectPlace)="onSelectArrivalChange($event)"
-        [defaultValue]="regular.destination?.place"></app-place-field>
-      <!-- TODO Remove hidden input-->
-      <input
-        id="arrivalPlace"
-        type="hidden"
-        name="arrivalPlace"
-        formControlName="arrivalPlace"
-        [ngClass]="validation(scheduleFareForm.controls.arrivalPlace)" />
+      <label class="form-label">Destination</label>
+      <app-destination-field
+        [destinationFieldControl]="scheduleFareForm.controls.arrivalPlace"
+        [destination]="regular.destination"
+        [prefilled]="regular.destinations"
+        (selectedValue)="onDestinationSelectedValueChange($event)"></app-destination-field>
     </div>
     <app-estimate-journey-fields
       [form]="$any(scheduleFareForm)"
       [estimateJourney]="estimateJourney$ | async"
       (formControlUpdated)="updateEstimateFields($event)"></app-estimate-journey-fields>
     <div class="mb-3">
-      <label for="driver" class="form-label">Chauffeur</label>
-      <!-- TODO Find a better way to link observable to view -->
+      <label class="form-label">Chauffeur</label>
       <app-driver-field
-        (selectDriver)="onSelectDriverChange($event)"
-        [defaultValue]="(selectedSlotContext$ | async)?.rowContext?.driver"></app-driver-field>
-      <input
-        id="driver"
-        type="hidden"
-        name="driver"
-        formControlName="driver"
-        [ngClass]="validation(scheduleFareForm.controls.driver)" />
+        [driverFieldControl]="scheduleFareForm.controls.driver"
+        [driver]="(selectedSlotContext$ | async)?.rowContext?.driver"
+        [prefilled]="(drivers$ | async) ?? []"></app-driver-field>
     </div>
     <div class="mb-3">
       <div class="form-check form-switch">

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { LoadUiModule } from '@features/common';
+import { LoadUiModule } from '@features/common/load';
 import { DIRECTIVES } from '../directives';
 import { LAYOUTS } from '../layouts';
 import { PAGES } from '../pages';

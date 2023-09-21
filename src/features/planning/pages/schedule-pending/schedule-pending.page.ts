@@ -14,7 +14,7 @@ import { formatDateToDatetimeLocalString, toDisplayDurationDistance } from '../.
 import { Driver, DurationDistance, isValidPlace, JourneyEstimate, PendingScheduled, Place } from '@definitions';
 import { PendingPresentation } from '../../common';
 import { defaultPlaceValue, toJourney } from '../../common/fares.presenter';
-import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common';
+import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common/journey';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { EstimateJourneyValues } from '../../components';
 import { DailyPlanningLayout } from '../../layouts';

@@ -1,17 +1,12 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, Output } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
-import { selectedPlaceValidator, SEARCH_PLACE_QUERY, SearchPlaceQuery } from '@features/common/place';
-import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, map, Observable, Subject, switchMap, tap } from 'rxjs';
-import { Place } from '@definitions';
-import { bootstrapValidationClasses, BootstrapValidationClasses, FORM_CONTROL_ERROR_MESSAGES_TOKEN } from '@features/common';
+import { SEARCH_PLACE_QUERY, SearchPlaceQuery } from '@features/common/place';
 import { PLACE_FORM_CONTROL_ERROR_MESSAGES } from '../../errors/form-errors-messages.token';
-
-export type PlaceValues = {
-  place: string;
-};
-export type PlaceFields = {
-  place: FormControl<PlaceValues['place']>;
-};
+import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { selectedPlaceValidator } from '../../validators';
+import { placeEmptyValue } from '../../place.presenter';
+import { PlaceValues } from '../../definitions/place.definition';
+import { FORM_CONTROL_ERROR_MESSAGES_TOKEN } from '@features/common/form-validation';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,77 +20,41 @@ export type PlaceFields = {
   ]
 })
 export class PlaceFieldComponent {
-  public validation: (control: AbstractControl) => BootstrapValidationClasses = bootstrapValidationClasses;
+  @Input({ required: true }) public placeFieldControl!: FormControl<PlaceValues>;
 
-  @Input() public minSearchTermLength: number = 3;
-  @Input() public searchDebounceTime: number = 300;
+  @Input() public prefilled: PlaceValues[] = [];
 
-  @Output() public readonly selectPlace: EventEmitter<Place> = new EventEmitter<Place>();
+  public searchFormGroup: FormGroup<{ search: FormControl<string> }> = new FormGroup<{ search: FormControl<string> }>({
+    search: new FormControl<string>('', { nonNullable: true, validators: [] })
+  });
 
-  @Output() public readonly resetPlace: EventEmitter<void> = new EventEmitter<void>();
-
-  @Input() public placeNotFound: boolean = false;
-
-  @Input() public displayReset: boolean = false;
-
-  @Input() public set defaultValue(place: (Place | undefined) | null) {
-    place != null && this.setPlaceSuggestion(place);
+  @Input() public set place(place: (PlaceValues | undefined) | null) {
+    place !== null && this.onPlaceReceived(place ?? placeEmptyValue);
   }
 
-  private readonly _searchPlaceTerm$: Subject<string> = new Subject<string>();
+  @Output() public readonly selectedValue: EventEmitter<PlaceValues> = new EventEmitter<PlaceValues>();
 
-  private readonly _selectedPlace$: BehaviorSubject<Place> = new BehaviorSubject<Place>(emptyPlaceValue);
-
-  public selectedPlace$: Observable<Place> = this._selectedPlace$.asObservable().pipe(
-    tap((place: Place): void => {
-      this.formGroup.controls.place.setValidators(selectedPlaceValidator(place));
-      this.formGroup.controls.place.updateValueAndValidity();
-    })
-  );
-
-  public placesFound$: Observable<Place[]> = this._searchPlaceTerm$.pipe(
-    map((searchPlaceTerm: string): string => searchPlaceTerm.trim()),
-    filter((searchPlaceTerm: string): boolean => searchPlaceTerm.length >= this.minSearchTermLength),
-    debounceTime(this.searchDebounceTime),
-    distinctUntilChanged(),
-    switchMap((searchPlaceTerm: string): Observable<Place[]> => this._searchPlaceQuery(searchPlaceTerm))
-  );
+  public onSelectedValueChange(place: PlaceValues): void {
+    this.placeFieldControl.setValue(place);
+    this.selectedValue.emit(place);
+  }
 
   public constructor(@Inject(SEARCH_PLACE_QUERY) private readonly _searchPlaceQuery: SearchPlaceQuery) {}
 
-  public readonly formGroup: FormGroup<PlaceFields> = new FormGroup<PlaceFields>({
-    place: new FormControl<PlaceValues['place']>('', {
-      nonNullable: true,
-      validators: []
-    })
-  });
-
-  public search(placeInput: string): void {
-    this._searchPlaceTerm$.next(placeInput);
-    this._selectedPlace$.next(emptyPlaceValue);
+  public onPlaceReceived(placeNumberValue: PlaceValues | undefined): void {
+    this.defaultValue = placeNumberValue;
   }
 
-  public setPlaceSuggestion(place: Place): void {
-    this.formGroup.get('place')?.setValue(place.context);
-    this._selectedPlace$.next(place);
-    this.selectPlace.emit(place);
-  }
+  public defaultValue: PlaceValues | undefined = placeEmptyValue;
 
-  public trackByPlaceName(_: number, place: Place): string {
-    return `${place.label}-${place.context}`;
-  }
+  public placeEmptyValue: PlaceValues = placeEmptyValue;
 
-  public clear(): void {
-    this.formGroup.get('place')?.reset();
-    this.resetPlace.emit();
-  }
+  public toSearchTerm = (placeValues: PlaceValues): string => placeValues.label;
+
+  public toTrackBy: (index: number, placeValues: PlaceValues) => string = (_: number, placeValues: PlaceValues): string =>
+    `${placeValues.context}${placeValues.location.latitude}${placeValues.location.longitude}`;
+
+  public placeValuesValidator: (placeValues: PlaceValues | undefined) => ValidatorFn = selectedPlaceValidator;
+
+  public query$ = (searchTerm: string): Observable<PlaceValues[]> => this._searchPlaceQuery(searchTerm);
 }
-
-const emptyPlaceValue: Place = {
-  context: '',
-  label: '',
-  location: {
-    latitude: NaN,
-    longitude: NaN
-  }
-};

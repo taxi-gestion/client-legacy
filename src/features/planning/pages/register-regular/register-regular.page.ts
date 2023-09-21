@@ -6,13 +6,13 @@ import { REGISTER_REGULAR_FORM, RegisterRegularFields, setRegisterRegularErrorTo
 import { formatRegisterRegularError, toRegisterRegular, toRegisterRegularSuccessToast } from './register-regular.presenter';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Place, RegularRegistered } from '@definitions';
+import { RegularRegistered } from '@definitions';
 import {
   BootstrapValidationClasses,
   bootstrapValidationClasses,
   forceControlRevalidation,
   nullToUndefined
-} from '@features/common';
+} from '@features/common/form-validation';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,15 +38,7 @@ export class RegisterRegularPage {
     private readonly _route: ActivatedRoute,
     @Inject(REGISTER_REGULAR_ACTION) private readonly _registerRegularAction$: RegisterRegularAction
   ) {}
-  //endregion
 
-  //region form-binding
-  public onSelectHomeAddressChange(place: Place): void {
-    this.registerRegularForm.controls.homeAddress.setValue(place);
-  }
-  // endregion
-
-  //region register-regular
   public onSubmitRegisterRegular = (triggerAction: () => void): void => {
     this.registerRegularForm.markAllAsTouched();
     this.registerRegularForm.valid ? triggerAction() : forceControlRevalidation(this.registerRegularForm);
@@ -66,5 +58,4 @@ export class RegisterRegularPage {
       title: 'Opération échouée'
     });
   };
-  // endregion
 }

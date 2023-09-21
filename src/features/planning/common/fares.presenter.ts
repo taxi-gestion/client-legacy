@@ -8,8 +8,13 @@ import {
 import { addMinutes, format, secondsToMinutes, subHours } from 'date-fns';
 import { Driver, Entity, Journey, Passenger, Place, RegularDetails, Scheduled } from '@definitions';
 import { FareToScheduleValues } from '../pages/schedule-fare/schedule-fare.form';
-import { passengerIdentity } from './regular.presenter';
-import { toPhone } from '../../common/phone';
+import { passengerIdentity, throwDecodeError } from './regular.presenter';
+import { toPhone } from '@features/common/phone';
+import { pipe as fpPipe } from 'fp-ts/function';
+import { fold as eitherFold } from 'fp-ts/Either';
+import { journeyCodec } from '@codecs';
+import { PlaceValues } from '@features/common/place';
+import { DestinationValues } from '@features/common/destination';
 
 export const defaultPlaceValue: Place = {
   context: '',
@@ -20,11 +25,25 @@ export const defaultPlaceValue: Place = {
   }
 };
 
-export const toJourney = (formValues: { departurePlace: Place; arrivalPlace: Place; departureDatetime: string }): Journey => ({
+const toJourneyDomain = (formValues: {
+  departurePlace: PlaceValues;
+  arrivalPlace: DestinationValues;
+  departureDatetime: string;
+}): unknown => ({
   origin: formValues.departurePlace,
-  destination: formValues.arrivalPlace,
+  destination: formValues.arrivalPlace.place,
   departureTime: datetimeLocalToIso8601UTCString(formValues.departureDatetime)
 });
+// TODO Import some rule codecs, should use a local journeyFormCodec with date and places rules
+export const toJourney = (rawFormValues: unknown): Journey => {
+  const tempUgly: unknown = toJourneyDomain(
+    rawFormValues as { departurePlace: PlaceValues; arrivalPlace: DestinationValues; departureDatetime: string }
+  );
+  return fpPipe(
+    journeyCodec.decode(tempUgly),
+    eitherFold(throwDecodeError('journeyCodec', rawFormValues), (values: Journey): Journey => values)
+  );
+};
 
 const matchDriver =
   (driver: Driver & Entity) =>

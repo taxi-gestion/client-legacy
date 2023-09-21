@@ -1,4 +1,3 @@
-/* eslint-disable id-denylist */
 import { ChangeDetectionStrategy, Component, ContentChild, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { AbstractControl, FormControl, FormControlStatus, FormGroup, ValidatorFn } from '@angular/forms';
 import {
@@ -12,7 +11,7 @@ import {
   switchMap,
   tap
 } from 'rxjs';
-import { bootstrapValidationClasses, BootstrapValidationClasses } from '@features/common';
+import { bootstrapValidationClasses, BootstrapValidationClasses } from '@features/common/form-validation';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,9 +32,13 @@ export class AutocompleteFieldComponent<TValue> {
   @Input({ required: true }) public toSearchTerm!: (value: TValue) => string;
   @Input({ required: true }) public toTrackBy!: (index: number, value: TValue) => string;
   @Input({ required: true }) public validator!: (value: TValue) => ValidatorFn;
-  @Input({ required: true }) public query!: (search: string) => Observable<TValue[]>;
-  @Input({ required: true }) public resultFilter!: (searchTerm: string) => (combinedResults: TValue[]) => TValue[];
+  @Input({ required: true }) public query$!: (search: string) => Observable<TValue[]>;
   @Input({ required: true }) public formGroup!: FormGroup<{ search: FormControl<string> }>;
+
+  @Input() public resultFilter: (searchTerm: string) => (combinedResults: TValue[]) => TValue[] =
+    (_search: string) =>
+    (values: TValue[]): TValue[] =>
+      values;
 
   @Input() public set setDefaultSelectedValue(value: (TValue | undefined) | null) {
     if (value === null) return;
@@ -47,8 +50,8 @@ export class AutocompleteFieldComponent<TValue> {
 
   @Input() public prefilled: TValue[] = [];
 
-  @Input() public set revalidate(statusChange: FormControlStatus | null) {
-    if (statusChange === null) return;
+  @Input() public set revalidate(statusChange: { status: FormControlStatus | null; touched: boolean }) {
+    if (statusChange.status === null || !statusChange.touched) return;
     this.formGroup.markAllAsTouched();
     this.formGroup.controls.search.setValidators(this.validator(this._selected$.getValue()));
     this.formGroup.controls.search.updateValueAndValidity();
@@ -74,11 +77,11 @@ export class AutocompleteFieldComponent<TValue> {
   );
 
   public foundFromSearch$: Observable<TValue[]> = this._searchTerm$.pipe(
-    map((searchPlaceTerm: string): string => searchPlaceTerm.trim()),
-    filter((searchPlaceTerm: string): boolean => searchPlaceTerm.length >= this.minSearchTermLength),
+    map((searchTerm: string): string => searchTerm.trim()),
+    filter((searchTerm: string): boolean => searchTerm.length >= this.minSearchTermLength),
     debounceTime(this.searchDebounceTime),
     distinctUntilChanged(),
-    switchMap((searchPlaceTerm: string): Observable<TValue[]> => this.query(searchPlaceTerm))
+    switchMap((searchTerm: string): Observable<TValue[]> => this.query$(searchTerm))
   );
 
   public found$: Observable<TValue[]> = combineLatest([this._prefilled$, this.foundFromSearch$]).pipe(

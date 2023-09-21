@@ -1,14 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {
-  DriverComponentModule,
-  JourneyQueriesModule,
-  LoadUiModule,
-  PlaceComponentModule,
-  RecurrenceServiceModule,
-  RegularServiceModule
-} from '@features/common';
 import { NavbarUiModule } from '../../../root/components';
 import { COMPONENTS } from '../components';
 import { CanActivatePlanningRedirectGuard } from '../guards';
@@ -20,7 +12,14 @@ import { DIRECTIVES } from '../directives';
 import { FormValidationComponentModule } from '../../common/form-validation/modules';
 import { FORM_CONTROL_ERROR_MESSAGES_TOKEN } from '../../common/form-validation/providers/error-messages.token';
 import { PLANNING_FORM_CONTROL_ERROR_MESSAGES } from '../errors/form-errors-messages.token';
-import { PhoneComponentModule } from '../../common/phone';
+import { PhoneComponentModule } from '@features/common/phone';
+import { RecurrenceServiceModule } from '@features/common/recurrence';
+import { DriverComponentModule } from '@features/common/driver';
+import { JourneyQueriesModule } from '@features/common/journey';
+import { DestinationComponentModule } from '@features/common/destination';
+import { RegularServiceModule } from '@features/common/regular';
+import { PlaceComponentModule } from '@features/common/place';
+import { LoadUiModule } from '@features/common/load';
 
 @NgModule({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -39,7 +38,8 @@ import { PhoneComponentModule } from '../../common/phone';
     RegularServiceModule,
     NavbarUiModule,
     FormValidationComponentModule,
-    PhoneComponentModule
+    PhoneComponentModule,
+    DestinationComponentModule
   ],
   providers: [
     CanActivatePlanningRedirectGuard,

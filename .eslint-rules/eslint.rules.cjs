@@ -100,9 +100,9 @@ module.exports = {
     'fun',
     'obj',
     'object',
-    'val',
-    'value',
-    'number'
+    'val'
+    //'value',
+    //'number'
   ],
   'id-length': ['error', { min: 2, exceptions: ['i', 'j', 'x', 'y', 'z', '_'] }],
   'init-declarations': 'off',

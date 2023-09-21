@@ -1,13 +1,12 @@
-/* eslint-disable id-denylist */
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { FORM_CONTROL_ERROR_MESSAGES_TOKEN } from '@features/common';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { FORM_CONTROL_ERROR_MESSAGES_TOKEN } from '@features/common/form-validation';
 import { PHONE_FORM_CONTROL_ERROR_MESSAGES } from '../../errors/form-errors-messages.token';
 import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { selectedPhoneValidator } from '../../validators';
 import { filterOnPhoneValuesProperties } from './phone-field.presenter';
 import { phoneEmptyValue } from '../../phone.presenter';
-import { PhoneValues } from '../../definitions/phone.definition';
+import { PhoneValues } from '../../definitions';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,6 +32,13 @@ export class PhoneFieldComponent {
     phone !== null && this.onPhoneReceived(phone ?? phoneEmptyValue);
   }
 
+  @Output() public readonly selectedValue: EventEmitter<PhoneValues> = new EventEmitter<PhoneValues>();
+
+  public onSelectedValueChange(phone: PhoneValues): void {
+    this.phoneFieldControl.setValue(phone);
+    this.selectedValue.emit(phone);
+  }
+
   public onPhoneReceived(phoneNumberValue: PhoneValues | undefined): void {
     this.defaultValue = phoneNumberValue;
   }
@@ -48,7 +54,7 @@ export class PhoneFieldComponent {
 
   public phoneValuesValidator: (phoneValues: PhoneValues | undefined) => ValidatorFn = selectedPhoneValidator;
 
-  public query = (): Observable<PhoneValues[]> => of([]);
+  public query$ = (): Observable<PhoneValues[]> => of([]);
 
   public resultsFilter: (searchTerm: string) => (combinedResults: PhoneValues[]) => PhoneValues[] =
     filterOnPhoneValuesProperties;

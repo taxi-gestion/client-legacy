@@ -28,7 +28,7 @@
       name="departureDatetime"
       formControlName="departureDatetime" />
   </div>
-  <div class="mb-3">
+  <!--  <div class="mb-3">
     <label for="departurePlace" class="form-label">Lieu de départ</label>
     <app-place-field (selectPlace)="onSelectDepartureChange($event)" [defaultValue]="departure$ | async"></app-place-field>
     <input id="departurePlace" type="hidden" name="departurePlace" formControlName="departurePlace" />
@@ -37,16 +37,19 @@
     <label for="arrivalPlace" class="form-label">Lieu d'arrivée</label>
     <app-place-field (selectPlace)="onSelectArrivalChange($event)" [defaultValue]="destination$ | async"></app-place-field>
     <input id="arrivalPlace" type="hidden" name="arrivalPlace" formControlName="arrivalPlace" />
-  </div>
+  </div>-->
   <app-estimate-journey-fields
     [form]="$any(schedulePendingForm)"
     [estimateJourney]="estimateJourney$ | async"
     (formControlUpdated)="updateEstimateFields($event)"></app-estimate-journey-fields>
-  <div class="mb-3">
+  <!--  <div class="mb-3">
     <label for="driver" class="form-label">Chauffeur</label>
-    <app-driver-field (selectDriver)="onSelectDriverChange($event)"></app-driver-field>
-    <input id="driver" type="hidden" name="driver" formControlName="driver" />
-  </div>
+    <app-driver-field
+      [driverFieldControl]="schedulePendingForm.controls.driver"
+      [driver]="(selectedSlotContext$ | async)?.rowContext?.driver"
+      [prefilled]="drivers$ | async"
+    ></app-driver-field>
+  </div>-->
   <button
     [appLoadActionDisplay]="loadAction.isLoading$ | async"
     #loadActionDisplay

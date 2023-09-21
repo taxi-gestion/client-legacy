@@ -1,63 +1,25 @@
-<form [formGroup]="formGroup">
-  <div formControlErrors="driver">
-    <label for="driver" class="visually-hidden"><ng-content></ng-content></label>
-    <div class="input-group">
-      <span class="input-group-text pe-0">
-        <i class="text-muted ri-search-line" aria-hidden="true"></i>
-      </span>
-      <input
-        #driverInput
-        type="search"
-        driverholder="Rechercher un chauffeur"
-        name="driver"
-        id="driver"
-        class="form-control border-start-0 position-relative"
-        [ngClass]="validation(formGroup.controls.driver)"
-        autocomplete="off"
-        aria-describedby="driver"
-        aria-haspopup="true"
-        formControlName="driver"
-        [attr.aria-describedby]="driverNotFound ? 'driver-desc-error' : null"
-        [attr.aria-expanded]="driverResultsDropdown.expanded$ | async"
-        (input)="
-          search(driverInput.value);
-          driverInput.value.length <= minSearchTermLength ? driverResultsDropdown.reduce() : driverResultsDropdown.expand()
-        "
-        (focus)="
-          driverInput.value.length <= minSearchTermLength ? driverResultsDropdown.reduce() : driverResultsDropdown.expand()
-        "
-        (keyup.escape)="driverResultsDropdown.reduce()"
-        (keyup.enter)="driverResultsDropdown.activeIndex = 0; driverResultsDropdown.focus()" />
-      <button type="button" *ngIf="driverInput.value && displayReset" class="btn input-group-btn" (click)="clear()">
-        <i class="ri-close-line"></i>
-      </button>
-      <ng-content></ng-content>
-    </div>
-    <ul
-      #driverResultsDropdown="driverResultsDropdown"
-      appDriverResultsDropdown
-      [dropdownControl]="driverInput"
-      [class.show]="driverResultsDropdown.expanded$ | async"
-      class="dropdown-menu position-sticky mt-1"
-      aria-labelledby="driver">
-      <li #results *ngFor="let driver of (driversFound$ | async) ?? []; index as driverIndex; trackBy: trackByDriverId">
-        <button
-          type="button"
-          class="dropdown-item"
-          [class.active]="driverResultsDropdown.activeIndex === driverIndex"
-          [attr.aria-current]="driverResultsDropdown.activeIndex === driverIndex ? true : null"
-          (focusin)="driverResultsDropdown.setIndex(driverIndex)"
-          (focusout)="driverResultsDropdown.setIndex(-1)"
-          (click)="setDriverSuggestion(driver); driverResultsDropdown.reduce()">
-          <b>{{ driver.username }}</b>
-          <br />
-          <small>{{ driver.identifier }}</small>
-        </button>
-      </li>
-    </ul>
-    <ng-container *ngIf="selectedDriver$ | async as selectedDriver">
-      <small *ngIf="selectedDriver.id === ''">Pas de chauffeur selectionné</small>
-      <small *ngIf="selectedDriver.id !== ''">Chauffeur: {{ selectedDriver.identifier }}</small>
+<app-autocomplete-field
+  placeholder="Rechercher une adresse, un lieu-dit..."
+  [emptyValue]="driverEmptyValue"
+  [toSearchTerm]="toSearchTerm"
+  [toTrackBy]="toTrackBy"
+  [query$]="query$"
+  [resultFilter]="resultFilter"
+  [formGroup]="searchFormGroup"
+  [validator]="driverValuesValidator"
+  [revalidate]="{ status: driverFieldControl.statusChanges | async, touched: driverFieldControl.touched }"
+  [prefilled]="prefilled"
+  [setDefaultSelectedValue]="defaultValue"
+  (selectedValue)="onSelectedValueChange($event)">
+  <ng-template #resultTemplate let-templatedValue>
+    <b>{{ templatedValue.username }}</b>
+    <br />
+    <small>{{ templatedValue.identifier }}</small>
+  </ng-template>
+  <ng-template #selectedValueTemplate let-selectedValue>
+    <ng-container *ngIf="selectedValue.username === ''"><small>Pas de chauffeur sélectionné</small></ng-container>
+    <ng-container *ngIf="selectedValue.username !== ''">
+      <small>Chauffeur : {{ selectedValue.identifier }}</small>
     </ng-container>
-  </div>
-</form>
+  </ng-template>
+</app-autocomplete-field>

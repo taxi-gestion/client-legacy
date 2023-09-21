@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { COMPONENTS } from '../components';
-import { LoadUiModule } from '@features/common';
+import { LoadUiModule } from '@features/common/load';
 
 @NgModule({
   declarations: [...COMPONENTS],

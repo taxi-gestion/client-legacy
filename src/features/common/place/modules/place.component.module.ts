@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { PlaceFieldComponent, PlaceResultsDropdownComponent } from '../components';
-import { FormValidationComponentModule } from '../../form-validation/modules';
+import { FormValidationComponentModule } from '../../form-validation';
+import { AutocompleteComponentModule } from '../../autocomplete';
+import { PlaceFieldComponent } from '../components/place-field/place-field.component';
 
 @NgModule({
-  declarations: [PlaceFieldComponent, PlaceResultsDropdownComponent],
+  declarations: [PlaceFieldComponent],
   exports: [PlaceFieldComponent],
-  imports: [CommonModule, ReactiveFormsModule, FormValidationComponentModule]
+  imports: [CommonModule, ReactiveFormsModule, FormValidationComponentModule, AutocompleteComponentModule]
 })
 export class PlaceComponentModule {}

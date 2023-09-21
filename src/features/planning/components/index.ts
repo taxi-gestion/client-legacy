@@ -6,10 +6,8 @@ import { FarePlanningSessionComponent } from './fares/fare-planning-session/fare
 import { FareCardComponent } from './fares/fare-card/fare-card.component';
 import { PendingReturnFieldComponent } from './fares/pending-return-field/pending-return-field.component';
 import { PendingReturnResultsDropdownComponent } from './fares/pending-return-results-dropdown/pending-return-results-dropdown.component';
-import { DestinationsComponent } from './regular/destinations/destinations.component';
 
 export * from './fares/fields';
-export * from './regular/destinations';
 
 // eslint-disable-next-line @typescript-eslint/typedef
 export const COMPONENTS = [
@@ -20,6 +18,5 @@ export const COMPONENTS = [
   FareCardComponent,
   PendingReturnFieldComponent,
   PendingReturnResultsDropdownComponent,
-  EstimateJourneyFieldsComponent,
-  DestinationsComponent
+  EstimateJourneyFieldsComponent
 ];

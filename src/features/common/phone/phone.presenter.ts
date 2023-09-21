@@ -8,13 +8,11 @@ export const phoneEmptyValue: PhoneValues = {
 
 export const toPhone = (phoneNumberValue: PhoneValues): Phone => ({
   type: phoneNumberValue.phoneType,
-  // eslint-disable-next-line id-denylist
   number: phoneNumberValue.phoneNumber
 });
 
 export const toPhoneValues = (phone: Phone): PhoneValues => ({
   phoneType: phone.type,
-  // eslint-disable-next-line id-denylist
   phoneNumber: phone.number
 });
 

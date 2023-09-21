@@ -50,9 +50,11 @@
       <app-phones id="phones" [parentArray]="editRegularForm.controls.phones" [phones]="regular.phones"></app-phones>
     </div>
     <div class="mb-3">
-      <label for="homeAddress" class="form-label">Domicile</label>
-      <app-place-field (selectPlace)="onSelectHomeAddressChange($event)" [defaultValue]="regular.homeAddress"></app-place-field>
-      <input id="homeAddress" type="hidden" name="homeAddress" formControlName="homeAddress" />
+      <label class="form-label">Domicile</label>
+      <!--<app-place-field (selectPlace)="onSelectHomeAddressChange($event)" [defaultValue]="regular.homeAddress"></app-place-field>-->
+      <app-place-field
+        [placeFieldControl]="editRegularForm.controls.homeAddress"
+        [place]="regular.homeAddress"></app-place-field>
     </div>
     <div class="mb-3">
       <label for="destinations" class="form-label">Destinations</label>

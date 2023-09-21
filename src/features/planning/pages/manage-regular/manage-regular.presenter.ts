@@ -1,13 +1,13 @@
 import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
-import { Destination, Entity, RegularDeleted, RegularDetails, RegularEdited } from '@definitions';
+import { Entity, RegularDeleted, RegularDetails, RegularEdited } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
-import { DestinationValues } from '../../components';
 import { editRegularFormCodec, EditRegularValues } from './edit-regular.form';
 import { fold as eitherFold } from 'fp-ts/Either';
 import { pipe as fpPipe } from 'fp-ts/function';
 import { entityCodec } from '@codecs';
 import { passengerIdentity, throwDecodeError, toRegularDetails } from '../../common/regular.presenter';
-import { toPhoneValues } from '../../../common/phone';
+import { toPhoneValues } from '@features/common/phone';
+import { toDestinationValues } from '@features/common/destination';
 
 export const toEditRegular = (rawFormValues: unknown): Entity & RegularDetails =>
   fpPipe(
@@ -48,14 +48,6 @@ export const toEditRegularPresentation = (regular: Entity & RegularDetails): Edi
 const toDomain = (formValues: EditRegularValues): Entity & RegularDetails => ({
   id: formValues.regularId,
   ...toRegularDetails(formValues)
-});
-
-export const toDestinationValues = (destination: Destination): DestinationValues => ({
-  destinationName: destination.name,
-  place: destination.place,
-  isMedicalDrive: destination.nature === 'medical',
-  isTwoWayDrive: destination.kind === 'two-way',
-  comment: destination.comment
 });
 
 // TODO Réfléchir à la mutualisation des erreurs communes
