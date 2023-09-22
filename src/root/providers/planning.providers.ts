@@ -28,7 +28,12 @@ import {
 import { listDriversQuery$ } from '../../features/common/driver/queries/list-drivers';
 import { estimateJourneyQuery$, estimateJourneyQueryProvider } from '@features/common/journey';
 import { listDriversQueryProvider } from '@features/common/driver';
-import { searchRegularQueryProvider, searchRegularsQuery$ } from '@features/common/regular';
+import {
+  regularByIdQuery$,
+  regularByIdQueryProvider,
+  searchRegularQueryProvider,
+  searchRegularsQuery$
+} from '@features/common/regular';
 import { searchPlaceQuery$, searchPlaceQueryProvider } from '@features/common/place';
 import { predictRecurrenceQuery$, predictRecurrenceQueryProvider } from '@features/common/recurrence';
 
@@ -43,6 +48,7 @@ export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   pendingReturnsForDateQueryProvider(validatedPendingReturnsForDateQuery$, [HttpClient]),
   predictRecurrenceQueryProvider(predictRecurrenceQuery$, [HttpClient]),
   registerRegularActionProvider(validatedRegisterRegularAction$, [HttpClient]),
+  regularByIdQueryProvider(regularByIdQuery$, [HttpClient]),
   scheduledFaresForDateQueryProvider(validatedScheduledFaresForDateQuery$, [HttpClient]),
   scheduleFareActionProvider(validatedScheduleFareAction$, [HttpClient]),
   schedulePendingActionProvider(validatedSchedulePendingAction$, [HttpClient]),
