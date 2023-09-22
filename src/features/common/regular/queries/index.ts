@@ -1,1 +1,2 @@
-export * from './search-regular/search-regular';
+export * from './search-regular';
+export * from './regular-by-id';

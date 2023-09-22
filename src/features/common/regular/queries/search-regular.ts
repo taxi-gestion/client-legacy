@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { SearchRegularQuery } from '../../providers';
+import { SearchRegularQuery } from '../providers';
 import { Entity, RegularDetails } from '@definitions';
 
 export const searchRegularsQuery$ =

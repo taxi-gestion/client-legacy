@@ -41,11 +41,10 @@ import { EstimateJourneyValues } from '../../components';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common/journey';
 import { formatSubcontractFareError, toFareToSubcontract, toSubcontractFareSuccessToast } from './subcontract-fare.presenter';
 import { setSubcontractFareErrorToForm, SUBCONTRACT_FARE_FORM, SubcontractFareFields } from './subcontract-fare.form';
-import { RegularValues, SEARCH_REGULAR_QUERY, SearchRegularQuery, toRegularValues } from '@features/common/regular';
+import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/common/regular';
 import { PlaceValues } from '@features/common/place';
 import { DestinationValues } from '@features/common/destination';
-import { DriverValues } from '@features/common/driver';
-import { toDriversValues } from '../../../common/driver/driver.presenter';
+import { DriverValues, toDriversValues } from '@features/common/driver';
 import { toPhoneValues } from '@features/common/phone';
 
 @Component({
@@ -74,13 +73,11 @@ export class ManageFarePage {
   // TODO Refactor ALL Observables
   public regularValues$: Observable<Entity & RegularValues> = this.selectedSessionContext$.pipe(
     switchMap(
-      (
-        selectedSession: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>
-      ): Observable<(Entity & RegularDetails)[]> =>
-        this._searchRegularAction$(`${selectedSession.sessionContext.passenger.lastname}`)
+      (selectedSession: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>): Observable<Entity & RegularDetails> =>
+        this._regularByIdQuery$(selectedSession.sessionContext.passenger.id)
     ),
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    map((regulars: (Entity & RegularDetails)[]): Entity & RegularValues => toRegularValues(regulars[0]!))
+    map((regular: Entity & RegularDetails): Entity & RegularValues => toRegularValues(regular))
   );
 
   public regular$: Observable<RegularPresentation> = this.regularValues$.pipe(
@@ -100,7 +97,7 @@ export class ManageFarePage {
     private readonly _planning: DailyPlanningLayout,
     private readonly _router: Router,
     private readonly _route: ActivatedRoute,
-    @Inject(SEARCH_REGULAR_QUERY) private readonly _searchRegularAction$: SearchRegularQuery,
+    @Inject(REGULAR_BY_ID_QUERY) private readonly _regularByIdQuery$: RegularByIdQuery,
     @Inject(DELETE_FARE_ACTION) private readonly _deleteFareAction$: DeleteFareAction,
     @Inject(EDIT_FARE_ACTION) private readonly _editFareAction$: EditFareAction,
     @Inject(SUBCONTRACT_FARE_ACTION) private readonly _subcontractFareAction$: SubcontractFareAction,
