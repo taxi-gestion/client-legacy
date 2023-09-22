@@ -1,29 +1,23 @@
 import { VALIDATION_FAILED_AFTER_API_CALL_ERROR_NAME, VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
-import { Entity, FaresEdited, ToEdit } from '@definitions';
+import { Entity, FaresEdited, Scheduled, ToEdit } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
-import { regularToPassenger, toLocalTime } from '../../common/fares.presenter';
+import { RegularPresentation, regularToPassenger, toLocalTime } from '../../common/fares.presenter';
 import { datetimeLocalToIso8601UTCString, kilometersToMeters, minutesToSeconds } from '../../common/unit-convertion';
 import { FareToEditValues } from './edit-fare.form';
 import { toPlace } from '@features/common/place';
 import { toDriver } from '../../../common/driver/driver.presenter';
 import { toIdentity } from '@features/common/regular';
+import { DestinationValues } from '@features/common/destination';
+import { PhoneValues } from '@features/common/phone';
 
-/*export const sessionToFaresToEditValues = (
-  selectedSession: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>
-): FareToEditValues =>
-  ({
-    arrivalPlace: selectedSession.sessionContext.destination, //toDestinationsFromPlace
-    departureDatetime: selectedSession.sessionContext.datetime,
-    departurePlace: selectedSession.sessionContext.departure,
-    driveDistance: 0,
-    driveDuration: 0,
-    driver: selectedSession.sessionContext.driver, //toDriverValues
-    id: selectedSession.sessionContext.id,
-    isMedicalDrive: selectedSession.sessionContext.nature,
-    isTwoWayDrive: selectedSession.sessionContext.kind,
-    passenger: selectedSession.sessionContext.passenger, //toPassengerValues
-    phoneToCall: toPhoneValues(selectedSession.sessionContext.passenger.phone)
-  });*/
+// TODO Refactor
+export type ManageFarePresentation = Scheduled & {
+  phone: PhoneValues;
+};
+
+export const destinationFromPlace = ([fare, regular]: [ManageFarePresentation, RegularPresentation]): DestinationValues =>
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  regular.destinations.find((destination: DestinationValues): boolean => destination.place.label === fare.destination.label)!;
 
 export const toEditFareSuccessToast = (fares: FaresEdited): Toast => ({
   content: `Course pour ${toIdentity(fares.scheduledEdited.passenger)} par ${

@@ -11,10 +11,11 @@ import { throwDecodeError } from './regular.presenter';
 import { pipe as fpPipe } from 'fp-ts/function';
 import { fold as eitherFold } from 'fp-ts/Either';
 import { journeyCodec } from '@codecs';
-import { PlaceValues } from '@features/common/place';
+import { PlaceValues, toPlacesValues } from '@features/common/place';
 import { DestinationValues } from '@features/common/destination';
 import { FareToScheduleValues } from '../pages/schedule-fare/schedule-fare.form';
-import { toPhone } from '@features/common/phone';
+import { PhoneValues, toPhone } from '@features/common/phone';
+import { RegularValues } from '@features/common/regular';
 
 export const defaultPlaceValue: Place = {
   context: '',
@@ -111,3 +112,23 @@ export const regularToPassenger = (formValues: FareToScheduleValues): Entity & P
 });
 
 export const localDatetimeString = (): string => formatDateToDatetimeLocalString(new Date());
+
+export type RegularPresentation = {
+  id: string;
+  phone: PhoneValues | undefined;
+  destination: DestinationValues | undefined;
+  destinations: DestinationValues[];
+  departure: PlaceValues | undefined;
+  departures: PlaceValues[];
+  phones: PhoneValues[];
+};
+
+export const toRegularPresentation = (regular: Entity & RegularValues): RegularPresentation => ({
+  id: regular.id,
+  phone: regular.phones === undefined ? undefined : regular.phones[0],
+  departure: regular.homeAddress,
+  departures: toPlacesValues(regular.homeAddress),
+  phones: regular.phones === undefined ? [] : regular.phones,
+  destination: regular.destinations === undefined ? undefined : regular.destinations[0],
+  destinations: regular.destinations === undefined ? [] : regular.destinations
+});

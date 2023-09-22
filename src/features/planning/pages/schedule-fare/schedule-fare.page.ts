@@ -2,7 +2,14 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { BehaviorSubject, combineLatest, filter, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
-import { defaultPlaceValue, localDatetimeString, toJourney, toLocalDatetimeString } from '../../common/fares.presenter';
+import {
+  defaultPlaceValue,
+  localDatetimeString,
+  RegularPresentation,
+  toJourney,
+  toLocalDatetimeString,
+  toRegularPresentation
+} from '../../common/fares.presenter';
 import { SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../providers';
 import { SCHEDULE_FARE_FORM, ScheduleFareFields, setScheduleFareErrorToForm } from './schedule-fare.form';
 import { formatScheduleFareError, toFareToSchedule, toScheduleFareSuccessToast } from './schedule-fare.presenter';
@@ -15,7 +22,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { EstimateJourneyValues } from '../../components';
 import { toDisplayDurationDistance } from '../../common/unit-convertion';
-import { PhoneValues } from '@features/common/phone';
 import {
   bootstrapValidationClasses,
   BootstrapValidationClasses,
@@ -23,31 +29,11 @@ import {
   nullToUndefined
 } from '@features/common/form-validation';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common/journey';
-import { PlaceValues, toPlacesValues } from '@features/common/place';
+import { PlaceValues } from '@features/common/place';
 import { DestinationValues } from '@features/common/destination';
 import { DriverValues } from '@features/common/driver';
 import { toDriversValues } from '../../../common/driver/driver.presenter';
 import { regularHasId, RegularValues } from '@features/common/regular';
-
-type RegularPresentation = {
-  id: string;
-  phone: PhoneValues | undefined;
-  destination: DestinationValues | undefined;
-  destinations: DestinationValues[];
-  departure: PlaceValues | undefined;
-  departures: PlaceValues[];
-  phones: PhoneValues[];
-};
-
-const toRegularPresentation = (regular: Entity & RegularValues): RegularPresentation => ({
-  id: regular.id,
-  phone: regular.phones === undefined ? undefined : regular.phones[0],
-  departure: regular.homeAddress,
-  departures: toPlacesValues(regular.homeAddress),
-  phones: regular.phones === undefined ? [] : regular.phones,
-  destination: regular.destinations === undefined ? undefined : regular.destinations[0],
-  destinations: regular.destinations === undefined ? [] : regular.destinations
-});
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

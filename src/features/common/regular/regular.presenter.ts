@@ -18,19 +18,6 @@ export const regularEmptyValue: Entity & RegularValues = {
 export const firstnameOrEmpty = (regular: { firstname: string | undefined }): string =>
   regular.firstname === undefined ? '' : `${regular.firstname} `;
 
-//export const toRegular = (regularValue: RegularValues): Entity & RegularDetails => ({
-//  ...regularValue
-//});
-
-//export const toRegularValuesOrUndefined = (regular: RegularValues | (Entity & RegularDetails) | undefined): RegularValues | undefined =>
-//  regular === undefined ? undefined : regular;
-
-//export const toRegularsValues = (regulars: (Entity & RegularDetails)[] | Entity & RegularValues | (Entity & RegularValues)[] | (Entity & RegularDetails) | undefined): (Entity & RegularValues)[] => {
-//  if (regulars === undefined) return [];
-//
-//  return 'id' in regulars ? [regulars] : regulars;
-//};
-
 export const toRegularsValues = (
   regulars: (Entity & RegularDetails)[] | (Entity & RegularDetails) | undefined
 ): (Entity & RegularValues)[] => {
