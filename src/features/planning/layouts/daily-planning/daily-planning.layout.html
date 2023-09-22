@@ -11,6 +11,20 @@
           Planifier une course
         </a>
       </li>
+      <li class="nav-item" *ngIf="(scheduledFares$ | async) as scheduledFares">
+        <a
+          class="nav-link"
+          ariaCurrentWhenActive="page"
+          routerLinkActive="active"
+          [routerLink]="'manage-fare'"
+          (click)="toggleNavbar()">
+          Gérer les courses&nbsp;
+          <span class="badge text-bg-secondary">
+            {{ scheduledFares.length }}
+            <span class="visually-hidden">manage fares</span>
+          </span>
+        </a>
+      </li>
       <!--      <li class="nav-item" *ngIf="(returnsToSchedule$ | async) as returnsToSchedule">
         <a
           class="nav-link"
