@@ -1,18 +1,18 @@
 /* eslint-disable max-lines */
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { BehaviorSubject, combineLatest, filter, map, Observable, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
 import {
   DELETE_FARE_ACTION,
   DeleteFareAction,
   EDIT_FARE_ACTION,
   EditFareAction,
+  SCHEDULED_FARES_FOR_DATE_QUERY,
+  ScheduledFaresForDateQuery,
   SUBCONTRACT_FARE_ACTION,
   SubcontractFareAction
 } from '../../providers';
 import { DailyPlanningLayout } from '../../layouts';
-import { SessionContext } from '../../components/planning/planning-row/planning-row.component';
-import { DailyDriverPlanning, ScheduledPlanningSession } from '../../common/fares.presentation';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import {
   DurationDistance,
   Entity,
@@ -46,20 +46,49 @@ import { PlaceValues } from '@features/common/place';
 import { DestinationValues } from '@features/common/destination';
 import { DriverValues, toDriversValues } from '@features/common/driver';
 import { toPhoneValues } from '@features/common/phone';
+import { scheduledFareEmptyValue, ScheduledFareValues } from '@features/common/fare';
+import { paramsToDateDayString } from '../../common/date.presenter';
+
+//TODO Refactor
+type PageData = {
+  fare: ManageFarePresentation;
+  regularValues: Entity & RegularValues;
+  regular: RegularPresentation;
+  drivers: DriverValues[];
+  destinationFromPlace: DestinationValues;
+};
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './manage-fare.page.html'
 })
 export class ManageFarePage {
-  public selectedSessionContext$: Observable<SessionContext<ScheduledPlanningSession, DailyDriverPlanning>> =
-    this._planning.selectedSessionContext$.pipe(filter(Boolean));
+  public readonly scheduledFares$: Observable<ScheduledFareValues[]> = this._route.params.pipe(
+    switchMap((params: Params): Observable<ScheduledFareValues[]> => this._faresForDateQuery(paramsToDateDayString(params))),
+    catchError((error: Error): Observable<ScheduledFareValues[]> => {
+      this._toaster.toast({
+        content: `Échec de la récupération des courses : ${error.name} | ${error.message}`,
+        status: 'danger',
+        title: 'Opération échouée'
+      });
+      return of([]);
+    })
+  );
 
-  public fare$: Observable<ManageFarePresentation> = this.selectedSessionContext$.pipe(
+  public fareControl: FormControl<ScheduledFareValues> = new FormControl(scheduledFareEmptyValue, { nonNullable: true });
+
+  private readonly _selectedScheduledFare: Subject<ScheduledFareValues> = new Subject<ScheduledFareValues>();
+  public selectedScheduledFare$: Observable<ScheduledFareValues> = this._selectedScheduledFare.asObservable();
+
+  public onSelectScheduledFare(scheduled: ScheduledFareValues): void {
+    this._selectedScheduledFare.next(scheduled);
+  }
+
+  public fare$: Observable<ManageFarePresentation> = this.selectedScheduledFare$.pipe(
     map(
-      (context: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>): ManageFarePresentation => ({
-        ...context.sessionContext,
-        phone: toPhoneValues(context.sessionContext.passenger.phone)
+      (fare: ScheduledFareValues): ManageFarePresentation => ({
+        ...fare,
+        phone: toPhoneValues(fare.passenger.phone)
       })
     ),
     tap((fare: ManageFarePresentation): void => {
@@ -69,13 +98,8 @@ export class ManageFarePage {
 
   public drivers$: Observable<DriverValues[]> = this._planning.drivers$.pipe(map(toDriversValues));
 
-  // TODO Get regular by id
-  // TODO Refactor ALL Observables
-  public regularValues$: Observable<Entity & RegularValues> = this.selectedSessionContext$.pipe(
-    switchMap(
-      (selectedSession: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>): Observable<Entity & RegularDetails> =>
-        this._regularByIdQuery$(selectedSession.sessionContext.passenger.id)
-    ),
+  public regularValues$: Observable<Entity & RegularValues> = this.selectedScheduledFare$.pipe(
+    switchMap((fare: ScheduledFareValues): Observable<Entity & RegularDetails> => this._regularByIdQuery$(fare.passenger.id)),
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     map((regular: Entity & RegularDetails): Entity & RegularValues => toRegularValues(regular))
   );
@@ -89,6 +113,23 @@ export class ManageFarePage {
     map(destinationFromPlace)
   );
 
+  public readonly pageData$: Observable<PageData> = combineLatest([
+    this.fare$,
+    this.regularValues$,
+    this.regular$,
+    this.drivers$,
+    this.destinationFromPlace$
+  ]).pipe(
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type,@typescript-eslint/typedef
+    map(([fare, regularValues, regular, drivers, destination]) => ({
+      fare,
+      regularValues,
+      regular,
+      drivers,
+      destinationFromPlace: destination
+    }))
+  );
+
   private readonly _departure$: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
   private readonly _destination$: BehaviorSubject<Place> = new BehaviorSubject<Place>(defaultPlaceValue);
 
@@ -97,6 +138,7 @@ export class ManageFarePage {
     private readonly _planning: DailyPlanningLayout,
     private readonly _router: Router,
     private readonly _route: ActivatedRoute,
+    @Inject(SCHEDULED_FARES_FOR_DATE_QUERY) private readonly _faresForDateQuery: ScheduledFaresForDateQuery,
     @Inject(REGULAR_BY_ID_QUERY) private readonly _regularByIdQuery$: RegularByIdQuery,
     @Inject(DELETE_FARE_ACTION) private readonly _deleteFareAction$: DeleteFareAction,
     @Inject(EDIT_FARE_ACTION) private readonly _editFareAction$: EditFareAction,
@@ -170,11 +212,8 @@ export class ManageFarePage {
 
   //region delete
   public readonly deleteFare$ = (): Observable<FaresDeleted> =>
-    this.selectedSessionContext$.pipe(
-      switchMap(
-        (context: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>): Observable<FaresDeleted> =>
-          this._deleteFareAction$(context.sessionContext.id)
-      )
+    this.selectedScheduledFare$.pipe(
+      switchMap((fare: ScheduledFareValues): Observable<FaresDeleted> => this._deleteFareAction$(fare.id))
     );
 
   public onDeleteFareActionSuccess = async (payload: FaresDeleted): Promise<void> => {
@@ -208,3 +247,18 @@ export class ManageFarePage {
   }
   //endregion
 }
+
+/*  public fare$: Observable<ManageFarePresentation> = this.selectedSessionContext$.pipe(
+    map(
+      (context: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>): ManageFarePresentation => ({
+        ...context.sessionContext,
+        phone: toPhoneValues(context.sessionContext.passenger.phone)
+      })
+    ),
+    tap((fare: ManageFarePresentation): void => {
+      this.editFareForm.controls.departureDatetime.setValue(formatDateToDatetimeLocalString(new Date(fare.datetime)));
+    })
+  );*/
+
+//public selectedSessionContext$: Observable<SessionContext<ScheduledPlanningSession, DailyDriverPlanning>> =
+//  this._planning.selectedSessionContext$.pipe(filter(Boolean));

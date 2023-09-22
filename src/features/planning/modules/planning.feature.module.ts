@@ -20,6 +20,7 @@ import { DestinationComponentModule } from '@features/common/destination';
 import { RegularComponentModule } from '@features/common/regular';
 import { PlaceComponentModule } from '@features/common/place';
 import { LoadUiModule } from '@features/common/load';
+import { FareComponentModule } from '@features/common/fare';
 
 @NgModule({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -40,7 +41,8 @@ import { LoadUiModule } from '@features/common/load';
     FormValidationComponentModule,
     PhoneComponentModule,
     DestinationComponentModule,
-    RegularComponentModule
+    RegularComponentModule,
+    FareComponentModule
   ],
   providers: [
     CanActivatePlanningRedirectGuard,

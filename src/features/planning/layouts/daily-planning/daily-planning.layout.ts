@@ -13,10 +13,10 @@ import {
 import { Driver, Entity, Pending, Scheduled } from '@definitions';
 import { DailyDriverPlanning, ScheduledPlanningSession } from '../../common/fares.presentation';
 import { LIST_DRIVERS_QUERY, ListDriversQuery } from '@features/common/driver';
-import { paramsToDateDayString } from './daily-planning.presenter';
 import { SessionContext, SlotContext } from '../../components/planning/planning-row/planning-row.component';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { NavbarComponent } from '../../../../root/components';
+import { paramsToDateDayString } from '../../common/date.presenter';
 
 const DEFAULT_PLANNING_SETTINGS: PlanningSettings = {
   interval: 60,
