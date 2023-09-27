@@ -2,6 +2,7 @@ import { RegularValues } from './definitions/regular.definition';
 import { Entity, Passenger, RegularDetails } from '@definitions';
 import { toDestinationsValues } from '@features/common/destination';
 import { toPhonesValues } from '@features/common/phone';
+import { PassengerValues } from '@features/common/fare';
 
 export const regularEmptyValue: Entity & RegularValues = {
   civility: 'Mr',
@@ -38,5 +39,5 @@ export const toRegularValues = (regular: Entity & RegularDetails): Entity & Regu
   subcontractedClient: regular.subcontractedClient
 });
 
-export const toIdentity = (passenger: (Entity & Passenger) | (Entity & RegularDetails)): string =>
+export const toIdentity = (passenger: PassengerValues | (Entity & Passenger) | (Entity & RegularDetails)): string =>
   `${passenger.civility} ${passenger.lastname} ${firstnameOrEmpty(passenger)}`.trim();

@@ -1,23 +1,19 @@
 import { VALIDATION_FAILED_AFTER_API_CALL_ERROR_NAME, VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
-import { Entity, FaresEdited, Scheduled, ToEdit } from '@definitions';
+import { Entity, FaresEdited, ToEdit } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
-import { RegularPresentation, regularToPassenger, toLocalTime } from '../../common/fares.presenter';
+import { regularToPassenger, toLocalTime } from '../../common/fares.presenter';
 import { datetimeLocalToIso8601UTCString, kilometersToMeters, minutesToSeconds } from '../../common/unit-convertion';
 import { FareToEditValues } from './edit-fare.form';
-import { toPlace } from '@features/common/place';
+import { PlaceValues, toPlace } from '@features/common/place';
 import { toDriver } from '../../../common/driver/driver.presenter';
 import { toIdentity } from '@features/common/regular';
 import { DestinationValues } from '@features/common/destination';
-import { PhoneValues } from '@features/common/phone';
 
-// TODO Refactor
-export type ManageFarePresentation = Scheduled & {
-  phone: PhoneValues;
-};
-
-export const destinationFromPlace = ([fare, regular]: [ManageFarePresentation, RegularPresentation]): DestinationValues =>
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  regular.destinations.find((destination: DestinationValues): boolean => destination.place.label === fare.destination.label)!;
+export const destinationFromDestinations = (
+  place: PlaceValues | undefined,
+  destinations: DestinationValues[] | undefined
+): DestinationValues | undefined =>
+  destinations?.find((destination: DestinationValues): boolean => destination.place.label === place?.label);
 
 export const toEditFareSuccessToast = (fares: FaresEdited): Toast => ({
   content: `Course pour ${toIdentity(fares.scheduledEdited.passenger)} par ${
