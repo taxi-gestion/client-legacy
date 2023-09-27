@@ -3,6 +3,8 @@ import { Entity, Passenger, RegularDetails } from '@definitions';
 import { toDestinationsValues } from '@features/common/destination';
 import { toPhonesValues } from '@features/common/phone';
 import { PassengerValues } from '@features/common/fare';
+import { placeEmptyValue, toPlaceValues } from '@features/common/place';
+import { destinationsWithDomicile } from '../../planning/common/fares.presenter';
 
 export const regularEmptyValue: Entity & RegularValues = {
   civility: 'Mr',
@@ -30,7 +32,10 @@ export const toRegularsValues = (
 export const toRegularValues = (regular: Entity & RegularDetails): Entity & RegularValues => ({
   civility: regular.civility,
   commentary: regular.commentary,
-  destinations: toDestinationsValues(regular.destinations),
+  destinations: destinationsWithDomicile(
+    toDestinationsValues(regular.destinations),
+    toPlaceValues(regular.home ?? placeEmptyValue)
+  ),
   firstname: regular.firstname,
   id: regular.id,
   homeAddress: regular.home,

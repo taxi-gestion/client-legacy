@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import {
   DELETE_FARE_ACTION,
   DeleteFareAction,
@@ -70,12 +70,10 @@ export class ManageFarePage {
 
   public fareControl: FormControl<ScheduledFareValues> = new FormControl(scheduledFareEmptyValue, { nonNullable: true });
 
-  private readonly _selectedScheduledFare$: Subject<ScheduledFareValues> = new Subject<ScheduledFareValues>();
+  private readonly _selectedScheduledFare$: BehaviorSubject<ScheduledFareValues> = new BehaviorSubject<ScheduledFareValues>(
+    scheduledFareEmptyValue
+  );
   public selectedScheduledFare$: Observable<ScheduledFareValues> = this._selectedScheduledFare$.asObservable();
-
-  public validSelectedScheduledFare$: Observable<boolean> = this._selectedScheduledFare$
-    .asObservable()
-    .pipe(map((fare: ScheduledFareValues): boolean => fareHasId(fare)));
 
   public onSelectScheduledFareChange(scheduled: ScheduledFareValues): void {
     this._selectedScheduledFare$.next(scheduled);
@@ -129,8 +127,12 @@ export class ManageFarePage {
 
   public onDestinationSelectedValueChange(destinationValues: DestinationValues): void {
     this._destination$.next(destinationValues.place);
-    this.editFareForm.controls.isMedicalDrive.setValue(destinationValues.isMedicalDrive);
-    this.editFareForm.controls.isTwoWayDrive.setValue(destinationValues.isTwoWayDrive);
+
+    if (destinationValues.isTwoWayDrive !== undefined)
+      this.editFareForm.controls.isTwoWayDrive.setValue(destinationValues.isTwoWayDrive);
+
+    if (destinationValues.isMedicalDrive !== undefined)
+      this.editFareForm.controls.isMedicalDrive.setValue(destinationValues.isMedicalDrive);
   }
 
   public readonly editFareForm: FormGroup<EditFareFields> = EDIT_FARE_FORM;
@@ -194,9 +196,7 @@ export class ManageFarePage {
 
   //region delete
   public readonly deleteFare$ = (): Observable<FaresDeleted> =>
-    this.selectedScheduledFare$.pipe(
-      switchMap((fare: ScheduledFareValues): Observable<FaresDeleted> => this._deleteFareAction$(fare.id))
-    );
+    this._deleteFareAction$(this._selectedScheduledFare$.getValue().id);
 
   public onDeleteFareActionSuccess = async (payload: FaresDeleted): Promise<void> => {
     this._toaster.toast(toDeleteFareSuccessToast(payload));

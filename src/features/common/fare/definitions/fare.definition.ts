@@ -24,7 +24,7 @@ export type PassengerValues = Entity & {
   phone: PhoneValues;
 };
 
-export type PendingFareValues = {
+export type PendingReturnValues = {
   datetime: string;
   departure: PlaceValues;
   destination: PlaceValues;

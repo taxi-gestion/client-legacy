@@ -92,8 +92,12 @@ export class ScheduleFarePage {
 
   public onDestinationSelectedValueChange(destinationValues: DestinationValues): void {
     this._destination$.next(destinationValues.place);
-    this.scheduleFareForm.controls.isMedicalDrive.setValue(destinationValues.isMedicalDrive);
-    this.scheduleFareForm.controls.isTwoWayDrive.setValue(destinationValues.isTwoWayDrive);
+
+    if (destinationValues.isTwoWayDrive !== undefined)
+      this.scheduleFareForm.controls.isTwoWayDrive.setValue(destinationValues.isTwoWayDrive);
+
+    if (destinationValues.isMedicalDrive !== undefined)
+      this.scheduleFareForm.controls.isMedicalDrive.setValue(destinationValues.isMedicalDrive);
   }
   public onSelectDriverChange(driver: Driver & Entity): void {
     this.scheduleFareForm.controls.driver.setValue(driver);

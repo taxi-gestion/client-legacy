@@ -36,8 +36,8 @@ const setHomeLabel = (home: PlaceValues): PlaceValues => ({
 const toDestination = (destination: DestinationValues): Destination => ({
   name: destination.destinationName,
   place: destination.place,
-  nature: destination.isMedicalDrive ? 'medical' : 'standard',
-  kind: destination.isTwoWayDrive ? 'two-way' : 'one-way',
+  nature: destination.isMedicalDrive === true ? 'medical' : 'standard',
+  kind: destination.isTwoWayDrive === true ? 'two-way' : 'one-way',
   comment: destination.comment
 });
 

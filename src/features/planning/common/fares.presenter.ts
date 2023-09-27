@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { DailyDriverPlanning, ScheduledPlanningSession, ScheduledPresentation } from './fares.presentation';
 import {
   datetimeLocalToIso8601UTCString,
@@ -11,7 +12,7 @@ import { throwDecodeError } from './regular.presenter';
 import { pipe as fpPipe } from 'fp-ts/function';
 import { fold as eitherFold } from 'fp-ts/Either';
 import { journeyCodec } from '@codecs';
-import { PlaceValues, toPlacesValues } from '@features/common/place';
+import { placeEmptyValue, PlaceValues, toPlacesValues } from '@features/common/place';
 import { DestinationValues } from '@features/common/destination';
 import { FareToScheduleValues } from '../pages/schedule-fare/schedule-fare.form';
 import { PhoneValues, toPhone } from '@features/common/phone';
@@ -35,6 +36,7 @@ const toJourneyDomain = (formValues: {
   destination: formValues.arrivalPlace.place,
   departureTime: datetimeLocalToIso8601UTCString(formValues.departureDatetime)
 });
+
 // TODO Import some rule codecs, should use a local journeyFormCodec with date and places rules
 export const toJourney = (rawFormValues: unknown): Journey => {
   const tempUgly: unknown = toJourneyDomain(
@@ -130,5 +132,20 @@ export const toRegularPresentation = (regular: Entity & RegularValues): RegularP
   departures: toPlacesValues(regular.homeAddress),
   phones: regular.phones === undefined ? [] : regular.phones,
   destination: regular.destinations === undefined ? undefined : regular.destinations[0],
-  destinations: regular.destinations === undefined ? [] : regular.destinations
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  destinations: destinationsWithDomicile(regular.destinations, regular.homeAddress ?? placeEmptyValue)
 });
+
+export const domicileAsDestination = (place: PlaceValues): DestinationValues => ({
+  destinationName: 'Domicile',
+  place,
+  isMedicalDrive: undefined,
+  isTwoWayDrive: undefined,
+  comment: undefined
+});
+
+export const destinationsWithDomicile = (
+  destinations: DestinationValues[] | undefined,
+  domicile: PlaceValues
+): DestinationValues[] =>
+  destinations === undefined ? [domicileAsDestination(domicile)] : [...destinations, domicileAsDestination(domicile)];

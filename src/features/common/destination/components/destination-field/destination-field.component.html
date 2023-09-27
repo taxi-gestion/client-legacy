@@ -16,11 +16,17 @@
     <b>{{ templatedValue.destinationName }}</b>
     <br />
     <small>Adresse: {{ templatedValue.place.label }} - {{ templatedValue.place.context }}</small>
-    <br />
-    <small>
-      Medical: {{ templatedValue.isMedicalDrive ? 'oui' : 'non' }} - Aller-Retour:
-      {{ templatedValue.isTwoWayDrive ? 'oui' : 'non' }}
-    </small>
+    <ng-container *ngIf="templatedValue.isMedicalDrive !== undefined || templatedValue.isTwoWayDrive !== undefined">
+      <br />
+      <small>
+        <ng-container *ngIf="templatedValue.isMedicalDrive !== undefined">
+          Medical: {{ templatedValue.isMedicalDrive ? 'oui' : 'non' }} -
+        </ng-container>
+        <ng-container *ngIf="templatedValue.isTwoWayDrive !== undefined">
+          Aller-Retour:{{ templatedValue.isTwoWayDrive ? 'oui' : 'non' }}
+        </ng-container>
+      </small>
+    </ng-container>
   </ng-template>
   <ng-template #selectedValueTemplate let-selectedValue>
     <ng-container *ngIf="selectedValue.destinationName === ''"><small>Pas de destination</small></ng-container>
