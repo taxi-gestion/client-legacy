@@ -1,14 +1,12 @@
 import { datetimeLocalToIso8601UTCString, kilometersToMeters, minutesToSeconds } from '../../common/unit-convertion';
 import { FareToScheduleValues, scheduleFareFormCodec } from './schedule-fare.form';
 import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
-import { FaresScheduled, RegularDetails, ToSchedule } from '@definitions';
+import { FaresScheduled, ToSchedule } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { regularToPassenger, toLocalTime } from '../../common/fares.presenter';
 import { pipe as fpPipe } from 'fp-ts/function';
 import { fold as eitherFold } from 'fp-ts/Either';
 import { throwDecodeError } from '../../common/regular.presenter';
-import { PhoneValues, toPhoneValues } from '@features/common/phone';
-import { DestinationValues, toDestinationValues } from '@features/common/destination';
 import { toPlace } from '@features/common/place';
 import { toDriver } from '../../../common/driver/driver.presenter';
 import { toIdentity } from '@features/common/regular';
@@ -39,16 +37,6 @@ export const toDomain = (formValues: FareToScheduleValues): ToSchedule => ({
   passenger: regularToPassenger(formValues),
   status: 'to-schedule'
 });
-
-export const toFirstPhone = (regular: RegularDetails): PhoneValues | undefined =>
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  regular.phones === undefined || regular.phones.length === 0 ? undefined : toPhoneValues(regular.phones.at(0)!);
-
-export const toFirstDestination = (regular: RegularDetails): DestinationValues | undefined =>
-  regular.destinations === undefined || regular.destinations.length === 0
-    ? undefined
-    : // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      toDestinationValues(regular.destinations.at(0)!);
 
 // TODO Réfléchir à la mutualisation des erreurs communes
 export type FormattedScheduleFareError = { field?: string; errors: Record<string, unknown> };

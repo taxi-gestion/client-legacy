@@ -1,18 +1,16 @@
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Entity } from '@definitions';
-import { FareFields, fareFormControls, FareValues } from '../../common/fares.presentation';
+import { FareFields, fareFormCodec, fareFormControls, FareValues } from '../../common/fares.presentation';
+import { Type, intersection as ioIntersection } from 'io-ts';
+import { entityCodec } from '@codecs';
 
 export type FareToEditValues = Entity & FareValues;
 
-export type EditFareFields = FareFields & {
-  id: FormControl<FareToEditValues['id']>;
-};
+export type EditFareFields = FareFields;
+
+export const editFareFormCodec: Type<FareToEditValues> = ioIntersection([entityCodec, fareFormCodec]);
 
 export const EDIT_FARE_FORM: FormGroup<EditFareFields> = new FormGroup<EditFareFields>({
-  id: new FormControl<FareToEditValues['id']>('', {
-    nonNullable: true,
-    validators: [Validators.required]
-  }),
   ...fareFormControls()
 });
 

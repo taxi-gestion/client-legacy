@@ -42,6 +42,7 @@ import { DriverValues, toDriversValues } from '@features/common/driver';
 import { fareHasId, scheduledFareEmptyValue, ScheduledFareValues, toScheduledFaresValues } from '@features/common/fare';
 import { paramsToDateDayString } from '../../common/date.presenter';
 import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/common/regular';
+import { forceControlRevalidation, nullToUndefined } from '@features/common/form-validation';
 
 type PageData = {
   fare: ScheduledFareValues;
@@ -134,18 +135,16 @@ export class ManageFarePage {
 
   public readonly editFareForm: FormGroup<EditFareFields> = EDIT_FARE_FORM;
 
-  //TODO Type to Observable<Error | Entity & Scheduled>
   public readonly editFare$ = (): Observable<FaresEdited> =>
-    // TODO Had to use EDIT_FARE_FORM.getRawValue() instead of EDIT_FARE_FORM.value for the latest controls value to be retreived
-    this._editFareAction$(toFareToEdit(EDIT_FARE_FORM.getRawValue() as unknown as FareToEditValues));
+    this._editFareAction$(toFareToEdit(nullToUndefined({ id: this.fareControl.value.id, ...this.editFareForm.value })));
 
   public onSubmitFareToEdit = (triggerAction: () => void): void => {
-    EDIT_FARE_FORM.markAllAsTouched();
-    EDIT_FARE_FORM.valid && triggerAction();
+    this.editFareForm.markAllAsTouched();
+    this.editFareForm.valid ? triggerAction() : forceControlRevalidation(this.editFareForm);
   };
 
   public onEditFareActionSuccess = async (fares: FaresEdited): Promise<void> => {
-    EDIT_FARE_FORM.reset();
+    this.editFareForm.reset();
     this._toaster.toast(toEditFareSuccessToast(fares));
     await this._router.navigate(['..'], { relativeTo: this._route });
   };
@@ -153,7 +152,7 @@ export class ManageFarePage {
   public onEditFareActionError = (error: Error): void => {
     setEditFareErrorToForm(formatEditFareError(error));
     this._toaster.toast({
-      content: 'Échec de la planification de la course',
+      content: `Échec de la planification de la course: ${error.name} | ${error.message}`,
       status: 'danger',
       title: 'Opération échouée'
     });
