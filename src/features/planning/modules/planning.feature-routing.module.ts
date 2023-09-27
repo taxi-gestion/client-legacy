@@ -5,6 +5,7 @@ import { DailyPlanningLayout } from '../layouts';
 import {
   DriverAgendaPage,
   ManageFarePage,
+  ManagePendingPage,
   ManagerDriverChoicePage,
   ManageRegularPage,
   MissingAdminConfigurationPage,
@@ -31,13 +32,9 @@ const DAILY_PAGES: Routes = [
     component: ScheduleFarePage
   },
   {
-    path: 'schedule-fare/register-regular',
-    component: RegisterRegularPage
+    path: 'manage-pending',
+    component: ManagePendingPage
   }
-  /*  {
-    path: 'schedule-return',
-    component: SchedulePendingPage
-  }*/
 ];
 
 const ROUTES: Routes = [

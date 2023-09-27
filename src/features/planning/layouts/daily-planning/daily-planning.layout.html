@@ -25,20 +25,40 @@
           </span>
         </a>
       </li>
-      <!--      <li class="nav-item" *ngIf="(returnsToSchedule$ | async) as returnsToSchedule">
+      <li class="nav-item" *ngIf="(returnsToSchedule$ | async) as returnsToSchedule">
         <a
           class="nav-link"
           ariaCurrentWhenActive="page"
           routerLinkActive="active"
-          [routerLink]="'schedule-return'"
+          [routerLink]="'manage-pending'"
           (click)="toggleNavbar()">
-          Planifier un retour&nbsp;
+          Gérer les retours&nbsp;
           <span class="badge text-bg-secondary">
             {{ returnsToSchedule.length }}
             <span class="visually-hidden">returns to schedule</span>
           </span>
         </a>
-      </li>-->
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          ariaCurrentWhenActive="page"
+          routerLinkActive="active"
+          [routerLink]="'manage-regular'"
+          (click)="toggleNavbar()">
+          Gérer les passagers&nbsp;
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          ariaCurrentWhenActive="page"
+          routerLinkActive="active"
+          [routerLink]="'register-regular'"
+          (click)="toggleNavbar()">
+          Nouveau passager&nbsp;
+        </a>
+      </li>
     </ul>
   </app-navbar>
   <div class="d-flex flex-grow-1 overflow-hidden g-0">

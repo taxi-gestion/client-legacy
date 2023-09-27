@@ -4,10 +4,10 @@ import { ManagerDriverChoicePage } from './manager-driver-choice/manager-driver-
 import { MissingAdminConfigurationPage } from './missing-admin-configuration/missing-admin-configuration.page';
 import { RegisterRegularPage } from './register-regular/register-regular.page';
 import { ManageFarePage } from './manage-fare/manage-fare.page';
-import { SchedulePendingPage } from './schedule-pending/schedule-pending.page';
+import { ManagePendingPage } from './manage-pending/manage-pending.page';
 import { ManageRegularPage } from './manage-regular/manage-regular.page';
 
-export * from './schedule-pending/schedule-pending.page';
+export * from './manage-pending/manage-pending.page';
 export * from './driver-agenda/driver-agenda.page';
 export * from './missing-admin-configuration/missing-admin-configuration.page';
 export * from './manager-driver-choice/manager-driver-choice.page';
@@ -18,7 +18,7 @@ export * from './manage-regular/manage-regular.page';
 
 // eslint-disable-next-line @typescript-eslint/typedef
 export const PAGES = [
-  SchedulePendingPage,
+  ManagePendingPage,
   DriverAgendaPage,
   MissingAdminConfigurationPage,
   ManagerDriverChoicePage,

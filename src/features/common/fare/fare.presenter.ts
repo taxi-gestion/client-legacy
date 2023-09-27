@@ -1,5 +1,5 @@
-import { PassengerValues, ScheduledFareValues } from './definitions/fare.definition';
-import { Entity, Passenger, Scheduled } from '@definitions';
+import { PassengerValues, PendingFareValues, ScheduledFareValues } from './definitions/fare.definition';
+import { Entity, Passenger, Pending, Scheduled } from '@definitions';
 import { placeEmptyValue, toPlaceValues } from '@features/common/place';
 import { driverEmptyValue, toDriverValues } from '@features/common/driver';
 import { phoneEmptyValue, toPhoneValues } from '@features/common/phone';
@@ -26,6 +26,18 @@ export const scheduledFareEmptyValue: ScheduledFareValues = {
   status: 'scheduled'
 };
 
+export const pendingReturnEmptyValue: PendingFareValues = {
+  datetime: '',
+  departure: placeEmptyValue,
+  destination: placeEmptyValue,
+  driver: driverEmptyValue,
+  id: '',
+  isMedicalDrive: true,
+  isTwoWayDrive: true,
+  passenger: passengerEmptyValue,
+  status: 'pending-return'
+};
+
 //
 //export const toFare = (fareValue: ScheduledFareValues): Fare => ({
 //  ...fareValue
@@ -42,6 +54,12 @@ export const toScheduledFaresValues = (
   return 'id' in fares ? [toScheduledFareValues(fares)] : fares.map(toScheduledFareValues);
 };
 
+export const toPendingFaresValues = (fares: (Entity & Pending)[] | (Entity & Pending) | undefined): PendingFareValues[] => {
+  if (fares === undefined) return [];
+
+  return 'id' in fares ? [toPendingFareValues(fares)] : fares.map(toPendingFareValues);
+};
+
 export const toScheduledFareValues = (fare: Entity & Scheduled): ScheduledFareValues => ({
   datetime: fare.datetime,
   departure: toPlaceValues(fare.departure),
@@ -54,6 +72,18 @@ export const toScheduledFareValues = (fare: Entity & Scheduled): ScheduledFareVa
   isTwoWayDrive: fare.kind === 'two-way',
   passenger: toPassengerValues(fare.passenger),
   status: 'scheduled'
+});
+
+export const toPendingFareValues = (fare: Entity & Pending): PendingFareValues => ({
+  datetime: fare.datetime,
+  departure: toPlaceValues(fare.departure),
+  destination: toPlaceValues(fare.destination),
+  driver: toDriverValues(fare.driver),
+  id: fare.id,
+  isMedicalDrive: fare.nature === 'medical',
+  isTwoWayDrive: true,
+  passenger: toPassengerValues(fare.passenger),
+  status: 'pending-return'
 });
 
 export const toPassengerValues = (passenger: Entity & Passenger): PassengerValues => ({

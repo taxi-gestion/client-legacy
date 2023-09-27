@@ -1,6 +1,6 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Entity } from '@definitions';
-import { ScheduledFareValues } from '../definitions';
+import { PendingFareValues, ScheduledFareValues } from '../definitions';
 
 export const selectedFareValidator =
   (fare: (Entity & ScheduledFareValues) | undefined): ValidatorFn =>
@@ -8,5 +8,5 @@ export const selectedFareValidator =
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-argument
     fareHasId(fare) ? null : { invalidFare: { value: control.value } };
 
-export const fareHasId = (candidate: (Entity & ScheduledFareValues) | undefined): boolean =>
+export const fareHasId = (candidate: (Entity & PendingFareValues) | (Entity & ScheduledFareValues) | undefined): boolean =>
   candidate !== undefined && candidate.id.length === 36;

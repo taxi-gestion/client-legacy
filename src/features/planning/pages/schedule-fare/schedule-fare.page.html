@@ -17,18 +17,6 @@
     <app-regular-field
       [regularFieldControl]="scheduleFareForm.controls.passenger"
       (selectedValue)="onSelectRegularChange($event)"></app-regular-field>
-    <div class="row align-items-center mt-3">
-      <div class="col-auto">
-        <a class="btn btn-secondary" ariaCurrentWhenActive="page" routerLinkActive="active" [routerLink]="'manage-regular'">
-          Fiches passager
-        </a>
-      </div>
-      <div class="col-auto">
-        <a class="btn btn-secondary" ariaCurrentWhenActive="page" routerLinkActive="active" [routerLink]="'register-regular'">
-          Nouveau passager
-        </a>
-      </div>
-    </div>
   </div>
   <ng-container *ngIf="(regular$ | async) as regular">
     <ng-container *ngIf="(validRegular$ | async)">

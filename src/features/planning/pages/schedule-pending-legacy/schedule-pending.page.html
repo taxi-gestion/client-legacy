@@ -1,3 +1,4 @@
+<!--
 <div class="d-flex">
   <h2 class="pt-2 pb-4 text-primary">Planifier un retour</h2>
   <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
@@ -28,7 +29,7 @@
       name="departureDatetime"
       formControlName="departureDatetime" />
   </div>
-  <!--  <div class="mb-3">
+  &lt;!&ndash;  <div class="mb-3">
     <label for="departurePlace" class="form-label">Lieu de départ</label>
     <app-place-field (selectPlace)="onSelectDepartureChange($event)" [defaultValue]="departure$ | async"></app-place-field>
     <input id="departurePlace" type="hidden" name="departurePlace" formControlName="departurePlace" />
@@ -37,19 +38,19 @@
     <label for="arrivalPlace" class="form-label">Lieu d'arrivée</label>
     <app-place-field (selectPlace)="onSelectArrivalChange($event)" [defaultValue]="destination$ | async"></app-place-field>
     <input id="arrivalPlace" type="hidden" name="arrivalPlace" formControlName="arrivalPlace" />
-  </div>-->
+  </div>&ndash;&gt;
   <app-estimate-journey-fields
     [form]="$any(schedulePendingForm)"
     [estimateJourney]="estimateJourney$ | async"
     (formControlUpdated)="updateEstimateFields($event)"></app-estimate-journey-fields>
-  <!--  <div class="mb-3">
+  &lt;!&ndash;  <div class="mb-3">
     <label for="driver" class="form-label">Chauffeur</label>
     <app-driver-field
       [driverFieldControl]="schedulePendingForm.controls.driver"
       [driver]="(selectedSlotContext$ | async)?.rowContext?.driver"
       [prefilled]="drivers$ | async"
     ></app-driver-field>
-  </div>-->
+  </div>&ndash;&gt;
   <button
     [appLoadActionDisplay]="loadAction.isLoading$ | async"
     #loadActionDisplay
@@ -62,7 +63,7 @@
       Planification en cours...
     </ng-container>
   </button>
-  <!-- TODO Mutualiser les erreurs communes -->
+  &lt;!&ndash; TODO Mutualiser les erreurs communes &ndash;&gt;
   <div class="text-danger mt-2" *ngIf="schedulePendingForm.errors?.['validationFailedAfterApiCallError']">
     La structure des données reçues ne respecte pas le contrat de transfer. La requête ne peut pas être effectuée. Prévenir
     Romain qu'il va faire des heures supp'.
@@ -71,3 +72,4 @@
     Une erreur est survenue lors de l'appel au service distant.
   </div>
 </form>
+-->
