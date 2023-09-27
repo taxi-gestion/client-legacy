@@ -22,40 +22,31 @@ import {
   isValidPlace,
   JourneyEstimate,
   Place,
-  RegularDetails
+  RegularDetails,
+  Scheduled
 } from '@definitions';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { FormControl, FormGroup } from '@angular/forms';
 import { EDIT_FARE_FORM, EditFareFields, FareToEditValues, setEditFareErrorToForm } from './edit-fare.form';
-import {
-  destinationFromPlace,
-  formatEditFareError,
-  ManageFarePresentation,
-  toEditFareSuccessToast,
-  toFareToEdit
-} from './edit-fare.presenter';
+import { destinationFromDestinations, formatEditFareError, toEditFareSuccessToast, toFareToEdit } from './edit-fare.presenter';
 import { toDeleteFareSuccessToast } from './delete-fare.presenter';
-import { defaultPlaceValue, RegularPresentation, toJourney, toRegularPresentation } from '../../common/fares.presenter';
+import { defaultPlaceValue, toJourney } from '../../common/fares.presenter';
 import { formatDateToDatetimeLocalString, toDisplayDurationDistance } from '../../common/unit-convertion';
 import { EstimateJourneyValues } from '../../components';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common/journey';
 import { formatSubcontractFareError, toFareToSubcontract, toSubcontractFareSuccessToast } from './subcontract-fare.presenter';
 import { setSubcontractFareErrorToForm, SUBCONTRACT_FARE_FORM, SubcontractFareFields } from './subcontract-fare.form';
-import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/common/regular';
 import { PlaceValues } from '@features/common/place';
 import { DestinationValues } from '@features/common/destination';
 import { DriverValues, toDriversValues } from '@features/common/driver';
-import { toPhoneValues } from '@features/common/phone';
-import { scheduledFareEmptyValue, ScheduledFareValues } from '@features/common/fare';
+import { fareHasId, scheduledFareEmptyValue, ScheduledFareValues, toScheduledFaresValues } from '@features/common/fare';
 import { paramsToDateDayString } from '../../common/date.presenter';
+import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/common/regular';
 
-//TODO Refactor
 type PageData = {
-  fare: ManageFarePresentation;
+  fare: ScheduledFareValues;
   regularValues: Entity & RegularValues;
-  regular: RegularPresentation;
   drivers: DriverValues[];
-  destinationFromPlace: DestinationValues;
 };
 
 @Component({
@@ -64,7 +55,8 @@ type PageData = {
 })
 export class ManageFarePage {
   public readonly scheduledFares$: Observable<ScheduledFareValues[]> = this._route.params.pipe(
-    switchMap((params: Params): Observable<ScheduledFareValues[]> => this._faresForDateQuery(paramsToDateDayString(params))),
+    switchMap((params: Params): Observable<(Entity & Scheduled)[]> => this._faresForDateQuery(paramsToDateDayString(params))),
+    map(toScheduledFaresValues),
     catchError((error: Error): Observable<ScheduledFareValues[]> => {
       this._toaster.toast({
         content: `Échec de la récupération des courses : ${error.name} | ${error.message}`,
@@ -77,56 +69,39 @@ export class ManageFarePage {
 
   public fareControl: FormControl<ScheduledFareValues> = new FormControl(scheduledFareEmptyValue, { nonNullable: true });
 
-  private readonly _selectedScheduledFare: Subject<ScheduledFareValues> = new Subject<ScheduledFareValues>();
-  public selectedScheduledFare$: Observable<ScheduledFareValues> = this._selectedScheduledFare.asObservable();
+  private readonly _selectedScheduledFare$: Subject<ScheduledFareValues> = new Subject<ScheduledFareValues>();
+  public selectedScheduledFare$: Observable<ScheduledFareValues> = this._selectedScheduledFare$.asObservable();
 
-  public onSelectScheduledFare(scheduled: ScheduledFareValues): void {
-    this._selectedScheduledFare.next(scheduled);
+  public validSelectedScheduledFare$: Observable<boolean> = this._selectedScheduledFare$
+    .asObservable()
+    .pipe(map((fare: ScheduledFareValues): boolean => fareHasId(fare)));
+
+  public onSelectScheduledFareChange(scheduled: ScheduledFareValues): void {
+    this._selectedScheduledFare$.next(scheduled);
   }
 
-  public fare$: Observable<ManageFarePresentation> = this.selectedScheduledFare$.pipe(
-    map(
-      (fare: ScheduledFareValues): ManageFarePresentation => ({
-        ...fare,
-        phone: toPhoneValues(fare.passenger.phone)
-      })
-    ),
-    tap((fare: ManageFarePresentation): void => {
-      this.editFareForm.controls.departureDatetime.setValue(formatDateToDatetimeLocalString(new Date(fare.datetime)));
+  public fare$: Observable<ScheduledFareValues> = this.selectedScheduledFare$.pipe(
+    tap((fare: ScheduledFareValues): void => {
+      if (fareHasId(fare))
+        this.editFareForm.controls.departureDatetime.setValue(formatDateToDatetimeLocalString(new Date(fare.datetime)));
     })
   );
 
   public drivers$: Observable<DriverValues[]> = this._planning.drivers$.pipe(map(toDriversValues));
 
   public regularValues$: Observable<Entity & RegularValues> = this.selectedScheduledFare$.pipe(
+    filter((fare: ScheduledFareValues): boolean => fareHasId(fare)),
     switchMap((fare: ScheduledFareValues): Observable<Entity & RegularDetails> => this._regularByIdQuery$(fare.passenger.id)),
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     map((regular: Entity & RegularDetails): Entity & RegularValues => toRegularValues(regular))
   );
 
-  public regular$: Observable<RegularPresentation> = this.regularValues$.pipe(
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    map((regular: Entity & RegularValues): RegularPresentation => toRegularPresentation(regular))
-  );
-
-  public destinationFromPlace$: Observable<DestinationValues> = combineLatest([this.fare$, this.regular$]).pipe(
-    map(destinationFromPlace)
-  );
-
-  public readonly pageData$: Observable<PageData> = combineLatest([
-    this.fare$,
-    this.regularValues$,
-    this.regular$,
-    this.drivers$,
-    this.destinationFromPlace$
-  ]).pipe(
+  public readonly pageData$: Observable<PageData> = combineLatest([this.fare$, this.regularValues$, this.drivers$]).pipe(
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type,@typescript-eslint/typedef
-    map(([fare, regularValues, regular, drivers, destination]) => ({
+    map(([fare, regularValues, drivers]) => ({
       fare,
       regularValues,
-      regular,
-      drivers,
-      destinationFromPlace: destination
+      drivers
     }))
   );
 
@@ -177,7 +152,11 @@ export class ManageFarePage {
 
   public onEditFareActionError = (error: Error): void => {
     setEditFareErrorToForm(formatEditFareError(error));
-    this._toaster.toast({ content: 'Échec de la planification de la course', status: 'danger', title: 'Opération échouée' });
+    this._toaster.toast({
+      content: 'Échec de la planification de la course',
+      status: 'danger',
+      title: 'Opération échouée'
+    });
   };
   //endregion
 
@@ -206,7 +185,11 @@ export class ManageFarePage {
 
   public onSubcontractFareActionError = (error: Error): void => {
     setSubcontractFareErrorToForm(formatSubcontractFareError(error));
-    this._toaster.toast({ content: 'Échec de la sous-traitance de la course', status: 'danger', title: 'Opération échouée' });
+    this._toaster.toast({
+      content: 'Échec de la sous-traitance de la course',
+      status: 'danger',
+      title: 'Opération échouée'
+    });
   };
   //endregion
 
@@ -245,20 +228,18 @@ export class ManageFarePage {
     this.editFareForm.controls.driveDuration = $event.driveDuration;
     this.editFareForm.controls.driveDistance = $event.driveDistance;
   }
+
   //endregion
+  public displayIfValidSelection(fare: ScheduledFareValues): boolean {
+    return fareHasId(fare);
+  }
+
+  public destinationFromPlace: (
+    place: PlaceValues | undefined,
+    destinations: DestinationValues[] | undefined
+  ) => DestinationValues | undefined = destinationFromDestinations;
 }
 
-/*  public fare$: Observable<ManageFarePresentation> = this.selectedSessionContext$.pipe(
-    map(
-      (context: SessionContext<ScheduledPlanningSession, DailyDriverPlanning>): ManageFarePresentation => ({
-        ...context.sessionContext,
-        phone: toPhoneValues(context.sessionContext.passenger.phone)
-      })
-    ),
-    tap((fare: ManageFarePresentation): void => {
-      this.editFareForm.controls.departureDatetime.setValue(formatDateToDatetimeLocalString(new Date(fare.datetime)));
-    })
-  );*/
-
+// TODO Re add select fare on click ?
 //public selectedSessionContext$: Observable<SessionContext<ScheduledPlanningSession, DailyDriverPlanning>> =
 //  this._planning.selectedSessionContext$.pipe(filter(Boolean));

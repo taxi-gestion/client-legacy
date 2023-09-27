@@ -11,6 +11,10 @@ export const toDriver = (driverValue: DriverValues): Driver & Entity => ({
   ...driverValue
 });
 
+export const toDriverValues = (driver: Driver & Entity): DriverValues => ({
+  ...driver
+});
+
 export const toDriversValues = (
   drivers: (Driver & Entity)[] | DriverValues | DriverValues[] | (Driver & Entity) | undefined
 ): DriverValues[] => {
