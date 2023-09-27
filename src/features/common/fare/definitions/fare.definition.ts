@@ -23,3 +23,15 @@ export type PassengerValues = Entity & {
   firstname: string | undefined;
   phone: PhoneValues;
 };
+
+export type PendingFareValues = {
+  datetime: string;
+  departure: PlaceValues;
+  destination: PlaceValues;
+  driver: DriverValues;
+  id: string;
+  isTwoWayDrive: boolean;
+  isMedicalDrive: boolean;
+  passenger: PassengerValues;
+  status: 'pending-return';
+};
