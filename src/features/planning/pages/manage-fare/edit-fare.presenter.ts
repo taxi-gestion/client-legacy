@@ -3,11 +3,14 @@ import { Entity, FaresEdited, ToEdit } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { regularToPassenger, toLocalTime } from '../../common/fares.presenter';
 import { datetimeLocalToIso8601UTCString, kilometersToMeters, minutesToSeconds } from '../../common/unit-convertion';
-import { FareToEditValues } from './edit-fare.form';
+import { editFareFormCodec, FareToEditValues } from './edit-fare.form';
 import { PlaceValues, toPlace } from '@features/common/place';
 import { toDriver } from '../../../common/driver/driver.presenter';
 import { toIdentity } from '@features/common/regular';
 import { DestinationValues } from '@features/common/destination';
+import { pipe as fpPipe } from 'fp-ts/function';
+import { fold as eitherFold } from 'fp-ts/Either';
+import { throwDecodeError } from '../../common/regular.presenter';
 
 export const destinationFromDestinations = (
   place: PlaceValues | undefined,
@@ -23,9 +26,11 @@ export const toEditFareSuccessToast = (fares: FaresEdited): Toast => ({
   title: 'Une course a été planifiée'
 });
 
-export const toFareToEdit = (formValues: FareToEditValues): Entity & ToEdit => ({
+export const toFareToEdit = (rawFormValues: unknown): Entity & ToEdit =>
+  fpPipe(editFareFormCodec.decode(rawFormValues), eitherFold(throwDecodeError('editFareFormCodec', rawFormValues), toDomain));
+
+export const toDomain = (formValues: FareToEditValues): Entity & ToEdit => ({
   id: formValues.id,
-  //recurrence: formValues.recurrence,
   destination: toPlace(formValues.arrivalPlace.place),
   datetime: datetimeLocalToIso8601UTCString(formValues.departureDatetime),
   departure: toPlace(formValues.departurePlace),
