@@ -1,5 +1,5 @@
 <app-autocomplete-field
-  fareholder="Rechercher une course par passager, chauffeur, destination"
+  placeholder="Rechercher un retour par passager, chauffeur, destination"
   [minSearchTermLength]="0"
   [emptyValue]="fareEmptyValue"
   [toSearchTerm]="toSearchTerm"
@@ -13,7 +13,7 @@
   (selectedValue)="onSelectedValueChange($event)">
   <ng-template #resultTemplate let-templatedValue>
     <b>
-      {{ time(templatedValue.datetime) }} - {{ passengerIdentity(templatedValue.passenger) }} -
+      {{ passengerIdentity(templatedValue.passenger) }} -
       {{ templatedValue.destination.label }}
     </b>
     <br />

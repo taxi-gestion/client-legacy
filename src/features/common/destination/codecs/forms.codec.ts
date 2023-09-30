@@ -10,8 +10,8 @@ import { DestinationValues } from '../definitions';
 import { placeValuesCodec } from '@features/common/place';
 
 export const destinationValuesCodec: Type<DestinationValues> = ioType({
-  isTwoWayDrive: ioBoolean,
-  isMedicalDrive: ioBoolean,
+  isTwoWayDrive: ioUnion([ioBoolean, ioUndefined]),
+  isMedicalDrive: ioUnion([ioBoolean, ioUndefined]),
   place: placeValuesCodec,
   comment: ioUnion([ioString, ioUndefined]),
   destinationName: ioString

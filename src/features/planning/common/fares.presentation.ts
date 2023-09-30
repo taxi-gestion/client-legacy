@@ -74,11 +74,11 @@ export const fareFormControls = (): FareFields => ({
   ...placeFieldFormControl('departurePlace'),
   ...destinationFieldFormControl('arrivalPlace'),
   ...estimateJourneyFormControls(),
-  isTwoWayDrive: new FormControl<DestinationValues['isTwoWayDrive']>(true, {
+  isTwoWayDrive: new FormControl<FareValues['isTwoWayDrive']>(true, {
     nonNullable: true,
     validators: [Validators.required]
   }),
-  isMedicalDrive: new FormControl<DestinationValues['isMedicalDrive']>(true, {
+  isMedicalDrive: new FormControl<FareValues['isMedicalDrive']>(true, {
     nonNullable: true,
     validators: [Validators.required]
   })

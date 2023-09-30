@@ -1,4 +1,4 @@
-import { PassengerValues, PendingFareValues, ScheduledFareValues } from './definitions/fare.definition';
+import { PassengerValues, PendingReturnValues, ScheduledFareValues } from './definitions/fare.definition';
 import { Entity, Passenger, Pending, Scheduled } from '@definitions';
 import { placeEmptyValue, toPlaceValues } from '@features/common/place';
 import { driverEmptyValue, toDriverValues } from '@features/common/driver';
@@ -26,7 +26,7 @@ export const scheduledFareEmptyValue: ScheduledFareValues = {
   status: 'scheduled'
 };
 
-export const pendingReturnEmptyValue: PendingFareValues = {
+export const pendingReturnEmptyValue: PendingReturnValues = {
   datetime: '',
   departure: placeEmptyValue,
   destination: placeEmptyValue,
@@ -54,7 +54,7 @@ export const toScheduledFaresValues = (
   return 'id' in fares ? [toScheduledFareValues(fares)] : fares.map(toScheduledFareValues);
 };
 
-export const toPendingFaresValues = (fares: (Entity & Pending)[] | (Entity & Pending) | undefined): PendingFareValues[] => {
+export const toPendingFaresValues = (fares: (Entity & Pending)[] | (Entity & Pending) | undefined): PendingReturnValues[] => {
   if (fares === undefined) return [];
 
   return 'id' in fares ? [toPendingFareValues(fares)] : fares.map(toPendingFareValues);
@@ -74,7 +74,7 @@ export const toScheduledFareValues = (fare: Entity & Scheduled): ScheduledFareVa
   status: 'scheduled'
 });
 
-export const toPendingFareValues = (fare: Entity & Pending): PendingFareValues => ({
+export const toPendingFareValues = (fare: Entity & Pending): PendingReturnValues => ({
   datetime: fare.datetime,
   departure: toPlaceValues(fare.departure),
   destination: toPlaceValues(fare.destination),

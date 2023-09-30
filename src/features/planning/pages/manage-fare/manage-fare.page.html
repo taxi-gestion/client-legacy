@@ -7,6 +7,7 @@
 </div>
 <hr />
 <div class="mb-3">
+  <label class="form-label">Sélectionner une course</label>
   <app-scheduled-field
     [fareFieldControl]="fareControl"
     [prefilled]="(scheduledFares$ | async) ?? []"
@@ -23,11 +24,10 @@
       (actionError)="onEditFareActionError($event)"
       (ngSubmit)="onSubmitFareToEdit(editLoadAction.start)">
       <div class="mb-3">
-        <label for="passenger" class="form-label">Identité du passager</label>
+        <label class="form-label">Identité du passager</label>
         <app-regular-field
           [regularFieldControl]="editFareForm.controls.passenger"
           [regular]="data.regularValues"></app-regular-field>
-        <input id="passenger" type="hidden" name="passenger" formControlName="passenger" />
       </div>
       <div class="mb-3">
         <label class="form-label">Téléphone à appeler</label>
