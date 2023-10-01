@@ -12,7 +12,7 @@ import {
   SubcontractFareAction
 } from '../../providers';
 import { DailyPlanningLayout } from '../../layouts';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   DurationDistance,
   Entity,
@@ -40,7 +40,6 @@ import { PlaceValues } from '@features/common/place';
 import { DestinationValues } from '@features/common/destination';
 import { DriverValues, toDriversValues } from '@features/common/driver';
 import { fareHasId, scheduledFareEmptyValue, ScheduledFareValues, toScheduledFaresValues } from '@features/common/fare';
-import { paramsToDateDayString } from '../../common/date.presenter';
 import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/common/regular';
 import { forceControlRevalidation, nullToUndefined } from '@features/common/form-validation';
 
@@ -55,8 +54,8 @@ type PageData = {
   templateUrl: './manage-fare.page.html'
 })
 export class ManageFarePage {
-  public readonly scheduledFares$: Observable<ScheduledFareValues[]> = this._route.params.pipe(
-    switchMap((params: Params): Observable<(Entity & Scheduled)[]> => this._faresForDateQuery(paramsToDateDayString(params))),
+  public readonly scheduledFares$: Observable<ScheduledFareValues[]> = this._planning.planningDay$.pipe(
+    switchMap((planningDay: string): Observable<(Entity & Scheduled)[]> => this._faresForDateQuery(planningDay)),
     map(toScheduledFaresValues),
     catchError((error: Error): Observable<ScheduledFareValues[]> => {
       this._toaster.toast({

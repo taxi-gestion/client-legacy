@@ -8,7 +8,7 @@ import {
   SchedulePendingAction
 } from '../../providers';
 import { DailyPlanningLayout } from '../../layouts';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   DurationDistance,
   Entity,
@@ -24,7 +24,6 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { formatDateToDatetimeLocalString, toDisplayDurationDistance } from '../../common/unit-convertion';
 import { DriverValues, toDriversValues } from '@features/common/driver';
 import { fareHasId, pendingReturnEmptyValue, PendingReturnValues, toPendingFaresValues } from '@features/common/fare';
-import { paramsToDateDayString } from '../../common/date.presenter';
 import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/common/regular';
 import { forceControlRevalidation, nullToUndefined } from '@features/common/form-validation';
 import {
@@ -51,8 +50,8 @@ type PageData = {
   templateUrl: './manage-pending.page.html'
 })
 export class ManagePendingPage {
-  public readonly pendingReturns$: Observable<PendingReturnValues[]> = this._route.params.pipe(
-    switchMap((params: Params): Observable<(Entity & Pending)[]> => this._pendingForDateQuery(paramsToDateDayString(params))),
+  public readonly pendingReturns$: Observable<PendingReturnValues[]> = this._planning.planningDay$.pipe(
+    switchMap((planningDay: string): Observable<(Entity & Pending)[]> => this._pendingForDateQuery(planningDay)),
     map(toPendingFaresValues),
     catchError((error: Error): Observable<PendingReturnValues[]> => {
       this._toaster.toast({
