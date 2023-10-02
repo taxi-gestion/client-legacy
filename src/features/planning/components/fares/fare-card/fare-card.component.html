@@ -16,15 +16,29 @@
         aria-hidden="true"></i>
     </div>
     <p class="small my-3">
-      Départ:
-      <a href="geo:{{ fare.departure.context }}">{{ fare.departure.context }} (Adresse GPS)</a>
+      Départ: {{ fare.departure.context }}
+      <a href="https://www.google.com/maps/dir/?api=1&destination={{ fare.departure.context }}&travelmode=driving">
+        GoogleMaps
+      </a>
       {{ ' - ' }}
-      <a href="geo:{{ fare.departure.location.latitude }},{{ fare.departure.location.longitude }}">(Coordonnées GPS)</a>
+      <a
+        href="https://www.waze.com/ul?ll={{ fare.departure.location.latitude }}%2C{{
+          fare.departure.location.longitude
+        }}&navigate=yes">
+        Waze
+      </a>
       <br />
-      Destination :
-      <a href="geo:{{ fare.destination.context }}">{{ fare.departure.context }} (Adresse GPS)</a>
+      Destination : {{ fare.destination.context }}
+      <a href="https://www.google.com/maps/dir/?api=1&destination={{ fare.destination.context }}&travelmode=driving">
+        GoogleMaps
+      </a>
       {{ ' - ' }}
-      <a href="geo:{{ fare.destination.location.latitude }},{{ fare.destination.location.longitude }}">(Coordonnées GPS)</a>
+      <a
+        href="https://www.waze.com/ul?ll={{ fare.destination.location.latitude }}%2C{{
+          fare.destination.location.longitude
+        }}&navigate=yes">
+        Waze
+      </a>
     </p>
     <br />
     Estimation distance: {{ fare.distance }} Km
