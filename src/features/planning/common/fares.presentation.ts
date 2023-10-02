@@ -1,5 +1,5 @@
 import { PlanningSession } from '../components/planning/planning-row/planning-row.component';
-import { Driver, Entity, Scheduled } from '@definitions';
+import { Driver, Entity } from '@definitions';
 import { boolean as ioBoolean, number as ioNumber, string as ioString, type as ioType, Type } from 'io-ts';
 import { EstimateJourneyFields, estimateJourneyFormControls, EstimateJourneyValues } from '../components';
 import { FormControl, Validators } from '@angular/forms';
@@ -17,6 +17,7 @@ import { DriverField, driverFieldFormControl } from '../../common/driver/compone
 import { DriverValues, driverValuesCodec } from '@features/common/driver';
 import { RegularField, regularFieldFormControl } from '../../common/regular/components/regular-field/regular-field.form';
 import { RegularValues, regularValuesEntityCodec } from '@features/common/regular';
+import { ScheduledFareValues } from '@features/common/fare';
 
 export type DailyDriverPlanning = {
   driver: Driver & Entity;
@@ -24,7 +25,7 @@ export type DailyDriverPlanning = {
 };
 
 // Plannings, horizontal axis
-export type ScheduledPresentation = Entity & Scheduled & { localTime: string };
+export type ScheduledPresentation = Entity & ScheduledFareValues & { localTime: string };
 export type ScheduledPlanningSession = PlanningSession & ScheduledPresentation;
 
 export type FareValues = EstimateJourneyValues & {

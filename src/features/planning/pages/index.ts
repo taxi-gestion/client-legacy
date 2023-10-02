@@ -6,6 +6,7 @@ import { RegisterRegularPage } from './register-regular/register-regular.page';
 import { ManageFarePage } from './manage-fare/manage-fare.page';
 import { ManagePendingPage } from './manage-pending/manage-pending.page';
 import { ManageRegularPage } from './manage-regular/manage-regular.page';
+import { ManagerDriverAgendaPage } from './manager-driver-agenda/manager-driver-agenda.page';
 
 export * from './manage-pending/manage-pending.page';
 export * from './driver-agenda/driver-agenda.page';
@@ -20,6 +21,7 @@ export * from './manage-regular/manage-regular.page';
 export const PAGES = [
   ManagePendingPage,
   DriverAgendaPage,
+  ManagerDriverAgendaPage,
   MissingAdminConfigurationPage,
   ManagerDriverChoicePage,
   ScheduleFarePage,

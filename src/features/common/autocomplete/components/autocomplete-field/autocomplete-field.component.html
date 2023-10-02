@@ -1,6 +1,7 @@
 <form [formGroup]="formGroup">
   <div formControlErrors="search">
-    <label [for]="search" class="visually-hidden"><ng-content></ng-content></label>
+    <!-- TODO This should be visible and use the given parent input identifier -->
+    <label for="search" class="visually-hidden"><ng-content></ng-content></label>
     <div class="input-group">
       <span class="input-group-text pe-0">
         <i class="text-muted ri-search-line" aria-hidden="true"></i>
@@ -9,8 +10,8 @@
         #templatedInput
         type="search"
         [placeholder]="placeholder"
-        [name]="search"
-        [id]="search"
+        name="search"
+        id="search"
         class="form-control border-start-0 position-relative"
         [ngClass]="validation(formGroup.controls.search)"
         autocomplete="off"

@@ -3,7 +3,7 @@ import { DailyDriverPlanning, ScheduledPlanningSession, ScheduledPresentation } 
 import { SessionContext } from '../../planning/planning-row/planning-row.component';
 import { toContextualizedSession } from '../../planning/planning-row/planning-row.presenter';
 import { toIdentity } from '@features/common/regular';
-import { Entity, Passenger } from '@definitions';
+import { PassengerValues } from '@features/common/fare';
 
 @Component({
   selector: 'app-fare-planning-session',
@@ -23,7 +23,7 @@ export class FarePlanningSessionComponent {
     );
   }
 
-  public passengerIdentity(passenger: Entity & Passenger): string {
+  public passengerIdentity(passenger: PassengerValues): string {
     return toIdentity(passenger);
   }
 }
