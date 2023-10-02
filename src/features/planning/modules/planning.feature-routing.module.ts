@@ -13,6 +13,7 @@ import {
   ScheduleFarePage
 } from '../pages';
 import { CanActivatePlanningRedirectGuard } from '../guards';
+import { ManagerDriverAgendaPage } from '../pages/manager-driver-agenda/manager-driver-agenda.page';
 
 const DAILY_PAGES: Routes = [
   {
@@ -65,6 +66,12 @@ const ROUTES: Routes = [
     canMatch: [CanMatchOneUserGroupGuard],
     data: { allowedGroups: ['developer', 'driver'] },
     component: DriverAgendaPage
+  },
+  {
+    path: 'agenda-manager',
+    canMatch: [CanMatchOneUserGroupGuard],
+    data: { allowedGroups: ['developer', 'manager'] },
+    component: ManagerDriverAgendaPage
   },
   {
     path: 'agenda/:date',

@@ -6,8 +6,7 @@ import { Session, SESSION_PERSISTENCE } from '../../../authentication';
 import { toScheduledFaresPresentation } from '../../common/fares.presenter';
 import { toStandardDateFormat } from '../../common/unit-convertion';
 import { Entity, Scheduled } from '@definitions';
-import { ScheduledPresentation } from '../../common/fares.presentation';
-import { sortByDatetime, toAgendaFares } from './driver-agenda.presenter';
+import { FareDriverCardPresentation, sortByDatetime, toAgendaFares } from '../../common/agenda.presenter';
 
 const paramsToDateString = (params: Params): string =>
   params['date'] == null ? toStandardDateFormat(new Date()) : (params['date'] as string);
@@ -19,7 +18,7 @@ const paramsToDateString = (params: Params): string =>
 export class DriverAgendaPage {
   public planningDate: string = paramsToDateString(this._route.snapshot.params);
 
-  public readonly agenda$: Observable<ScheduledPresentation[]> = this._route.params.pipe(
+  public readonly agenda$: Observable<FareDriverCardPresentation[]> = this._route.params.pipe(
     switchMap(
       (params: Params): Observable<(Entity & Scheduled)[]> =>
         this._driverAgendaForDateQuery({ driver: { id: this._session.userId() }, date: paramsToDateString(params) })

@@ -6,18 +6,18 @@
     <span class="text-body cursor" title="Appeler le client au {{ fare.passenger.phone }}">
       {{ passengerIdentity(fare.passenger) }}
     </span>
-    <ng-container *ngIf="fare.nature === 'medical'">
+    <ng-container *ngIf="fare.isMedicalDrive">
       <span class="visually-hidden">Trajet médical</span>
       <i class="ms-auto ri-stethoscope-line small text-muted" aria-hidden="true"></i>
     </ng-container>
   </b>
   <small class="text-muted d-flex">
     <span class="text-muted">{{ fare.distance }} Km - {{ fare.duration }} min</span>
-    <span class="visually-hidden">{{ fare.kind }}</span>
+    <span class="visually-hidden">{{ fare.isTwoWayDrive ? 'two-way fare' : 'one-way fare' }}</span>
     <i
       class="align-bottom ms-auto"
-      [class.ri-arrow-right-line]="fare.kind === 'one-way'"
-      [class.ri-arrow-left-right-line]="fare.kind === 'two-way'"
+      [class.ri-arrow-right-line]="!fare.isTwoWayDrive"
+      [class.ri-arrow-left-right-line]="fare.isTwoWayDrive"
       aria-hidden="true"></i>
   </small>
 </a>

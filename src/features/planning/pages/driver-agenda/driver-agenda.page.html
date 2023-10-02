@@ -10,6 +10,7 @@
         (change)="onPlanningDateChange(planningField.value)" />
     </h1>
   </div>
+
   <div class="flex-grow-1 pt-2 overflow-y-auto" *ngIf="agenda$ | async as fares">
     <div class="col-xxl-3 col-xl-4 col-md-6 col-12 mb-3" *ngFor="let fare of fares">
       <app-fare-card [fare]="fare"></app-fare-card>

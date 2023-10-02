@@ -12,11 +12,13 @@ import { throwDecodeError } from './regular.presenter';
 import { pipe as fpPipe } from 'fp-ts/function';
 import { fold as eitherFold } from 'fp-ts/Either';
 import { journeyCodec } from '@codecs';
-import { placeEmptyValue, PlaceValues, toPlacesValues } from '@features/common/place';
+import { placeEmptyValue, PlaceValues, toPlacesValues, toPlaceValues } from '@features/common/place';
 import { DestinationValues } from '@features/common/destination';
 import { FareToScheduleValues } from '../pages/schedule-fare/schedule-fare.form';
 import { PhoneValues, toPhone } from '@features/common/phone';
 import { RegularValues } from '@features/common/regular';
+import { toPassengerValues } from '@features/common/fare';
+import { toDriverValues } from '@features/common/driver';
 
 export const defaultPlaceValue: Place = {
   context: '',
@@ -71,15 +73,15 @@ export const toFaresForDatePlanningSession = (fares: ScheduledPresentation[]): S
 
 export const toScheduledFarePresentation = (fare: Entity & Scheduled): ScheduledPresentation => ({
   id: fare.id,
-  passenger: fare.passenger,
-  departure: fare.departure,
-  destination: fare.destination,
+  passenger: toPassengerValues(fare.passenger),
+  departure: toPlaceValues(fare.departure),
+  destination: toPlaceValues(fare.destination),
   distance: fare.distance,
   duration: fare.duration,
-  kind: fare.kind,
-  nature: fare.nature,
-  driver: fare.driver,
-  status: fare.status,
+  isTwoWayDrive: fare.kind === 'two-way',
+  isMedicalDrive: fare.nature === 'medical',
+  driver: toDriverValues(fare.driver),
+  status: 'scheduled',
   datetime: fare.datetime,
   localTime: timeInTimezone(fare.datetime, 'Europe/Paris')
 });
@@ -91,8 +93,8 @@ export const toScheduledPlanningSession = (fare: ScheduledPresentation): Schedul
   destination: fare.destination,
   distance: Number((fare.distance * 0.001).toPrecision(3)),
   duration: secondsToMinutes(fare.duration),
-  kind: fare.kind,
-  nature: fare.nature,
+  isTwoWayDrive: fare.isTwoWayDrive,
+  isMedicalDrive: fare.isMedicalDrive,
   driver: fare.driver,
   status: fare.status,
   datetime: fare.datetime,
