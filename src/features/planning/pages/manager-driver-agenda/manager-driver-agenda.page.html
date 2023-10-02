@@ -1,33 +1,35 @@
-<div class="d-flex flex-grow-1 flex-column overflow-hidden h-100 mt-2 g-0 col">
+<div class="d-flex flex-grow-1 flex-column h-100 mt-2 g-0 col">
   <div class="sticky-top shadow-sm start-0">
     <h1 class="mb-1">Agenda manager</h1>
   </div>
-  <div class="m-2">
-    <div class="mb-3">
-      <label class="form-label">Date:</label>
-      <input
-        #planningField
-        type="date"
-        [value]="planningDate"
-        class="form-control form-control-lg"
-        (change)="onPlanningDateChange(planningField.value)" />
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Chauffeur:</label>
-      <!-- TODO Missing "for"... Manage label in autocomplete ? -->
-      <app-driver-field
-        [driverFieldControl]="driverControl"
-        [driver]="(userOrFirstDriver$ | async)"
-        [prefilled]="(drivers$ | async) ?? []"
-        (selectedValue)="onDriverSelectedChange($event)"></app-driver-field>
-    </div>
-  </div>
-  <h2 class="mb-1">Courses du chauffeur</h2>
-  <ng-container *ngIf="(fares$ | async) as fares">
-    <div class="flex-grow-1 pt-2 overflow-y-auto">
-      <div class="col-xxl-3 col-xl-4 col-md-6 col-12 mb-3" *ngFor="let fare of fares">
-        <app-fare-card [fare]="fare"></app-fare-card>
+  <div class="overflow-y-auto">
+    <div class="m-2">
+      <div class="mb-3">
+        <label class="form-label">Date:</label>
+        <input
+          #planningField
+          type="date"
+          [value]="planningDate"
+          class="form-control form-control-lg"
+          (change)="onPlanningDateChange(planningField.value)" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Chauffeur:</label>
+        <!-- TODO Missing "for"... Manage label in autocomplete ? -->
+        <app-driver-field
+          [driverFieldControl]="driverControl"
+          [driver]="(userOrFirstDriver$ | async)"
+          [prefilled]="(drivers$ | async) ?? []"
+          (selectedValue)="onDriverSelectedChange($event)"></app-driver-field>
       </div>
     </div>
-  </ng-container>
+    <h2 class="mb-1">Courses du chauffeur</h2>
+    <ng-container *ngIf="(fares$ | async) as fares">
+      <div class="flex-grow-1 pt-2">
+        <div class="col-xxl-3 col-xl-4 col-md-6 col-12 mb-3" *ngFor="let fare of fares">
+          <app-fare-card [fare]="fare"></app-fare-card>
+        </div>
+      </div>
+    </ng-container>
+  </div>
 </div>
