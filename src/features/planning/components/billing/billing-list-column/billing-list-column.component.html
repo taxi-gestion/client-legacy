@@ -1,0 +1,19 @@
+<div class="flex-shrink-0 h-100">
+  <div class="driver-header text-nowrap p-3">
+    {{ driver }}
+  </div>
+  <div class="fare text-nowrap card p-3" *ngFor="let fare of fares">
+    <div>
+      <b>{{ fare.time }} - {{ fare.passenger }}</b>
+      <br />
+      De: {{ fare.departure }}
+      <br />
+      A: {{ fare.destination }}
+      <br />
+      Medical: {{ fare.isMedicalDrive ? 'oui' : 'non' }}
+      <br />
+      Retour: {{ fare.isTwoWayDrive ? 'oui' : 'non' }}
+      <br />
+    </div>
+  </div>
+</div>

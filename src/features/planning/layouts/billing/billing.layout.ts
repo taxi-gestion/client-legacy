@@ -8,14 +8,14 @@ import { DailyDriverPlanning } from '../../common/fares.presentation';
 import { LIST_DRIVERS_QUERY, ListDriversQuery } from '@features/common/driver';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { paramsToDateDayString } from '../../common/date.presenter';
-import { DailyDriverPlanningListPresentation, toDailyDriverPlanningListPresentation } from './daily-planning-list.presenter';
+import { BillingByDriverPresentation, toBillingByDriverPresentation } from './billing.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './daily-planning-list.layout.html'
+  templateUrl: './billing.layout.html'
 })
-export class DailyPlanningListLayout {
-  public planningDay$: Observable<string> = this._route.params.pipe(
+export class BillingLayout {
+  public billingDay$: Observable<string> = this._route.params.pipe(
     map((params: Params): string => paramsToDateDayString(params))
   );
 
@@ -42,16 +42,14 @@ export class DailyPlanningListLayout {
     })
   );
 
-  public readonly plannings$: Observable<DailyDriverPlanningListPresentation[]> = combineLatest([
+  public readonly plannings$: Observable<BillingByDriverPresentation[]> = combineLatest([
     this.drivers$,
     this.scheduledFares$
   ]).pipe(
     map(([drivers, fares]: [(Driver & Entity)[], (Entity & Scheduled)[]]): DailyDriverPlanning[] =>
       toDailyDriverPlanning(drivers, fares)
     ),
-    map((plannings: DailyDriverPlanning[]): DailyDriverPlanningListPresentation[] =>
-      toDailyDriverPlanningListPresentation(plannings)
-    )
+    map((plannings: DailyDriverPlanning[]): BillingByDriverPresentation[] => toBillingByDriverPresentation(plannings))
   );
 
   public constructor(
@@ -62,7 +60,7 @@ export class DailyPlanningListLayout {
     @Inject(LIST_DRIVERS_QUERY) private readonly _listDriversQuery: ListDriversQuery
   ) {}
 
-  public async onPlanningDateChange(planningDate: string): Promise<void> {
-    await this._router.navigate(['planning', 'daily-list', planningDate]);
+  public async onBillingDateChange(planningDate: string): Promise<void> {
+    await this._router.navigate(['planning', 'billing', planningDate]);
   }
 }
