@@ -16,7 +16,8 @@ export const minutesSinceStartOfDayInTimezone = (isoUtcDate: string, timeZone: s
 
 export const timeInTimezone = (isoUtcDate: string, timeZone: string): string => {
   const dateInDesiredTimeZone: Date = utcToZonedTime(isoUtcDate, timeZone);
-  return `${getHours(dateInDesiredTimeZone)}:${getMinutes(dateInDesiredTimeZone)}`;
+  //return `${getHours(dateInDesiredTimeZone)}:${getMinutes(dateInDesiredTimeZone)}`;
+  return format(dateInDesiredTimeZone, 'HH:mm');
 };
 
 export const secondsToMinutes = (duration: number): number => Math.round(duration / 60);

@@ -4,6 +4,7 @@ import { PlanningRowComponent } from './planning/planning-row/planning-row.compo
 import { PlanningSettingsComponent } from './planning/planning-settings/planning-settings.component';
 import { FarePlanningSessionComponent } from './fares/fare-planning-session/fare-planning-session.component';
 import { FareCardComponent } from './fares/fare-card/fare-card.component';
+import { PlanningListColumnComponent } from './planning-list/planning-list-column/planning-list-column.component';
 
 export * from './fares/fields';
 
@@ -12,6 +13,7 @@ export const COMPONENTS = [
   PlanningComponent,
   PlanningRowComponent,
   PlanningSettingsComponent,
+  PlanningListColumnComponent,
   FarePlanningSessionComponent,
   FareCardComponent,
   EstimateJourneyFieldsComponent
