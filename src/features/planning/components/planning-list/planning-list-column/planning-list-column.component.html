@@ -2,35 +2,9 @@
   <div class="driver-header text-nowrap p-3">
     {{ driver }}
   </div>
-  <div class="fare text-nowrap" *ngFor="let fare of fares">
+  <div class="fare text-nowrap card p-3" *ngFor="let fare of fares">
     <div>
       <a>{{ fare.time }} - {{ fare.passenger }}</a>
     </div>
   </div>
 </div>
-
-<!--  <div
-    class="position-sticky bg-light start-0 p-2 me-4 overflow-hidden shadow-right"
-    style="width: 200px; top: 0; left: 0; z-index: 1">
-    <ng-content select="[slot=header]"></ng-content>
-  </div>
-  <a
-    [routerLink]="slotLink"
-    class="btn btn-link text-decoration-none border-start-dashed border-2 planning-slot d-flex text-start"
-    (click)="onPlanningSlotClicked(timeInMinutes, context)"
-    [style.width.px]="planning.columnWidth"
-    *ngFor="let timeInMinutes of planning.timesInMinutes$ | async">
-    <ng-container *ngFor="let session of sessions">
-      <div
-        *ngIf="
-          timeInMinutes + planning.interval - session.startTimeInMinutes > 0 &&
-          timeInMinutes + planning.interval - session.startTimeInMinutes <= planning.interval
-        "
-        [ngStyle]="{ 'width.px': (planning.columnWidth * session.duration) / planning.interval, 'min-width.px': 125 }"
-        [style.transform]="
-          'translateX(' + offsetForMinutes(session.startTimeInMinutes - timeInMinutes, planning.columnWidth) + 'px)'
-        ">
-        <ng-container *ngTemplateOutlet="template; context: { session, context }"></ng-container>
-      </div>
-    </ng-container>
-  </a>-->
