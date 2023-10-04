@@ -25,7 +25,8 @@
       "@features/common/fare": ["src/features/common/fare"],
       "@features/dashboard": ["src/features/dashboard"],
       "@features/planning": ["src/features/planning"],
-      "@features/public": ["src/features/public"]
+      "@features/public": ["src/features/public"],
+      "@features/regular": ["src/features/regular"]
     },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
