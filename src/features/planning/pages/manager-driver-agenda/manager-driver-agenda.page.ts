@@ -8,7 +8,8 @@ import { toStandardDateFormat } from '../../common/unit-convertion';
 import { Driver, Entity, Scheduled } from '@definitions';
 import { driverEmptyValue, DriverValues, LIST_DRIVERS_QUERY, ListDriversQuery, toDriversValues } from '@features/common/driver';
 import { FormControl } from '@angular/forms';
-import { FareDriverCardPresentation, sortByDatetime, toAgendaFares } from '../../common/agenda.presenter';
+import { FareDriverCardPresentation, toAgendaFares } from '../../common/agenda.presenter';
+import { sortByDatetime } from '../../common/time.presenter';
 
 const paramsToDateString = (params: Params): string =>
   params['date'] == null ? toStandardDateFormat(new Date()) : (params['date'] as string);
