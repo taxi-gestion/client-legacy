@@ -6,7 +6,8 @@ import { Session, SESSION_PERSISTENCE } from '../../../authentication';
 import { toScheduledFaresPresentation } from '../../common/fares.presenter';
 import { toStandardDateFormat } from '../../common/unit-convertion';
 import { Entity, Scheduled } from '@definitions';
-import { FareDriverCardPresentation, sortByDatetime, toAgendaFares } from '../../common/agenda.presenter';
+import { FareDriverCardPresentation, toAgendaFares } from '../../common/agenda.presenter';
+import { sortByDatetime } from '../../common/time.presenter';
 
 const paramsToDateString = (params: Params): string =>
   params['date'] == null ? toStandardDateFormat(new Date()) : (params['date'] as string);

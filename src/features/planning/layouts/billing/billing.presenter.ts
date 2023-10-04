@@ -1,5 +1,6 @@
 import { DailyDriverPlanning, ScheduledPlanningSession } from '../../common/fares.presentation';
 import { toIdentity } from '@features/common/regular';
+import { sortByTime } from '../../common/time.presenter';
 
 export type BillingByDriverPresentation = {
   driver: string;
@@ -20,7 +21,7 @@ export const toBillingByDriverPresentation = (dailyDriverPlannings: DailyDriverP
 
 const toListPresentation = (dailyDriverPlanning: DailyDriverPlanning): BillingByDriverPresentation => ({
   driver: dailyDriverPlanning.driver.username,
-  fares: toBillingListItems(dailyDriverPlanning.fares)
+  fares: sortByTime(toBillingListItems(dailyDriverPlanning.fares))
 });
 
 const toBillingListItems = (fares: ScheduledPlanningSession[]): BillingListItem[] => fares.map(toBillingListItem);

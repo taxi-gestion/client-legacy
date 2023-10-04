@@ -20,15 +20,6 @@ const toAgendaFare = (fare: ScheduledPresentation): FareDriverCardPresentation =
   title: cardTitle(fare)
 });
 
-/* eslint-disable */
-export const sortByDatetime = (fares: FareDriverCardPresentation[]): FareDriverCardPresentation[] =>
-  fares.sort((a, b) => {
-    const aMinutes = parseInt(a.datetime.split(':')[0]!) * 60 + parseInt(a.datetime.split(':')[1]!);
-    const bMinutes = parseInt(b.datetime.split(':')[0]!) * 60 + parseInt(b.datetime.split(':')[1]!);
-    return aMinutes - bMinutes;
-  });
-/* eslint-enable */
-
 export type FareDriverCardPresentation = {
   title: string;
   duration: string;
