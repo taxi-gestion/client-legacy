@@ -1,0 +1,131 @@
+<div class="pe-3 ps-3">
+  <h3 class="text-primary">Editer un passager</h3>
+  <div class="mb-3">
+    <label class="form-label">Sélectionner un passager pour modification</label>
+    <app-regular-field
+      [regularFieldControl]="editRegularForm.controls.regular"
+      (selectedValue)="onSelectRegularChange($event)"></app-regular-field>
+  </div>
+  <ng-container *ngIf="(regular$ | async) as regular">
+    <ng-container *ngIf="(validRegular$ | async)">
+      <h3 class="mb-3 text-primary h5">Modifier le passager</h3>
+      <form
+        [formGroup]="editRegularForm"
+        [appLoadAction]="editRegular$"
+        #loadAction="loadAction"
+        (actionSuccess)="onEditRegularActionSuccess($event)"
+        (actionError)="onEditRegularActionError($event)"
+        (ngSubmit)="onSubmitEditRegular(loadAction.start)">
+        <div class="mb-3">
+          <label for="firstname" class="form-label">Civilité*</label>
+          <select name="civility" class="form-select w-auto" formControlName="civility">
+            <option value="Mr">Mr</option>
+            <option value="Mrs">Mme</option>
+            <option value="Couple">Mr/Mme</option>
+            <option value="Child">Enfant</option>
+            <option value="Company">Société</option>
+            <option value="Other">Autre</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="firstname" class="form-label">Prénom</label>
+          <input
+            class="form-control"
+            id="firstname"
+            type="text"
+            name="firstname"
+            formControlName="firstname"
+            placeholder="Jean" />
+        </div>
+        <div class="mb-3" formControlErrors="lastname">
+          <label for="lastname" class="form-label">Nom de famille*</label>
+          <input
+            class="form-control"
+            id="lastname"
+            type="text"
+            name="lastname"
+            formControlName="lastname"
+            placeholder="Dupont"
+            [ngClass]="validation(editRegularForm.controls.lastname)" />
+        </div>
+        <div class="mb-3">
+          <label for="phones" class="form-label">Téléphones</label>
+          <app-phones id="phones" [parentArray]="editRegularForm.controls.phones" [phones]="regular.phones"></app-phones>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Domicile</label>
+          <!--<app-place-field (selectPlace)="onSelectHomeAddressChange($event)" [defaultValue]="regular.homeAddress"></app-place-field>-->
+          <app-place-field
+            [placeFieldControl]="editRegularForm.controls.homeAddress"
+            [place]="regular.homeAddress"></app-place-field>
+        </div>
+        <div class="mb-3">
+          <label for="destinations" class="form-label">Destinations</label>
+          <app-destinations
+            id="destinations"
+            [parentArray]="editRegularForm.controls.destinations"
+            [destinations]="regular.destinations"></app-destinations>
+        </div>
+        <div class="mb-3">
+          <label for="commentary" class="form-label">Commentaire client</label>
+          <textarea
+            id="commentary"
+            type="text"
+            placeholder="Commentaire..."
+            class="form-control"
+            name="commentary"
+            cols="30"
+            rows="5"
+            formControlName="commentary"></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="subcontractedClient" class="form-label">Client d'une autre société</label>
+          <input
+            id="subcontractedClient"
+            type="text"
+            placeholder="Client de..."
+            class="form-control"
+            name="subcontractedClient"
+            formControlName="subcontractedClient" />
+        </div>
+        <button
+          [appLoadActionDisplay]="loadAction.isLoading$ | async"
+          #loadActionDisplay
+          type="submit"
+          class="btn mt-3 btn-primary w-100"
+          [disabled]="loadActionDisplay.isLoading">
+          <ng-container slot="loadActionDisplayIdle">Modifier le passager</ng-container>
+          <ng-container slot="loadActionDisplayLoading">
+            <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+            Modification en cours...
+          </ng-container>
+        </button>
+        <!-- TODO Mutualiser les erreurs communes -->
+        <div class="text-danger mt-2" *ngIf="editRegularForm.errors">Errors: {{ editRegularForm.errors | json }}</div>
+        <div class="text-danger mt-2" *ngIf="editRegularForm.errors?.['validationFailedBeforeApiCallError']">
+          La structure des données de la requête ne respecte pas le contrat de transfer. La requête ne peut pas être effectuée.
+          Prévenir Romain qu'il va faire des heures supp'.
+        </div>
+      </form>
+      <hr />
+      <h3 class="mb-3 text-primary h5">Supprimer le passager (irréversible)</h3>
+      <button
+        [appLoadAction]="deleteRegular$"
+        #deleteLoadAction="loadAction"
+        (actionSuccess)="onDeleteRegularActionSuccess($event)"
+        (actionError)="onDeleteRegularActionError($event)"
+        (click)="onClickDeleteRegular(deleteLoadAction.start)"
+        [appLoadActionDisplay]="deleteLoadAction.isLoading$ | async"
+        #deleteLoadActionDisplay
+        type="button"
+        class="btn btn-danger mt-2 w-100"
+        [disabled]="deleteLoadActionDisplay.isLoading">
+        <ng-container slot="loadActionDisplayIdle">Supprimer le passager</ng-container>
+        <ng-container slot="loadActionDisplayLoading">
+          <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+          Suppression en cours...
+        </ng-container>
+      </button>
+    </ng-container>
+  </ng-container>
+</div>
