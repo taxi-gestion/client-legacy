@@ -1,0 +1,33 @@
+<div class="d-flex flex-column h-100 overflow-auto">
+  <div class="d-flex flex-row">
+    <h1 class="p-3 text-primary">Facturation</h1>
+    <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
+      <i class="ri-close-line ri-2x" aria-hidden="true"></i>
+      <span class="visually-hidden">Fermer</span>
+    </a>
+  </div>
+  <div class="btn-group pe-2 ps-2" role="group" id="passenger-action" aria-label="Passenger action options">
+    <input
+      type="radio"
+      class="btn-check"
+      name="action-button"
+      id="edit-regular-button"
+      autocomplete="off"
+      checked
+      [routerLink]="['medical']" />
+    <label class="btn btn-outline-primary" for="edit-regular-button">Medical</label>
+
+    <input
+      type="radio"
+      class="btn-check"
+      name="action-button"
+      id="register-regular-button"
+      autocomplete="off"
+      [routerLink]="['standard']" />
+    <label class="btn btn-outline-primary" for="register-regular-button">Standard</label>
+  </div>
+  <hr />
+  <div>
+    <router-outlet></router-outlet>
+  </div>
+</div>

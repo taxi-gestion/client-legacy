@@ -15,7 +15,6 @@ import {
 import { CanActivatePlanningRedirectGuard } from '../guards';
 import { ManagerDriverAgendaPage } from '../pages/manager-driver-agenda/manager-driver-agenda.page';
 import { DailyPlanningListLayout } from '../layouts/daily-planning-list/daily-planning-list.layout';
-import { BillingLayout } from '../layouts/billing/billing.layout';
 
 const DAILY_PAGES: Routes = [
   {
@@ -94,18 +93,6 @@ const ROUTES: Routes = [
     canMatch: [CanMatchOneUserGroupGuard],
     data: { allowedGroups: ['developer', 'driver'] },
     component: DriverAgendaPage
-  },
-  {
-    path: 'billing',
-    canMatch: [CanMatchOneUserGroupGuard],
-    data: { allowedGroups: ['developer', 'manager', 'billing'] },
-    component: BillingLayout
-  },
-  {
-    path: 'billing/:date',
-    canMatch: [CanMatchOneUserGroupGuard],
-    data: { allowedGroups: ['developer', 'manager', 'billing'] },
-    component: BillingLayout
   },
   {
     path: ':date',

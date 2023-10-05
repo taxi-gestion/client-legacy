@@ -46,4 +46,4 @@ const navigateToAgenda =
 const navigateToBilling =
   (router: Router) =>
   (date: string | undefined): Observable<boolean> =>
-    date == null ? from(router.navigate(['/planning/billing/'])) : from(router.navigate(['/planning/billing/', date]));
+    date == null ? from(router.navigate(['/billing/'])) : from(router.navigate(['/billing/', date]));

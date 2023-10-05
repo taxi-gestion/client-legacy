@@ -55,15 +55,14 @@ const matchDriver =
   (fare: Entity & Scheduled): boolean =>
     fare.driver.id === driver.id;
 
-export function toDailyDriverPlanning(drivers: (Driver & Entity)[], fares: (Entity & Scheduled)[]): DailyDriverPlanning[] {
-  return drivers.map((driver: Driver & Entity): DailyDriverPlanning => {
+export const toDailyDriverPlanning = (drivers: (Driver & Entity)[], fares: (Entity & Scheduled)[]): DailyDriverPlanning[] =>
+  drivers.map((driver: Driver & Entity): DailyDriverPlanning => {
     const associatedFares: (Entity & Scheduled)[] = fares.filter(matchDriver(driver));
     return {
       driver,
       fares: toFaresForDatePlanningSession(toScheduledFaresPresentation(associatedFares))
     };
   });
-}
 
 export const toScheduledFaresPresentation = (fares: (Entity & Scheduled)[]): ScheduledPresentation[] =>
   fares.map(toScheduledFarePresentation);

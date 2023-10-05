@@ -11,10 +11,10 @@ import { cognitoAuthenticationProviders } from '@features/aws';
 import { PlanningFeatureModule } from '@features/planning';
 import { PublicFeatureModule } from '@features/public';
 import { MainLayout } from '../layouts';
-import { PLANNING_PROVIDERS } from '../providers';
+import { PLANNING_PROVIDERS, REGULAR_PROVIDERS, BILLING_PROVIDERS } from '../providers';
 import { DashboardFeatureModule } from '@features/dashboard';
 import { RegularFeatureModule } from '@features/regular';
-import { REGULAR_PROVIDERS } from '../providers/regular.providers';
+import { BillingFeatureModule } from '@features/billing';
 
 const ROUTES: Routes = [
   {
@@ -38,6 +38,14 @@ const ROUTES: Routes = [
     canMatch: [CanMatchRefreshTokenGuard, CanMatchLoggedInGuard, CanMatchOneUserGroupGuard],
     data: { allowedGroups: ['developer', 'manager'] },
     providers: [...REGULAR_PROVIDERS]
+  },
+  {
+    loadChildren: async (): Promise<typeof BillingFeatureModule> => (await import('@features/billing')).BillingFeatureModule,
+    component: MainLayout,
+    path: 'billing',
+    canMatch: [CanMatchOneUserGroupGuard],
+    data: { allowedGroups: ['developer', 'manager', 'billing'] },
+    providers: [...BILLING_PROVIDERS]
   },
   {
     loadChildren: async (): Promise<typeof PublicFeatureModule> => (await import('@features/public')).PublicFeatureModule,
