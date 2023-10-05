@@ -1,0 +1,20 @@
+<div class="d-flex flex-column h-100 overflow-hidden">
+  <div class="p-3 sticky-top shadow-sm start-0">
+    <h1 class="h3">
+      Facturation du
+      <input
+        #planningField
+        type="date"
+        [value]="billingDay$ | async"
+        class="form-control form-control-lg w-auto d-inline align-bottom"
+        (change)="onBillingDateChange(planningField.value)" />
+    </h1>
+  </div>
+  <h2 class="h4 p-3">Facturation standard</h2>
+  <div class="flex-grow-1 pt-2 overflow-auto d-flex flex-nowrap w-100 pe-3 ps-3" *ngIf="standardBilling$ | async as plannings">
+    <app-billing-column
+      *ngFor="let planning of plannings | keyvalue"
+      [driver]="planning.key"
+      [fares]="planning.value"></app-billing-column>
+  </div>
+</div>

@@ -19,7 +19,7 @@ const ROUTES: Routes = [
         path: 'register',
         component: RegisterRegularPage
       },
-      { path: '', redirectTo: 'edit', pathMatch: 'full' }
+      { path: '**', redirectTo: 'edit', pathMatch: 'full' }
     ]
   }
 ];

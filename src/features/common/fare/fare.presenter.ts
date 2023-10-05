@@ -1,5 +1,5 @@
 import { PassengerValues, PendingReturnValues, ScheduledFareValues } from './definitions/fare.definition';
-import { Entity, Passenger, Pending, Scheduled } from '@definitions';
+import { Entity, Kind, Nature, Passenger, Pending, Scheduled } from '@definitions';
 import { placeEmptyValue, toPlaceValues } from '@features/common/place';
 import { driverEmptyValue, toDriverValues } from '@features/common/driver';
 import { phoneEmptyValue, toPhoneValues } from '@features/common/phone';
@@ -38,14 +38,6 @@ export const pendingReturnEmptyValue: PendingReturnValues = {
   status: 'pending-return'
 };
 
-//
-//export const toFare = (fareValue: ScheduledFareValues): Fare => ({
-//  ...fareValue
-//});
-//
-//export const toFareValuesOrUndefined = (fare: Fare | ScheduledFareValues | undefined): ScheduledFareValues | undefined =>
-//  fare === undefined ? undefined : fare;
-//
 export const toScheduledFaresValues = (
   fares: (Entity & Scheduled)[] | (Entity & Scheduled) | undefined
 ): ScheduledFareValues[] => {
@@ -93,5 +85,6 @@ export const toPassengerValues = (passenger: Entity & Passenger): PassengerValue
   firstname: passenger.firstname,
   phone: toPhoneValues(passenger.phone)
 });
-//
-//export const toFareValues = (fare: Fare): ScheduledFareValues => fare;
+
+export const isMedicalDrive = (nature: Nature['nature']): boolean => nature === 'medical';
+export const isTwoWayDrive = (kind: Kind['kind']): boolean => kind === 'two-way';

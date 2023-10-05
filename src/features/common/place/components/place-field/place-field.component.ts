@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, Output } from '@angular/core';
-import { SEARCH_PLACE_QUERY, SearchPlaceQuery } from '@features/common/place';
+import { SEARCH_PLACE_QUERY, SearchPlaceQuery } from '../../providers';
 import { PLACE_FORM_CONTROL_ERROR_MESSAGES } from '../../errors/form-errors-messages.token';
 import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { Observable } from 'rxjs';
