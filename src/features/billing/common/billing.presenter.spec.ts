@@ -1,5 +1,3 @@
-// Fail because of angular / jest config
-/*
 import { Entity, Scheduled } from '@definitions';
 import { groupByNature } from './billing.presenter';
 
@@ -23,18 +21,17 @@ describe('groupByNature', (): void => {
     [
       [fare1, fare2, fare3],
       {
-        medical: [fare1, fare2],
-        standard: [fare3]
+        medical: [fare1, fare3],
+        standard: [fare2]
       }
-    ] // Valid date string
+    ]
   ])(
     'group fares by nature',
     (
       fares: (Entity & Scheduled)[],
       expectedResult: { medical: (Entity & Scheduled)[]; standard: (Entity & Scheduled)[] }
     ): void => {
-      expect(groupByNature(fares)).toBe(expectedResult);
+      expect(groupByNature(fares)).toStrictEqual(expectedResult);
     }
   );
 });
-*/

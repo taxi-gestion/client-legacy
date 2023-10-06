@@ -6,6 +6,6 @@
     "types": ["node"]
   },
   "files": ["src/main.ts"],
-  "include": ["src/**/*.ts", "src/**/*.d.ts"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "jest.setup.ts"],
   "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"]
 }
