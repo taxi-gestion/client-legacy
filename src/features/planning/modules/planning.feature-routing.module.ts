@@ -89,6 +89,12 @@ const ROUTES: Routes = [
     component: ManagerDriverAgendaPage
   },
   {
+    path: 'agenda-manager/:date',
+    canMatch: [CanMatchOneUserGroupGuard],
+    data: { allowedGroups: ['developer', 'manager'] },
+    component: ManagerDriverAgendaPage
+  },
+  {
     path: 'agenda/:date',
     canMatch: [CanMatchOneUserGroupGuard],
     data: { allowedGroups: ['developer', 'driver'] },

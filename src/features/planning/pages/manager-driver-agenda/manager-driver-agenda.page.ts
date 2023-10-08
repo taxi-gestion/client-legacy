@@ -66,6 +66,6 @@ export class ManagerDriverAgendaPage {
   ) {}
 
   public async onPlanningDateChange(planningDate: string): Promise<void> {
-    await this._router.navigate(['planning', 'agenda', planningDate]);
+    await this._router.navigate(['planning', 'agenda-manager', planningDate]);
   }
 }

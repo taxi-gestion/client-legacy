@@ -1,6 +1,6 @@
 import { DailyDriverPlanning, ScheduledPlanningSession } from '../../common/fares.presentation';
 import { toIdentity } from '@features/common/regular';
-import { sortByTime } from '../../common/time.presenter';
+import { sortByDatetime } from '../../common/time.presenter';
 
 export type DailyDriverPlanningListPresentation = {
   driver: string;
@@ -10,6 +10,7 @@ export type DailyDriverPlanningListPresentation = {
 export type FareListItem = {
   passenger: string;
   time: string;
+  datetime: string;
 };
 
 export const toDailyDriverPlanningListPresentation = (
@@ -18,12 +19,13 @@ export const toDailyDriverPlanningListPresentation = (
 
 const toListPresentation = (dailyDriverPlanning: DailyDriverPlanning): DailyDriverPlanningListPresentation => ({
   driver: dailyDriverPlanning.driver.username,
-  fares: sortByTime(toFareListItems(dailyDriverPlanning.fares))
+  fares: sortByDatetime(toFareListItems(dailyDriverPlanning.fares))
 });
 
 const toFareListItems = (fares: ScheduledPlanningSession[]): FareListItem[] => fares.map(toFareListItem);
 
 const toFareListItem = (fare: ScheduledPlanningSession): FareListItem => ({
   passenger: toIdentity(fare.passenger),
-  time: fare.localTime
+  time: fare.localTime,
+  datetime: fare.datetime
 });

@@ -9,6 +9,7 @@ import { ScheduledFareValues } from '../../definitions';
 import { toIdentity } from '@features/common/regular';
 import { Entity, Passenger } from '@definitions';
 import { toLocalTime } from '../../../../planning/common/fares.presenter';
+import { filterOnPassengerAndDriver } from './scheduled-fare-field.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -59,6 +60,9 @@ export class ScheduledFareFieldComponent {
   public fareValuesValidator: (ScheduledFareValues: ScheduledFareValues | undefined) => ValidatorFn = selectedFareValidator;
 
   public query$ = (_searchTerm: string): Observable<ScheduledFareValues[]> => of([]);
+
+  // eslint-disable-next-line @typescript-eslint/typedef
+  public resultFilter = filterOnPassengerAndDriver;
 
   public passengerIdentity(passenger: Entity & Passenger): string {
     return toIdentity(passenger);
