@@ -1,9 +1,9 @@
-import { ScheduledFareValues } from '../../definitions/fare.definition';
+import { PendingReturnValues } from '../../definitions/fare.definition';
 import { toIdentity } from '@features/common/regular';
 
 export const filterOnPassengerAndDriver =
   (searchTerm: string) =>
-  (combinedResults: ScheduledFareValues[]): ScheduledFareValues[] =>
-    combinedResults.filter((fareValue: ScheduledFareValues): boolean =>
+  (combinedResults: PendingReturnValues[]): PendingReturnValues[] =>
+    combinedResults.filter((fareValue: PendingReturnValues): boolean =>
       `${toIdentity(fareValue.passenger)}${fareValue.driver.username}`.toLowerCase().includes(searchTerm.toLowerCase())
     );

@@ -10,7 +10,7 @@ const toAgendaFare = (fare: ScheduledPresentation): FareDriverCardPresentation =
   //...fare,
   duration: String(secondsToMinutes(fare.duration)),
   distance: String(metersToKilometers(fare.distance)),
-  datetime: datetime(fare.datetime),
+  datetime: fare.datetime,
   phoneToCall: fare.passenger.phone.phoneNumber,
   phoneDisplay: phoneDisplay(fare.passenger.phone),
   isMedicalDrive: fare.isMedicalDrive,

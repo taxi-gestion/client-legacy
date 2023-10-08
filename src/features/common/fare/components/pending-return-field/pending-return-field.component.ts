@@ -9,6 +9,7 @@ import { PendingReturnValues } from '../../definitions';
 import { toIdentity } from '@features/common/regular';
 import { Entity, Passenger } from '@definitions';
 import { toLocalTime } from '../../../../planning/common/fares.presenter';
+import { filterOnPassengerAndDriver } from './pending-return-field.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -59,6 +60,9 @@ export class PendingReturnFieldComponent {
   public fareValuesValidator: (pendingReturnValues: PendingReturnValues | undefined) => ValidatorFn = selectedFareValidator;
 
   public query$ = (_searchTerm: string): Observable<PendingReturnValues[]> => of([]);
+
+  // eslint-disable-next-line @typescript-eslint/typedef
+  public resultFilter = filterOnPassengerAndDriver;
 
   public passengerIdentity(passenger: Entity & Passenger): string {
     return toIdentity(passenger);
