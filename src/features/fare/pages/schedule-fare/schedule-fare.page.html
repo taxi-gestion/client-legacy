@@ -1,0 +1,24 @@
+<div class="p-3">
+  <div>
+    <h3 class="text-primary">Planifier une course</h3>
+  </div>
+  <div class="mb-4">
+    <label class="form-label">Passager</label>
+    <app-regular-field
+      [regularFieldControl]="regularControl"
+      (selectedValue)="onSelectRegularChange($event)"></app-regular-field>
+  </div>
+  <ng-container *ngIf="(regular$ | async) as regular">
+    <ng-container *ngIf="(validRegular$ | async)">
+      <app-fare-form
+        [fareForm]="scheduleFareForm"
+        [action$]="scheduleFare$"
+        [drivers]="(drivers$ | async) ?? []"
+        [regular]="regular"
+        [selectedDate]="selectedDate$ | async"
+        [initialValues]="(prefilledFare$ | async) ?? {}"
+        (actionSuccess)="onScheduleFareActionSuccess($event)"
+        (actionError)="onScheduleFareActionError($event)"></app-fare-form>
+    </ng-container>
+  </ng-container>
+</div>

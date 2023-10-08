@@ -6,7 +6,7 @@ import { datetimeLocalToIso8601UTCString, kilometersToMeters, minutesToSeconds }
 import { PendingToScheduleValues, schedulePendingFormCodec } from './schedule-pending.form';
 import { PlaceValues, toPlace } from '@features/common/place';
 import { toIdentity } from '@features/common/regular';
-import { pipe as fpPipe } from 'fp-ts/function';
+import { pipe as fpipe } from 'fp-ts/function';
 import { fold as eitherFold } from 'fp-ts/Either';
 import { throwDecodeError } from '../../common/regular.presenter';
 import { toDriver } from '@features/common/driver';
@@ -22,7 +22,7 @@ export const toSchedulePendingSuccessToast = (pending: PendingScheduled): Toast 
 });
 
 export const toPendingToSchedule = (rawFormValues: unknown): Entity & ReturnDrive =>
-  fpPipe(
+  fpipe(
     schedulePendingFormCodec.decode(rawFormValues),
     eitherFold(throwDecodeError('scheduleReturnFormCodec', rawFormValues), toDomain)
   );
@@ -53,7 +53,7 @@ export const toJourney = (rawFormValues: unknown): Journey => {
   const tempUgly: unknown = toJourneyDomain(
     rawFormValues as { departurePlace: PlaceValues; arrivalPlace: PlaceValues; departureDatetime: string }
   );
-  return fpPipe(
+  return fpipe(
     journeyCodec.decode(tempUgly),
     eitherFold(throwDecodeError('journeyCodec', rawFormValues), (values: Journey): Journey => values)
   );

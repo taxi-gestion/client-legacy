@@ -1,0 +1,93 @@
+<form
+  [formGroup]="fareForm"
+  [appLoadAction]="action$"
+  #loadAction="loadAction"
+  (actionSuccess)="onActionSuccess($event)"
+  (actionError)="onActionError($event)"
+  (ngSubmit)="onSubmit(loadAction.start)">
+  <div class="mb-3">
+    <label class="form-label">Téléphone à appeler</label>
+    <app-phone-field
+      [phoneFieldControl]="fareForm.controls.phoneToCall"
+      [phone]="initialValues.phoneToCall"
+      [prefilled]="regular.phones ?? []"></app-phone-field>
+  </div>
+  <div class="mb-3" formControlErrors="departureDatetime">
+    <label for="departureDatetime" class="form-label">Date et heure du départ</label>
+    <input
+      id="departureDatetime"
+      type="datetime-local"
+      class="form-control"
+      name="departureDatetime"
+      formControlName="departureDatetime"
+      [ngClass]="validation(fareForm.controls.departureDatetime)" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Lieu de départ</label>
+    <app-place-field
+      [placeFieldControl]="fareForm.controls.departurePlace"
+      [place]="initialValues.departurePlace"
+      [prefilled]="regular.homeAddress ? [regular.homeAddress] : []"></app-place-field>
+  </div>
+  <div class="mb-3" formControlErrors="arrivalPlace">
+    <label class="form-label">Destination</label>
+    <app-destination-field
+      [destinationFieldControl]="fareForm.controls.arrivalPlace"
+      [destination]="initialValues.arrivalPlace"
+      [prefilled]="regular.destinations ?? []"></app-destination-field>
+  </div>
+  <!--   &lt;!&ndash;      <app-estimate-journey-fields
+      [form]="$any(fareForm)"
+      [estimateJourney]="estimateJourney$ | async"
+      (formControlUpdated)="updateEstimateFields($event)"></app-estimate-journey-fields>&ndash;&gt;-->
+  <div class="mb-3">
+    <label class="form-label">Chauffeur</label>
+    <app-driver-field
+      [driverFieldControl]="fareForm.controls.driver"
+      [driver]="initialValues.driver"
+      [prefilled]="drivers"></app-driver-field>
+  </div>
+  <div class="mb-3">
+    <div class="form-check form-switch">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        id="isTwoWayDrive"
+        name="isTwoWayDrive"
+        formControlName="isTwoWayDrive"
+        checked />
+      <label class="form-check-label" for="isTwoWayDrive">Ce trajet comporte un retour</label>
+    </div>
+  </div>
+  <div class="mb-3">
+    <div class="form-check form-switch">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        id="isMedicalDrive"
+        name="isMedicalDrive"
+        formControlName="isMedicalDrive"
+        checked />
+      <label class="form-check-label" for="isMedicalDrive">Ce trajet est de nature médicale</label>
+    </div>
+  </div>
+  <button
+    [appLoadActionDisplay]="loadAction.isLoading$ | async"
+    #loadActionDisplay
+    type="submit"
+    class="btn mt-3 btn-primary w-100"
+    [disabled]="loadActionDisplay.isLoading">
+    <ng-container slot="loadActionDisplayIdle">Créer la course</ng-container>
+    <ng-container slot="loadActionDisplayLoading">
+      <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+      Création en cours...
+    </ng-container>
+  </button>
+  <div class="text-danger mt-2" *ngIf="fareForm.errors?.['validationFailedBeforeApiCallError']">
+    La structure des données de la requête ne respecte pas le contrat de transfer. La requête ne peut pas être effectuée.
+    Prévenir Romain qu'il va faire des heures supp'.
+  </div>
+  <div class="text-danger mt-2" *ngIf="fareForm.errors">Une erreur est survenue lors de l'appel au service distant.</div>
+</form>

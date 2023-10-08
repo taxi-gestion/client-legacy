@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { RegisterRegularAction } from '../providers';
-import { pipe as fpPipe } from 'fp-ts/function';
+import { pipe as fpipe } from 'fp-ts/function';
 import { fold } from 'fp-ts/Either';
 import { ValidationFailedAfterApiCallError, ValidationFailedBeforeApiCallError } from '../errors';
 import { RegularDetails, RegularRegistered } from '@definitions';
@@ -12,7 +12,7 @@ const registerRegularUrl = (): string => `/api/regular/register`;
 export const validatedRegisterRegularAction$ =
   (http: HttpClient): RegisterRegularAction =>
   (regularDetails: RegularDetails): Observable<RegularRegistered> =>
-    fpPipe(
+    fpipe(
       regularDetailsCodec.decode(regularDetails),
       fold(
         (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCallError()),
@@ -28,7 +28,7 @@ export const validatedRegisterRegularAction$ =
     );
 
 const registeredRegularValidation = (transfer: unknown): RegularRegistered =>
-  fpPipe(
+  fpipe(
     transfer,
     externalTypeCheckFor<RegularRegistered>(regularRegisteredCodec),
     fold(

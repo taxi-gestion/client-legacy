@@ -1,6 +1,6 @@
 import { Entity, Nature, Scheduled } from '@definitions';
 import { BillingItem, BillingItemsByDriver } from '../definitions/billing.presentation';
-import { isMedicalDrive, isTwoWayDrive } from '@features/common/fare';
+import { isMedicalDrive, isTwoWayDrive } from '@features/fare';
 import { toIdentity } from '@features/common/regular';
 import { groupBy as arrayGroupBy } from 'fp-ts/NonEmptyArray';
 import { format } from 'date-fns';

@@ -17,7 +17,7 @@ import { DriverField, driverFieldFormControl } from '../../common/driver/compone
 import { DriverValues, driverValuesCodec } from '@features/common/driver';
 import { RegularField, regularFieldFormControl } from '../../common/regular/components/regular-field/regular-field.form';
 import { RegularValues, regularValuesEntityCodec } from '@features/common/regular';
-import { ScheduledFareValues } from '@features/common/fare';
+import { ScheduledFareValues } from '@features/fare';
 
 export type DailyDriverPlanning = {
   driver: DriverValues;

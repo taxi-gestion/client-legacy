@@ -3,7 +3,7 @@ import { DailyDriverPlanning, ScheduledPlanningSession, ScheduledPresentation } 
 import { SessionContext } from '../../planning/planning-row/planning-row.component';
 import { toContextualizedSession } from '../../planning/planning-row/planning-row.presenter';
 import { toIdentity } from '@features/common/regular';
-import { PassengerValues } from '@features/common/fare';
+import { PassengerValues } from '@features/fare';
 
 @Component({
   selector: 'app-fare-planning-session',

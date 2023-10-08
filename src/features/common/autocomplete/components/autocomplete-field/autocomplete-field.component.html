@@ -18,14 +18,8 @@
         aria-haspopup="true"
         formControlName="search"
         [attr.aria-expanded]="resultsDropdown.expanded$ | async"
-        (input)="
-          search(templatedInput.value);
-          templatedInput.value.length >= minSearchTermLength ? resultsDropdown.expand() : resultsDropdown.reduce()
-        "
-        (focus)="
-          initResults();
-          templatedInput.value.length >= minSearchTermLength ? resultsDropdown.expand() : resultsDropdown.reduce()
-        "
+        (input)="search(templatedInput.value)"
+        (focus)="onFocus()"
         (keyup.escape)="resultsDropdown.reduce()"
         (keyup.enter)="resultsDropdown.activeIndex = 0; resultsDropdown.focus()" />
       <ng-content></ng-content>

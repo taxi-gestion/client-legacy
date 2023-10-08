@@ -3,7 +3,7 @@ import { FORM_CONTROL_ERROR_MESSAGES_TOKEN } from '@features/common/form-validat
 import { DESTINATION_FORM_CONTROL_ERROR_MESSAGES } from '../../errors/form-errors-messages.token';
 import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { filterOnDestinationValuesProperties } from './destination-field.presenter';
-import { destinationEmptyValue } from '../../destination.presenter';
+import { emptyDestinationValue } from '../../destination.presenter';
 import { DestinationValues } from '../../definitions/destination.definition';
 import { selectedDestinationValidator } from '../../validators';
 import { Observable, of } from 'rxjs';
@@ -25,7 +25,7 @@ export class DestinationFieldComponent {
   @Input() public prefilled: DestinationValues[] = [];
 
   @Input() public set destination(destination: (DestinationValues | undefined) | null) {
-    destination !== null && this.onDestinationReceived(destination ?? destinationEmptyValue);
+    destination !== null && this.onDestinationReceived(destination ?? emptyDestinationValue);
   }
 
   @Output() public readonly selectedValue: EventEmitter<DestinationValues> = new EventEmitter<DestinationValues>();
@@ -38,9 +38,9 @@ export class DestinationFieldComponent {
     this.defaultValue = destinationNumberValue;
   }
 
-  public defaultValue: DestinationValues | undefined = destinationEmptyValue;
+  public defaultValue: DestinationValues | undefined = emptyDestinationValue;
 
-  public destinationEmptyValue: DestinationValues = destinationEmptyValue;
+  public destinationEmptyValue: DestinationValues = emptyDestinationValue;
 
   public toSearchTerm = (destinationValues: DestinationValues): string => destinationValues.destinationName;
 

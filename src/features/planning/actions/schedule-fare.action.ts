@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { ScheduleFareAction } from '../providers';
-import { pipe as fpPipe } from 'fp-ts/function';
+import { pipe as fpipe } from 'fp-ts/function';
 import { fold } from 'fp-ts/Either';
 import { ValidationFailedAfterApiCallError, ValidationFailedBeforeApiCallError } from '../errors';
 import { FaresScheduled, ToSchedule } from '@definitions';
@@ -12,7 +12,7 @@ const scheduleFareUrl = (): string => `/api/fare/schedule`;
 export const validatedScheduleFareAction$ =
   (http: HttpClient): ScheduleFareAction =>
   (fareToSchedule: ToSchedule): Observable<FaresScheduled> =>
-    fpPipe(
+    fpipe(
       toScheduleCodec.decode(fareToSchedule),
       fold(
         (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCallError()),
@@ -28,7 +28,7 @@ export const validatedScheduleFareAction$ =
     );
 
 const scheduledFareAndReturnValidation = (transfer: unknown): FaresScheduled =>
-  fpPipe(
+  fpipe(
     transfer,
     externalTypeCheckFor<FaresScheduled>(fareScheduledCodec),
     fold(

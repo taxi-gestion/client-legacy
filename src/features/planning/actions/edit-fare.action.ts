@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
-import { pipe as fpPipe } from 'fp-ts/function';
+import { pipe as fpipe } from 'fp-ts/function';
 import { fold } from 'fp-ts/Either';
 import { ValidationFailedAfterApiCallError, ValidationFailedBeforeApiCallError } from '../errors';
 import { Entity, FaresEdited, ToEdit } from '@definitions';
@@ -12,7 +12,7 @@ const editFareUrl = (): string => `/api/fare/edit`;
 export const validatedEditFareAction$ =
   (http: HttpClient): EditFareAction =>
   (fareToEdit: Entity & ToEdit): Observable<FaresEdited> =>
-    fpPipe(
+    fpipe(
       fareToEditCodec.decode(fareToEdit),
       fold(
         (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCallError()),
@@ -28,7 +28,7 @@ export const validatedEditFareAction$ =
     );
 
 const editedFareAndReturnValidation = (transfer: unknown): FaresEdited =>
-  fpPipe(
+  fpipe(
     transfer,
     externalTypeCheckFor<FaresEdited>(faresEditedCodec),
     fold(

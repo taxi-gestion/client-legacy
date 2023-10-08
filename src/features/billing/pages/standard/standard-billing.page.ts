@@ -3,7 +3,7 @@ import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
 import { catchError, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
 import { Entity, Scheduled } from '@definitions';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
-import { SCHEDULED_FARES_FOR_DATE_QUERY, ScheduledFaresForDateQuery } from '@features/common/fare';
+import { SCHEDULED_FARES_FOR_DATE_QUERY, ScheduledFaresForDateQuery } from '@features/fare';
 import { BillingItem, BillingItemsByDriver } from '../../definitions/billing.presentation';
 import { routeParamToDateString } from '@features/common/angular';
 import {

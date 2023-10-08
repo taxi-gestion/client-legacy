@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
-import { pipe as fpPipe } from 'fp-ts/function';
+import { pipe as fpipe } from 'fp-ts/function';
 import { fold } from 'fp-ts/Either';
 import { ValidationFailedAfterApiCallError, ValidationFailedBeforeApiCallError } from '../errors';
 import { Entity, RegularEdited, RegularDetails } from '@definitions';
@@ -12,7 +12,7 @@ const editRegularUrl = (): string => `/api/regular/edit`;
 export const validatedEditRegularAction$ =
   (http: HttpClient): EditRegularAction =>
   (regularToEdit: Entity & RegularDetails): Observable<RegularEdited> =>
-    fpPipe(
+    fpipe(
       regularDetailsEntityCodec.decode(regularToEdit),
       fold(
         (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCallError()),
@@ -28,7 +28,7 @@ export const validatedEditRegularAction$ =
     );
 
 const editedRegularAndReturnValidation = (transfer: unknown): RegularEdited =>
-  fpPipe(
+  fpipe(
     transfer,
     externalTypeCheckFor<RegularEdited>(regularEditedCodec),
     fold(

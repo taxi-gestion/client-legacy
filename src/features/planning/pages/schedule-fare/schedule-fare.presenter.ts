@@ -1,15 +1,16 @@
-import { datetimeLocalToIso8601UTCString, kilometersToMeters, minutesToSeconds } from '../../common/unit-convertion';
+import { datetimeLocalToIso8601UTCString } from '../../common/unit-convertion';
 import { FareToScheduleValues, scheduleFareFormCodec } from './schedule-fare.form';
 import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
 import { FaresScheduled, ToSchedule } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { regularToPassenger, toLocalTime } from '../../common/fares.presenter';
-import { pipe as fpPipe } from 'fp-ts/function';
+import { pipe as fpipe } from 'fp-ts/function';
 import { fold as eitherFold } from 'fp-ts/Either';
 import { throwDecodeError } from '../../common/regular.presenter';
 import { toPlace } from '@features/common/place';
 import { toDriver } from '../../../common/driver/driver.presenter';
 import { toIdentity } from '@features/common/regular';
+import { kilometersToMeters, minutesToSeconds, toKind, toNature } from '@features/common/presentation';
 
 export const toScheduleFareSuccessToast = (fares: FaresScheduled): Toast => ({
   content: `Course pour ${toIdentity(fares.scheduledCreated.passenger)} par ${
@@ -20,7 +21,7 @@ export const toScheduleFareSuccessToast = (fares: FaresScheduled): Toast => ({
 });
 
 export const toFareToSchedule = (rawFormValues: unknown): ToSchedule =>
-  fpPipe(
+  fpipe(
     scheduleFareFormCodec.decode(rawFormValues),
     eitherFold(throwDecodeError('scheduleFareFormCodec', rawFormValues), toDomain)
   );
@@ -32,8 +33,8 @@ export const toDomain = (formValues: FareToScheduleValues): ToSchedule => ({
   distance: kilometersToMeters(formValues.driveDistance),
   driver: toDriver(formValues.driver),
   duration: minutesToSeconds(formValues.driveDuration),
-  kind: formValues.isTwoWayDrive ? 'two-way' : 'one-way',
-  nature: formValues.isMedicalDrive ? 'medical' : 'standard',
+  kind: toKind(formValues.isTwoWayDrive),
+  nature: toNature(formValues.isMedicalDrive),
   passenger: regularToPassenger(formValues),
   status: 'to-schedule'
 });

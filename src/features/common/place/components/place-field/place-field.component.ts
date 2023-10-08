@@ -4,7 +4,7 @@ import { PLACE_FORM_CONTROL_ERROR_MESSAGES } from '../../errors/form-errors-mess
 import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { selectedPlaceValidator } from '../../validators';
-import { placeEmptyValue } from '../../place.presenter';
+import { emptyPlaceValue } from '../../place.presenter';
 import { PlaceValues } from '../../definitions/place.definition';
 import { FORM_CONTROL_ERROR_MESSAGES_TOKEN } from '@features/common/form-validation';
 
@@ -29,7 +29,7 @@ export class PlaceFieldComponent {
   });
 
   @Input() public set place(place: (PlaceValues | undefined) | null) {
-    place !== null && this.onPlaceReceived(place ?? placeEmptyValue);
+    place !== null && this.onPlaceReceived(place ?? emptyPlaceValue);
   }
 
   @Output() public readonly selectedValue: EventEmitter<PlaceValues> = new EventEmitter<PlaceValues>();
@@ -45,9 +45,9 @@ export class PlaceFieldComponent {
     this.defaultValue = placeNumberValue;
   }
 
-  public defaultValue: PlaceValues | undefined = placeEmptyValue;
+  public defaultValue: PlaceValues | undefined = emptyPlaceValue;
 
-  public placeEmptyValue: PlaceValues = placeEmptyValue;
+  public placeEmptyValue: PlaceValues = emptyPlaceValue;
 
   public toSearchTerm = (placeValues: PlaceValues): string => placeValues.label;
 
