@@ -1,7 +1,7 @@
 import { PlaceValues } from './definitions/place.definition';
 import { Place } from '@definitions';
 
-export const placeEmptyValue: PlaceValues = {
+export const emptyPlaceValue: PlaceValues = {
   context: '',
   label: '',
   location: {

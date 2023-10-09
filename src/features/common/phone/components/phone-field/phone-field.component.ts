@@ -5,7 +5,7 @@ import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { selectedPhoneValidator } from '../../validators';
 import { filterOnPhoneValuesProperties } from './phone-field.presenter';
-import { phoneEmptyValue } from '../../phone.presenter';
+import { emptyPhoneValue } from '../../phone.presenter';
 import { PhoneValues } from '../../definitions';
 
 @Component({
@@ -29,7 +29,7 @@ export class PhoneFieldComponent {
   });
 
   @Input() public set phone(phone: (PhoneValues | undefined) | null) {
-    phone !== null && this.onPhoneReceived(phone ?? phoneEmptyValue);
+    phone !== null && this.onPhoneReceived(phone ?? emptyPhoneValue);
   }
 
   @Output() public readonly selectedValue: EventEmitter<PhoneValues> = new EventEmitter<PhoneValues>();
@@ -43,9 +43,9 @@ export class PhoneFieldComponent {
     this.defaultValue = phoneNumberValue;
   }
 
-  public defaultValue: PhoneValues | undefined = phoneEmptyValue;
+  public defaultValue: PhoneValues | undefined = emptyPhoneValue;
 
-  public phoneEmptyValue: PhoneValues = phoneEmptyValue;
+  public phoneEmptyValue: PhoneValues = emptyPhoneValue;
 
   public toSearchTerm = (phoneValues: PhoneValues): string => phoneValues.phoneNumber;
 

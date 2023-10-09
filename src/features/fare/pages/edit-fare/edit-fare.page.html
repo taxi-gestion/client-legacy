@@ -1,0 +1,27 @@
+<div class="p-3">
+  <div>
+    <h3 class="text-primary">Editer une course</h3>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Course</label>
+    <app-scheduled-field
+      [fareFieldControl]="fareControl"
+      [prefilled]="(scheduledFares$ | async) ?? []"
+      (selectedValue)="onSelectScheduledFareChange($event)"></app-scheduled-field>
+  </div>
+  <ng-container *ngIf="(regular$ | async) as regular">
+    <!-- TODO refactor and invert container once place as destinations is done -->
+    <ng-container *ngIf="(initialFareValues$ | async) as fare">
+      <ng-container *ngIf="(validFare$ | async)">
+        <app-fare-form
+          [fareForm]="editFareForm"
+          [action$]="editFare$"
+          [drivers]="(drivers$ | async) ?? []"
+          [regular]="regular"
+          [initialValues]="fare"
+          (actionSuccess)="onEditFareActionSuccess($event)"
+          (actionError)="onEditFareActionError($event)"></app-fare-form>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</div>

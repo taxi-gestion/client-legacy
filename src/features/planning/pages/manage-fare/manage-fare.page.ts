@@ -39,7 +39,7 @@ import { setSubcontractFareErrorToForm, SUBCONTRACT_FARE_FORM, SubcontractFareFi
 import { PlaceValues } from '@features/common/place';
 import { DestinationValues } from '@features/common/destination';
 import { DriverValues, toDriversValues } from '@features/common/driver';
-import { fareHasId, scheduledFareEmptyValue, ScheduledFareValues, toScheduledFaresValues } from '@features/common/fare';
+import { fareHasId, scheduledFareEmptyValue, ScheduledFareValues, toScheduledFaresValues } from '@features/fare';
 import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/common/regular';
 import { forceControlRevalidation, nullToUndefined } from '@features/common/form-validation';
 

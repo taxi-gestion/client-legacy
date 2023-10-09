@@ -23,7 +23,7 @@ import { ToasterPresenter } from '../../../../root/components/toaster/toaster.pr
 import { FormControl, FormGroup } from '@angular/forms';
 import { formatDateToDatetimeLocalString, toDisplayDurationDistance } from '../../common/unit-convertion';
 import { DriverValues, toDriversValues } from '@features/common/driver';
-import { fareHasId, pendingReturnEmptyValue, PendingReturnValues, toPendingFaresValues } from '@features/common/fare';
+import { fareHasId, pendingReturnEmptyValue, PendingReturnValues, toPendingFaresValues } from '@features/fare';
 import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/common/regular';
 import { forceControlRevalidation, nullToUndefined } from '@features/common/form-validation';
 import {

@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
-import { pipe as fpPipe } from 'fp-ts/function';
+import { pipe as fpipe } from 'fp-ts/function';
 import { fold } from 'fp-ts/Either';
 import { ValidationFailedAfterApiCallError, ValidationFailedBeforeApiCallError } from '../errors';
 import { Entity, FaresSubcontracted, ToSubcontract } from '@definitions';
@@ -12,7 +12,7 @@ const subcontractFareUrl = (): string => `/api/fare/subcontract`;
 export const validatedSubcontractFareAction$ =
   (http: HttpClient): SubcontractFareAction =>
   (fareToSubcontract: Entity & ToSubcontract): Observable<FaresSubcontracted> =>
-    fpPipe(
+    fpipe(
       fareToSubcontractCodec.decode(fareToSubcontract),
       fold(
         (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCallError()),
@@ -28,7 +28,7 @@ export const validatedSubcontractFareAction$ =
     );
 
 const subcontractedFareAndReturnValidation = (transfer: unknown): FaresSubcontracted =>
-  fpPipe(
+  fpipe(
     transfer,
     externalTypeCheckFor<FaresSubcontracted>(faresSubcontractedCodec),
     fold(

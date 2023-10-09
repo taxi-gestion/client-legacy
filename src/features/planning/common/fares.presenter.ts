@@ -9,15 +9,15 @@ import {
 import { addMinutes, format, secondsToMinutes, subHours } from 'date-fns';
 import { Driver, Entity, Journey, Passenger, Place, Scheduled } from '@definitions';
 import { throwDecodeError } from './regular.presenter';
-import { pipe as fpPipe } from 'fp-ts/function';
+import { pipe as fpipe } from 'fp-ts/function';
 import { fold as eitherFold } from 'fp-ts/Either';
 import { journeyCodec } from '@codecs';
-import { placeEmptyValue, PlaceValues, toPlacesValues, toPlaceValues } from '@features/common/place';
+import { emptyPlaceValue, PlaceValues, toPlacesValues, toPlaceValues } from '@features/common/place';
 import { DestinationValues } from '@features/common/destination';
 import { FareToScheduleValues } from '../pages/schedule-fare/schedule-fare.form';
 import { PhoneValues, toPhone } from '@features/common/phone';
 import { RegularValues } from '@features/common/regular';
-import { toPassengerValues } from '@features/common/fare';
+import { toPassengerValues } from '@features/fare';
 import { toDriverValues } from '@features/common/driver';
 
 export const defaultPlaceValue: Place = {
@@ -44,7 +44,7 @@ export const toJourney = (rawFormValues: unknown): Journey => {
   const tempUgly: unknown = toJourneyDomain(
     rawFormValues as { departurePlace: PlaceValues; arrivalPlace: DestinationValues; departureDatetime: string }
   );
-  return fpPipe(
+  return fpipe(
     journeyCodec.decode(tempUgly),
     eitherFold(throwDecodeError('journeyCodec', rawFormValues), (values: Journey): Journey => values)
   );
@@ -134,7 +134,7 @@ export const toRegularPresentation = (regular: Entity & RegularValues): RegularP
   phones: regular.phones === undefined ? [] : regular.phones,
   destination: regular.destinations === undefined ? undefined : regular.destinations[0],
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  destinations: destinationsWithDomicile(regular.destinations, regular.homeAddress ?? placeEmptyValue)
+  destinations: destinationsWithDomicile(regular.destinations, regular.homeAddress ?? emptyPlaceValue)
 });
 
 export const domicileAsDestination = (place: PlaceValues): DestinationValues => ({

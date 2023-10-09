@@ -1,12 +1,12 @@
 import { DestinationValues } from './definitions/destination.definition';
-import { placeEmptyValue } from '@features/common/place';
+import { emptyPlaceValue } from '@features/common/place';
 import { Destination } from '@definitions';
 
-export const destinationEmptyValue: DestinationValues = {
+export const emptyDestinationValue: DestinationValues = {
   destinationName: '',
   isMedicalDrive: true,
   isTwoWayDrive: true,
-  place: placeEmptyValue,
+  place: emptyPlaceValue,
   comment: undefined
 };
 

@@ -3,19 +3,19 @@ import { Entity, RegularDeleted, RegularDetails, RegularEdited } from '@definiti
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { editRegularFormCodec, EditRegularValues } from './edit-regular.form';
 import { fold as eitherFold } from 'fp-ts/Either';
-import { pipe as fpPipe } from 'fp-ts/function';
+import { pipe as fpipe } from 'fp-ts/function';
 import { entityCodec } from '@codecs';
 import { passengerIdentity, throwDecodeError, toRegularDetails } from '../../common/regular.presenter';
 import { RegularValues } from '@features/common/regular';
 
 export const toEditRegular = (rawFormValues: unknown): Entity & RegularDetails =>
-  fpPipe(
+  fpipe(
     editRegularFormCodec.decode(rawFormValues),
     eitherFold(throwDecodeError('editRegularFormCodec', rawFormValues), toDomain)
   );
 
 export const toDeleteRegular = (rawValue: unknown): Entity =>
-  fpPipe(
+  fpipe(
     entityCodec.decode(rawValue),
     eitherFold(throwDecodeError('entityCodec', rawValue), (entity: Entity): Entity => entity)
   );

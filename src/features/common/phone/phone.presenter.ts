@@ -1,7 +1,7 @@
 import { Phone } from '@definitions';
 import { PhoneValues } from './definitions/phone.definition';
 
-export const phoneEmptyValue: PhoneValues = {
+export const emptyPhoneValue: PhoneValues = {
   phoneNumber: '',
   phoneType: ''
 };

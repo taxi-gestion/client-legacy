@@ -1,5 +1,5 @@
 // Do not move / rename this file, it works for IDE automatic setting.
-// Lint the files included in each typescript project with common rules
+// Lint the files included in each typescript project
 const projects = ['./tsconfig.app.json'];
 const tests = ['./tsconfig.spec.json'];
 

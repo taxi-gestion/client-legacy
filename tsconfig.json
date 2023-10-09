@@ -14,6 +14,7 @@
       "@features/common/autocomplete": ["src/features/common/autocomplete"],
       "@features/common/client": ["src/features/common/client"],
       "@features/common/destination": ["src/features/common/destination"],
+      "@features/common/date": ["src/features/common/date"],
       "@features/common/driver": ["src/features/common/driver"],
       "@features/common/form-validation": ["src/features/common/form-validation"],
       "@features/common/journey": ["src/features/common/journey"],
@@ -25,10 +26,12 @@
       "@features/common/validation": ["src/features/common/validation"],
       "@features/common/fare": ["src/features/common/fare"],
       "@features/common/angular": ["src/features/common/angular"],
+      "@features/common/presentation": ["src/features/common/presentation"],
       "@features/dashboard": ["src/features/dashboard"],
       "@features/planning": ["src/features/planning"],
       "@features/public": ["src/features/public"],
-      "@features/regular": ["src/features/regular"]
+      "@features/regular": ["src/features/regular"],
+      "@features/fare": ["src/features/fare"]
     },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",

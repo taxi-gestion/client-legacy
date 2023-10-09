@@ -10,3 +10,5 @@ export const selectedRegularValidator =
 
 export const regularHasId = (candidate: (Entity & RegularValues) | undefined): boolean =>
   candidate !== undefined && candidate.id.length === 36;
+
+export const isValidRegular = (regular: Entity & RegularValues): boolean => regularHasId(regular);

@@ -1,10 +1,9 @@
 import { RegularValues } from './definitions/regular.definition';
 import { Entity, Passenger, RegularDetails } from '@definitions';
-import { toDestinationsValues } from '@features/common/destination';
+import { DestinationValues, toDestinationsValues } from '@features/common/destination';
 import { toPhonesValues } from '@features/common/phone';
-import { PassengerValues } from '@features/common/fare';
-import { placeEmptyValue, toPlaceValues } from '@features/common/place';
-import { destinationsWithDomicile } from '../../planning/common/fares.presenter';
+import { PassengerValues } from '@features/fare';
+import { emptyPlaceValue, PlaceValues, toPlaceValues } from '@features/common/place';
 
 export const regularEmptyValue: Entity & RegularValues = {
   civility: 'Mr',
@@ -29,12 +28,23 @@ export const toRegularsValues = (
   return 'id' in regulars ? [toRegularValues(regulars)] : regulars.map(toRegularValues);
 };
 
+const domicileAsDestination = (place: PlaceValues): DestinationValues => ({
+  destinationName: 'Domicile',
+  place,
+  isMedicalDrive: undefined,
+  isTwoWayDrive: undefined,
+  comment: undefined
+});
+
+const destinationsWithDomicile = (destinations: DestinationValues[] | undefined, domicile: PlaceValues): DestinationValues[] =>
+  destinations === undefined ? [domicileAsDestination(domicile)] : [...destinations, domicileAsDestination(domicile)];
+
 export const toRegularValues = (regular: Entity & RegularDetails): Entity & RegularValues => ({
   civility: regular.civility,
   commentary: regular.commentary,
   destinations: destinationsWithDomicile(
     toDestinationsValues(regular.destinations),
-    toPlaceValues(regular.home ?? placeEmptyValue)
+    toPlaceValues(regular.home ?? emptyPlaceValue)
   ),
   firstname: regular.firstname,
   id: regular.id,

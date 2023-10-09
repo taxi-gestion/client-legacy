@@ -8,7 +8,7 @@ import { PlaceValues, toPlace } from '@features/common/place';
 import { toDriver } from '../../../common/driver/driver.presenter';
 import { toIdentity } from '@features/common/regular';
 import { DestinationValues } from '@features/common/destination';
-import { pipe as fpPipe } from 'fp-ts/function';
+import { pipe as fpipe } from 'fp-ts/function';
 import { fold as eitherFold } from 'fp-ts/Either';
 import { throwDecodeError } from '../../common/regular.presenter';
 
@@ -27,7 +27,7 @@ export const toEditFareSuccessToast = (fares: FaresEdited): Toast => ({
 });
 
 export const toFareToEdit = (rawFormValues: unknown): Entity & ToEdit =>
-  fpPipe(editFareFormCodec.decode(rawFormValues), eitherFold(throwDecodeError('editFareFormCodec', rawFormValues), toDomain));
+  fpipe(editFareFormCodec.decode(rawFormValues), eitherFold(throwDecodeError('editFareFormCodec', rawFormValues), toDomain));
 
 export const toDomain = (formValues: FareToEditValues): Entity & ToEdit => ({
   id: formValues.id,

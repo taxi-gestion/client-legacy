@@ -1,0 +1,88 @@
+<div class="d-flex flex-column h-100 overflow-auto">
+  <div class="d-flex flex-row">
+    <h1 class="p-3 text-primary d-flex">
+      Gérer les courses
+      <app-date></app-date>
+    </h1>
+    <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
+      <i class="ri-close-line ri-2x" aria-hidden="true"></i>
+      <span class="visually-hidden">Fermer</span>
+    </a>
+  </div>
+  <div class="btn-group pe-2 ps-2" role="group" id="fare-action" aria-label="Fare actions options">
+    <input
+      type="radio"
+      class="btn-check"
+      name="action-button"
+      id="schedule-fare-button"
+      autocomplete="off"
+      checked
+      [routerLink]="['schedule']" />
+    <label class="btn btn-outline-primary" for="schedule-fare-button">Planifier</label>
+    <input
+      type="radio"
+      class="btn-check"
+      name="action-button"
+      id="edit-fare-button"
+      autocomplete="off"
+      [routerLink]="['edit']" />
+    <label class="btn btn-outline-primary" for="edit-fare-button">Editer</label>
+    <!--    <input
+      type="radio"
+      class="btn-check"
+      name="action-button"
+      id="schedule-fare-button"
+      autocomplete="off"
+      checked
+      [routerLink]="['schedule']" />
+    <label class="btn btn-outline-primary" for="schedule-fare-button">Incomplet</label>
+    <input
+      type="radio"
+      class="btn-check"
+      name="action-button"
+      id="edit-fare-button"
+      autocomplete="off"
+      [routerLink]="['edit']" />
+    <label class="btn btn-outline-primary" for="edit-fare-button">Retours</label>
+    <input
+      type="radio"
+      class="btn-check"
+      name="action-button"
+      id="edit-fare-button"
+      autocomplete="off"
+      [routerLink]="['edit']" />
+    <label class="btn btn-outline-primary" for="edit-fare-button">Sous-traité</label>-->
+  </div>
+  <!--
+  <label class="btn btn-outline-primary" for="pending-returns-button">Retours</label>
+  <input
+    type="radio"
+    class="btn-check"
+    name="action-button"
+    id="pending-returns-button"
+    autocomplete="off"
+    checked
+    [routerLink]="['pending']" />-->
+  <!--  <label class="btn btn-outline-primary" for="edit-fare-button">Incomplet</label>
+  <input
+    type="radio"
+    class="btn-check"
+    name="actionbutton"
+    id="edit-fare-button"
+    autocomplete="off"
+    checked
+    [routerLink]="['incomplete']" />-->
+  <!--  <label class="btn btn-outline-primary" for="subcontracted-fares-button">Sous-traité</label>
+  <input
+    type="radio"
+    class="btn-check"
+    name="action-button"
+    id="subcontracted-fares-button"
+    autocomplete="off"
+    checked
+    [routerLink]="['subcontracted']" />-->
+  <hr />
+  <div>
+    <router-outlet></router-outlet>
+  </div>
+</div>

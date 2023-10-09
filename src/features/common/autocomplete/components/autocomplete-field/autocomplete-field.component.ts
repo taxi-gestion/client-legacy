@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, ContentChild, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ContentChild,
+  EventEmitter,
+  Input,
+  Output,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { AbstractControl, FormControl, FormControlStatus, FormGroup, ValidatorFn } from '@angular/forms';
 import {
   BehaviorSubject,
@@ -8,10 +17,12 @@ import {
   filter,
   map,
   Observable,
+  startWith,
   switchMap,
   tap
 } from 'rxjs';
 import { bootstrapValidationClasses, BootstrapValidationClasses } from '@features/common/form-validation';
+import { AutocompleteResultsDropdownComponent } from '../autocomplete-results-dropdown/autocomplete-results-dropdown.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,6 +32,8 @@ import { bootstrapValidationClasses, BootstrapValidationClasses } from '@feature
 export class AutocompleteFieldComponent<TValue> {
   @ContentChild('resultTemplate') public resultTemplate!: TemplateRef<unknown>;
   @ContentChild('selectedValueTemplate') public selectedValueTemplate!: TemplateRef<unknown>;
+
+  @ViewChild('resultsDropdown') public resultsDropdown!: AutocompleteResultsDropdownComponent;
 
   public validation: (control: AbstractControl) => BootstrapValidationClasses = bootstrapValidationClasses;
 
@@ -32,8 +45,9 @@ export class AutocompleteFieldComponent<TValue> {
   @Input({ required: true }) public toSearchTerm!: (value: TValue) => string;
   @Input({ required: true }) public toTrackBy!: (index: number, value: TValue) => string;
   @Input({ required: true }) public validator!: (value: TValue) => ValidatorFn;
-  @Input({ required: true }) public query$!: (search: string) => Observable<TValue[]>;
   @Input({ required: true }) public formGroup!: FormGroup<{ search: FormControl<string> }>;
+
+  @Input({ required: true }) public query$!: (search: string) => Observable<TValue[]>;
 
   @Input() public resultFilter: (searchTerm: string) => (combinedResults: TValue[]) => TValue[] =
     (_search: string) =>
@@ -59,7 +73,7 @@ export class AutocompleteFieldComponent<TValue> {
 
   private readonly _prefilled$: BehaviorSubject<TValue[]> = new BehaviorSubject<TValue[]>(this.prefilled);
 
-  public initResults(): void {
+  public onFocus(): void {
     this._prefilled$.next(this.prefilled);
   }
 
@@ -81,13 +95,17 @@ export class AutocompleteFieldComponent<TValue> {
     filter((searchTerm: string): boolean => searchTerm.length >= this.minSearchTermLength),
     debounceTime(this.searchDebounceTime),
     distinctUntilChanged(),
-    switchMap((searchTerm: string): Observable<TValue[]> => this.query$(searchTerm))
+    switchMap((searchTerm: string): Observable<TValue[]> => this.query$(searchTerm)),
+    startWith([])
   );
 
   public found$: Observable<TValue[]> = combineLatest([this._prefilled$, this.foundFromSearch$]).pipe(
     map(([prefilled, foundFromSearch]: [TValue[], TValue[]]): TValue[] =>
       this.resultFilter(this._searchTerm$.getValue())([...prefilled, ...foundFromSearch])
-    )
+    ),
+    tap((values: TValue[]): void => {
+      if (values.length >= 1) this.resultsDropdown.expand();
+    })
   );
 
   public search(term: string): void {
