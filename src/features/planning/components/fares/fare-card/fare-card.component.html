@@ -1,19 +1,28 @@
 <div class="card border-0 shadow-sm h-100">
   <div class="card-body">
-    <div class="d-flex">
+    <div class="d-flex justify-content-between">
       <h5 class="card-title d-flex mb-0">{{ fare.title }}</h5>
-      <ng-container *ngIf="fare.isMedicalDrive">
-        <span class="visually-hidden">Trajet médical</span>
-        <i class="ms-auto ri-stethoscope-line text-muted" aria-hidden="true"></i>
-      </ng-container>
+      <div class="d-flex">
+        <ng-container *ngIf="fare.isMedicalDrive; else nonMedicalDrive">
+          <span class="visually-hidden">Trajet médical</span>
+          <i class="ri-hospital-line small text-muted pe-1 ps-1" style="font-size: 18px" aria-hidden="true"></i>
+        </ng-container>
+        <ng-template #nonMedicalDrive>
+          <span class="visually-hidden">Trajet non médical</span>
+          <i class="ri-money-euro-box-line small text-muted pe-1 ps-1" style="font-size: 18px" aria-hidden="true"></i>
+        </ng-template>
+        <ng-container *ngIf="fare.isTwoWayDrive; else oneWayDrive">
+          <span class="visually-hidden">Trajet Aller retour</span>
+          <i class="ri-arrow-left-right-line small text-muted pe-1 ps-1" style="font-size: 18px" aria-hidden="true"></i>
+        </ng-container>
+        <ng-template #oneWayDrive>
+          <span class="visually-hidden">Trajet simple</span>
+          <i class="ri-arrow-right-line small text-muted pe-1 ps-1" style="font-size: 18px" aria-hidden="true"></i>
+        </ng-template>
+      </div>
     </div>
     <div class="d-flex">
       <a href="tel:{{ fare.phoneToCall }}">{{ fare.phoneDisplay }}</a>
-      <i
-        class="align-bottom ms-auto text-muted"
-        [class.ri-arrow-right-line]="!fare.isTwoWayDrive"
-        [class.ri-arrow-left-right-line]="fare.isTwoWayDrive"
-        aria-hidden="true"></i>
     </div>
     <p class="small my-3">
       Départ: {{ fare.departure.context }}
