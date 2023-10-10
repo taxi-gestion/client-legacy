@@ -1,33 +1,35 @@
-<div class="d-flex flex-column h-100 overflow-auto">
+<div class="d-flex flex-column h-100 overflow-hidden">
   <div class="d-flex flex-row">
-    <h1 class="p-3 text-primary">Facturation</h1>
+    <h1 class="p-3 text-primary d-flex">
+      Facturation
+      <app-date></app-date>
+    </h1>
     <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
       <i class="ri-close-line ri-2x" aria-hidden="true"></i>
       <span class="visually-hidden">Fermer</span>
     </a>
   </div>
-  <div class="btn-group pe-2 ps-2" role="group" id="passenger-action" aria-label="Passenger action options">
+  <div class="btn-group pe-2 ps-2" role="group" id="billing-pages" aria-label="Billing page options">
     <input
       type="radio"
       class="btn-check"
-      name="action-button"
+      name="page-button"
       id="edit-regular-button"
       autocomplete="off"
       checked
       [routerLink]="['medical']" />
     <label class="btn btn-outline-primary" for="edit-regular-button">Medical</label>
-
     <input
       type="radio"
       class="btn-check"
-      name="action-button"
+      name="page-button"
       id="register-regular-button"
       autocomplete="off"
       [routerLink]="['standard']" />
     <label class="btn btn-outline-primary" for="register-regular-button">Standard</label>
   </div>
   <hr />
-  <div>
+  <div class="h-100 overflow-x-scroll">
     <router-outlet></router-outlet>
   </div>
 </div>

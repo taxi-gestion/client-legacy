@@ -1,11 +1,7 @@
 import { Place } from './place.definition';
+import { Driver } from './drivers.definitions';
 
 export type Entity = { id: string };
-
-export type Driver = {
-  identifier: string;
-  username: string;
-};
 
 export type Drive = {
   departure: Place;

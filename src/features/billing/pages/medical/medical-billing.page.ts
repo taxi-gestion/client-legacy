@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
-import { catchError, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
+import { catchError, map, Observable, of, switchMap } from 'rxjs';
 import { Entity, Scheduled } from '@definitions';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { SCHEDULED_FARES_FOR_DATE_QUERY, ScheduledFaresForDateQuery } from '@features/fare';
 import { BillingItem, BillingItemsByDriver } from '../../definitions/billing.presentation';
-import { routeParamToDateString } from '@features/common/angular';
+import { toLongDateFormat, toStandardDateFormat } from '@features/common/angular';
 import {
   FaresByNature,
   groupByDriver,
@@ -13,27 +12,19 @@ import {
   sortBillingItemsByDriverByTime,
   toBillingItem
 } from '../../common/billing.presenter';
+import { DateService } from '../../../common/date/services';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './medical-billing.page.html'
 })
 export class MedicalBillingPage {
-  public billingDay$: Observable<string> = this._route.params.pipe(
-    map((params: Params): string => routeParamToDateString('date', params, new Date()))
-  );
+  public selectedDate$: Observable<Date> = this._date.date$();
 
-  public readonly refresh$: Observable<NavigationEnd> = this._router.events.pipe(
-    filter((routerEvent: unknown): routerEvent is NavigationEnd => routerEvent instanceof NavigationEnd)
-  );
+  public userFriendlyDate$: Observable<string> = this.selectedDate$.pipe(map(toLongDateFormat));
 
-  public readonly billingItemsByNature$: Observable<FaresByNature> = this.refresh$.pipe(
-    startWith(null),
-    switchMap((): Observable<Params> => this._route.params),
-    switchMap(
-      (params: Params): Observable<(Entity & Scheduled)[]> =>
-        this._faresForDateQuery(routeParamToDateString('date', params, new Date()))
-    ),
+  public readonly billingItemsByNature$: Observable<FaresByNature> = this.selectedDate$.pipe(
+    switchMap((date: Date): Observable<(Entity & Scheduled)[]> => this._faresForDateQuery(toStandardDateFormat(date))),
     catchError((error: Error): Observable<(Entity & Scheduled)[]> => {
       this._toaster.toast({
         content: `Échec de la récupération des courses : ${error.name} | ${error.message}`,
@@ -53,12 +44,7 @@ export class MedicalBillingPage {
 
   public constructor(
     private readonly _toaster: ToasterPresenter,
-    private readonly _router: Router,
-    private readonly _route: ActivatedRoute,
+    private readonly _date: DateService,
     @Inject(SCHEDULED_FARES_FOR_DATE_QUERY) private readonly _faresForDateQuery: ScheduledFaresForDateQuery
   ) {}
-
-  public async onBillingDateChange(planningDate: string): Promise<void> {
-    await this._router.navigate(['billing', 'medical', planningDate]);
-  }
 }

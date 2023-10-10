@@ -1,6 +1,12 @@
-import { Driver, Pending, RegularDetails, Scheduled, Subcontracted } from './index';
+/* eslint-disable @typescript-eslint/naming-convention */
+import { Pending, RegularDetails, Scheduled, Subcontracted } from './index';
 
-export type DriverPersistence = Driver;
+export type DriverPersistence = {
+  id: string;
+  username: string;
+  identifier: string;
+  display_order: number;
+};
 
 export type ScheduledPersistence = Scheduled;
 
@@ -11,6 +17,5 @@ export type PendingPersistence = Pending & {
 };
 
 export type RegularDetailsPersistence = Omit<RegularDetails, 'subcontractedClient'> & {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   subcontracted_client: string | undefined;
 };
