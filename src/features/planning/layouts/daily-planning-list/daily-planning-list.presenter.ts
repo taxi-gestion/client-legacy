@@ -11,6 +11,8 @@ export type FareListItem = {
   passenger: string;
   time: string;
   datetime: string;
+  isMedicalDrive: boolean;
+  isTwoWayDrive: boolean;
 };
 
 export const toDailyDriverPlanningListPresentation = (
@@ -27,5 +29,7 @@ const toFareListItems = (fares: ScheduledPlanningSession[]): FareListItem[] => f
 const toFareListItem = (fare: ScheduledPlanningSession): FareListItem => ({
   passenger: toIdentity(fare.passenger),
   time: fare.localTime,
-  datetime: fare.datetime
+  datetime: fare.datetime,
+  isMedicalDrive: fare.isMedicalDrive,
+  isTwoWayDrive: fare.isTwoWayDrive
 });

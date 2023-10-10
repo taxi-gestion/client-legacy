@@ -149,3 +149,11 @@ $font-family-icons-lower: string.to-lower-case($font-family-icons);
 .ri-search-line::before {
   content: '\f0d1';
 }
+
+.ri-hospital-line::before {
+  content: '\ee37';
+}
+
+.ri-money-euro-box-line::before {
+  content: '\ef67';
+}
