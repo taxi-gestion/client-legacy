@@ -89,3 +89,5 @@ export const subcontractedFaresCodec: Type<(Entity & Subcontracted)[]> = ioArray
   subcontractedFareCodec,
   'subcontractedFaresCodec'
 );
+
+export const driversWithOrderCodec: Type<(Entity & Scheduled)[]> = ioArray(scheduledFareCodec, 'scheduledFaresCodec');

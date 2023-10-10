@@ -1,6 +1,7 @@
 import { isValid, parseISO } from 'date-fns';
 import { Params } from '@angular/router';
 import { format } from 'date-fns-tz';
+import { fr } from 'date-fns/locale';
 
 export const toStandardDateFormat = (date: Date): string => format(date, 'yyyy-MM-dd');
 
@@ -19,3 +20,5 @@ export const routeParamToDateString = (keyInParams: string, params: Params, fall
   const isDateValid: boolean = date === null || typeof date !== 'string' ? false : isValidDate(date);
   return toStandardDateFormat(isDateValid ? parseISO(date as string) : fallbackDate);
 };
+
+export const toLongDateFormat = (date: Date): string => format(date, 'PPPP', { locale: fr });

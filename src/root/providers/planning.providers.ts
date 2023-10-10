@@ -27,7 +27,11 @@ import {
 
 import { listDriversQuery$ } from '../../features/common/driver/queries/list-drivers';
 import { estimateJourneyQuery$, estimateJourneyQueryProvider } from '@features/common/journey';
-import { listDriversQueryProvider } from '@features/common/driver';
+import {
+  listDriversQueryProvider,
+  listDriversWithOrderQuery$,
+  listDriversWithOrderQueryProvider
+} from '@features/common/driver';
 import {
   regularByIdQuery$,
   regularByIdQueryProvider,
@@ -45,6 +49,7 @@ export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   editRegularActionProvider(validatedEditRegularAction$, [HttpClient]),
   estimateJourneyQueryProvider(estimateJourneyQuery$, [HttpClient]),
   listDriversQueryProvider(listDriversQuery$, [HttpClient]),
+  listDriversWithOrderQueryProvider(listDriversWithOrderQuery$, [HttpClient]),
   pendingReturnsForDateQueryProvider(validatedPendingReturnsForDateQuery$, [HttpClient]),
   predictRecurrenceQueryProvider(predictRecurrenceQuery$, [HttpClient]),
   registerRegularActionProvider(validatedRegisterRegularAction$, [HttpClient]),

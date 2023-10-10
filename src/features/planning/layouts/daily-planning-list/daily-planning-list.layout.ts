@@ -3,9 +3,9 @@ import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
 import { catchError, combineLatest, filter, map, Observable, of, startWith, switchMap, take } from 'rxjs';
 import { toDailyDriverPlanning } from '../../common/fares.presenter';
 import { SCHEDULED_FARES_FOR_DATE_QUERY, ScheduledFaresForDateQuery } from '../../providers';
-import { Driver, Entity, Scheduled } from '@definitions';
+import { Driver, DriverWithOrder, Entity, Scheduled } from '@definitions';
 import { DailyDriverPlanning } from '../../common/fares.presentation';
-import { LIST_DRIVERS_QUERY, ListDriversQuery } from '@features/common/driver';
+import { LIST_DRIVERS_WITH_ORDER_QUERY, ListDriversWithOrderQuery, sortDriversByDisplayOrder } from '@features/common/driver';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { paramsToDateDayString } from '../../common/date.presenter';
 import { DailyDriverPlanningListPresentation, toDailyDriverPlanningListPresentation } from './daily-planning-list.presenter';
@@ -20,7 +20,8 @@ export class DailyPlanningListLayout {
   );
 
   public readonly drivers$: Observable<(Driver & Entity)[]> = of([]).pipe(
-    switchMap((): Observable<(Driver & Entity)[]> => this._listDriversQuery()),
+    switchMap((): Observable<DriverWithOrder[]> => this._listDriversWithOrderQuery()),
+    map(sortDriversByDisplayOrder),
     take(1)
   );
 
@@ -59,7 +60,7 @@ export class DailyPlanningListLayout {
     private readonly _router: Router,
     private readonly _route: ActivatedRoute,
     @Inject(SCHEDULED_FARES_FOR_DATE_QUERY) private readonly _faresForDateQuery: ScheduledFaresForDateQuery,
-    @Inject(LIST_DRIVERS_QUERY) private readonly _listDriversQuery: ListDriversQuery
+    @Inject(LIST_DRIVERS_WITH_ORDER_QUERY) private readonly _listDriversWithOrderQuery: ListDriversWithOrderQuery
   ) {}
 
   public async onPlanningDateChange(planningDate: string): Promise<void> {
