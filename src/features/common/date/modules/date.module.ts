@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { DateComponent } from '../components/date.component';
+import { DateComponent } from '../components/date/date.component';
 import { DateService } from '../services';
 
 @NgModule({

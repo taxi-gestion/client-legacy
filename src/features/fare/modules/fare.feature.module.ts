@@ -18,6 +18,7 @@ import { COMPONENTS, PendingReturnFieldComponent, ScheduledFareFieldComponent } 
 import { AutocompleteComponentModule } from '@features/common/autocomplete';
 import { DriverComponentModule } from '@features/common/driver';
 import { DateModule } from '@features/common/date';
+import { JourneyComponentModule } from '@features/common/journey';
 
 @NgModule({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -39,7 +40,8 @@ import { DateModule } from '@features/common/date';
     RegularComponentModule,
     AutocompleteComponentModule,
     DriverComponentModule,
-    DateModule
+    DateModule,
+    JourneyComponentModule
   ],
   providers: [
     {

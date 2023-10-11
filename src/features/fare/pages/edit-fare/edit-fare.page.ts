@@ -17,7 +17,7 @@ import { bootstrapValidationClasses, BootstrapValidationClasses, nullToUndefined
 import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/common/regular';
 import { EditFareFields, FARE_FORM } from '../fare.form';
 import { toEditFareSuccessToast, toFareToEdit } from './edit-fare.presenter';
-import { toStandardDateFormat } from '@features/common/angular';
+import { toLongDateFormat, toStandardDateFormat } from '@features/common/angular';
 import { DateService } from '../../../common/date/services';
 import { DriverValues, LIST_DRIVERS_QUERY, ListDriversQuery, toDriversValues } from '@features/common/driver';
 
@@ -33,11 +33,20 @@ export class EditFarePage {
   @Output() public editFareError: EventEmitter<Error> = new EventEmitter<Error>();
 
   public readonly editFare$ = (): Observable<FaresEdited> =>
-    this._editFareAction$(toFareToEdit(nullToUndefined(this.editFareForm.value)));
+    this._editFareAction$(
+      toFareToEdit(
+        nullToUndefined({
+          ...this.editFareForm.value,
+          passenger: { ...this.fareControl.value.passenger },
+          id: this.fareControl.value.id
+        })
+      )
+    );
 
   public readonly editFareForm: FormGroup<EditFareFields> = FARE_FORM;
 
   public selectedDate$: Observable<Date> = this._date.date$();
+  public userFriendlyDate$: Observable<string> = this.selectedDate$.pipe(map(toLongDateFormat));
 
   public readonly scheduledFares$: Observable<ScheduledFareValues[]> = this.selectedDate$.pipe(
     switchMap((date: Date): Observable<(Entity & Scheduled)[]> => this._faresForDateQuery(toStandardDateFormat(date))),
@@ -84,6 +93,7 @@ export class EditFarePage {
   public drivers$: Observable<DriverValues[]> = this._listDriversQuery$().pipe(map(toDriversValues));
 
   public onEditFareActionSuccess = (fares: FaresEdited): void => {
+    this.fareControl.reset();
     this.editFareForm.reset();
     this._toaster.toast(toEditFareSuccessToast(fares));
   };

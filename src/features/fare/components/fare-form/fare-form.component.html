@@ -36,10 +36,12 @@
       [destination]="initialValues.arrivalPlace"
       [prefilled]="regular.destinations ?? []"></app-destination-field>
   </div>
-  <!--   &lt;!&ndash;      <app-estimate-journey-fields
-      [form]="$any(fareForm)"
-      [estimateJourney]="estimateJourney$ | async"
-      (formControlUpdated)="updateEstimateFields($event)"></app-estimate-journey-fields>&ndash;&gt;-->
+  <app-estimate-journey-field
+    [durationFieldControl]="fareForm.controls.driveDuration"
+    [distanceFieldControl]="fareForm.controls.driveDistance"
+    [origin]="fareForm.controls.departurePlace.valueChanges | async"
+    [destination]="fareForm.controls.arrivalPlace.valueChanges | async"
+    [date]="fareForm.controls.departureDatetime.valueChanges | async"></app-estimate-journey-field>
   <div class="mb-3">
     <label class="form-label">Chauffeur</label>
     <app-driver-field
@@ -79,10 +81,10 @@
     type="submit"
     class="btn mt-3 btn-primary w-100"
     [disabled]="loadActionDisplay.isLoading">
-    <ng-container slot="loadActionDisplayIdle">Créer la course</ng-container>
+    <ng-container slot="loadActionDisplayIdle">{{ mode === 'create' ? 'Créer' : 'Editer' }} la course</ng-container>
     <ng-container slot="loadActionDisplayLoading">
       <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
-      Création en cours...
+      {{ mode === 'create' ? 'Création' : 'Edition' }} en cours...
     </ng-container>
   </button>
   <div class="text-danger mt-2" *ngIf="fareForm.errors?.['validationFailedBeforeApiCallError']">

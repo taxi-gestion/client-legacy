@@ -1,5 +1,12 @@
 import { FormGroup } from '@angular/forms';
-import { boolean as ioBoolean, intersection as ioIntersection, string as ioString, type as ioType, Type } from 'io-ts';
+import {
+  boolean as ioBoolean,
+  intersection as ioIntersection,
+  string as ioString,
+  type as ioType,
+  Type,
+  number as ioNumber
+} from 'io-ts';
 import { FareFields, fareFormControls, FareValues } from '../presentation/fares.presentation';
 import { Entity } from '@definitions';
 import { entityCodec } from '@codecs';
@@ -24,6 +31,8 @@ export const fareFormCodec: Type<FareValues> = ioType({
   phoneToCall: phoneValuesCodec,
   departureDatetime: ioString,
   departurePlace: placeValuesCodec,
+  driveDuration: ioNumber,
+  driveDistance: ioNumber,
   arrivalPlace: destinationValuesCodec,
   driver: driverValuesCodec,
   isTwoWayDrive: ioBoolean,
@@ -31,7 +40,6 @@ export const fareFormCodec: Type<FareValues> = ioType({
 });
 
 export const scheduleFareFormCodec: Type<FareToScheduleValues> = fareFormCodec;
-
 export const editFareFormCodec: Type<FareToEditValues> = ioIntersection([entityCodec, fareFormCodec]);
 
 export const FARE_FORM: FormGroup<FareFields> = new FormGroup<FareFields>({

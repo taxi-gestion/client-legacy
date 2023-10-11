@@ -9,80 +9,19 @@
       <span class="visually-hidden">Fermer</span>
     </a>
   </div>
-  <div class="btn-group pe-2 ps-2" role="group" id="fare-pages" aria-label="Fare pages options">
-    <input
-      type="radio"
-      class="btn-check"
-      name="action-button"
-      id="schedule-fare-button"
-      autocomplete="off"
-      checked
-      [routerLink]="['schedule']" />
-    <label class="btn btn-outline-primary" for="schedule-fare-button">Planifier</label>
-    <input
-      type="radio"
-      class="btn-check"
-      name="action-button"
-      id="edit-fare-button"
-      autocomplete="off"
-      [routerLink]="['edit']" />
-    <label class="btn btn-outline-primary" for="edit-fare-button">Editer</label>
-    <!--    <input
-      type="radio"
-      class="btn-check"
-      name="action-button"
-      id="schedule-fare-button"
-      autocomplete="off"
-      checked
-      [routerLink]="['schedule']" />
-    <label class="btn btn-outline-primary" for="schedule-fare-button">Incomplet</label>
-    <input
-      type="radio"
-      class="btn-check"
-      name="action-button"
-      id="edit-fare-button"
-      autocomplete="off"
-      [routerLink]="['edit']" />
-    <label class="btn btn-outline-primary" for="edit-fare-button">Retours</label>
-    <input
-      type="radio"
-      class="btn-check"
-      name="action-button"
-      id="edit-fare-button"
-      autocomplete="off"
-      [routerLink]="['edit']" />
-    <label class="btn btn-outline-primary" for="edit-fare-button">Sous-traité</label>-->
-  </div>
-  <!--
-  <label class="btn btn-outline-primary" for="pending-returns-button">Retours</label>
-  <input
-    type="radio"
-    class="btn-check"
-    name="action-button"
-    id="pending-returns-button"
-    autocomplete="off"
-    checked
-    [routerLink]="['pending']" />-->
-  <!--  <label class="btn btn-outline-primary" for="edit-fare-button">Incomplet</label>
-  <input
-    type="radio"
-    class="btn-check"
-    name="actionbutton"
-    id="edit-fare-button"
-    autocomplete="off"
-    checked
-    [routerLink]="['incomplete']" />-->
-  <!--  <label class="btn btn-outline-primary" for="subcontracted-fares-button">Sous-traité</label>
-  <input
-    type="radio"
-    class="btn-check"
-    name="action-button"
-    id="subcontracted-fares-button"
-    autocomplete="off"
-    checked
-    [routerLink]="['subcontracted']" />-->
+  <h2 class="h5 text-primary ps-3">{{ userFriendlyDate$ | async }}</h2>
   <hr />
-  <div>
-    <router-outlet></router-outlet>
+  <div class="pe-2 ps-2">
+    <div class="d-flex gap-2 mb-2" role="group" aria-label="First group of options">
+      <button type="button" class="btn btn-primary btn-square" [routerLink]="['schedule']">Planifier</button>
+      <button type="button" class="btn btn-primary btn-square" [routerLink]="['edit']">
+        Editer
+        <span class="badge bg-danger m-2">{{ (scheduledFares$ | async)?.length ?? 0}}</span>
+      </button>
+      <button type="button" class="btn btn-primary btn-square disabled" [routerLink]="['returns']">
+        Retours
+        <span class="badge bg-danger m-2">{{ (pendingReturns$ | async)?.length ?? 0}}</span>
+      </button>
+    </div>
   </div>
 </div>

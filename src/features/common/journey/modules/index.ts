@@ -1,1 +1,1 @@
-export * from './journey.queries.module';
+export * from './journey.component.module';

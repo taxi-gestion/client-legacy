@@ -4,10 +4,17 @@ import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { pipe as fpipe } from 'fp-ts/function';
 import { fold as eitherFold } from 'fp-ts/Either';
 import { toPlace } from '@features/common/place';
-import { toDriver } from '../../../common/driver/driver.presenter';
+import { toDriver } from '@features/common/driver';
 import { toIdentity } from '@features/common/regular';
 import { throwDecodeError } from '@features/common/form-validation';
-import { datetimeLocalToIso8601UTCString, toKind, toNature, toTime } from '@features/common/presentation';
+import {
+  datetimeLocalToIso8601UTCString,
+  kilometersToMeters,
+  minutesToSeconds,
+  toKind,
+  toNature,
+  toTime
+} from '@features/common/presentation';
 
 import { toPassenger } from '@features/fare';
 
@@ -29,11 +36,9 @@ export const toDomain = (formValues: FareToScheduleValues): ToSchedule => ({
   destination: toPlace(formValues.arrivalPlace.place),
   datetime: datetimeLocalToIso8601UTCString(formValues.departureDatetime),
   departure: toPlace(formValues.departurePlace),
-  // TODO ReAdd After estimate-journey refactor
-  distance: 0, // kilometersToMeters(formValues.driveDistance),
+  distance: kilometersToMeters(formValues.driveDistance),
   driver: toDriver(formValues.driver),
-  // TODO ReAdd After estimate-journey refactor
-  duration: 0, // minutesToSeconds(formValues.driveDuration),
+  duration: minutesToSeconds(formValues.driveDuration),
   kind: toKind(formValues.isTwoWayDrive),
   nature: toNature(formValues.isMedicalDrive),
   passenger: toPassenger(formValues),
