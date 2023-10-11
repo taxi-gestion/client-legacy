@@ -8,11 +8,11 @@ import { Entity, FaresScheduled } from '@definitions';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 
 import { nullToUndefined } from '@features/common/form-validation';
-import { DriverValues, LIST_DRIVERS_QUERY, ListDriversQuery } from '@features/common/driver';
-import { toDriversValues } from '../../../common/driver/driver.presenter';
+import { DriverValues, LIST_DRIVERS_QUERY, ListDriversQuery, toDriversValues } from '@features/common/driver';
 import { isValidRegular, regularEmptyValue, RegularValues } from '@features/common/regular';
 import { FareValues, initialFareValuesFromRegular } from '@features/fare';
-import { DateService } from '../../../common/date/services';
+import { DateService } from '@features/common/date';
+import { toLongDateFormat } from '@features/common/angular';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,12 +26,20 @@ export class ScheduleFarePage {
   @Output() public scheduleFareError: EventEmitter<Error> = new EventEmitter<Error>();
 
   public readonly scheduleFare$ = (): Observable<FaresScheduled> =>
-    this._scheduleFareAction$(toFareToSchedule(nullToUndefined(this.scheduleFareForm.value)));
+    this._scheduleFareAction$(
+      toFareToSchedule(
+        nullToUndefined({
+          ...this.scheduleFareForm.value,
+          passenger: { ...this.regularControl.value }
+        })
+      )
+    );
 
   public readonly scheduleFareForm: FormGroup<ScheduleFareFields> = FARE_FORM;
   public regularControl: FormControl<Entity & RegularValues> = new FormControl(regularEmptyValue, { nonNullable: true });
 
   public selectedDate$: Observable<Date> = this._date.date$();
+  public userFriendlyDate$: Observable<string> = this.selectedDate$.pipe(map(toLongDateFormat));
 
   public constructor(
     private readonly _toaster: ToasterPresenter,
@@ -60,6 +68,8 @@ export class ScheduleFarePage {
   public drivers$: Observable<DriverValues[]> = this._listDriversQuery$().pipe(map(toDriversValues));
 
   public onScheduleFareActionSuccess = (fares: FaresScheduled): void => {
+    this.regularControl.reset();
+    this.scheduleFareForm.reset();
     this._toaster.toast(toScheduleFareSuccessToast(fares));
   };
 

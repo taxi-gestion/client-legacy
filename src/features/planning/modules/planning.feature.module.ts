@@ -15,12 +15,12 @@ import { PLANNING_FORM_CONTROL_ERROR_MESSAGES } from '../errors/form-errors-mess
 import { PhoneComponentModule } from '@features/common/phone';
 import { RecurrenceServiceModule } from '@features/common/recurrence';
 import { DriverComponentModule } from '@features/common/driver';
-import { JourneyQueriesModule } from '@features/common/journey';
 import { DestinationComponentModule } from '@features/common/destination';
 import { RegularComponentModule } from '@features/common/regular';
 import { PlaceComponentModule } from '@features/common/place';
 import { LoadUiModule } from '@features/common/load';
 import { FareFeatureModule } from '@features/fare';
+import { JourneyComponentModule } from '@features/common/journey';
 
 @NgModule({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -32,7 +32,6 @@ import { FareFeatureModule } from '@features/fare';
     ReactiveFormsModule,
     LoadUiModule,
     PlaceComponentModule,
-    JourneyQueriesModule,
     PlanningFeatureRoutingModule,
     RecurrenceServiceModule,
     DriverComponentModule,
@@ -42,7 +41,8 @@ import { FareFeatureModule } from '@features/fare';
     PhoneComponentModule,
     DestinationComponentModule,
     RegularComponentModule,
-    FareFeatureModule
+    FareFeatureModule,
+    JourneyComponentModule
   ],
   providers: [
     CanActivatePlanningRedirectGuard,

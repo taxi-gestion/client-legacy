@@ -11,7 +11,7 @@ import { formatFareError, setFareErrorToForm } from '../../pages/fare.form';
 import { DriverValues } from '@features/common/driver';
 import { RegularValues } from '@features/common/regular';
 import { formatDateToDatetimeLocalString } from '../../../planning/common/unit-convertion';
-import { toValidLocalDatetimeInputValue } from '@features/common/presentation';
+import { metersToKilometers, secondsToMinutes, toValidLocalDatetimeInputValue } from '@features/common/presentation';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,6 +26,7 @@ export class FareFormComponent<T> implements OnInit {
   @Input({ required: true }) public drivers!: DriverValues[];
   @Input({ required: true }) public initialValues: Partial<FareValues> = fareEmptyValue;
   @Input({ required: true }) public regular!: RegularValues;
+  @Input() public mode: 'create' | 'edit' = 'create';
 
   @Input() public set selectedDate(date: Date | null) {
     if (date === null) return;
@@ -56,6 +57,7 @@ export class FareFormComponent<T> implements OnInit {
   };
 
   // TODO Should have a component for departure datetime and checkboxes so as to have the same behavior as other inputs
+  // eslint-disable-next-line max-statements
   public ngOnInit(): void {
     if (this.initialValues.departureDatetime !== undefined) {
       this.fareForm.controls.departureDatetime.setValue(
@@ -69,6 +71,14 @@ export class FareFormComponent<T> implements OnInit {
 
     if (this.initialValues.isMedicalDrive !== undefined) {
       this.fareForm.controls.isMedicalDrive.setValue(this.initialValues.isMedicalDrive);
+    }
+
+    if (this.initialValues.driveDuration !== undefined) {
+      this.fareForm.controls.driveDuration.setValue(secondsToMinutes(this.initialValues.driveDuration));
+    }
+
+    if (this.initialValues.driveDistance !== undefined) {
+      this.fareForm.controls.driveDistance.setValue(metersToKilometers(this.initialValues.driveDistance));
     }
   }
 }

@@ -8,6 +8,7 @@ import { DriverField, driverFieldFormControl } from '../../common/driver/compone
 import { DriverValues } from '@features/common/driver';
 import { RegularField, regularFieldFormControl } from '../../common/regular/components/regular-field/regular-field.form';
 import { RegularValues } from '@features/common/regular';
+import { EstimateJourneyFields, estimateJourneyFieldsFormControl } from '@features/common/journey';
 
 export type FareValues = {
   passenger: Entity & RegularValues;
@@ -15,6 +16,8 @@ export type FareValues = {
   departureDatetime: string;
   departurePlace: PlaceValues;
   arrivalPlace: DestinationValues;
+  driveDuration: number;
+  driveDistance: number;
   driver: DriverValues;
   isTwoWayDrive: boolean;
   isMedicalDrive: boolean;
@@ -22,6 +25,7 @@ export type FareValues = {
 
 export type FareFields = DestinationField<'arrivalPlace'> &
   DriverField<'driver'> &
+  EstimateJourneyFields<'driveDuration', 'driveDistance'> &
   PhoneField<'phoneToCall'> &
   PlaceField<'departurePlace'> &
   RegularField<'passenger'> & {
@@ -38,6 +42,7 @@ export const fareFormControls = (): FareFields => ({
     nonNullable: true,
     validators: [Validators.required]
   }),
+  ...estimateJourneyFieldsFormControl('driveDuration', 'driveDistance'),
   ...driverFieldFormControl('driver'),
   ...placeFieldFormControl('departurePlace'),
   ...destinationFieldFormControl('arrivalPlace'),

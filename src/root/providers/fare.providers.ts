@@ -8,7 +8,9 @@ import {
   validatedEditFareAction$,
   validatedScheduleFareAction$,
   scheduledFaresForDateQueryProvider,
-  validatedScheduledFaresForDateQuery$
+  validatedScheduledFaresForDateQuery$,
+  pendingReturnsForDateQueryProvider,
+  validatedPendingReturnsForDateQuery$
 } from '@features/fare';
 import { listDriversQuery$, listDriversQueryProvider } from '@features/common/driver';
 import {
@@ -18,14 +20,17 @@ import {
   searchRegularsQuery$
 } from '@features/common/regular';
 import { searchPlaceQuery$, searchPlaceQueryProvider } from '@features/common/place';
+import { estimateJourneyQuery$, estimateJourneyQueryProvider } from '@features/common/journey';
 
 export const FARE_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   deleteFareActionProvider(validatedDeleteFareAction$, [HttpClient]),
   editFareActionProvider(validatedEditFareAction$, [HttpClient]),
   scheduledFaresForDateQueryProvider(validatedScheduledFaresForDateQuery$, [HttpClient]),
+  pendingReturnsForDateQueryProvider(validatedPendingReturnsForDateQuery$, [HttpClient]),
   scheduleFareActionProvider(validatedScheduleFareAction$, [HttpClient]),
   listDriversQueryProvider(listDriversQuery$, [HttpClient]),
   searchRegularQueryProvider(searchRegularsQuery$, [HttpClient]),
   searchPlaceQueryProvider(searchPlaceQuery$, [HttpClient]),
-  regularByIdQueryProvider(regularByIdQuery$, [HttpClient])
+  regularByIdQueryProvider(regularByIdQuery$, [HttpClient]),
+  estimateJourneyQueryProvider(estimateJourneyQuery$, [HttpClient])
 ];

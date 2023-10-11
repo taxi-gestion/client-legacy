@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DateService } from '../services';
+import { DateService } from '../../services';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

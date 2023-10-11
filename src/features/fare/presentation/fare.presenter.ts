@@ -16,10 +16,10 @@ export const toScheduledFaresValues = (
   return 'id' in fares ? [toScheduledFareValues(fares)] : fares.map(toScheduledFareValues);
 };
 
-export const toPendingFaresValues = (fares: (Entity & Pending)[] | (Entity & Pending) | undefined): PendingReturnValues[] => {
+export const toPendingReturnsValues = (fares: (Entity & Pending)[] | (Entity & Pending) | undefined): PendingReturnValues[] => {
   if (fares === undefined) return [];
 
-  return 'id' in fares ? [toPendingFareValues(fares)] : fares.map(toPendingFareValues);
+  return 'id' in fares ? [toPendingReturnValues(fares)] : fares.map(toPendingReturnValues);
 };
 
 export const toScheduledFareValues = (fare: Entity & Scheduled): ScheduledFareValues => ({
@@ -36,7 +36,7 @@ export const toScheduledFareValues = (fare: Entity & Scheduled): ScheduledFareVa
   status: 'scheduled'
 });
 
-export const toPendingFareValues = (fare: Entity & Pending): PendingReturnValues => ({
+export const toPendingReturnValues = (fare: Entity & Pending): PendingReturnValues => ({
   datetime: fare.datetime,
   departure: toPlaceValues(fare.departure),
   destination: toPlaceValues(fare.destination),
@@ -87,7 +87,9 @@ export const initialFareValuesFromScheduledAndRegular = (
   driver: fare.driver,
   isMedicalDrive: fare.isMedicalDrive,
   isTwoWayDrive: fare.isTwoWayDrive,
-  departureDatetime: fare.datetime
+  departureDatetime: fare.datetime,
+  driveDuration: fare.duration,
+  driveDistance: fare.distance
 });
 
 export const destinationFromDestinations = (
@@ -123,6 +125,8 @@ export const fareEmptyValue: FareValues = {
   departureDatetime: '',
   departurePlace: emptyPlaceValue,
   arrivalPlace: emptyDestinationValue,
+  driveDuration: 0,
+  driveDistance: 0,
   driver: driverEmptyValue,
   isMedicalDrive: true,
   isTwoWayDrive: true,

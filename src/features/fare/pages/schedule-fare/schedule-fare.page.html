@@ -1,7 +1,16 @@
 <div class="p-3">
-  <div>
-    <h3 class="text-primary">Planifier une course</h3>
+  <div class="d-flex">
+    <h1 class="text-primary d-flex align-items-center">
+      Planifier
+      <app-date></app-date>
+    </h1>
+    <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../../">
+      <i class="ri-close-line ri-2x" aria-hidden="true"></i>
+      <span class="visually-hidden">Fermer</span>
+    </a>
   </div>
+  <h2 class="h5 text-primary">{{ userFriendlyDate$ | async }}</h2>
+  <hr />
   <div class="mb-4">
     <label class="form-label">Passager</label>
     <app-regular-field
@@ -11,6 +20,7 @@
   <ng-container *ngIf="(regular$ | async) as regular">
     <ng-container *ngIf="(validRegular$ | async)">
       <app-fare-form
+        mode="create"
         [fareForm]="scheduleFareForm"
         [action$]="scheduleFare$"
         [drivers]="(drivers$ | async) ?? []"

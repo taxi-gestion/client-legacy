@@ -23,7 +23,7 @@ import { ToasterPresenter } from '../../../../root/components/toaster/toaster.pr
 import { FormControl, FormGroup } from '@angular/forms';
 import { formatDateToDatetimeLocalString, toDisplayDurationDistance } from '../../common/unit-convertion';
 import { DriverValues, toDriversValues } from '@features/common/driver';
-import { fareHasId, pendingReturnEmptyValue, PendingReturnValues, toPendingFaresValues } from '@features/fare';
+import { fareHasId, pendingReturnEmptyValue, PendingReturnValues, toPendingReturnsValues } from '@features/fare';
 import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/common/regular';
 import { forceControlRevalidation, nullToUndefined } from '@features/common/form-validation';
 import {
@@ -52,7 +52,7 @@ type PageData = {
 export class ManagePendingPage {
   public readonly pendingReturns$: Observable<PendingReturnValues[]> = this._planning.planningDay$.pipe(
     switchMap((planningDay: string): Observable<(Entity & Pending)[]> => this._pendingForDateQuery(planningDay)),
-    map(toPendingFaresValues),
+    map(toPendingReturnsValues),
     catchError((error: Error): Observable<PendingReturnValues[]> => {
       this._toaster.toast({
         content: `Échec de la récupération des retours : ${error.name} | ${error.message}`,

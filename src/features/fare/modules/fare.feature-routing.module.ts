@@ -11,38 +11,27 @@ const ROUTES: Routes = [
     path: '',
     component: ManageFareLayout,
     canMatch: [CanMatchOneUserGroupGuard],
-    data: { allowedGroups: ['developer'] },
-    children: [
-      {
-        path: 'edit',
-        canActivate: [redirectWithDate],
-        component: EditFarePage
-      },
-      {
-        path: 'schedule',
-        canActivate: [redirectWithDate],
-        component: ScheduleFarePage
-      },
-      {
-        path: 'edit/:date',
-        canActivate: [setDate],
-        component: EditFarePage
-      },
-      {
-        path: 'schedule/:date',
-        canActivate: [setDate],
-        component: ScheduleFarePage
-      },
-      /*      {
-        path: 'incomplete',
-        component: ScheduleFarePage
-      },*/
-      /*      {
-        path: 'pending',
-        component: EditPendingPage
-      },*/
-      { path: '**', redirectTo: 'schedule', pathMatch: 'full' }
-    ]
+    data: { allowedGroups: ['developer', 'manager'] }
+  },
+  {
+    path: 'edit',
+    canActivate: [redirectWithDate],
+    component: EditFarePage
+  },
+  {
+    path: 'schedule',
+    canActivate: [redirectWithDate],
+    component: ScheduleFarePage
+  },
+  {
+    path: 'edit/:date',
+    canActivate: [setDate],
+    component: EditFarePage
+  },
+  {
+    path: 'schedule/:date',
+    canActivate: [setDate],
+    component: ScheduleFarePage
   }
 ];
 
