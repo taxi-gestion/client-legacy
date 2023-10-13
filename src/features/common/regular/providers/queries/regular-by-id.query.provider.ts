@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
 import { FactoryProvider } from '@angular/core';
-import { Entity, RegularDetails } from '@definitions';
+import { Entity, Regular } from '@definitions';
 
-export type RegularByIdQuery = (id: string) => Observable<Entity & RegularDetails>;
+export type RegularByIdQuery = (id: string) => Observable<Entity & Regular>;
 
 export const REGULAR_BY_ID_QUERY: symbol = Symbol('regular.regular-by-id.queries');
 

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
-import { fareEmptyValue, FareFields, FareValues } from '../../presentation';
+import { fareEmptyValue, FareFields, FareValues, isMedicalDrive, isTwoWayDrive } from '../../presentation';
 import { Observable } from 'rxjs';
 import {
   bootstrapValidationClasses,
@@ -10,8 +10,8 @@ import {
 import { formatFareError, setFareErrorToForm } from '../../pages/fare.form';
 import { DriverValues } from '@features/common/driver';
 import { RegularValues } from '@features/common/regular';
-import { formatDateToDatetimeLocalString } from '../../../planning/common/unit-convertion';
 import { metersToKilometers, secondsToMinutes, toValidLocalDatetimeInputValue } from '@features/common/presentation';
+import { WaypointValues } from '@features/common/waypoint';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,12 +26,12 @@ export class FareFormComponent<T> implements OnInit {
   @Input({ required: true }) public drivers!: DriverValues[];
   @Input({ required: true }) public initialValues: Partial<FareValues> = fareEmptyValue;
   @Input({ required: true }) public regular!: RegularValues;
-  @Input() public mode: 'create' | 'edit' = 'create';
+  @Input() public mode: 'create' | 'edit' | 'pending' = 'create';
 
   @Input() public set selectedDate(date: Date | null) {
     if (date === null) return;
 
-    this.fareForm.controls.departureDatetime.setValue(formatDateToDatetimeLocalString(date));
+    this.fareForm.controls.departureDatetime.setValue(toValidLocalDatetimeInputValue(date));
   }
 
   @Output() public submitted: EventEmitter<void> = new EventEmitter<void>();
@@ -65,20 +65,23 @@ export class FareFormComponent<T> implements OnInit {
       );
     }
 
-    if (this.initialValues.isTwoWayDrive !== undefined) {
-      this.fareForm.controls.isTwoWayDrive.setValue(this.initialValues.isTwoWayDrive);
-    }
-
-    if (this.initialValues.isMedicalDrive !== undefined) {
-      this.fareForm.controls.isMedicalDrive.setValue(this.initialValues.isMedicalDrive);
-    }
-
     if (this.initialValues.driveDuration !== undefined) {
       this.fareForm.controls.driveDuration.setValue(secondsToMinutes(this.initialValues.driveDuration));
     }
 
     if (this.initialValues.driveDistance !== undefined) {
       this.fareForm.controls.driveDistance.setValue(metersToKilometers(this.initialValues.driveDistance));
+    }
+  }
+
+  public onArrivalSelected(arrival: WaypointValues): void {
+    if (this.mode === 'pending') return;
+
+    if (arrival.setKind !== 'none') {
+      this.fareForm.controls.isTwoWayDrive.setValue(isTwoWayDrive(arrival.setKind));
+    }
+    if (arrival.setNature !== 'none') {
+      this.fareForm.controls.isMedicalDrive.setValue(isMedicalDrive(arrival.setNature));
     }
   }
 }

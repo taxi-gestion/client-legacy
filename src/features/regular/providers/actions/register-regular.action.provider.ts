@@ -1,8 +1,8 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
-import { RegularDetails, RegularRegistered } from '@definitions';
+import { Regular, RegularRegistered } from '@definitions';
 
-export type RegisterRegularAction = (regular: RegularDetails) => Observable<RegularRegistered>;
+export type RegisterRegularAction = (regular: Regular) => Observable<RegularRegistered>;
 
 export const REGISTER_REGULAR_ACTION: symbol = Symbol('regular.register-regular.action');
 

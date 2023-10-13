@@ -1,29 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { FactoryProvider, ValueProvider } from '@angular/core';
-import {
-  deleteFareActionProvider,
-  deleteRegularActionProvider,
-  driverAgendaForDateQueryProvider,
-  editFareActionProvider,
-  editRegularActionProvider,
-  pendingReturnsForDateQueryProvider,
-  registerRegularActionProvider,
-  scheduledFaresForDateQueryProvider,
-  scheduleFareActionProvider,
-  schedulePendingActionProvider,
-  subcontractFareActionProvider,
-  validatedDeleteFareAction$,
-  validatedDeleteRegularAction$,
-  validatedDriverAgendaForDateQuery$,
-  validatedEditFareAction$,
-  validatedEditRegularAction$,
-  validatedPendingReturnsForDateQuery$,
-  validatedRegisterRegularAction$,
-  validatedScheduledFaresForDateQuery$,
-  validatedScheduleFareAction$,
-  validatedSchedulePendingAction$,
-  validatedSubcontractFareAction$
-} from '@features/planning';
 
 import { listDriversQuery$ } from '../../features/common/driver/queries/list-drivers';
 import { estimateJourneyQuery$, estimateJourneyQueryProvider } from '@features/common/journey';
@@ -40,6 +16,31 @@ import {
 } from '@features/common/regular';
 import { searchPlaceQuery$, searchPlaceQueryProvider } from '@features/common/place';
 import { predictRecurrenceQuery$, predictRecurrenceQueryProvider } from '@features/common/recurrence';
+import {
+  deleteRegularActionProvider,
+  editRegularActionProvider,
+  registerRegularActionProvider,
+  validatedDeleteRegularAction$,
+  validatedEditRegularAction$,
+  validatedRegisterRegularAction$
+} from '@features/regular';
+import {
+  deleteFareActionProvider,
+  editFareActionProvider,
+  pendingReturnsForDateQueryProvider,
+  scheduledFaresForDateQueryProvider,
+  scheduleFareActionProvider,
+  schedulePendingActionProvider,
+  subcontractFareActionProvider,
+  validatedDeleteFareAction$,
+  validatedEditFareAction$,
+  validatedPendingReturnsForDateQuery$,
+  validatedScheduledFaresForDateQuery$,
+  validatedScheduleFareAction$,
+  validatedSchedulePendingAction$,
+  validatedSubcontractFareAction$
+} from '@features/fare';
+import { driverAgendaForDateQueryProvider, validatedDriverAgendaForDateQuery$ } from '@features/planning';
 
 export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   deleteFareActionProvider(validatedDeleteFareAction$, [HttpClient]),

@@ -2,11 +2,10 @@ import { ChangeDetectionStrategy, Component, Inject, Input } from '@angular/core
 import { FormControl } from '@angular/forms';
 import { DurationDistance, isValidPlace, JourneyEstimate } from '@definitions';
 import { combineLatest, debounceTime, map, Observable, startWith, Subject, switchMap, tap } from 'rxjs';
-import { PlaceValues } from '@features/common/place';
-import { DestinationValues } from '@features/common/destination';
 import { toDisplayDurationDistance, toJourney } from './estimate-journey-fields.presenter';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common/journey';
-import { isValidDate } from '../../../planning/common/date.presenter';
+import { WaypointValues } from '@features/common/waypoint';
+import { isValidDate } from '@features/common/angular';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -16,12 +15,13 @@ import { isValidDate } from '../../../planning/common/date.presenter';
 export class EstimateJourneyFields2Component {
   @Input({ required: true }) public durationFieldControl!: FormControl<number>;
   @Input({ required: true }) public distanceFieldControl!: FormControl<number>;
-  @Input({ required: true }) public set origin(place: PlaceValues | null) {
-    if (place === null || !isValidPlace(place)) return;
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  @Input({ required: true }) public set origin(origin: WaypointValues | null) {
+    if (origin === null || !isValidPlace(origin.place)) return;
 
-    this._origin$.next(place);
+    this._origin$.next(origin);
   }
-  @Input({ required: true }) public set destination(destination: DestinationValues | null) {
+  @Input({ required: true }) public set destination(destination: WaypointValues | null) {
     if (destination === null || !isValidPlace(destination.place)) return;
 
     this._destination$.next(destination);
@@ -34,8 +34,8 @@ export class EstimateJourneyFields2Component {
 
   public constructor(@Inject(ESTIMATE_JOURNEY_QUERY) private readonly _estimateJourneyQuery$: EstimateJourneyQuery) {}
 
-  private readonly _origin$: Subject<PlaceValues> = new Subject<PlaceValues>();
-  private readonly _destination$: Subject<DestinationValues> = new Subject<DestinationValues>();
+  private readonly _origin$: Subject<WaypointValues> = new Subject<WaypointValues>();
+  private readonly _destination$: Subject<WaypointValues> = new Subject<WaypointValues>();
   private readonly _date$: Subject<string> = new Subject<string>();
 
   public readonly estimateJourney$: Observable<DurationDistance> = combineLatest([
@@ -45,9 +45,9 @@ export class EstimateJourneyFields2Component {
   ]).pipe(
     switchMap(
       // eslint-disable-next-line @typescript-eslint/no-shadow
-      ([origin, destination, date]: [PlaceValues, DestinationValues, string]): Observable<JourneyEstimate> =>
+      ([origin, destination, date]: [WaypointValues, WaypointValues, string]): Observable<JourneyEstimate> =>
         this._estimateJourneyQuery$(
-          toJourney({ origin, destination: destination.place, departureTime: new Date(date).toISOString() })
+          toJourney({ origin: origin.place, destination: destination.place, departureTime: new Date(date).toISOString() })
         )
     ),
     map(toDisplayDurationDistance),

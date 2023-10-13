@@ -8,15 +8,15 @@ import {
   CanMatchRefreshTokenGuard
 } from '@features/authentication';
 import { cognitoAuthenticationProviders } from '@features/aws';
-import { PlanningFeatureModule } from '@features/planning';
 import { PublicFeatureModule } from '@features/public';
 import { MainLayout } from '../layouts';
-import { PLANNING_PROVIDERS, REGULAR_PROVIDERS, BILLING_PROVIDERS } from '../providers';
+import { REGULAR_PROVIDERS, BILLING_PROVIDERS, PLANNING_PROVIDERS } from '../providers';
 import { DashboardFeatureModule } from '@features/dashboard';
 import { RegularFeatureModule } from '@features/regular';
 import { BillingFeatureModule } from '@features/billing';
 import { FareFeatureModule } from '../../features/fare';
 import { FARE_PROVIDERS } from '../providers/fare.providers';
+import { PlanningFeatureModule } from '@features/planning';
 
 const ROUTES: Routes = [
   {
@@ -69,7 +69,7 @@ const ROUTES: Routes = [
     canMatch: [CanMatchGuestGuard],
     providers: [...cognitoAuthenticationProviders()]
   },
-  { path: '**', pathMatch: 'full', redirectTo: '/planning' }
+  { path: '**', pathMatch: 'full', redirectTo: '/dashboard' }
 ];
 
 @NgModule({

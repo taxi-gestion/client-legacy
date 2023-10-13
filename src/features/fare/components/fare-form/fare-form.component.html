@@ -24,17 +24,18 @@
   </div>
   <div class="mb-3">
     <label class="form-label">Lieu de départ</label>
-    <app-place-field
-      [placeFieldControl]="fareForm.controls.departurePlace"
-      [place]="initialValues.departurePlace"
-      [prefilled]="regular.homeAddress ? [regular.homeAddress] : []"></app-place-field>
+    <app-waypoint-field
+      [waypointFieldControl]="fareForm.controls.departurePlace"
+      [waypoint]="initialValues.departurePlace"
+      [prefilled]="regular.waypoints ?? []"></app-waypoint-field>
   </div>
   <div class="mb-3" formControlErrors="arrivalPlace">
     <label class="form-label">Destination</label>
-    <app-destination-field
-      [destinationFieldControl]="fareForm.controls.arrivalPlace"
-      [destination]="initialValues.arrivalPlace"
-      [prefilled]="regular.destinations ?? []"></app-destination-field>
+    <app-waypoint-field
+      [waypointFieldControl]="fareForm.controls.arrivalPlace"
+      [waypoint]="initialValues.arrivalPlace"
+      [prefilled]="regular.waypoints ?? []"
+      (selectedValue)="onArrivalSelected($event)"></app-waypoint-field>
   </div>
   <app-estimate-journey-field
     [durationFieldControl]="fareForm.controls.driveDuration"
@@ -49,7 +50,7 @@
       [driver]="initialValues.driver"
       [prefilled]="drivers"></app-driver-field>
   </div>
-  <div class="mb-3">
+  <div class="mb-3" *ngIf="mode !== 'pending'">
     <div class="form-check form-switch">
       <input
         class="form-check-input"
@@ -58,7 +59,7 @@
         id="isTwoWayDrive"
         name="isTwoWayDrive"
         formControlName="isTwoWayDrive"
-        checked />
+        [checked]="this.initialValues.isTwoWayDrive" />
       <label class="form-check-label" for="isTwoWayDrive">Ce trajet comporte un retour</label>
     </div>
   </div>
@@ -71,7 +72,7 @@
         id="isMedicalDrive"
         name="isMedicalDrive"
         formControlName="isMedicalDrive"
-        checked />
+        [checked]="this.initialValues.isMedicalDrive" />
       <label class="form-check-label" for="isMedicalDrive">Ce trajet est de nature médicale</label>
     </div>
   </div>
@@ -81,10 +82,12 @@
     type="submit"
     class="btn mt-3 btn-primary w-100"
     [disabled]="loadActionDisplay.isLoading">
-    <ng-container slot="loadActionDisplayIdle">{{ mode === 'create' ? 'Créer' : 'Editer' }} la course</ng-container>
+    <ng-container slot="loadActionDisplayIdle">
+      {{ mode === 'create' || mode === 'pending' ? 'Créer' : 'Editer' }} la course
+    </ng-container>
     <ng-container slot="loadActionDisplayLoading">
       <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
-      {{ mode === 'create' ? 'Création' : 'Edition' }} en cours...
+      {{ mode === 'create' || mode === 'pending' ? 'Création' : 'Edition' }} en cours...
     </ng-container>
   </button>
   <div class="text-danger mt-2" *ngIf="fareForm.errors?.['validationFailedBeforeApiCallError']">

@@ -13,7 +13,7 @@
       "@features/common": ["src/features/common"],
       "@features/common/autocomplete": ["src/features/common/autocomplete"],
       "@features/common/client": ["src/features/common/client"],
-      "@features/common/destination": ["src/features/common/destination"],
+      "@features/common/waypoint": ["src/features/common/waypoint"],
       "@features/common/date": ["src/features/common/date"],
       "@features/common/driver": ["src/features/common/driver"],
       "@features/common/form-validation": ["src/features/common/form-validation"],

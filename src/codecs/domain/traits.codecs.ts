@@ -9,8 +9,9 @@ import {
   undefined as ioUndefined,
   union as ioUnion
 } from 'io-ts';
-import { Civility, Drive, DurationDistance, Entity, Kind, Nature, Passenger, Phone } from '../../definitions';
-import { placeCodec } from '../common';
+import { Civility, Drive, DurationDistance, Entity, WithKind, WithNature, Passenger, Phone } from '../../definitions';
+
+import { waypointCodec } from './waypointCodec';
 
 export const entityCodec: Type<Entity> = ioType(
   {
@@ -31,26 +32,26 @@ export const civilityCodec: Type<Civility> = ioKeyOf(
   'civilityCodec'
 );
 
-export const kindCodec: Type<Kind> = ioType(
+export const withKindCodec: Type<WithKind> = ioType(
   {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     kind: ioKeyOf({ 'one-way': null, 'two-way': null })
   },
-  'kindCodec'
+  'withKindCodec'
 );
 
-export const natureCodec: Type<Nature> = ioType(
+export const withNatureCodec: Type<WithNature> = ioType(
   {
     nature: ioKeyOf({ medical: null, standard: null })
   },
-  'natureCodec'
+  'withNatureCodec'
 );
 
 export const driveCodec: Type<Drive> = ioType(
   {
     datetime: ioString,
-    departure: placeCodec,
-    destination: placeCodec
+    departure: waypointCodec,
+    arrival: waypointCodec
   },
   'driveCodec'
 );
@@ -76,7 +77,8 @@ export const passengerCodec: Type<Passenger> = ioType(
     civility: civilityCodec,
     firstname: ioUnion([ioString, ioUndefined]),
     lastname: ioString,
-    phone: phoneCodec
+    phone: phoneCodec,
+    comment: ioUnion([ioString, ioUndefined])
   },
   'passengerCodec'
 );

@@ -4,8 +4,8 @@ import { Driver } from './drivers.definitions';
 export type Entity = { id: string };
 
 export type Drive = {
-  departure: Place;
-  destination: Place;
+  departure: Waypoint;
+  arrival: Waypoint;
   datetime: string;
 };
 
@@ -22,6 +22,7 @@ export type Passenger = {
     type: string;
     number: string;
   };
+  comment: string | undefined;
 };
 
 export type Civility = 'Child' | 'Company' | 'Couple' | 'Mr' | 'Mrs' | 'Other';
@@ -31,33 +32,37 @@ export type Phone = {
   number: string;
 };
 
-export type Destination = Kind &
-  Nature & {
-    place: Place;
-    name: string;
-    comment: string | undefined;
-  };
+export type Waypoint = {
+  place: Place;
+  name: string;
+  comment: string | undefined;
+} & { kind: Kind | undefined } & { nature: Nature | undefined };
 
-export type RegularDetails = {
+export type Regular = {
   firstname: string | undefined;
   lastname: string;
   civility: Civility;
   phones: Phone[] | undefined;
-  home: Place | undefined;
-  destinations: Destination[] | undefined;
-  commentary: string | undefined;
+  waypoints: Waypoint[] | undefined;
+  comment: string | undefined;
   subcontractedClient: string | undefined;
 };
 
-export type Nature = {
-  nature: 'medical' | 'standard';
+export type Nature = 'medical' | 'standard';
+export type Kind = 'one-way' | 'two-way';
+
+export type WithNature = {
+  nature: Nature;
 };
 
-export type Kind = {
-  kind: 'one-way' | 'two-way';
+export type WithKind = {
+  kind: Kind;
 };
 
-export type Fare = Drive & DurationDistance & Kind & Nature & { driver: Driver & Entity } & { passenger: Entity & Passenger };
+export type Fare = Drive &
+  DurationDistance &
+  WithKind &
+  WithNature & { driver: Driver & Entity } & { passenger: Entity & Passenger };
 
 export type ToSchedule = Fare & {
   status: 'to-schedule';
@@ -77,7 +82,7 @@ export type ReturnDrive = Drive &
   } & { driver: Driver & Entity };
 
 export type Pending = Drive &
-  Nature & {
+  WithNature & {
     kind: 'two-way';
     status: 'pending-return';
   } & { driver: Driver & Entity } & { passenger: Entity & Passenger };
@@ -92,7 +97,7 @@ export type ToSubcontract = {
 
 export type Subcontracted = Drive &
   DurationDistance &
-  Kind &
-  Nature & {
+  WithKind &
+  WithNature & {
     status: 'subcontracted';
   } & { passenger: Entity & Passenger } & { subcontractor: Subcontractor };

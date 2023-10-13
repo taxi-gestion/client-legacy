@@ -13,6 +13,7 @@ import { isValidRegular, regularEmptyValue, RegularValues } from '@features/comm
 import { FareValues, initialFareValuesFromRegular } from '@features/fare';
 import { DateService } from '@features/common/date';
 import { toLongDateFormat } from '@features/common/angular';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -44,6 +45,8 @@ export class ScheduleFarePage {
   public constructor(
     private readonly _toaster: ToasterPresenter,
     private readonly _date: DateService,
+    private readonly _router: Router,
+    private readonly _route: ActivatedRoute,
     @Inject(SCHEDULE_FARE_ACTION) private readonly _scheduleFareAction$: ScheduleFareAction,
     @Inject(LIST_DRIVERS_QUERY) private readonly _listDriversQuery$: ListDriversQuery
   ) {}
@@ -67,10 +70,11 @@ export class ScheduleFarePage {
 
   public drivers$: Observable<DriverValues[]> = this._listDriversQuery$().pipe(map(toDriversValues));
 
-  public onScheduleFareActionSuccess = (fares: FaresScheduled): void => {
+  public onScheduleFareActionSuccess = async (fares: FaresScheduled): Promise<void> => {
     this.regularControl.reset();
     this.scheduleFareForm.reset();
     this._toaster.toast(toScheduleFareSuccessToast(fares));
+    await this._router.navigate(['../../'], { relativeTo: this._route });
   };
 
   public onScheduleFareActionError = (error: Error): void => {

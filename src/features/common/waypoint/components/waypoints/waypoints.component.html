@@ -1,0 +1,117 @@
+<div class="mb-3">
+  <div class="mb-2">
+    <button type="button" class="btn btn-primary" (click)="addWaypoint(undefined)">Ajouter une destination</button>
+  </div>
+  <div *ngFor="let waypoint of parentArray.controls; let i = index" class="border p-3 my-2 rounded">
+    <div class="mb-3" formControlErrors="waypointName" [formArrayErrors]="parentArray" [formArrayErrorsIndex]="i">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="nameLabel">Nom:</span>
+        </div>
+        <input
+          id="waypointName"
+          placeholder="clinique, dialyse ..."
+          type="text"
+          class="form-control"
+          [ngClass]="validation(waypoint.controls.waypointName)"
+          aria-describedby="waypointNameLabel"
+          name="waypointName"
+          [formControl]="waypoint.controls.waypointName" />
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label d-block">Adresse:</label>
+      <app-place-field [placeFieldControl]="waypoint.controls.place" [place]="waypoint.controls.place.value"></app-place-field>
+    </div>
+    <div class="mb-3">
+      <label for="nature-action">Action à la sélection comme destination:</label>
+      <div class="d-flex flex-column p-2">
+        <label for="nature-action">Nature:</label>
+        <div class="btn-group p-2" role="group" id="nature-action" aria-label="Nature action options">
+          <input
+            type="radio"
+            class="btn-check"
+            [name]="'nature-button-' + i"
+            [id]="'no-nature-action-button-' + i"
+            autocomplete="off"
+            [checked]="waypoint.controls.setNature.value === 'none'"
+            [formControl]="waypoint.controls.setNature"
+            value="none" />
+          <label class="btn btn-outline-secondary" [for]="'no-nature-action-button-' + i">Rien</label>
+
+          <input
+            type="radio"
+            class="btn-check"
+            [name]="'nature-button-' + i"
+            [id]="'set-medical-drive-button-' + i"
+            autocomplete="off"
+            [checked]="waypoint.controls.setNature.value === 'medical'"
+            [formControl]="waypoint.controls.setNature"
+            value="medical" />
+          <label class="btn btn-outline-success" [for]="'set-medical-drive-button-' + i">Trajet Médical</label>
+
+          <input
+            type="radio"
+            class="btn-check"
+            [name]="'nature-button-' + i"
+            [id]="'set-standard-drive-button-' + i"
+            autocomplete="off"
+            [checked]="waypoint.controls.setNature.value === 'standard'"
+            [formControl]="waypoint.controls.setNature"
+            value="standard" />
+          <label class="btn btn-outline-danger" [for]="'set-standard-drive-button-' + i">Trajet Payant</label>
+        </div>
+        <label for="nature-action">Type:</label>
+        <div class="btn-group p-2" role="group" id="kind-action" aria-label="Kind action options">
+          <input
+            type="radio"
+            class="btn-check"
+            [name]="'kind-button-' + i"
+            [id]="'no-kind-action-button-' + i"
+            autocomplete="off"
+            [checked]="waypoint.controls.setKind.value === 'none'"
+            [formControl]="waypoint.controls.setKind"
+            value="none" />
+          <label class="btn btn-outline-secondary" [for]="'no-kind-action-button-' + i">Rien</label>
+
+          <input
+            type="radio"
+            class="btn-check"
+            [name]="'kind-button-' + i"
+            [id]="'set-two-way-drive-button-' + i"
+            autocomplete="off"
+            [checked]="waypoint.controls.setKind.value === 'two-way'"
+            [formControl]="waypoint.controls.setKind"
+            value="two-way" />
+          <label class="btn btn-outline-success" [for]="'set-two-way-drive-button-' + i">Aller & Retour</label>
+
+          <input
+            type="radio"
+            class="btn-check"
+            [name]="'kind-button-' + i"
+            [id]="'set-one-way-drive-button-' + i"
+            autocomplete="off"
+            [checked]="waypoint.controls.setKind.value === 'one-way'"
+            [formControl]="waypoint.controls.setKind"
+            value="one-way" />
+          <label class="btn btn-outline-danger" [for]="'set-one-way-drive-button-' + i">Aller simple</label>
+        </div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <div class="input-group">
+        <textarea
+          id="comment"
+          placeholder="Commentaire trajet..."
+          class="form-control"
+          aria-describedby="commentLabel"
+          name="comment"
+          cols="30"
+          rows="2"
+          [formControl]="waypoint.controls.comment"></textarea>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-danger" (click)="removeWaypoint(i)">Supprimer</button>
+  </div>
+</div>

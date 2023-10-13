@@ -1,12 +1,17 @@
 /* eslint-disable max-lines */
 import { PassengerValues, PendingReturnValues, ScheduledFareValues } from '../definitions/fare.definition';
-import { Civility, Entity, Kind, Nature, Passenger, Pending, Scheduled } from '@definitions';
-import { emptyPlaceValue, PlaceValues, toPlaceValues } from '@features/common/place';
-import { driverEmptyValue, toDriverValues } from '@features/common/driver';
+import { Civility, Entity, Passenger, Pending, Scheduled, WithKind, WithNature } from '@definitions';
+import { driverEmptyValue, DriverValues, toDriverValues } from '@features/common/driver';
 import { emptyPhoneValue, PhoneValues, toPhone, toPhoneValues } from '@features/common/phone';
-import { DestinationValues, emptyDestinationValue } from '@features/common/destination';
-import { regularEmptyValue, RegularValues } from '@features/common/regular';
+import { regularEmptyValue, RegularValues, toIdentity } from '@features/common/regular';
 import { FareValues } from './fares.presentation';
+import { emptyWaypointValue, toWaypointValues, WaypointValues } from '@features/common/waypoint';
+import { sort } from 'fp-ts/Array';
+import { contramap, getMonoid, Ord } from 'fp-ts/Ord';
+import { Ord as ordString } from 'fp-ts/string';
+import { Ord as ordDate } from 'fp-ts/Date';
+import { Monoid } from 'fp-ts/Monoid';
+import { pipe as fpipe } from 'fp-ts/function';
 
 export const toScheduledFaresValues = (
   fares: (Entity & Scheduled)[] | (Entity & Scheduled) | undefined
@@ -24,8 +29,8 @@ export const toPendingReturnsValues = (fares: (Entity & Pending)[] | (Entity & P
 
 export const toScheduledFareValues = (fare: Entity & Scheduled): ScheduledFareValues => ({
   datetime: fare.datetime,
-  departure: toPlaceValues(fare.departure),
-  destination: toPlaceValues(fare.destination),
+  departure: toWaypointValues(fare.departure),
+  arrival: toWaypointValues(fare.arrival),
   distance: fare.distance,
   driver: toDriverValues(fare.driver),
   duration: fare.duration,
@@ -38,8 +43,8 @@ export const toScheduledFareValues = (fare: Entity & Scheduled): ScheduledFareVa
 
 export const toPendingReturnValues = (fare: Entity & Pending): PendingReturnValues => ({
   datetime: fare.datetime,
-  departure: toPlaceValues(fare.departure),
-  destination: toPlaceValues(fare.destination),
+  departure: toWaypointValues(fare.departure),
+  arrival: toWaypointValues(fare.arrival),
   driver: toDriverValues(fare.driver),
   id: fare.id,
   isMedicalDrive: isMedicalDrive(fare.nature),
@@ -53,36 +58,38 @@ export const toPassengerValues = (passenger: Entity & Passenger): PassengerValue
   civility: passenger.civility,
   lastname: passenger.lastname,
   firstname: passenger.firstname,
-  phone: toPhoneValues(passenger.phone)
+  phone: toPhoneValues(passenger.phone),
+  comment: passenger.comment
 });
 
 export const toPassenger = (formValues: {
-  passenger: { id: string; civility: Civility; firstname: string | undefined; lastname: string };
+  passenger: { id: string; civility: Civility; firstname: string | undefined; lastname: string; comment: string | undefined };
   phoneToCall: PhoneValues;
 }): Entity & Passenger => ({
   id: formValues.passenger.id,
   civility: formValues.passenger.civility,
   firstname: formValues.passenger.firstname,
   lastname: formValues.passenger.lastname,
-  phone: toPhone(formValues.phoneToCall)
+  phone: toPhone(formValues.phoneToCall),
+  comment: formValues.passenger.comment
 });
 
-export const isMedicalDrive = (nature: Nature['nature']): boolean => nature === 'medical';
-export const isTwoWayDrive = (kind: Kind['kind']): boolean => kind === 'two-way';
+export const isMedicalDrive = (nature: WithNature['nature']): boolean => nature === 'medical';
+export const isTwoWayDrive = (kind: WithKind['kind']): boolean => kind === 'two-way';
 
 export const initialFareValuesFromRegular = (regular: RegularValues): Partial<FareValues> => ({
-  departurePlace: regular.homeAddress === undefined ? emptyPlaceValue : regular.homeAddress,
-  arrivalPlace: regular.destinations?.[0] === undefined ? emptyDestinationValue : regular.destinations[0],
+  departurePlace: regular.waypoints?.[0] === undefined ? emptyWaypointValue : regular.waypoints[0],
+  arrivalPlace: regular.waypoints?.[1] === undefined ? emptyWaypointValue : regular.waypoints[1],
   phoneToCall: regular.phones?.[0] === undefined ? emptyPhoneValue : regular.phones[0]
 });
 
 export const initialFareValuesFromScheduledAndRegular = (
   fare: ScheduledFareValues,
   regular: Entity & RegularValues
-): Partial<FareValues> => ({
-  departurePlace: fare.departure,
-  // TODO Refactor once ScheduledFareValues contain Destinations only
-  arrivalPlace: destinationFromDestinations(fare.destination, regular.destinations) ?? emptyDestinationValue,
+): Partial<Entity & FareValues> => ({
+  id: fare.id,
+  departurePlace: arrivalFromWaypoints(fare.departure, regular.waypoints) ?? emptyWaypointValue,
+  arrivalPlace: arrivalFromWaypoints(fare.arrival, regular.waypoints) ?? emptyWaypointValue,
   phoneToCall: fare.passenger.phone,
   driver: fare.driver,
   isMedicalDrive: fare.isMedicalDrive,
@@ -92,24 +99,39 @@ export const initialFareValuesFromScheduledAndRegular = (
   driveDistance: fare.distance
 });
 
-export const destinationFromDestinations = (
-  place: PlaceValues | undefined,
-  destinations: DestinationValues[] | undefined
-): DestinationValues | undefined =>
-  destinations?.find((destination: DestinationValues): boolean => destination.place.label === place?.label);
+export const initialValuesFromPendingAndRegular = (
+  fare: PendingReturnValues,
+  regular: Entity & RegularValues
+): Partial<Entity & FareValues> => ({
+  id: fare.id,
+  departurePlace: arrivalFromWaypoints(fare.departure, regular.waypoints) ?? emptyWaypointValue,
+  arrivalPlace: arrivalFromWaypoints(fare.arrival, regular.waypoints) ?? emptyWaypointValue,
+  phoneToCall: fare.passenger.phone,
+  driver: fare.driver,
+  isMedicalDrive: fare.isMedicalDrive,
+  isTwoWayDrive: fare.isTwoWayDrive,
+  departureDatetime: fare.datetime
+});
+
+const arrivalFromWaypoints = (
+  waypoint: WaypointValues | undefined,
+  waypoints: WaypointValues[] | undefined
+): WaypointValues | undefined =>
+  waypoints?.find((destination: WaypointValues): boolean => destination.place.label === waypoint?.place.label);
 
 export const passengerEmptyValue: Entity & PassengerValues = {
   civility: 'Mr',
   firstname: '',
   id: '',
   lastname: '',
+  comment: undefined,
   phone: emptyPhoneValue
 };
 
 export const scheduledFareEmptyValue: ScheduledFareValues = {
   datetime: '',
-  departure: emptyPlaceValue,
-  destination: emptyPlaceValue,
+  departure: emptyWaypointValue,
+  arrival: emptyWaypointValue,
   distance: 0,
   driver: driverEmptyValue,
   duration: 0,
@@ -123,8 +145,8 @@ export const scheduledFareEmptyValue: ScheduledFareValues = {
 export const fareEmptyValue: FareValues = {
   passenger: regularEmptyValue,
   departureDatetime: '',
-  departurePlace: emptyPlaceValue,
-  arrivalPlace: emptyDestinationValue,
+  departurePlace: emptyWaypointValue,
+  arrivalPlace: emptyWaypointValue,
   driveDuration: 0,
   driveDistance: 0,
   driver: driverEmptyValue,
@@ -135,8 +157,8 @@ export const fareEmptyValue: FareValues = {
 
 export const pendingReturnEmptyValue: PendingReturnValues = {
   datetime: '',
-  departure: emptyPlaceValue,
-  destination: emptyPlaceValue,
+  departure: emptyWaypointValue,
+  arrival: emptyWaypointValue,
   driver: driverEmptyValue,
   id: '',
   isMedicalDrive: true,
@@ -144,3 +166,33 @@ export const pendingReturnEmptyValue: PendingReturnValues = {
   passenger: passengerEmptyValue,
   status: 'pending-return'
 };
+
+type WithDriverAndDatetimeValues = { driver: DriverValues; datetime: string };
+type WithPassengerValues = { passenger: PassengerValues };
+
+export const filterOnPassengerAndDriver =
+  <T extends WithDriverAndDatetimeValues & WithPassengerValues>(searchTerm: string) =>
+  (combinedResults: T[]): T[] =>
+    fpipe(combinedResults, filterByProperties(searchTerm), sortFaresByDriverAndDatetime);
+
+export const filterByProperties =
+  (searchTerm: string) =>
+  <T extends WithDriverAndDatetimeValues & WithPassengerValues>(results: T[]): T[] =>
+    results.filter((fareValue: T): boolean =>
+      `${toIdentity(fareValue.passenger)}${fareValue.driver.username}`.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+export const sortFaresByDriverAndDatetime = <T extends WithDriverAndDatetimeValues>(fares: T[]): T[] =>
+  sort(byDriverNameThenDatetime)(fares);
+
+const byDriverName: Ord<WithDriverAndDatetimeValues> = contramap(
+  (fare: { driver: DriverValues }): string => fare.driver.username
+)(ordString);
+
+const byDatetime: Ord<WithDriverAndDatetimeValues> = contramap((fare: { datetime: string }): Date => new Date(fare.datetime))(
+  ordDate
+);
+
+// Monoid instance to combine Ord instances
+const ordMonoid: Monoid<Ord<WithDriverAndDatetimeValues>> = getMonoid<WithDriverAndDatetimeValues>();
+const byDriverNameThenDatetime: Ord<WithDriverAndDatetimeValues> = ordMonoid.concat(byDriverName, byDatetime);

@@ -1,4 +1,4 @@
-import { Entity, Nature, Scheduled } from '@definitions';
+import { Entity, WithNature, Scheduled } from '@definitions';
 import { BillingItem, BillingItemsByDriver } from '../definitions/billing.presentation';
 import { isMedicalDrive, isTwoWayDrive } from '@features/fare';
 import { toIdentity } from '@features/common/regular';
@@ -11,8 +11,8 @@ const toLocalTime = (datetime: string): string => format(new Date(datetime), "HH
 export const toBillingItem = (fare: Entity & Scheduled): BillingItem => ({
   passenger: toIdentity(fare.passenger),
   time: toLocalTime(fare.datetime),
-  departure: fare.departure.context,
-  destination: fare.destination.context,
+  departure: fare.departure.place.context,
+  arrival: fare.arrival.place.context,
   isMedicalDrive: isMedicalDrive(fare.nature),
   isTwoWayDrive: isTwoWayDrive(fare.kind),
   driver: fare.driver.username
@@ -21,7 +21,7 @@ export const toBillingItem = (fare: Entity & Scheduled): BillingItem => ({
 const driver = (billingItem: BillingItem): string => billingItem.driver;
 export const groupByDriver = (billingItems: BillingItem[]): Record<string, BillingItem[]> => arrayGroupBy(driver)(billingItems);
 
-export type FaresByNature = Record<Nature['nature'], (Entity & Scheduled)[]>;
+export type FaresByNature = Record<WithNature['nature'], (Entity & Scheduled)[]>;
 
 export const groupByNature = (fares: (Entity & Scheduled)[]): FaresByNature =>
   fares.reduce<FaresByNature>(

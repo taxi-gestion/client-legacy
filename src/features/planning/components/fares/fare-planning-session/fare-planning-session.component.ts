@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { DailyDriverPlanning, ScheduledPlanningSession, ScheduledPresentation } from '../../../common/fares.presentation';
 import { SessionContext } from '../../planning/planning-row/planning-row.component';
 import { toContextualizedSession } from '../../planning/planning-row/planning-row.presenter';
 import { toIdentity } from '@features/common/regular';
 import { PassengerValues } from '@features/fare';
+import { DailyDriverPlanning, ScheduledPlanningSession, ScheduledPresentation } from '../../../common/agenda.presenter';
 
 @Component({
   selector: 'app-fare-planning-session',

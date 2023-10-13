@@ -59,7 +59,7 @@ export class EditRegularPage {
       this.editRegularForm.controls.civility.setValue(regularValues.civility);
       this.editRegularForm.controls.firstname.setValue(regularValues.firstname);
       this.editRegularForm.controls.lastname.setValue(regularValues.lastname);
-      this.editRegularForm.controls.commentary.setValue(regularValues.commentary);
+      this.editRegularForm.controls.comment.setValue(regularValues.comment);
       this.editRegularForm.controls.subcontractedClient.setValue(regularValues.subcontractedClient);
     })
   );

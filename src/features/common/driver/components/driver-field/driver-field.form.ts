@@ -1,7 +1,6 @@
 import { FormControl, Validators } from '@angular/forms';
 import { DriverValues } from '../../definitions/driver.definition';
 import { driverEmptyValue } from '../../driver.presenter';
-import { notEmptyDriverValidator } from '../../../../planning/validators/driver.validator';
 
 export type DriverField<T extends string> = {
   [K in T]: FormControl<DriverValues>;
@@ -15,6 +14,6 @@ export const driverFieldFormControl = <T extends string>(
   ({
     [formControlName]: new FormControl<DriverValues>(value === undefined ? driverEmptyValue : value, {
       nonNullable: true,
-      validators: [Validators.required, notEmptyDriverValidator]
+      validators: [Validators.required]
     })
   } as DriverField<T>);

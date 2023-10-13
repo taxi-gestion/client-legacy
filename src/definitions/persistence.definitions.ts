@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Pending, RegularDetails, Scheduled, Subcontracted } from './index';
+import { Pending, Regular, Scheduled, Subcontracted } from './index';
 
 export type DriverPersistence = {
   id: string;
@@ -16,6 +16,6 @@ export type PendingPersistence = Pending & {
   outwardFareId: string;
 };
 
-export type RegularDetailsPersistence = Omit<RegularDetails, 'subcontractedClient'> & {
+export type RegularPersistence = Omit<Regular, 'subcontractedClient'> & {
   subcontracted_client: string | undefined;
 };

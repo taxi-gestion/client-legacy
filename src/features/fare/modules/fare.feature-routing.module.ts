@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { EditFarePage, ScheduleFarePage } from '../pages';
+import { EditFarePage, ScheduleFarePage, SchedulePendingPage } from '../pages';
 import { CanMatchOneUserGroupGuard } from '@features/authentication';
 import { ManageFareLayout } from '../layouts';
 import { redirectWithDate } from '../guards/redirect-with-date.guard';
@@ -19,6 +19,11 @@ const ROUTES: Routes = [
     component: EditFarePage
   },
   {
+    path: 'pendings',
+    canActivate: [redirectWithDate],
+    component: SchedulePendingPage
+  },
+  {
     path: 'schedule',
     canActivate: [redirectWithDate],
     component: ScheduleFarePage
@@ -27,6 +32,11 @@ const ROUTES: Routes = [
     path: 'edit/:date',
     canActivate: [setDate],
     component: EditFarePage
+  },
+  {
+    path: 'pendings/:date',
+    canActivate: [setDate],
+    component: SchedulePendingPage
   },
   {
     path: 'schedule/:date',

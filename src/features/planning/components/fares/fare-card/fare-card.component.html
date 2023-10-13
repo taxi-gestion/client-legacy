@@ -1,57 +1,80 @@
 <div class="card border-0 shadow-sm h-100">
   <div class="card-body">
-    <div class="d-flex justify-content-between">
-      <h5 class="card-title d-flex mb-0">{{ fare.title }}</h5>
-      <div class="d-flex">
+    <div class="d-flex justify-content-between mb-3">
+      <h5 class="card-title mb-0">{{ fare.title }}</h5>
+      <div class="d-flex align-items-center">
         <ng-container *ngIf="fare.isMedicalDrive; else nonMedicalDrive">
-          <span class="visually-hidden">Trajet médical</span>
-          <i class="ri-hospital-line small text-muted pe-1 ps-1" style="font-size: 18px" aria-hidden="true"></i>
+          <i class="ri-hospital-line text-success pe-2" style="font-size: 24px"></i>
         </ng-container>
         <ng-template #nonMedicalDrive>
-          <span class="visually-hidden">Trajet non médical</span>
-          <i class="ri-money-euro-box-line small text-muted pe-1 ps-1" style="font-size: 18px" aria-hidden="true"></i>
+          <i class="ri-money-euro-box-line text-warning pe-2" style="font-size: 24px"></i>
         </ng-template>
         <ng-container *ngIf="fare.isTwoWayDrive; else oneWayDrive">
-          <span class="visually-hidden">Trajet Aller retour</span>
-          <i class="ri-arrow-left-right-line small text-muted pe-1 ps-1" style="font-size: 18px" aria-hidden="true"></i>
+          <i class="ri-arrow-left-right-line text-primary pe-2" style="font-size: 24px"></i>
         </ng-container>
         <ng-template #oneWayDrive>
-          <span class="visually-hidden">Trajet simple</span>
-          <i class="ri-arrow-right-line small text-muted pe-1 ps-1" style="font-size: 18px" aria-hidden="true"></i>
+          <i class="ri-arrow-right-line text-info pe-2" style="font-size: 24px"></i>
         </ng-template>
       </div>
     </div>
-    <div class="d-flex">
-      <a href="tel:{{ fare.phoneToCall }}">{{ fare.phoneDisplay }}</a>
-    </div>
-    <p class="small my-3">
-      Départ: {{ fare.departure.context }}
-      <a href="https://www.google.com/maps/dir/?api=1&destination={{ fare.departure.context }}&travelmode=driving">
-        GoogleMaps
+
+    <ng-container *ngIf="fare.passengerComment">
+      <p class="mb-2">
+        <strong>Commentaire client:</strong>
+        {{ fare.passengerComment }}
+      </p>
+    </ng-container>
+
+    <div class="mb-3">
+      <a href="tel:{{ fare.phone.phoneNumber }}" class="btn btn-success">
+        <i class="ri-phone-line text-white pe-2" style="font-size: 24px"></i>
+        {{ fare.phone.phoneType }} - {{ fare.phone.phoneNumber }}
       </a>
-      {{ ' - ' }}
-      <a
-        href="https://www.waze.com/ul?ll={{ fare.departure.location.latitude }}%2C{{
-          fare.departure.location.longitude
-        }}&navigate=yes">
-        Waze
+    </div>
+    <hr />
+    <p class="small mb-3">
+      <strong>Départ:</strong>
+      {{ fare.departure.place.context }}
+      <ng-container *ngIf="fare.departure.comment">
+        <br />
+        <strong>Commentaire:</strong>
+        {{ fare.departure.comment }}
+      </ng-container>
+      <br />
+      <a class="btn btn-primary btn-sm my-1 me-1" [href]="getGoogleMapsLink(fare.departure.place)">
+        <i class="ri-navigation-line text-white pe-2" style="font-size: 24px"></i>
+        Départ GoogleMaps
+      </a>
+      <a class="btn btn-primary btn-sm m-1" [href]="getWazeLink(fare.departure.place)">
+        <i class="ri-navigation-line text-white pe-2" style="font-size: 24px"></i>
+        Départ Waze
       </a>
       <br />
-      Destination : {{ fare.destination.context }}
-      <a href="https://www.google.com/maps/dir/?api=1&destination={{ fare.destination.context }}&travelmode=driving">
-        GoogleMaps
+      <br />
+      <strong>Destination:</strong>
+      {{ fare.arrival.place.context }}
+      <ng-container *ngIf="fare.arrival.comment">
+        <br />
+        <strong>Commentaire:</strong>
+        {{ fare.arrival.comment }}
+      </ng-container>
+      <br />
+      <a class="btn btn-primary btn-sm my-1 me-1" [href]="getGoogleMapsLink(fare.arrival.place)">
+        <i class="ri-navigation-line text-white pe-2" style="font-size: 24px"></i>
+        Destination GoogleMaps
       </a>
-      {{ ' - ' }}
-      <a
-        href="https://www.waze.com/ul?ll={{ fare.destination.location.latitude }}%2C{{
-          fare.destination.location.longitude
-        }}&navigate=yes">
-        Waze
+      <a class="btn btn-primary btn-sm m-1" [href]="getWazeLink(fare.arrival.place)">
+        <i class="ri-navigation-line text-white pe-2" style="font-size: 24px"></i>
+        Destination Waze
       </a>
     </p>
-    Estimation distance: {{ fare.distance }} Km
-    <br />
-    Estimation temps: {{ fare.duration }} minutes
-    <br />
+
+    <p class="mb-0">
+      <strong>Estimation distance:</strong>
+      {{ fare.distance }} Km
+      <br />
+      <strong>Estimation temps:</strong>
+      {{ fare.duration }} minutes
+    </p>
   </div>
 </div>

@@ -2,10 +2,10 @@ import { FormGroup } from '@angular/forms';
 import {
   boolean as ioBoolean,
   intersection as ioIntersection,
+  number as ioNumber,
   string as ioString,
-  type as ioType,
   Type,
-  number as ioNumber
+  type as ioType
 } from 'io-ts';
 import { FareFields, fareFormControls, FareValues } from '../presentation/fares.presentation';
 import { Entity } from '@definitions';
@@ -16,24 +16,43 @@ import {
 } from '@features/common/form-validation';
 import { regularValuesEntityCodec } from '@features/common/regular';
 import { phoneValuesCodec } from '@features/common/phone';
-import { placeValuesCodec } from '@features/common/place';
-import { destinationValuesCodec } from '@features/common/destination';
-import { driverValuesCodec } from '@features/common/driver';
+import { DriverValues, driverValuesCodec } from '@features/common/driver';
+import { WaypointValues, waypointValuesCodec } from '@features/common/waypoint';
 
 export type FareToScheduleValues = FareValues;
 export type FareToEditValues = Entity & FareValues;
+export type ReturnToScheduleValues = Entity & {
+  id: string;
+  departureDatetime: string;
+  departurePlace: WaypointValues;
+  arrivalPlace: WaypointValues;
+  driveDuration: number;
+  driveDistance: number;
+  driver: DriverValues;
+};
 
 export type ScheduleFareFields = FareFields;
 export type EditFareFields = FareFields;
+export type SchedulePendingFields = FareFields;
+
+export const pendingFormCodec: Type<ReturnToScheduleValues> = ioType({
+  id: ioString,
+  departureDatetime: ioString,
+  departurePlace: waypointValuesCodec,
+  driveDuration: ioNumber,
+  driveDistance: ioNumber,
+  arrivalPlace: waypointValuesCodec,
+  driver: driverValuesCodec
+});
 
 export const fareFormCodec: Type<FareValues> = ioType({
   passenger: regularValuesEntityCodec,
   phoneToCall: phoneValuesCodec,
   departureDatetime: ioString,
-  departurePlace: placeValuesCodec,
+  departurePlace: waypointValuesCodec,
   driveDuration: ioNumber,
   driveDistance: ioNumber,
-  arrivalPlace: destinationValuesCodec,
+  arrivalPlace: waypointValuesCodec,
   driver: driverValuesCodec,
   isTwoWayDrive: ioBoolean,
   isMedicalDrive: ioBoolean

@@ -1,15 +1,15 @@
-import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
-import { RegularDetails, RegularRegistered } from '@definitions';
+import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '@features/common/form-validation';
+import { Regular, RegularRegistered } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { pipe as fpipe } from 'fp-ts/function';
 import { registerRegularFormCodec } from './register-regular.form';
 import { fold as eitherFold } from 'fp-ts/Either';
-import { passengerIdentity, throwDecodeError, toRegularDetails } from '../../common/regular.presenter';
+import { passengerIdentity, throwDecodeError, toRegular } from '../../common/regular.presenter';
 
-export const toRegisterRegular = (rawFormValues: unknown): RegularDetails =>
+export const toRegisterRegular = (rawFormValues: unknown): Regular =>
   fpipe(
     registerRegularFormCodec.decode(rawFormValues),
-    eitherFold(throwDecodeError('registerRegularFormCodec', rawFormValues), toRegularDetails)
+    eitherFold(throwDecodeError('registerRegularFormCodec', rawFormValues), toRegular)
   );
 
 export const toRegisterRegularSuccessToast = (regular: RegularRegistered): Toast => ({

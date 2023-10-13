@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavbarUiModule } from '../../../root/components';
 import { COMPONENTS } from '../components';
-import { CanActivatePlanningRedirectGuard } from '../guards';
 import { LAYOUTS } from '../layouts';
 import { PAGES } from '../pages';
 import { PIPES } from '../pipes';
@@ -15,12 +14,12 @@ import { PLANNING_FORM_CONTROL_ERROR_MESSAGES } from '../errors/form-errors-mess
 import { PhoneComponentModule } from '@features/common/phone';
 import { RecurrenceServiceModule } from '@features/common/recurrence';
 import { DriverComponentModule } from '@features/common/driver';
-import { DestinationComponentModule } from '@features/common/destination';
 import { RegularComponentModule } from '@features/common/regular';
 import { PlaceComponentModule } from '@features/common/place';
 import { LoadUiModule } from '@features/common/load';
 import { FareFeatureModule } from '@features/fare';
 import { JourneyComponentModule } from '@features/common/journey';
+import { WaypointModule } from '@features/common/waypoint';
 
 @NgModule({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -39,13 +38,12 @@ import { JourneyComponentModule } from '@features/common/journey';
     NavbarUiModule,
     FormValidationComponentModule,
     PhoneComponentModule,
-    DestinationComponentModule,
     RegularComponentModule,
     FareFeatureModule,
-    JourneyComponentModule
+    JourneyComponentModule,
+    WaypointModule
   ],
   providers: [
-    CanActivatePlanningRedirectGuard,
     {
       provide: FORM_CONTROL_ERROR_MESSAGES_TOKEN,
       useValue: PLANNING_FORM_CONTROL_ERROR_MESSAGES

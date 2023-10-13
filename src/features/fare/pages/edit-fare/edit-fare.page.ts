@@ -1,8 +1,15 @@
 /* eslint-disable max-lines */
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, of, switchMap } from 'rxjs';
-import { EDIT_FARE_ACTION, EditFareAction, SCHEDULED_FARES_FOR_DATE_QUERY, ScheduledFaresForDateQuery } from '../../providers';
-import { Entity, FaresEdited, RegularDetails, Scheduled } from '@definitions';
+import {
+  DELETE_FARE_ACTION,
+  DeleteFareAction,
+  EDIT_FARE_ACTION,
+  EditFareAction,
+  SCHEDULED_FARES_FOR_DATE_QUERY,
+  ScheduledFaresForDateQuery
+} from '../../providers';
+import { Entity, FaresDeleted, FaresEdited, Regular, Scheduled } from '@definitions';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import {
@@ -16,10 +23,11 @@ import {
 import { bootstrapValidationClasses, BootstrapValidationClasses, nullToUndefined } from '@features/common/form-validation';
 import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/common/regular';
 import { EditFareFields, FARE_FORM } from '../fare.form';
-import { toEditFareSuccessToast, toFareToEdit } from './edit-fare.presenter';
+import { toDeleteFareSuccessToast, toEditFareSuccessToast, toFareToEdit } from './edit-fare.presenter';
 import { toLongDateFormat, toStandardDateFormat } from '@features/common/angular';
 import { DateService } from '../../../common/date/services';
 import { DriverValues, LIST_DRIVERS_QUERY, ListDriversQuery, toDriversValues } from '@features/common/driver';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -68,18 +76,18 @@ export class EditFarePage {
   );
 
   public regular$: Observable<Entity & RegularValues> = this._selectedScheduledFare$.pipe(
-    filter(isValidFare),
-    switchMap((fare: ScheduledFareValues): Observable<Entity & RegularDetails> => this._regularByIdQuery$(fare.passenger.id)),
+    filter((scheduled: ScheduledFareValues): boolean => isValidFare(scheduled)),
+    switchMap((fare: ScheduledFareValues): Observable<Entity & Regular> => this._regularByIdQuery$(fare.passenger.id)),
     map(toRegularValues)
   );
 
-  public initialFareValues$: Observable<Partial<FareValues>> = combineLatest([
+  public initialFareValues$: Observable<Partial<Entity & FareValues>> = combineLatest([
     this._selectedScheduledFare$.asObservable(),
     this.regular$
   ]).pipe(
     map(
       //TODO Refactor once Scheduled return destinationValues only
-      ([fare, regular]: [ScheduledFareValues, Entity & RegularValues]): Partial<FareValues> =>
+      ([fare, regular]: [ScheduledFareValues, Entity & RegularValues]): Partial<Entity & FareValues> =>
         initialFareValuesFromScheduledAndRegular(fare, regular)
     )
   );
@@ -92,10 +100,11 @@ export class EditFarePage {
 
   public drivers$: Observable<DriverValues[]> = this._listDriversQuery$().pipe(map(toDriversValues));
 
-  public onEditFareActionSuccess = (fares: FaresEdited): void => {
+  public onEditFareActionSuccess = async (fares: FaresEdited): Promise<void> => {
     this.fareControl.reset();
     this.editFareForm.reset();
     this._toaster.toast(toEditFareSuccessToast(fares));
+    await this._router.navigate(['../../'], { relativeTo: this._route });
   };
 
   public onEditFareActionError = (error: Error): void => {
@@ -108,11 +117,26 @@ export class EditFarePage {
 
   public constructor(
     private readonly _toaster: ToasterPresenter,
-    //private readonly _router: Router,
+    private readonly _router: Router,
+    private readonly _route: ActivatedRoute,
     private readonly _date: DateService,
     @Inject(SCHEDULED_FARES_FOR_DATE_QUERY) private readonly _faresForDateQuery: ScheduledFaresForDateQuery,
     @Inject(REGULAR_BY_ID_QUERY) private readonly _regularByIdQuery$: RegularByIdQuery,
     @Inject(EDIT_FARE_ACTION) private readonly _editFareAction$: EditFareAction,
+    @Inject(DELETE_FARE_ACTION) private readonly _deleteFareAction$: DeleteFareAction,
     @Inject(LIST_DRIVERS_QUERY) private readonly _listDriversQuery$: ListDriversQuery // //@Inject(DELETE_FARE_ACTION) private readonly _deleteFareAction$: DeleteFareAction, // //@Inject(SUBCONTRACT_FARE_ACTION) private readonly _subcontractFareAction$: SubcontractFareAction, //@Inject(ESTIMATE_JOURNEY_QUERY) private readonly _estimateJourneyQuery$: EstimateJourneyQuery
   ) {}
+
+  //region delete
+  public readonly deleteFare$$ = (id: string) => (): Observable<FaresDeleted> => this._deleteFareAction$(id);
+
+  public onDeleteFareActionSuccess = async (payload: FaresDeleted): Promise<void> => {
+    this._toaster.toast(toDeleteFareSuccessToast(payload));
+    await this._router.navigate(['../../'], { relativeTo: this._route });
+  };
+
+  public onDeleteFareActionError = (_error: Error): void => {
+    this._toaster.toast({ content: 'Échec de la suppression', status: 'danger', title: 'Opération échouée' });
+  };
+  //endregion
 }

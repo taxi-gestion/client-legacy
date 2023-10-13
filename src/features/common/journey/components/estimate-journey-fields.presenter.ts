@@ -2,8 +2,8 @@ import { DurationDistance, Journey, JourneyEstimate } from '@definitions';
 import { pipe as fpipe } from 'fp-ts/function';
 import { journeyCodec } from '@codecs';
 import { fold as eitherFold } from 'fp-ts/Either';
-import { throwDecodeError } from '../../../planning/common/regular.presenter';
-import { metersToKilometers, secondsToMinutes } from '../../../planning/common/unit-convertion';
+import { throwDecodeError } from '@features/common/form-validation';
+import { metersToKilometers, secondsToMinutes } from '@features/common/presentation';
 
 export const toJourney = (rawFormValues: unknown): Journey =>
   fpipe(
