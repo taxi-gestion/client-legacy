@@ -11,7 +11,7 @@ describe('all forms presenter', (): void => {
           lastname: 'Dupont',
           phones: [{ phoneType: 'portable', phoneNumber: '0684319595' }],
           homeAddress: null,
-          destinations: [
+          waypoints: [
             {
               name: 'Clinique du Vinatier',
               place: {
@@ -24,7 +24,7 @@ describe('all forms presenter', (): void => {
               comment: null
             }
           ],
-          commentary: null,
+          comment: null,
           subcontractedClient: null
         },
         {
@@ -33,7 +33,7 @@ describe('all forms presenter', (): void => {
           lastname: 'Dupont',
           phones: [{ phoneType: 'portable', phoneNumber: '0684319595' }],
           homeAddress: undefined,
-          destinations: [
+          waypoints: [
             {
               name: 'Clinique du Vinatier',
               place: {
@@ -46,7 +46,7 @@ describe('all forms presenter', (): void => {
               comment: undefined
             }
           ],
-          commentary: undefined,
+          comment: undefined,
           subcontractedClient: undefined
         }
       ]

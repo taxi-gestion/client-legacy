@@ -1,22 +1,24 @@
+/*
 import { ChangeDetectionStrategy, Component, Inject, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
 import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, of, startWith, switchMap, take } from 'rxjs';
 import { PlanningSettings } from '../../components/planning/planning-settings/planning-settings.component';
 import { DEFAULT_END_HOUR, DEFAULT_START_HOUR } from '../../components/planning/planning-settings/planning-settings.form';
 import { toDailyDriverPlanning } from '../../common/fares.presenter';
-import {
-  PENDING_RETURNS_FOR_DATE_QUERY,
-  PendingReturnsForDateQuery,
-  SCHEDULED_FARES_FOR_DATE_QUERY,
-  ScheduledFaresForDateQuery
-} from '../../providers';
 import { Driver, Entity, Pending, Scheduled } from '@definitions';
 import { DailyDriverPlanning, ScheduledPlanningSession } from '../../common/fares.presentation';
 import { LIST_DRIVERS_QUERY, ListDriversQuery } from '@features/common/driver';
 import { SessionContext, SlotContext } from '../../components/planning/planning-row/planning-row.component';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { NavbarComponent } from '../../../../root/components';
-import { paramsToDateDayString } from '../../common/date.presenter';
+
+import {
+  PENDING_RETURNS_FOR_DATE_QUERY,
+  PendingReturnsForDateQuery,
+  SCHEDULED_FARES_FOR_DATE_QUERY,
+  ScheduledFaresForDateQuery
+} from '@features/fare';
+import { routeParamToDateString } from '@features/common/angular';
 
 const DEFAULT_PLANNING_SETTINGS: PlanningSettings = {
   interval: 60,
@@ -29,14 +31,13 @@ const DEFAULT_PLANNING_SETTINGS: PlanningSettings = {
   templateUrl: './daily-planning.layout.html'
 })
 export class DailyPlanningLayout {
-  // TODO @Marc Do i have the right to do this ?
   @ViewChild(NavbarComponent) private readonly _navbar!: NavbarComponent;
   public toggleNavbar(): void {
     this._navbar.toggle();
   }
 
   public planningDay$: Observable<string> = this._route.params.pipe(
-    map((params: Params): string => paramsToDateDayString(params))
+    map((params: Params): string => routeParamToDateString('date', params, new Date()))
   );
 
   public planningSettings: PlanningSettings = DEFAULT_PLANNING_SETTINGS;
@@ -67,7 +68,10 @@ export class DailyPlanningLayout {
   public readonly scheduledFares$: Observable<(Entity & Scheduled)[]> = this.refresh$.pipe(
     startWith(null),
     switchMap((): Observable<Params> => this._route.params),
-    switchMap((params: Params): Observable<(Entity & Scheduled)[]> => this._faresForDateQuery(paramsToDateDayString(params))),
+    switchMap(
+      (params: Params): Observable<(Entity & Scheduled)[]> =>
+        this._faresForDateQuery(routeParamToDateString('date', params, new Date()))
+    ),
     catchError((error: Error): Observable<(Entity & Scheduled)[]> => {
       this._toaster.toast({
         content: `Échec de la récupération des courses : ${error.name} | ${error.message}`,
@@ -121,3 +125,4 @@ export class DailyPlanningLayout {
     this._selectedSessionContext$.next(sessionContext);
   }
 }
+*/

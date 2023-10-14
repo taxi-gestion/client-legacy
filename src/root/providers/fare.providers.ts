@@ -10,7 +10,9 @@ import {
   scheduledFaresForDateQueryProvider,
   validatedScheduledFaresForDateQuery$,
   pendingReturnsForDateQueryProvider,
-  validatedPendingReturnsForDateQuery$
+  validatedPendingReturnsForDateQuery$,
+  schedulePendingActionProvider,
+  validatedSchedulePendingAction$
 } from '@features/fare';
 import { listDriversQuery$, listDriversQueryProvider } from '@features/common/driver';
 import {
@@ -28,6 +30,7 @@ export const FARE_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   scheduledFaresForDateQueryProvider(validatedScheduledFaresForDateQuery$, [HttpClient]),
   pendingReturnsForDateQueryProvider(validatedPendingReturnsForDateQuery$, [HttpClient]),
   scheduleFareActionProvider(validatedScheduleFareAction$, [HttpClient]),
+  schedulePendingActionProvider(validatedSchedulePendingAction$, [HttpClient]),
   listDriversQueryProvider(listDriversQuery$, [HttpClient]),
   searchRegularQueryProvider(searchRegularsQuery$, [HttpClient]),
   searchPlaceQueryProvider(searchPlaceQuery$, [HttpClient]),

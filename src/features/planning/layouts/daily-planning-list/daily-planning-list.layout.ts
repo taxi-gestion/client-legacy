@@ -2,13 +2,13 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
 import { catchError, combineLatest, filter, map, Observable, of, startWith, switchMap, take } from 'rxjs';
 import { toDailyDriverPlanning } from '../../common/fares.presenter';
-import { SCHEDULED_FARES_FOR_DATE_QUERY, ScheduledFaresForDateQuery } from '../../providers';
 import { Driver, DriverWithOrder, Entity, Scheduled } from '@definitions';
-import { DailyDriverPlanning } from '../../common/fares.presentation';
 import { LIST_DRIVERS_WITH_ORDER_QUERY, ListDriversWithOrderQuery, sortDriversByDisplayOrder } from '@features/common/driver';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
-import { paramsToDateDayString } from '../../common/date.presenter';
 import { DailyDriverPlanningListPresentation, toDailyDriverPlanningListPresentation } from './daily-planning-list.presenter';
+import { SCHEDULED_FARES_FOR_DATE_QUERY, ScheduledFaresForDateQuery } from '@features/fare';
+import { routeParamToDateString } from '@features/common/angular';
+import { DailyDriverPlanning } from '../../common/agenda.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -16,7 +16,7 @@ import { DailyDriverPlanningListPresentation, toDailyDriverPlanningListPresentat
 })
 export class DailyPlanningListLayout {
   public planningDay$: Observable<string> = this._route.params.pipe(
-    map((params: Params): string => paramsToDateDayString(params))
+    map((params: Params): string => routeParamToDateString('date', params, new Date()))
   );
 
   public readonly drivers$: Observable<(Driver & Entity)[]> = of([]).pipe(
@@ -32,7 +32,10 @@ export class DailyPlanningListLayout {
   public readonly scheduledFares$: Observable<(Entity & Scheduled)[]> = this.refresh$.pipe(
     startWith(null),
     switchMap((): Observable<Params> => this._route.params),
-    switchMap((params: Params): Observable<(Entity & Scheduled)[]> => this._faresForDateQuery(paramsToDateDayString(params))),
+    switchMap(
+      (params: Params): Observable<(Entity & Scheduled)[]> =>
+        this._faresForDateQuery(routeParamToDateString('date', params, new Date()))
+    ),
     catchError((error: Error): Observable<(Entity & Scheduled)[]> => {
       this._toaster.toast({
         content: `Échec de la récupération des courses : ${error.name} | ${error.message}`,

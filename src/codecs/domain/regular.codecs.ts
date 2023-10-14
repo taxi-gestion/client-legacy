@@ -7,30 +7,25 @@ import {
   undefined as ioUndefined,
   union as ioUnion
 } from 'io-ts';
-import { Entity, RegularDetails } from '../../definitions';
+import { Entity, Regular } from '../../definitions';
 import { civilityCodec, entityCodec, phoneCodec } from './traits.codecs';
-import { placeCodec } from '../common';
-import { destinationCodec } from './destination.codec';
+import { waypointCodec } from './waypointCodec';
 
-export const regularDetailsCodec: Type<RegularDetails> = ioType(
+export const regularCodec: Type<Regular> = ioType(
   {
     civility: civilityCodec,
     firstname: ioUnion([ioString, ioUndefined]),
     lastname: ioString,
     phones: ioUnion([ioArray(phoneCodec), ioUndefined]),
-    home: ioUnion([placeCodec, ioUndefined]),
-    destinations: ioUnion([ioArray(destinationCodec), ioUndefined]),
-    commentary: ioUnion([ioString, ioUndefined]),
+    waypoints: ioUnion([ioArray(waypointCodec), ioUndefined]),
+    comment: ioUnion([ioString, ioUndefined]),
     subcontractedClient: ioUnion([ioString, ioUndefined])
   },
-  'regularDetailsCodec'
+  'regularCodec'
 );
 
-export const regularDetailsEntityCodec: Type<Entity & RegularDetails> = ioIntersection(
-  [entityCodec, regularDetailsCodec],
-  'regularDetailsEntityCodec'
-);
-export const regularsDetailsEntitiesCodec: Type<(Entity & RegularDetails)[]> = ioArray(
-  regularDetailsEntityCodec,
+export const regularEntityCodec: Type<Entity & Regular> = ioIntersection([entityCodec, regularCodec], 'regularEntityCodec');
+export const regularsDetailsEntitiesCodec: Type<(Entity & Regular)[]> = ioArray(
+  regularEntityCodec,
   'regularsDetailsEntitiesCodec'
 );

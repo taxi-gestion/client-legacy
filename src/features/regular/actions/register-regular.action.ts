@@ -3,20 +3,20 @@ import { catchError, map, Observable, throwError } from 'rxjs';
 import { RegisterRegularAction } from '../providers';
 import { pipe as fpipe } from 'fp-ts/function';
 import { fold } from 'fp-ts/Either';
-import { ValidationFailedAfterApiCallError, ValidationFailedBeforeApiCallError } from '../errors';
-import { RegularDetails, RegularRegistered } from '@definitions';
-import { externalTypeCheckFor, regularDetailsCodec, regularRegisteredCodec } from '@codecs';
+import { ValidationFailedAfterApiCallError, ValidationFailedBeforeApiCallError } from '@features/common/form-validation';
+import { Regular, RegularRegistered } from '@definitions';
+import { externalTypeCheckFor, regularCodec, regularRegisteredCodec } from '@codecs';
 
 const registerRegularUrl = (): string => `/api/regular/register`;
 
 export const validatedRegisterRegularAction$ =
   (http: HttpClient): RegisterRegularAction =>
-  (regularDetails: RegularDetails): Observable<RegularRegistered> =>
+  (regular: Regular): Observable<RegularRegistered> =>
     fpipe(
-      regularDetailsCodec.decode(regularDetails),
+      regularCodec.decode(regular),
       fold(
         (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCallError()),
-        (validatedTransfer: RegularDetails): Observable<RegularRegistered> =>
+        (validatedTransfer: Regular): Observable<RegularRegistered> =>
           http.post<unknown>(registerRegularUrl(), validatedTransfer).pipe(
             map(registeredRegularValidation),
             catchError(

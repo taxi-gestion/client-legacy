@@ -10,8 +10,7 @@ import {
 import { RegularValues } from '../definitions';
 import { civilityCodec, entityCodec } from '@codecs';
 import { phoneValuesCodec } from '@features/common/phone';
-import { placeValuesCodec } from '@features/common/place';
-import { destinationValuesCodec } from '@features/common/destination';
+import { waypointValuesCodec } from '@features/common/waypoint';
 import { Entity } from '@definitions';
 
 export const regularValuesCodec: Type<RegularValues> = ioType({
@@ -19,9 +18,8 @@ export const regularValuesCodec: Type<RegularValues> = ioType({
   firstname: ioUnion([ioString, ioUndefined]),
   lastname: ioString,
   phones: ioUnion([ioArray(phoneValuesCodec), ioUndefined]),
-  homeAddress: ioUnion([placeValuesCodec, ioUndefined]),
-  destinations: ioUnion([ioArray(destinationValuesCodec), ioUndefined]),
-  commentary: ioUnion([ioString, ioUndefined]),
+  waypoints: ioUnion([ioArray(waypointValuesCodec), ioUndefined]),
+  comment: ioUnion([ioString, ioUndefined]),
   subcontractedClient: ioUnion([ioString, ioUndefined])
 });
 

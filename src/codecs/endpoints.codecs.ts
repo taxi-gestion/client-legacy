@@ -8,13 +8,13 @@ import {
   Pending,
   PendingScheduled,
   RegularDeleted,
-  RegularDetails,
+  Regular,
   RegularEdited,
   RegularRegistered,
   Scheduled,
   Subcontracted
 } from '../definitions';
-import { pendingReturnCodec, regularDetailsEntityCodec, scheduledFareCodec, subcontractedFareCodec } from './domain';
+import { pendingReturnCodec, regularEntityCodec, scheduledFareCodec, subcontractedFareCodec } from './domain';
 
 export const fareScheduledCodec: Type<FaresScheduled> = ioType(
   {
@@ -52,21 +52,21 @@ export const faresEditedCodec: Type<FaresEdited> = ioType(
 
 export const regularRegisteredCodec: Type<RegularRegistered> = ioType(
   {
-    regularRegistered: regularDetailsEntityCodec
+    regularRegistered: regularEntityCodec
   },
   'regularRegisteredCodec'
 );
 
 export const regularDeletedCodec: Type<RegularDeleted> = ioType(
   {
-    regularDeleted: regularDetailsEntityCodec
+    regularDeleted: regularEntityCodec
   },
   'regularDeletedCodec'
 );
 
 export const regularEditedCodec: Type<RegularEdited> = ioType(
   {
-    regularEdited: regularDetailsEntityCodec
+    regularEdited: regularEntityCodec
   },
   'regularEditedCodec'
 );
@@ -79,10 +79,7 @@ export const pendingScheduledCodec: Type<PendingScheduled> = ioType(
   'regularEditedCodec'
 );
 
-export const regularsDetailsCodec: Type<(Entity & RegularDetails)[]> = ioArray(
-  regularDetailsEntityCodec,
-  'regularsDetailsCodec'
-);
+export const regularsDetailsCodec: Type<(Entity & Regular)[]> = ioArray(regularEntityCodec, 'regularsDetailsCodec');
 export const pendingReturnsCodec: Type<(Entity & Pending)[]> = ioArray(pendingReturnCodec, 'pendingReturnsCodec');
 export const scheduledFaresCodec: Type<(Entity & Scheduled)[]> = ioArray(scheduledFareCodec, 'scheduledFaresCodec');
 export const subcontractedFaresCodec: Type<(Entity & Subcontracted)[]> = ioArray(

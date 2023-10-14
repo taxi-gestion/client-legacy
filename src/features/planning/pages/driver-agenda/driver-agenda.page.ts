@@ -4,10 +4,9 @@ import { map, Observable, switchMap } from 'rxjs';
 import { DRIVER_AGENDA_FOR_DATE_QUERY, DriverAgendaForDateQuery } from '@features/planning';
 import { Session, SESSION_PERSISTENCE } from '../../../authentication';
 import { toScheduledFaresPresentation } from '../../common/fares.presenter';
-import { toStandardDateFormat } from '../../common/unit-convertion';
 import { Entity, Scheduled } from '@definitions';
-import { FareDriverCardPresentation, toAgendaFares } from '../../common/agenda.presenter';
-import { sortByDatetime } from '../../common/time.presenter';
+import { FareDriverCardPresentation, sortByDatetime, toAgendaFares } from '../../common/agenda.presenter';
+import { toStandardDateFormat } from '@features/common/angular';
 
 const paramsToDateString = (params: Params): string =>
   params['date'] == null ? toStandardDateFormat(new Date()) : (params['date'] as string);

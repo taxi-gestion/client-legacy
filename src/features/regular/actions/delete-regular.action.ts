@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { DeleteRegularAction } from '../providers';
 import { Entity, RegularDeleted } from '@definitions';
-import { ValidationFailedAfterApiCallError } from '../errors';
+import { ValidationFailedAfterApiCallError } from '@features/common/form-validation';
 import { pipe as fpipe } from 'fp-ts/function';
 import { externalTypeCheckFor, regularDeletedCodec } from '@codecs';
 import { fold } from 'fp-ts/Either';

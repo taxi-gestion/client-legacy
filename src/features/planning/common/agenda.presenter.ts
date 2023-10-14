@@ -1,23 +1,34 @@
-import { ScheduledPresentation } from './fares.presentation';
-import { formatDateToDatetimeLocalString, metersToKilometers, secondsToMinutes } from './unit-convertion';
-import { passengerIdentity } from './regular.presenter';
+import { metersToKilometers, secondsToMinutes, toTime } from '@features/common/presentation';
 import { PhoneValues } from '@features/common/phone';
-import { PlaceValues } from '@features/common/place';
+import { passengerIdentity } from '../../regular/common/regular.presenter';
+import { WaypointValues } from '@features/common/waypoint';
+import { Entity } from '@definitions';
+import { ScheduledFareValues } from '@features/fare';
+import { PlanningSession } from '../components/planning/planning-row/planning-row.component';
+import { DriverValues } from '@features/common/driver';
+
+export type DailyDriverPlanning = {
+  driver: DriverValues;
+  fares: ScheduledPlanningSession[];
+};
+
+export type ScheduledPresentation = Entity & ScheduledFareValues & { localTime: string };
+
+export type ScheduledPlanningSession = PlanningSession & ScheduledPresentation;
 
 export const toAgendaFares = (fares: ScheduledPresentation[]): FareDriverCardPresentation[] => fares.map(toAgendaFare);
 
 const toAgendaFare = (fare: ScheduledPresentation): FareDriverCardPresentation => ({
-  //...fare,
   duration: String(secondsToMinutes(fare.duration)),
   distance: String(metersToKilometers(fare.distance)),
   datetime: fare.datetime,
-  phoneToCall: fare.passenger.phone.phoneNumber,
-  phoneDisplay: phoneDisplay(fare.passenger.phone),
+  phone: fare.passenger.phone,
   isMedicalDrive: fare.isMedicalDrive,
   isTwoWayDrive: fare.isTwoWayDrive,
   departure: fare.departure,
-  destination: fare.destination,
-  title: cardTitle(fare)
+  arrival: fare.arrival,
+  title: cardTitle(fare),
+  passengerComment: fare.passenger.comment
 });
 
 export type FareDriverCardPresentation = {
@@ -27,15 +38,13 @@ export type FareDriverCardPresentation = {
   datetime: string;
   isMedicalDrive: boolean;
   isTwoWayDrive: boolean;
-  phoneToCall: string;
-  phoneDisplay: string;
-  departure: PlaceValues;
-  destination: PlaceValues;
+  phone: PhoneValues;
+  departure: WaypointValues;
+  arrival: WaypointValues;
+  passengerComment: string | undefined;
 };
 
-const cardTitle = (fare: ScheduledPresentation): string => `${datetime(fare.datetime)} - ${passengerIdentity(fare.passenger)}`;
-
-const datetime = (datetimeString: string): string =>
-  formatDateToDatetimeLocalString(new Date(datetimeString)).split('T')[1] ?? '';
-
-const phoneDisplay = (phone: PhoneValues): string => `tèl ${phone.phoneType} - ${phone.phoneNumber}`;
+const cardTitle = (fare: ScheduledPresentation): string => `${toTime(fare.datetime)} - ${passengerIdentity(fare.passenger)}`;
+// TODO Do I really need to explain how ugly this is ?
+export const sortByDatetime = <T extends { datetime: string }>(elements: T[]): T[] =>
+  elements.sort((elem1: T, elem2: T): number => Date.parse(elem1.datetime) - Date.parse(elem2.datetime));

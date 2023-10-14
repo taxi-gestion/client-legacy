@@ -23,7 +23,7 @@ const redirectToRoutes: Map<RedirectRoutesKeys, string> = new Map<RedirectRoutes
   ['activate', '/login'],
   ['register', '/activate'],
   ['not-activated', '/activate'],
-  ['login', '/planning'],
+  ['login', '/dashboard'],
   ['logout', '/'],
   ['session-expired', '/login'],
   ['forgot-password', '/reset-password'],

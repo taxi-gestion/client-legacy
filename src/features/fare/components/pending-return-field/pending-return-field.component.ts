@@ -2,12 +2,11 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { selectedFareValidator } from '../../validators';
-import { pendingReturnEmptyValue } from '../../presentation/fare.presenter';
+import { filterOnPassengerAndDriver, pendingReturnEmptyValue } from '../../presentation/fare.presenter';
 import { FORM_CONTROL_ERROR_MESSAGES_TOKEN } from '@features/common/form-validation';
 import { PendingReturnValues } from '../../definitions';
 import { toIdentity } from '@features/common/regular';
 import { Entity, Passenger } from '@definitions';
-import { filterOnPassengerAndDriver } from './pending-return-field.presenter';
 import { FARE_FORM_CONTROL_ERROR_MESSAGES } from '../../errors/form-errors-messages.token';
 import { toTime } from '@features/common/presentation';
 

@@ -8,7 +8,6 @@ export const selectedFareValidator =
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-argument
     fareHasId(fare) ? null : { invalidFare: { value: control.value } };
 
-export const fareHasId = (candidate: (Entity & PendingReturnValues) | (Entity & ScheduledFareValues) | undefined): boolean =>
-  candidate !== undefined && candidate.id.length === 36;
+export const fareHasId = (candidate: Entity | undefined): boolean => candidate !== undefined && candidate.id.length === 36;
 
-export const isValidFare = (fare: Entity & ScheduledFareValues): boolean => fareHasId(fare);
+export const isValidFare = (fare: Entity): boolean => fareHasId(fare);

@@ -1,0 +1,74 @@
+<app-autocomplete-field
+  placeholder="Sélectionner une destination..."
+  [minSearchTermLength]="3"
+  [emptyValue]="waypointEmptyValue"
+  [toSearchTerm]="toSearchTerm"
+  [toTrackBy]="toTrackBy"
+  [query$]="query$"
+  [formGroup]="searchFormGroup"
+  [validator]="waypointValuesValidator"
+  [revalidate]="{ status: waypointFieldControl.statusChanges | async, touched: waypointFieldControl.touched }"
+  [prefilled]="prefilled"
+  [resultFilter]="resultsFilter"
+  [setDefaultSelectedValue]="defaultValue"
+  (selectedValue)="onSelectedValueChange($event)">
+  <ng-template #resultTemplate let-templatedValue>
+    <b>{{ templatedValue.waypointName }}</b>
+    <br />
+    <small>Adresse: {{ templatedValue.place.label }} - {{ templatedValue.place.context }}</small>
+    <ng-container *ngIf="templatedValue.comment !== undefined">
+      <br />
+      <small>Commentaire: {{ templatedValue.comment }}</small>
+    </ng-container>
+    <i
+      *ngIf="templatedValue.setNature === 'medical'"
+      class="ri-hospital-line text-success pe-1 ps-1"
+      style="font-size: 18px"
+      aria-hidden="true"></i>
+    <i
+      *ngIf="templatedValue.setNature === 'standard'"
+      class="ri-money-euro-box-line text-warning pe-1 ps-1"
+      style="font-size: 18px"
+      aria-hidden="true"></i>
+    <i
+      *ngIf="templatedValue.setKind === 'two-way'"
+      class="ri-arrow-left-right-line text-primary pe-1 ps-1"
+      style="font-size: 18px"
+      aria-hidden="true"></i>
+    <i
+      *ngIf="templatedValue.setKind === 'one-way'"
+      class="ri-arrow-right-line text-info pe-1 ps-1"
+      style="font-size: 18px"
+      aria-hidden="true"></i>
+  </ng-template>
+  <ng-template #selectedValueTemplate let-selectedValue>
+    <ng-container *ngIf="selectedValue.waypointName === ''"><small>Pas de destination</small></ng-container>
+    <ng-container *ngIf="selectedValue.waypointName !== ''">
+      <small>Adresse: {{ selectedValue.place.context }}</small>
+      <ng-container *ngIf="selectedValue.comment !== undefined">
+        <br />
+        <small>Commentaire: {{ selectedValue.comment }}</small>
+      </ng-container>
+      <i
+        *ngIf="selectedValue.setNature === 'medical'"
+        class="ri-hospital-line text-success pe-1 ps-1"
+        style="font-size: 18px"
+        aria-hidden="true"></i>
+      <i
+        *ngIf="selectedValue.setNature === 'standard'"
+        class="ri-money-euro-box-line text-warning pe-1 ps-1"
+        style="font-size: 18px"
+        aria-hidden="true"></i>
+      <i
+        *ngIf="selectedValue.setKind === 'two-way'"
+        class="ri-arrow-left-right-line text-primary pe-1 ps-1"
+        style="font-size: 18px"
+        aria-hidden="true"></i>
+      <i
+        *ngIf="selectedValue.setKind === 'one-way'"
+        class="ri-arrow-right-line text-info pe-1 ps-1"
+        style="font-size: 18px"
+        aria-hidden="true"></i>
+    </ng-container>
+  </ng-template>
+</app-autocomplete-field>

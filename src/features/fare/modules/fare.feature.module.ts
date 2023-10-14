@@ -7,7 +7,6 @@ import { FormValidationComponentModule } from '../../common/form-validation/modu
 import { FORM_CONTROL_ERROR_MESSAGES_TOKEN } from '../../common/form-validation/providers/error-messages.token';
 import { PhoneComponentModule } from '@features/common/phone';
 import { RecurrenceServiceModule } from '@features/common/recurrence';
-import { DestinationComponentModule } from '@features/common/destination';
 import { RegularComponentModule } from '@features/common/regular';
 import { PlaceComponentModule } from '@features/common/place';
 import { LoadUiModule } from '@features/common/load';
@@ -19,29 +18,30 @@ import { AutocompleteComponentModule } from '@features/common/autocomplete';
 import { DriverComponentModule } from '@features/common/driver';
 import { DateModule } from '@features/common/date';
 import { JourneyComponentModule } from '@features/common/journey';
+import { WaypointModule } from '@features/common/waypoint';
 
 @NgModule({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   declarations: [...LAYOUTS, ...PAGES, ...COMPONENTS],
   exports: [ScheduledFareFieldComponent, PendingReturnFieldComponent],
   imports: [
+    AutocompleteComponentModule,
     CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    LoadUiModule,
-    PlaceComponentModule,
+    DateModule,
+    DriverComponentModule,
     FareFeatureRoutingModule,
+    FormsModule,
+    FormValidationComponentModule,
+    JourneyComponentModule,
+    LoadUiModule,
+    NavbarUiModule,
+    PhoneComponentModule,
+    PlaceComponentModule,
+    ReactiveFormsModule,
     RecurrenceServiceModule,
     RegularComponentModule,
-    NavbarUiModule,
-    FormValidationComponentModule,
-    PhoneComponentModule,
-    DestinationComponentModule,
     RegularComponentModule,
-    AutocompleteComponentModule,
-    DriverComponentModule,
-    DateModule,
-    JourneyComponentModule
+    WaypointModule
   ],
   providers: [
     {

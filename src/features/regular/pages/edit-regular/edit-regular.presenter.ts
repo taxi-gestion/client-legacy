@@ -1,14 +1,14 @@
-import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '../../errors';
-import { Entity, RegularDeleted, RegularDetails, RegularEdited } from '@definitions';
+import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '@features/common/form-validation';
+import { Entity, RegularDeleted, Regular, RegularEdited } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { editRegularFormCodec, EditRegularValues } from './edit-regular.form';
 import { fold as eitherFold } from 'fp-ts/Either';
 import { pipe as fpipe } from 'fp-ts/function';
 import { entityCodec } from '@codecs';
 import { RegularValues } from '@features/common/regular';
-import { passengerIdentity, throwDecodeError, toRegularDetails } from '../../common/regular.presenter';
+import { passengerIdentity, throwDecodeError, toRegular } from '../../common/regular.presenter';
 
-export const toEditRegular = (rawFormValues: unknown): Entity & RegularDetails =>
+export const toEditRegular = (rawFormValues: unknown): Entity & Regular =>
   fpipe(
     editRegularFormCodec.decode(rawFormValues),
     eitherFold(throwDecodeError('editRegularFormCodec', rawFormValues), toDomain)
@@ -38,15 +38,14 @@ export const toEditRegularPresentation = (regular: Entity & RegularValues): Edit
   firstname: regular.firstname,
   lastname: regular.lastname,
   phones: regular.phones,
-  homeAddress: regular.homeAddress,
-  commentary: regular.commentary,
-  destinations: regular.destinations,
+  comment: regular.comment,
+  waypoints: regular.waypoints,
   subcontractedClient: regular.subcontractedClient
 });
 
-const toDomain = (formValues: EditRegularValues): Entity & RegularDetails => ({
+const toDomain = (formValues: EditRegularValues): Entity & Regular => ({
   id: formValues.regular.id,
-  ...toRegularDetails(formValues)
+  ...toRegular(formValues)
 });
 
 // TODO Réfléchir à la mutualisation des erreurs communes

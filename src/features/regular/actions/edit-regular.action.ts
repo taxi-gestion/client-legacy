@@ -2,21 +2,21 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { pipe as fpipe } from 'fp-ts/function';
 import { fold } from 'fp-ts/Either';
-import { ValidationFailedAfterApiCallError, ValidationFailedBeforeApiCallError } from '../errors';
-import { Entity, RegularEdited, RegularDetails } from '@definitions';
-import { externalTypeCheckFor, regularDetailsEntityCodec, regularEditedCodec } from '@codecs';
+import { Entity, RegularEdited, Regular } from '@definitions';
+import { externalTypeCheckFor, regularEntityCodec, regularEditedCodec } from '@codecs';
 import { EditRegularAction } from '../providers';
+import { ValidationFailedAfterApiCallError, ValidationFailedBeforeApiCallError } from '@features/common/form-validation';
 
 const editRegularUrl = (): string => `/api/regular/edit`;
 
 export const validatedEditRegularAction$ =
   (http: HttpClient): EditRegularAction =>
-  (regularToEdit: Entity & RegularDetails): Observable<RegularEdited> =>
+  (regularToEdit: Entity & Regular): Observable<RegularEdited> =>
     fpipe(
-      regularDetailsEntityCodec.decode(regularToEdit),
+      regularEntityCodec.decode(regularToEdit),
       fold(
         (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCallError()),
-        (validatedTransfer: Entity & RegularDetails): Observable<RegularEdited> =>
+        (validatedTransfer: Entity & Regular): Observable<RegularEdited> =>
           http.post<unknown>(editRegularUrl(), validatedTransfer).pipe(
             map(editedRegularAndReturnValidation),
             catchError(

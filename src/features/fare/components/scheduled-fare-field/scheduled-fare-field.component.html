@@ -15,7 +15,7 @@
   <ng-template #resultTemplate let-templatedValue>
     <b>
       {{ time(templatedValue.datetime) }} - {{ passengerIdentity(templatedValue.passenger) }} -
-      {{ templatedValue.destination.label }}
+      {{ templatedValue.arrival.place.label }}
     </b>
     <br />
     <small>{{ templatedValue.driver.username }}</small>
@@ -25,7 +25,7 @@
     <ng-container *ngIf="selectedValue.id !== ''">
       <small>
         Course: {{ time(selectedValue.datetime) }} - {{ passengerIdentity(selectedValue.passenger) }} -
-        {{ selectedValue.destination.label }}
+        {{ selectedValue.arrival.place.label }}
       </small>
     </ng-container>
   </ng-template>

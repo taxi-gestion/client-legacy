@@ -1,94 +1,103 @@
-<div class="p-3">
-  <div>
-    <h3 class="text-primary">Enregistrer un passager</h3>
+<div class="d-flex h-100 flex-column overflow-auto p-3">
+  <div class="d-flex">
+    <h1 class="text-primary d-flex align-items-center">Enregistrer un passager</h1>
+    <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
+      <i class="ri-close-line ri-2x" aria-hidden="true"></i>
+      <span class="visually-hidden">Fermer</span>
+    </a>
   </div>
-  <form
-    [formGroup]="registerRegularForm"
-    [appLoadAction]="registerRegular$"
-    #loadAction="loadAction"
-    (actionSuccess)="onRegisterRegularActionSuccess($event)"
-    (actionError)="onRegisterRegularActionError($event)"
-    (ngSubmit)="onSubmitRegisterRegular(loadAction.start)">
-    <div class="mb-3">
-      <label for="firstname" class="form-label">Civilité*</label>
-      <select name="civility" class="form-control form-select w-auto d-inline-block" formControlName="civility">
-        <option value="Mr">Mr</option>
-        <option value="Mrs">Mme</option>
-        <option value="Couple">Mr/Mme</option>
-        <option value="Child">Enfant</option>
-        <option value="Company">Société</option>
-        <option value="Other">Autre</option>
-      </select>
-    </div>
-    <div class="mb-3">
-      <label for="firstname" class="form-label">Prénom</label>
-      <input class="form-control" id="firstname" type="text" name="firstname" formControlName="firstname" placeholder="Jean" />
-    </div>
-    <div class="mb-3" formControlErrors="lastname">
-      <label for="lastname" class="form-label">Nom de famille*</label>
-      <input
-        class="form-control"
-        id="lastname"
-        type="text"
-        name="lastname"
-        formControlName="lastname"
-        placeholder="Dupont"
-        [ngClass]="validation(registerRegularForm.controls.lastname)" />
-    </div>
-    <div class="mb-3">
-      <label for="phones" class="form-label">Téléphones</label>
-      <app-phones id="phones" [parentArray]="registerRegularForm.controls.phones"></app-phones>
-    </div>
-    <div class="mb-3">
-      <label for="homeAddress" class="form-label">Domicile</label>
-      <app-place-field [placeFieldControl]="registerRegularForm.controls.homeAddress"></app-place-field>
-    </div>
-    <div class="mb-3">
-      <label for="destinations" class="form-label">Destinations</label>
-      <app-destinations id="destinations" [parentArray]="registerRegularForm.controls.destinations"></app-destinations>
-    </div>
-    <div class="mb-3">
-      <label for="commentary" class="form-label">Commentaire client</label>
-      <textarea
-        id="commentary"
-        type="text"
-        placeholder="Commentaire..."
-        class="form-control"
-        name="commentary"
-        cols="30"
-        rows="5"
-        formControlName="commentary"></textarea>
-    </div>
-    <div class="mb-3">
-      <label for="subcontractedClient" class="form-label">Client d'une autre société</label>
-      <input
-        id="subcontractedClient"
-        type="text"
-        placeholder="Client de..."
-        class="form-control"
-        name="subcontractedClient"
-        formControlName="subcontractedClient" />
-    </div>
-    <button
-      [appLoadActionDisplay]="loadAction.isLoading$ | async"
-      #loadActionDisplay
-      type="submit"
-      class="btn mt-3 btn-primary w-100"
-      [disabled]="loadActionDisplay.isLoading">
-      <ng-container slot="loadActionDisplayIdle">Enregistrer un nouveau passager</ng-container>
-      <ng-container slot="loadActionDisplayLoading">
-        <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
-        Enregistrement en cours...
-      </ng-container>
-    </button>
-    <!-- TODO Mutualiser les erreurs communes -->
-    <div class="text-danger mt-2" *ngIf="registerRegularForm.errors">Errors: {{ registerRegularForm.errors | json }}</div>
-    <div class="text-danger mt-2" *ngIf="registerRegularForm.errors?.['validationFailedBeforeApiCallError']">
-      La structure des données de la requête ne respecte pas le contrat de transfer. La requête ne peut pas être effectuée.
-      Prévenir Romain qu'il va faire des heures supp'.
-    </div>
-    <div class="text-danger mt-2" *ngIf="registerRegularForm.errors">
-      Une erreur est survenue lors de l'appel au service distant.
-    </div>
-  </form>
+  <hr />
+  <div class="p-3">
+    <form
+      [formGroup]="registerRegularForm"
+      [appLoadAction]="registerRegular$"
+      #loadAction="loadAction"
+      (actionSuccess)="onRegisterRegularActionSuccess($event)"
+      (actionError)="onRegisterRegularActionError($event)"
+      (ngSubmit)="onSubmitRegisterRegular(loadAction.start)">
+      <div class="mb-3">
+        <label for="firstname" class="form-label">Civilité*</label>
+        <select name="civility" class="form-control form-select w-auto d-inline-block" formControlName="civility">
+          <option value="Mr">Mr</option>
+          <option value="Mrs">Mme</option>
+          <option value="Couple">Mr/Mme</option>
+          <option value="Child">Enfant</option>
+          <option value="Company">Société</option>
+          <option value="Other">Autre</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="firstname" class="form-label">Prénom</label>
+        <input
+          class="form-control"
+          id="firstname"
+          type="text"
+          name="firstname"
+          formControlName="firstname"
+          placeholder="Jean" />
+      </div>
+      <div class="mb-3" formControlErrors="lastname">
+        <label for="lastname" class="form-label">Nom de famille*</label>
+        <input
+          class="form-control"
+          id="lastname"
+          type="text"
+          name="lastname"
+          formControlName="lastname"
+          placeholder="Dupont"
+          [ngClass]="validation(registerRegularForm.controls.lastname)" />
+      </div>
+      <div class="mb-3">
+        <label for="phones" class="form-label">Téléphones</label>
+        <app-phones id="phones" [parentArray]="registerRegularForm.controls.phones"></app-phones>
+      </div>
+      <div class="mb-3">
+        <label for="waypoints" class="form-label">Destinations</label>
+        <app-waypoints id="destinations" [parentArray]="registerRegularForm.controls.waypoints"></app-waypoints>
+      </div>
+      <div class="mb-3">
+        <label for="comment" class="form-label">Commentaire client</label>
+        <textarea
+          id="comment"
+          type="text"
+          placeholder="Commentaire..."
+          class="form-control"
+          name="comment"
+          cols="30"
+          rows="5"
+          formControlName="comment"></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="subcontractedClient" class="form-label">Client d'une autre société</label>
+        <input
+          id="subcontractedClient"
+          type="text"
+          placeholder="Client de..."
+          class="form-control"
+          name="subcontractedClient"
+          formControlName="subcontractedClient" />
+      </div>
+      <button
+        [appLoadActionDisplay]="loadAction.isLoading$ | async"
+        #loadActionDisplay
+        type="submit"
+        class="btn mt-3 btn-primary w-100"
+        [disabled]="loadActionDisplay.isLoading">
+        <ng-container slot="loadActionDisplayIdle">Enregistrer un nouveau passager</ng-container>
+        <ng-container slot="loadActionDisplayLoading">
+          <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+          Enregistrement en cours...
+        </ng-container>
+      </button>
+      <!-- TODO Mutualiser les erreurs communes -->
+      <div class="text-danger mt-2" *ngIf="registerRegularForm.errors">Errors: {{ registerRegularForm.errors | json }}</div>
+      <div class="text-danger mt-2" *ngIf="registerRegularForm.errors?.['validationFailedBeforeApiCallError']">
+        La structure des données de la requête ne respecte pas le contrat de transfer. La requête ne peut pas être effectuée.
+        Prévenir Romain qu'il va faire des heures supp'.
+      </div>
+      <div class="text-danger mt-2" *ngIf="registerRegularForm.errors">
+        Une erreur est survenue lors de l'appel au service distant.
+      </div>
+    </form>
+  </div>
 </div>

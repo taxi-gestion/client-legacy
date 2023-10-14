@@ -18,7 +18,7 @@
         Editer
         <span class="badge bg-danger m-2">{{ (scheduledFares$ | async)?.length ?? 0}}</span>
       </button>
-      <button type="button" class="btn btn-primary btn-square disabled" [routerLink]="['returns']">
+      <button type="button" class="btn btn-primary btn-square" [routerLink]="['pendings']">
         Retours
         <span class="badge bg-danger m-2">{{ (pendingReturns$ | async)?.length ?? 0}}</span>
       </button>

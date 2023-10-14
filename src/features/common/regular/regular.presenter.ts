@@ -1,17 +1,15 @@
 import { RegularValues } from './definitions/regular.definition';
-import { Entity, Passenger, RegularDetails } from '@definitions';
-import { DestinationValues, toDestinationsValues } from '@features/common/destination';
+import { Entity, Passenger, Regular } from '@definitions';
 import { toPhonesValues } from '@features/common/phone';
 import { PassengerValues } from '@features/fare';
-import { emptyPlaceValue, PlaceValues, toPlaceValues } from '@features/common/place';
+import { toWaypointsValues } from '../waypoint';
 
 export const regularEmptyValue: Entity & RegularValues = {
   civility: 'Mr',
-  commentary: undefined,
-  destinations: undefined,
+  comment: undefined,
+  waypoints: undefined,
   firstname: '',
   id: '',
-  homeAddress: undefined,
   lastname: '',
   phones: undefined,
   subcontractedClient: undefined
@@ -21,38 +19,23 @@ export const firstnameOrEmpty = (regular: { firstname: string | undefined }): st
   regular.firstname === undefined ? '' : `${regular.firstname} `;
 
 export const toRegularsValues = (
-  regulars: (Entity & RegularDetails)[] | (Entity & RegularDetails) | undefined
+  regulars: (Entity & Regular)[] | (Entity & Regular) | undefined
 ): (Entity & RegularValues)[] => {
   if (regulars === undefined) return [];
 
   return 'id' in regulars ? [toRegularValues(regulars)] : regulars.map(toRegularValues);
 };
 
-const domicileAsDestination = (place: PlaceValues): DestinationValues => ({
-  destinationName: 'Domicile',
-  place,
-  isMedicalDrive: undefined,
-  isTwoWayDrive: undefined,
-  comment: undefined
-});
-
-const destinationsWithDomicile = (destinations: DestinationValues[] | undefined, domicile: PlaceValues): DestinationValues[] =>
-  destinations === undefined ? [domicileAsDestination(domicile)] : [...destinations, domicileAsDestination(domicile)];
-
-export const toRegularValues = (regular: Entity & RegularDetails): Entity & RegularValues => ({
+export const toRegularValues = (regular: Entity & Regular): Entity & RegularValues => ({
   civility: regular.civility,
-  commentary: regular.commentary,
-  destinations: destinationsWithDomicile(
-    toDestinationsValues(regular.destinations),
-    toPlaceValues(regular.home ?? emptyPlaceValue)
-  ),
+  comment: regular.comment,
+  waypoints: toWaypointsValues(regular.waypoints),
   firstname: regular.firstname,
   id: regular.id,
-  homeAddress: regular.home,
   lastname: regular.lastname,
   phones: toPhonesValues(regular.phones),
   subcontractedClient: regular.subcontractedClient
 });
 
-export const toIdentity = (passenger: PassengerValues | (Entity & Passenger) | (Entity & RegularDetails)): string =>
+export const toIdentity = (passenger: PassengerValues | (Entity & Passenger) | (Entity & Regular)): string =>
   `${passenger.civility} ${passenger.lastname} ${firstnameOrEmpty(passenger)}`.trim();

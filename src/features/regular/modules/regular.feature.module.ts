@@ -7,13 +7,13 @@ import { FormValidationComponentModule } from '../../common/form-validation/modu
 import { FORM_CONTROL_ERROR_MESSAGES_TOKEN } from '../../common/form-validation/providers/error-messages.token';
 import { PhoneComponentModule } from '@features/common/phone';
 import { RecurrenceServiceModule } from '@features/common/recurrence';
-import { DestinationComponentModule } from '@features/common/destination';
 import { RegularComponentModule } from '@features/common/regular';
 import { PlaceComponentModule } from '@features/common/place';
 import { LoadUiModule } from '@features/common/load';
 import { RegularFeatureRoutingModule } from './regular.feature-routing.module';
 import { REGULAR_FORM_CONTROL_ERROR_MESSAGES } from '../errors/form-errors-messages.token';
 import { LAYOUTS } from '../layouts';
+import { WaypointModule } from '@features/common/waypoint';
 
 @NgModule({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -31,7 +31,7 @@ import { LAYOUTS } from '../layouts';
     NavbarUiModule,
     FormValidationComponentModule,
     PhoneComponentModule,
-    DestinationComponentModule,
+    WaypointModule,
     RegularComponentModule
   ],
   providers: [

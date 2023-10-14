@@ -1,12 +1,12 @@
-import { PlaceValues } from '@features/common/place';
 import { DriverValues } from '@features/common/driver';
 import { Civility, Entity } from '@definitions';
 import { PhoneValues } from '@features/common/phone';
+import { WaypointValues } from '@features/common/waypoint';
 
 export type ScheduledFareValues = {
   datetime: string;
-  departure: PlaceValues;
-  destination: PlaceValues;
+  departure: WaypointValues;
+  arrival: WaypointValues;
   distance: number;
   driver: DriverValues;
   duration: number;
@@ -22,12 +22,13 @@ export type PassengerValues = Entity & {
   lastname: string;
   firstname: string | undefined;
   phone: PhoneValues;
+  comment: string | undefined;
 };
 
 export type PendingReturnValues = {
   datetime: string;
-  departure: PlaceValues;
-  destination: PlaceValues;
+  departure: WaypointValues;
+  arrival: WaypointValues;
   driver: DriverValues;
   id: string;
   isTwoWayDrive: boolean;

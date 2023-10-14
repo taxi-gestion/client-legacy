@@ -1,6 +1,5 @@
-import { DailyDriverPlanning, ScheduledPlanningSession } from '../../common/fares.presentation';
 import { toIdentity } from '@features/common/regular';
-import { sortByDatetime } from '../../common/time.presenter';
+import { DailyDriverPlanning, ScheduledPlanningSession, sortByDatetime } from '../../common/agenda.presenter';
 
 export type DailyDriverPlanningListPresentation = {
   driver: string;

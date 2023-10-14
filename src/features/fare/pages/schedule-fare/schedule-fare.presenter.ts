@@ -3,7 +3,6 @@ import { FaresScheduled, ToSchedule } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { pipe as fpipe } from 'fp-ts/function';
 import { fold as eitherFold } from 'fp-ts/Either';
-import { toPlace } from '@features/common/place';
 import { toDriver } from '@features/common/driver';
 import { toIdentity } from '@features/common/regular';
 import { throwDecodeError } from '@features/common/form-validation';
@@ -17,6 +16,7 @@ import {
 } from '@features/common/presentation';
 
 import { toPassenger } from '@features/fare';
+import { toWaypoint } from '@features/common/waypoint';
 
 export const toScheduleFareSuccessToast = (fares: FaresScheduled): Toast => ({
   content: `Course pour ${toIdentity(fares.scheduledCreated.passenger)} par ${
@@ -33,9 +33,9 @@ export const toFareToSchedule = (rawFormValues: unknown): ToSchedule =>
   );
 
 export const toDomain = (formValues: FareToScheduleValues): ToSchedule => ({
-  destination: toPlace(formValues.arrivalPlace.place),
+  arrival: toWaypoint(formValues.arrivalPlace),
   datetime: datetimeLocalToIso8601UTCString(formValues.departureDatetime),
-  departure: toPlace(formValues.departurePlace),
+  departure: toWaypoint(formValues.departurePlace),
   distance: kilometersToMeters(formValues.driveDistance),
   driver: toDriver(formValues.driver),
   duration: minutesToSeconds(formValues.driveDuration),
