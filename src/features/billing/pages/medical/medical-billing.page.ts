@@ -5,13 +5,7 @@ import { ToasterPresenter } from '../../../../root/components/toaster/toaster.pr
 import { SCHEDULED_FARES_FOR_DATE_QUERY, ScheduledFaresForDateQuery } from '@features/fare';
 import { BillingItem, BillingItemsByDriver } from '../../definitions/billing.presentation';
 import { toLongDateFormat, toStandardDateFormat } from '@features/common/angular';
-import {
-  FaresByNature,
-  groupByDriver,
-  groupByNature,
-  sortBillingItemsByDriverByTime,
-  toBillingItem
-} from '../../common/billing.presenter';
+import { FaresByNature, groupByDriver, groupByNature, sortByDatetime, toBillingItem } from '../../common/billing.presenter';
 import { DateService } from '../../../common/date/services';
 
 @Component({
@@ -38,8 +32,8 @@ export class MedicalBillingPage {
 
   public readonly medicalBilling$: Observable<BillingItemsByDriver> = this.billingItemsByNature$.pipe(
     map((fares: FaresByNature): BillingItem[] => fares.medical.map(toBillingItem)),
-    map(groupByDriver),
-    map(sortBillingItemsByDriverByTime)
+    map(sortByDatetime<BillingItem>),
+    map(groupByDriver)
   );
 
   public constructor(

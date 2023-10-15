@@ -1,15 +1,25 @@
 import { Entity, WithNature, Scheduled } from '@definitions';
-import { BillingItem, BillingItemsByDriver } from '../definitions/billing.presentation';
+import { BillingItem } from '../definitions/billing.presentation';
 import { isMedicalDrive, isTwoWayDrive } from '@features/fare';
 import { toIdentity } from '@features/common/regular';
 import { groupBy as arrayGroupBy } from 'fp-ts/NonEmptyArray';
 import { format } from 'date-fns';
+import { sort } from 'fp-ts/Array';
+import { contramap, Ord } from 'fp-ts/Ord';
+import { Ord as ordDate } from 'fp-ts/Date';
+
+type WithDatetimeValues = { datetime: string };
+
+export const sortByDatetime = <T extends WithDatetimeValues>(fares: T[]): T[] => sort(byDatetime)(fares);
+
+const byDatetime: Ord<WithDatetimeValues> = contramap((fare: { datetime: string }): Date => new Date(fare.datetime))(ordDate);
 
 // TODO Common time presenter
 const toLocalTime = (datetime: string): string => format(new Date(datetime), "HH'h'mm");
 
 export const toBillingItem = (fare: Entity & Scheduled): BillingItem => ({
   passenger: toIdentity(fare.passenger),
+  datetime: fare.datetime,
   time: toLocalTime(fare.datetime),
   departure: fare.departure.place.context,
   arrival: fare.arrival.place.context,
@@ -31,18 +41,3 @@ export const groupByNature = (fares: (Entity & Scheduled)[]): FaresByNature =>
     }),
     { medical: [], standard: [] }
   );
-
-export const sortByTime = (item1: BillingItem, item2: BillingItem): number => item1.time.localeCompare(item2.time);
-
-// TODO Refactor
-/* eslint-disable */
-export const sortBillingItemsByDriverByTime = (billingItemsByDriver: BillingItemsByDriver): BillingItemsByDriver => {
-  const sorted: BillingItemsByDriver = {};
-  for (const driver in billingItemsByDriver) {
-    if (billingItemsByDriver.hasOwnProperty(driver)) {
-      sorted[driver] = [...billingItemsByDriver[driver]!].sort(sortByTime);
-    }
-  }
-  return sorted;
-};
-/* eslint-enable */
