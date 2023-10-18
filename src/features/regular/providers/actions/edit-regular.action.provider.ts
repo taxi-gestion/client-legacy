@@ -1,8 +1,8 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Entity, Regular, RegularEdited } from '@definitions';
+import { EditRegular, Entity, Regular } from '@definitions';
 
-export type EditRegularAction = (regularToEdit: Entity & Regular) => Observable<RegularEdited>;
+export type EditRegularAction = (regularToEdit: Entity & Regular) => Observable<EditRegular>;
 
 export const EDIT_REGULAR_ACTION: symbol = Symbol('regular.edit-regular.action');
 

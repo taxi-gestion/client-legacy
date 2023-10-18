@@ -76,18 +76,17 @@
       <label class="form-check-label" for="isMedicalDrive">Ce trajet est de nature médicale</label>
     </div>
   </div>
+  <hr />
   <button
     [appLoadActionDisplay]="loadAction.isLoading$ | async"
     #loadActionDisplay
     type="submit"
     class="btn mt-3 btn-primary w-100"
     [disabled]="loadActionDisplay.isLoading">
-    <ng-container slot="loadActionDisplayIdle">
-      {{ mode === 'create' || mode === 'pending' ? 'Créer' : 'Editer' }} la course
-    </ng-container>
+    <ng-container slot="loadActionDisplayIdle">{{ mode === 'edit-scheduled' ? 'Editer' : 'Créer' }} la course</ng-container>
     <ng-container slot="loadActionDisplayLoading">
       <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
-      {{ mode === 'create' || mode === 'pending' ? 'Création' : 'Edition' }} en cours...
+      {{ mode === 'edit-scheduled' ? 'Edition' : 'Création' }} en cours...
     </ng-container>
   </button>
   <div class="text-danger mt-2" *ngIf="fareForm.errors?.['validationFailedBeforeApiCallError']">

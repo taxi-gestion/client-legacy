@@ -2,8 +2,9 @@ import { Component, Input } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BootstrapValidationClasses, bootstrapValidationClasses } from '@features/common/form-validation';
 import { placeFieldFormControl } from '../../../place/components/place-field/place-field.form';
-import { WaypointValues } from '../../definitions/waypoint.definition';
 import { WaypointsArrayElementFields } from './waypoints.form';
+
+import { WaypointValues } from '../../definitions';
 
 @Component({
   selector: 'app-waypoints',

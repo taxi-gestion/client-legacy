@@ -25,7 +25,4 @@ export const regularCodec: Type<Regular> = ioType(
 );
 
 export const regularEntityCodec: Type<Entity & Regular> = ioIntersection([entityCodec, regularCodec], 'regularEntityCodec');
-export const regularsDetailsEntitiesCodec: Type<(Entity & Regular)[]> = ioArray(
-  regularEntityCodec,
-  'regularsDetailsEntitiesCodec'
-);
+export const regularsEntitiesCodec: Type<(Entity & Regular)[]> = ioArray(regularEntityCodec, 'regularsDetailsEntitiesCodec');

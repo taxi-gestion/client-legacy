@@ -26,7 +26,7 @@ export class FareFormComponent<T> implements OnInit {
   @Input({ required: true }) public drivers!: DriverValues[];
   @Input({ required: true }) public initialValues: Partial<FareValues> = fareEmptyValue;
   @Input({ required: true }) public regular!: RegularValues;
-  @Input() public mode: 'create' | 'edit' | 'pending' = 'create';
+  @Input({ required: true }) public mode!: 'edit-scheduled' | 'pending' | 'scheduled' | 'unassigned';
 
   @Input() public set selectedDate(date: Date | null) {
     if (date === null) return;

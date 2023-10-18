@@ -5,8 +5,15 @@ import { ToasterPresenter } from '../../../../root/components/toaster/toaster.pr
 import { SCHEDULED_FARES_FOR_DATE_QUERY, ScheduledFaresForDateQuery } from '@features/fare';
 import { BillingItem, BillingItemsByDriver } from '../../definitions/billing.presentation';
 import { toLongDateFormat, toStandardDateFormat } from '@features/common/angular';
-import { FaresByNature, groupByDriver, groupByNature, sortByDatetime, toBillingItem } from '../../common/billing.presenter';
 import { DateService } from '../../../common/date/services';
+import {
+  FaresByNature,
+  generateExcelFromData,
+  groupByDriver,
+  groupByNature,
+  sortByDatetime,
+  toBillingItem
+} from '../billing.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,4 +48,8 @@ export class MedicalBillingPage {
     private readonly _date: DateService,
     @Inject(SCHEDULED_FARES_FOR_DATE_QUERY) private readonly _faresForDateQuery: ScheduledFaresForDateQuery
   ) {}
+
+  public downloadAsExcel(data: BillingItemsByDriver): void {
+    generateExcelFromData(data);
+  }
 }

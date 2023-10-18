@@ -12,6 +12,6 @@ export const toJourney = (rawFormValues: unknown): Journey =>
   );
 
 export const toDisplayDurationDistance = (estimate: JourneyEstimate): DurationDistance => ({
-  duration: secondsToMinutes(estimate.durationInSeconds),
-  distance: metersToKilometers(estimate.distanceInMeters)
+  duration: Math.max(secondsToMinutes(estimate.durationInSeconds), 1),
+  distance: Math.max(metersToKilometers(estimate.distanceInMeters), 1)
 });

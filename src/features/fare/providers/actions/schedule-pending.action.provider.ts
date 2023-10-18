@@ -1,8 +1,8 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Entity, PendingScheduled, ReturnDrive } from '@definitions';
+import { Entity, SchedulePending, PendingToScheduled } from '@definitions';
 
-export type SchedulePendingAction = (returnToSchedule: Entity & ReturnDrive) => Observable<PendingScheduled>;
+export type SchedulePendingAction = (returnToSchedule: Entity & PendingToScheduled) => Observable<SchedulePending>;
 
 export const SCHEDULE_PENDING_ACTION: symbol = Symbol('fare.schedule-pending.action');
 

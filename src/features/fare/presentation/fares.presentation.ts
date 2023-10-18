@@ -21,6 +21,24 @@ export type FareValues = {
   isMedicalDrive: boolean;
 };
 
+export type FareToScheduleValues = FareValues;
+
+export type ScheduledToEditValues = Entity & FareValues;
+
+export type UnassignedToScheduleValues = Entity & FareValues;
+
+export type ReturnToScheduleValues = Entity & {
+  id: string;
+  departureDatetime: string;
+  departurePlace: WaypointValues;
+  arrivalPlace: WaypointValues;
+  driveDuration: number;
+  driveDistance: number;
+  driver: DriverValues;
+};
+
+export type UnassignedToAllocateValues = Omit<FareValues, 'driver'>;
+
 export type FareFields = DriverField<'driver'> &
   EstimateJourneyFields<'driveDuration', 'driveDistance'> &
   PhoneField<'phoneToCall'> &

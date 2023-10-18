@@ -6,13 +6,26 @@
     <div>
       <b>{{ fare.time }} - {{ fare.passenger }}</b>
       <br />
-      De: {{ fare.departure }}
+      <ng-container *ngIf="fare.contactPhone.length === 0"><small>Pas de téléphone enregistré</small></ng-container>
+      <ng-container *ngIf="fare.contactPhone.length !== 0">
+        <small>Contact: {{ fare.contactPhone }}</small>
+      </ng-container>
       <br />
-      A: {{ fare.arrival }}
       <br />
-      Medical: {{ fare.isMedicalDrive ? 'oui' : 'non' }}
+      De:
+      <strong>{{ fare.departure.waypointName }}</strong>
       <br />
-      Retour: {{ fare.isTwoWayDrive ? 'oui' : 'non' }}
+      <small>{{ fare.departure.place.context }}</small>
+      <br />
+      <br />
+      A:
+      <strong>{{ fare.arrival.waypointName }}</strong>
+      <br />
+      <small>{{ fare.arrival.place.context }}</small>
+      <br />
+      Kilométrage: {{ fare.distance }} Km
+      <br />
+      Aller/Retour: {{ fare.isTwoWayDrive ? 'oui' : 'non' }}
       <br />
     </div>
   </div>

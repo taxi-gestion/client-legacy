@@ -4,8 +4,8 @@ import { Entity, Scheduled } from '@definitions';
 import { pipe as fpipe } from 'fp-ts/function';
 import { externalTypeCheckFor, scheduledFaresCodec } from '@codecs';
 import { fold } from 'fp-ts/Either';
-import { ScheduledFaresForDateQuery } from '../providers';
 import { ValidationFailedAfterApiCallError } from '@features/common/form-validation';
+import { ScheduledFaresForDateQuery } from '../providers';
 
 export const validatedScheduledFaresForDateQuery$ =
   (httpClient: HttpClient): ScheduledFaresForDateQuery =>

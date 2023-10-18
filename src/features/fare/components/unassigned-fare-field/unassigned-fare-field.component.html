@@ -1,0 +1,30 @@
+<app-autocomplete-field
+  placeholder="Rechercher une course par passager, chauffeur, destination"
+  [minSearchTermLength]="0"
+  [emptyValue]="fareEmptyValue"
+  [toSearchTerm]="toSearchTerm"
+  [resultFilter]="resultFilter"
+  [toTrackBy]="toTrackBy"
+  [query$]="query$"
+  [formGroup]="searchFormGroup"
+  [validator]="fareValuesValidator"
+  [revalidate]="{ status: fareFieldControl.statusChanges | async, touched: fareFieldControl.touched }"
+  [prefilled]="prefilled"
+  [setDefaultSelectedValue]="defaultValue"
+  (selectedValue)="onSelectedValueChange($event)">
+  <ng-template #resultTemplate let-templatedValue>
+    <b>
+      {{ time(templatedValue.datetime) }} - {{ passengerIdentity(templatedValue.passenger) }} -
+      {{ templatedValue.arrival.place.label }}
+    </b>
+  </ng-template>
+  <ng-template #selectedValueTemplate let-selectedValue>
+    <ng-container *ngIf="selectedValue.id === ''"><small>Pas de course sélectionnée</small></ng-container>
+    <ng-container *ngIf="selectedValue.id !== ''">
+      <small>
+        Course: {{ time(selectedValue.datetime) }} - {{ passengerIdentity(selectedValue.passenger) }} -
+        {{ selectedValue.arrival.place.label }}
+      </small>
+    </ng-container>
+  </ng-template>
+</app-autocomplete-field>

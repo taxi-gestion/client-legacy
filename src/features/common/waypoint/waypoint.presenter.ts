@@ -1,6 +1,6 @@
-import { WaypointValues } from './definitions/waypoint.definition';
 import { emptyPlaceValue, toPlace } from '@features/common/place';
 import { Waypoint } from '@definitions';
+import { WaypointValues } from './definitions';
 
 export const emptyWaypointValue: WaypointValues = {
   waypointName: '',

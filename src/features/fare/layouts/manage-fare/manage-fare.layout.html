@@ -11,17 +11,37 @@
   </div>
   <h2 class="h5 text-primary ps-3">{{ userFriendlyDate$ | async }}</h2>
   <hr />
-  <div class="pe-2 ps-2">
-    <div class="d-flex gap-2 mb-2" role="group" aria-label="First group of options">
-      <button type="button" class="btn btn-primary btn-square" [routerLink]="['schedule']">Planifier</button>
-      <button type="button" class="btn btn-primary btn-square" [routerLink]="['edit']">
-        Editer
-        <span class="badge bg-danger m-2">{{ (scheduledFares$ | async)?.length ?? 0}}</span>
-      </button>
-      <button type="button" class="btn btn-primary btn-square" [routerLink]="['pendings']">
-        Retours
-        <span class="badge bg-danger m-2">{{ (pendingReturns$ | async)?.length ?? 0}}</span>
-      </button>
+  <ng-container *ngIf="(fareCounts$ | async) as count">
+    <div class="pe-2 ps-2">
+      <div class="d-flex gap-2 mb-2" role="group" aria-label="First group of options">
+        <button type="button" class="btn btn-primary btn-square" [routerLink]="['schedule']">Planifier</button>
+        <button type="button" class="btn btn-primary btn-square" [disabled]="count.scheduled === 0" [routerLink]="['edit']">
+          Editer
+          <span class="badge bg-danger m-2">{{ count.scheduled }}</span>
+        </button>
+        <button type="button" class="btn btn-primary btn-square" [disabled]="count.pending === 0" [routerLink]="['pendings']">
+          Retours
+          <span class="badge bg-danger m-2">{{ count.pending}}</span>
+        </button>
+      </div>
+      <div class="d-flex gap-2 mb-2" role="group" aria-label="First group of options">
+        <button
+          type="button"
+          class="btn btn-primary btn-square"
+          [disabled]="count.unassigned === 0"
+          [routerLink]="['unassigned']">
+          Courses à assigner
+          <span class="badge bg-danger m-2">{{ count.unassigned }}</span>
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary btn-square"
+          [disabled]="count.subcontracted === 0"
+          [routerLink]="['subcontracted']">
+          Courses sous-traitées
+          <span class="badge bg-danger m-2">{{ count.subcontracted }}</span>
+        </button>
+      </div>
     </div>
-  </div>
+  </ng-container>
 </div>

@@ -6,7 +6,7 @@ import { REGISTER_REGULAR_FORM, RegisterRegularFields, setRegisterRegularErrorTo
 import { formatRegisterRegularError, toRegisterRegular, toRegisterRegularSuccessToast } from './register-regular.presenter';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RegularRegistered } from '@definitions';
+import { RegisterRegular } from '@definitions';
 import {
   BootstrapValidationClasses,
   bootstrapValidationClasses,
@@ -27,7 +27,7 @@ export class RegisterRegularPage {
 
   @Output() public registerRegularError: EventEmitter<Error> = new EventEmitter<Error>();
 
-  public readonly registerRegular$ = (): Observable<RegularRegistered> =>
+  public readonly registerRegular$ = (): Observable<RegisterRegular> =>
     this._registerRegularAction$(toRegisterRegular(nullToUndefined(REGISTER_REGULAR_FORM.value)));
 
   public readonly registerRegularForm: FormGroup<RegisterRegularFields> = REGISTER_REGULAR_FORM;
@@ -44,7 +44,7 @@ export class RegisterRegularPage {
     this.registerRegularForm.valid ? triggerAction() : forceControlRevalidation(this.registerRegularForm);
   };
 
-  public onRegisterRegularActionSuccess = async (regular: RegularRegistered): Promise<void> => {
+  public onRegisterRegularActionSuccess = async (regular: RegisterRegular): Promise<void> => {
     this.registerRegularForm.reset();
     this._toaster.toast(toRegisterRegularSuccessToast(regular));
     await this._router.navigate(['..'], { relativeTo: this._route });

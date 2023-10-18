@@ -13,7 +13,7 @@ import {
 } from './edit-regular.presenter';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Entity, RegularDeleted, RegularEdited } from '@definitions';
+import { Entity, DeleteRegular, EditRegular } from '@definitions';
 import {
   BootstrapValidationClasses,
   bootstrapValidationClasses,
@@ -69,7 +69,7 @@ export class EditRegularPage {
     .pipe(map((regular: Entity & RegularValues): boolean => regularHasId(regular)));
 
   //region action edit regular
-  public readonly editRegular$ = (): Observable<RegularEdited> =>
+  public readonly editRegular$ = (): Observable<EditRegular> =>
     this._editRegularAction$(toEditRegular(nullToUndefined(EDIT_REGULAR_FORM.value)));
 
   public onSubmitEditRegular = (triggerAction: () => void): void => {
@@ -77,7 +77,7 @@ export class EditRegularPage {
     this.editRegularForm.valid ? triggerAction() : forceControlRevalidation(this.editRegularForm);
   };
 
-  public onEditRegularActionSuccess = async (regular: RegularEdited): Promise<void> => {
+  public onEditRegularActionSuccess = async (regular: EditRegular): Promise<void> => {
     this.editRegularForm.reset();
     this._toaster.toast(toEditRegularSuccessToast(regular));
     await this._router.navigate(['..'], { relativeTo: this._route });
@@ -94,10 +94,10 @@ export class EditRegularPage {
   // endregion
 
   //region action delete regular
-  public readonly deleteRegular$ = (): Observable<RegularDeleted> =>
+  public readonly deleteRegular$ = (): Observable<DeleteRegular> =>
     this._deleteRegularAction$(toDeleteRegular(this._regular$.getValue()));
 
-  public onDeleteRegularActionSuccess = async (payload: RegularDeleted): Promise<void> => {
+  public onDeleteRegularActionSuccess = async (payload: DeleteRegular): Promise<void> => {
     this._toaster.toast(toDeleteRegularSuccessToast(payload));
     await this._router.navigate(['..'], { relativeTo: this._route });
   };

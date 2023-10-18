@@ -1,8 +1,8 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Entity, RegularDeleted } from '@definitions';
+import { DeleteRegular, Entity } from '@definitions';
 
-export type DeleteRegularAction = (regularToDelete: Entity) => Observable<RegularDeleted>;
+export type DeleteRegularAction = (regularToDelete: Entity) => Observable<DeleteRegular>;
 
 export const DELETE_REGULAR_ACTION: symbol = Symbol('regular.delete-regular.action');
 

@@ -1,11 +1,11 @@
 import { metersToKilometers, secondsToMinutes, toTime } from '@features/common/presentation';
 import { PhoneValues } from '@features/common/phone';
 import { passengerIdentity } from '../../regular/common/regular.presenter';
-import { WaypointValues } from '@features/common/waypoint';
 import { Entity } from '@definitions';
 import { ScheduledFareValues } from '@features/fare';
 import { PlanningSession } from '../components/planning/planning-row/planning-row.component';
 import { DriverValues } from '@features/common/driver';
+import { WaypointValues } from '@features/common/waypoint';
 
 export type DailyDriverPlanning = {
   driver: DriverValues;

@@ -1,6 +1,7 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { WaypointValues } from '../definitions/waypoint.definition';
 import { isValidPlaceValues } from '@features/common/place';
+
+import { WaypointValues } from '../definitions';
 
 export const selectedWaypointValidator =
   (selectedWaypoint: WaypointValues | undefined): ValidatorFn =>

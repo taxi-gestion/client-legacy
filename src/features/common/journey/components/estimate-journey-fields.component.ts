@@ -4,8 +4,9 @@ import { DurationDistance, isValidPlace, JourneyEstimate } from '@definitions';
 import { combineLatest, debounceTime, map, Observable, startWith, Subject, switchMap, tap } from 'rxjs';
 import { toDisplayDurationDistance, toJourney } from './estimate-journey-fields.presenter';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common/journey';
-import { WaypointValues } from '@features/common/waypoint';
 import { isValidDate } from '@features/common/angular';
+
+import { WaypointValues } from '@features/common/waypoint';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -56,8 +57,8 @@ export class EstimateJourneyFields2Component {
       this.distanceFieldControl.setValue(durationDistance.distance);
     }),
     startWith({
-      duration: 0,
-      distance: 0
+      duration: 1,
+      distance: 1
     })
   );
 }

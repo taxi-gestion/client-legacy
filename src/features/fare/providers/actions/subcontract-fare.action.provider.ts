@@ -1,8 +1,8 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Entity, FaresSubcontracted, ToSubcontract } from '@definitions';
+import { Entity, SubcontractFare, ToSubcontracted } from '@definitions';
 
-export type SubcontractFareAction = (fareToSubcontract: Entity & ToSubcontract) => Observable<FaresSubcontracted>;
+export type SubcontractFareAction = (fareToSubcontract: Entity & ToSubcontracted) => Observable<SubcontractFare>;
 
 export const SUBCONTRACT_FARE_ACTION: symbol = Symbol('fare.subcontract-fare.action');
 

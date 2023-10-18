@@ -4,49 +4,49 @@ import { RegisterRegularAction } from '../providers';
 import { pipe as fpipe } from 'fp-ts/function';
 import { fold } from 'fp-ts/Either';
 import { ValidationFailedAfterApiCallError, ValidationFailedBeforeApiCallError } from '@features/common/form-validation';
-import { Regular, RegularRegistered } from '@definitions';
+import { Regular, RegisterRegular } from '@definitions';
 import { externalTypeCheckFor, regularCodec, regularRegisteredCodec } from '@codecs';
 
 const registerRegularUrl = (): string => `/api/regular/register`;
 
 export const validatedRegisterRegularAction$ =
   (http: HttpClient): RegisterRegularAction =>
-  (regular: Regular): Observable<RegularRegistered> =>
+  (regular: Regular): Observable<RegisterRegular> =>
     fpipe(
       regularCodec.decode(regular),
       fold(
         (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCallError()),
-        (validatedTransfer: Regular): Observable<RegularRegistered> =>
+        (validatedTransfer: Regular): Observable<RegisterRegular> =>
           http.post<unknown>(registerRegularUrl(), validatedTransfer).pipe(
             map(registeredRegularValidation),
             catchError(
-              (error: Error | HttpErrorResponse, caught: Observable<RegularRegistered>): Observable<never> =>
+              (error: Error | HttpErrorResponse, caught: Observable<RegisterRegular>): Observable<never> =>
                 handleRegisteredRegularError$(error, caught)
             )
           )
       )
     );
 
-const registeredRegularValidation = (transfer: unknown): RegularRegistered =>
+const registeredRegularValidation = (transfer: unknown): RegisterRegular =>
   fpipe(
     transfer,
-    externalTypeCheckFor<RegularRegistered>(regularRegisteredCodec),
+    externalTypeCheckFor<RegisterRegular>(regularRegisteredCodec),
     fold(
       (): never => {
         throw new ValidationFailedAfterApiCallError(`Faudrait mettre le HttpReporter...`);
       },
-      (validatedTransfer: RegularRegistered): RegularRegistered => validatedTransfer
+      (validatedTransfer: RegisterRegular): RegisterRegular => validatedTransfer
     )
   );
 
 const handleRegisteredRegularError$ = (
   error: Error | HttpErrorResponse,
-  caught: Observable<RegularRegistered>
+  caught: Observable<RegisterRegular>
 ): Observable<never> => {
   if (error instanceof ValidationFailedAfterApiCallError) return throwError((): Error => error);
 
   switch ((error as HttpErrorResponse).error.__type) {
     default:
-      return throwError((): Observable<RegularRegistered> => caught);
+      return throwError((): Observable<RegisterRegular> => caught);
   }
 };

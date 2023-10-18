@@ -1,6 +1,7 @@
 import { FormControl, Validators } from '@angular/forms';
-import { WaypointValues } from '../../definitions/waypoint.definition';
 import { emptyWaypointValue } from '../../waypoint.presenter';
+
+import { WaypointValues } from '../../definitions';
 
 export type WaypointField<T extends string> = {
   [K in T]: FormControl<WaypointValues>;

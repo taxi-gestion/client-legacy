@@ -1,4 +1,4 @@
-import { WaypointValues } from '../../definitions/waypoint.definition';
+import { WaypointValues } from '@features/common/waypoint';
 
 export const filterOnWaypointValuesProperties =
   (searchTerm: string) =>
