@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { DeleteRegularAction } from '../providers';
-import { Entity, RegularDeleted } from '@definitions';
+import { Entity, DeleteRegular } from '@definitions';
 import { ValidationFailedAfterApiCallError } from '@features/common/form-validation';
 import { pipe as fpipe } from 'fp-ts/function';
 import { externalTypeCheckFor, regularDeletedCodec } from '@codecs';
@@ -11,35 +11,35 @@ const deleteRegularUrl = (regular: Entity): string => `/api/regular/delete/${reg
 
 export const validatedDeleteRegularAction$ =
   (httpClient: HttpClient): DeleteRegularAction =>
-  (regularToDelete: Entity): Observable<RegularDeleted> =>
+  (regularToDelete: Entity): Observable<DeleteRegular> =>
     httpClient.delete<unknown>(deleteRegularUrl(regularToDelete)).pipe(
       map(deletedRegularAndReturnValidation),
       catchError(
-        (error: Error | HttpErrorResponse, caught: Observable<RegularDeleted>): Observable<never> =>
+        (error: Error | HttpErrorResponse, caught: Observable<DeleteRegular>): Observable<never> =>
           handleDeletedRegularAndReturnError$(error, caught)
       )
     );
 
 const handleDeletedRegularAndReturnError$ = (
   error: Error | HttpErrorResponse,
-  caught: Observable<RegularDeleted>
+  caught: Observable<DeleteRegular>
 ): Observable<never> => {
   if (error instanceof ValidationFailedAfterApiCallError) return throwError((): Error => error);
 
   switch ((error as HttpErrorResponse).error.__type) {
     default:
-      return throwError((): Observable<RegularDeleted> => caught);
+      return throwError((): Observable<DeleteRegular> => caught);
   }
 };
 
-const deletedRegularAndReturnValidation = (transfer: unknown): RegularDeleted =>
+const deletedRegularAndReturnValidation = (transfer: unknown): DeleteRegular =>
   fpipe(
     transfer,
-    externalTypeCheckFor<RegularDeleted>(regularDeletedCodec),
+    externalTypeCheckFor<DeleteRegular>(regularDeletedCodec),
     fold(
       (): never => {
         throw new ValidationFailedAfterApiCallError(`Faudrait mettre le HttpReporter...`);
       },
-      (validatedTransfer: RegularDeleted): RegularDeleted => validatedTransfer
+      (validatedTransfer: DeleteRegular): DeleteRegular => validatedTransfer
     )
   );

@@ -1,6 +1,7 @@
 import { Civility } from '@definitions';
-import { WaypointValues } from '@features/common/waypoint';
 import { PhoneValues } from '@features/common/phone';
+
+import { WaypointValues } from '@features/common/waypoint';
 
 export type RegularValues = {
   civility: Civility;

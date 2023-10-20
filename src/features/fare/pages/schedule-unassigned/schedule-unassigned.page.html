@@ -1,0 +1,42 @@
+<div class="d-flex h-100 flex-column overflow-auto p-3">
+  <div class="d-flex">
+    <h1 class="text-primary d-flex align-items-center">
+      Courses à assigner
+      <app-date></app-date>
+    </h1>
+    <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../../">
+      <i class="ri-close-line ri-2x" aria-hidden="true"></i>
+      <span class="visually-hidden">Fermer</span>
+    </a>
+  </div>
+  <h2 class="h5 text-primary">{{ userFriendlyDate$ | async }}</h2>
+  <hr />
+  <div class="mb-3">
+    <label class="form-label">Course</label>
+    <app-unassigned-field
+      [fareFieldControl]="fareControl"
+      [prefilled]="(unassignedFares$ | async) ?? []"
+      (selectedValue)="onSelectUnassignedFareChange($event)"></app-unassigned-field>
+  </div>
+  <ng-container *ngIf="(regular$ | async) as regular">
+    <!-- TODO refactor and invert container once place as destinations is done -->
+    <ng-container *ngIf="(initialUnassignedValues$ | async) as fare">
+      <ng-container *ngIf="(validFare$ | async)">
+        <app-fare-form
+          mode="unassigned"
+          [fareForm]="scheduleUnassignedForm"
+          [action$]="scheduleUnassigned$"
+          [drivers]="(drivers$ | async) ?? []"
+          [regular]="regular"
+          [initialValues]="fare"
+          (actionSuccess)="onScheduleUnassignedActionSuccess($event)"
+          (actionError)="onScheduleUnassignedActionError($event)"></app-fare-form>
+        <hr />
+        <app-delete-fare
+          [action$]="deleteFare$$(fare.id!)"
+          (actionSuccess)="onDeleteFareActionSuccess($event)"
+          (actionError)="onDeleteFareActionError($event)"></app-delete-fare>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</div>

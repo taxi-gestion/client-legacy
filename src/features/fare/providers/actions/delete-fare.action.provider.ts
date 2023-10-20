@@ -1,8 +1,8 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FaresDeleted } from '@definitions';
+import { DeleteFare } from '@definitions';
 
-export type DeleteFareAction = (fareIdToDelete: string) => Observable<FaresDeleted>;
+export type DeleteFareAction = (fareIdToDelete: string) => Observable<DeleteFare>;
 
 export const DELETE_FARE_ACTION: symbol = Symbol('fare.delete-fare.action');
 

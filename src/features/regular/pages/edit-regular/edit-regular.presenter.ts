@@ -1,5 +1,5 @@
 import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '@features/common/form-validation';
-import { Entity, RegularDeleted, Regular, RegularEdited } from '@definitions';
+import { Entity, DeleteRegular, Regular, EditRegular } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { editRegularFormCodec, EditRegularValues } from './edit-regular.form';
 import { fold as eitherFold } from 'fp-ts/Either';
@@ -20,13 +20,13 @@ export const toDeleteRegular = (rawValue: unknown): Entity =>
     eitherFold(throwDecodeError('entityCodec', rawValue), (entity: Entity): Entity => entity)
   );
 
-export const toDeleteRegularSuccessToast = (regular: RegularDeleted): Toast => ({
+export const toDeleteRegularSuccessToast = (regular: DeleteRegular): Toast => ({
   content: `Passager supprimé: ${passengerIdentity(regular.regularDeleted)}`,
   status: 'success',
   title: `Un passager à été supprimé`
 });
 
-export const toEditRegularSuccessToast = (regular: RegularEdited): Toast => ({
+export const toEditRegularSuccessToast = (regular: EditRegular): Toast => ({
   content: `Passager modifié: ${passengerIdentity(regular.regularEdited)}`,
   status: 'success',
   title: `Un passager a été modifié`

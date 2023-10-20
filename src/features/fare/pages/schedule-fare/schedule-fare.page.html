@@ -20,7 +20,7 @@
   <ng-container *ngIf="(regular$ | async) as regular">
     <ng-container *ngIf="(validRegular$ | async)">
       <app-fare-form
-        mode="create"
+        mode="scheduled"
         [fareForm]="scheduleFareForm"
         [action$]="scheduleFare$"
         [drivers]="(drivers$ | async) ?? []"
@@ -29,6 +29,11 @@
         [initialValues]="(prefilledFare$ | async) ?? {}"
         (actionSuccess)="onScheduleFareActionSuccess($event)"
         (actionError)="onScheduleFareActionError($event)"></app-fare-form>
+      <hr />
+      <app-allocate-unassigned
+        mode="create"
+        [fareForm]="scheduleFareForm"
+        [regularControl]="regularControl"></app-allocate-unassigned>
     </ng-container>
   </ng-container>
 </div>

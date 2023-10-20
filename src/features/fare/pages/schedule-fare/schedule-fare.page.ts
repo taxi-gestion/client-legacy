@@ -4,7 +4,7 @@ import { BehaviorSubject, filter, map, Observable } from 'rxjs';
 import { SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../providers';
 import { FARE_FORM, ScheduleFareFields } from '../fare.form';
 import { toFareToSchedule, toScheduleFareSuccessToast } from './schedule-fare.presenter';
-import { Entity, FaresScheduled } from '@definitions';
+import { Entity, ScheduleScheduled } from '@definitions';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 
 import { nullToUndefined } from '@features/common/form-validation';
@@ -26,7 +26,7 @@ export class ScheduleFarePage {
 
   @Output() public scheduleFareError: EventEmitter<Error> = new EventEmitter<Error>();
 
-  public readonly scheduleFare$ = (): Observable<FaresScheduled> =>
+  public readonly scheduleFare$ = (): Observable<ScheduleScheduled> =>
     this._scheduleFareAction$(
       toFareToSchedule(
         nullToUndefined({
@@ -70,7 +70,7 @@ export class ScheduleFarePage {
 
   public drivers$: Observable<DriverValues[]> = this._listDriversQuery$().pipe(map(toDriversValues));
 
-  public onScheduleFareActionSuccess = async (fares: FaresScheduled): Promise<void> => {
+  public onScheduleFareActionSuccess = async (fares: ScheduleScheduled): Promise<void> => {
     this.regularControl.reset();
     this.scheduleFareForm.reset();
     this._toaster.toast(toScheduleFareSuccessToast(fares));

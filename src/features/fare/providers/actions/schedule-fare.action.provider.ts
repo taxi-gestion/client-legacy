@@ -1,8 +1,8 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FaresScheduled, ToSchedule } from '@definitions';
+import { ScheduleScheduled, ToScheduled } from '@definitions';
 
-export type ScheduleFareAction = (fareToSchedule: ToSchedule) => Observable<FaresScheduled>;
+export type ScheduleFareAction = (fareToSchedule: ToScheduled) => Observable<ScheduleScheduled>;
 
 export const SCHEDULE_FARE_ACTION: symbol = Symbol('fare.schedule-fare.action');
 

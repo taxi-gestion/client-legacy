@@ -2,17 +2,25 @@ import { HttpClient } from '@angular/common/http';
 import { FactoryProvider, ValueProvider } from '@angular/core';
 import {
   deleteFareActionProvider,
-  editFareActionProvider,
+  editScheduledActionProvider,
   scheduleFareActionProvider,
   validatedDeleteFareAction$,
-  validatedEditFareAction$,
   validatedScheduleFareAction$,
   scheduledFaresForDateQueryProvider,
   validatedScheduledFaresForDateQuery$,
   pendingReturnsForDateQueryProvider,
   validatedPendingReturnsForDateQuery$,
   schedulePendingActionProvider,
-  validatedSchedulePendingAction$
+  validatedSchedulePendingAction$,
+  allocateUnassignedActionProvider,
+  allocateUnassignedAction$,
+  faresCountForDateQueryProvider,
+  faresCountForDateQuery$,
+  scheduleUnassignedActionProvider,
+  scheduleUnassignedAction$,
+  validatedEditScheduledAction$,
+  unassignedFaresForDateQueryProvider,
+  unassignedFaresForDateQuery$
 } from '@features/fare';
 import { listDriversQuery$, listDriversQueryProvider } from '@features/common/driver';
 import {
@@ -25,15 +33,19 @@ import { searchPlaceQuery$, searchPlaceQueryProvider } from '@features/common/pl
 import { estimateJourneyQuery$, estimateJourneyQueryProvider } from '@features/common/journey';
 
 export const FARE_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
+  allocateUnassignedActionProvider(allocateUnassignedAction$, [HttpClient]),
   deleteFareActionProvider(validatedDeleteFareAction$, [HttpClient]),
-  editFareActionProvider(validatedEditFareAction$, [HttpClient]),
-  scheduledFaresForDateQueryProvider(validatedScheduledFaresForDateQuery$, [HttpClient]),
+  editScheduledActionProvider(validatedEditScheduledAction$, [HttpClient]),
+  estimateJourneyQueryProvider(estimateJourneyQuery$, [HttpClient]),
+  faresCountForDateQueryProvider(faresCountForDateQuery$, [HttpClient]),
+  listDriversQueryProvider(listDriversQuery$, [HttpClient]),
   pendingReturnsForDateQueryProvider(validatedPendingReturnsForDateQuery$, [HttpClient]),
+  regularByIdQueryProvider(regularByIdQuery$, [HttpClient]),
+  scheduledFaresForDateQueryProvider(validatedScheduledFaresForDateQuery$, [HttpClient]),
   scheduleFareActionProvider(validatedScheduleFareAction$, [HttpClient]),
   schedulePendingActionProvider(validatedSchedulePendingAction$, [HttpClient]),
-  listDriversQueryProvider(listDriversQuery$, [HttpClient]),
-  searchRegularQueryProvider(searchRegularsQuery$, [HttpClient]),
+  scheduleUnassignedActionProvider(scheduleUnassignedAction$, [HttpClient]),
   searchPlaceQueryProvider(searchPlaceQuery$, [HttpClient]),
-  regularByIdQueryProvider(regularByIdQuery$, [HttpClient]),
-  estimateJourneyQueryProvider(estimateJourneyQuery$, [HttpClient])
+  searchRegularQueryProvider(searchRegularsQuery$, [HttpClient]),
+  unassignedFaresForDateQueryProvider(unassignedFaresForDateQuery$, [HttpClient])
 ];

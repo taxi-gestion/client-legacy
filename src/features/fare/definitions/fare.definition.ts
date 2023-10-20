@@ -1,6 +1,7 @@
 import { DriverValues } from '@features/common/driver';
 import { Civility, Entity } from '@definitions';
 import { PhoneValues } from '@features/common/phone';
+
 import { WaypointValues } from '@features/common/waypoint';
 
 export type ScheduledFareValues = {
@@ -15,6 +16,19 @@ export type ScheduledFareValues = {
   isMedicalDrive: boolean;
   passenger: PassengerValues;
   status: 'scheduled';
+};
+
+export type UnassignedFareValues = {
+  datetime: string;
+  departure: WaypointValues;
+  arrival: WaypointValues;
+  distance: number;
+  duration: number;
+  id: string;
+  isTwoWayDrive: boolean;
+  isMedicalDrive: boolean;
+  passenger: PassengerValues;
+  status: 'unassigned';
 };
 
 export type PassengerValues = Entity & {

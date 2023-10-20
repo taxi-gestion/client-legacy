@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { selectedFareValidator } from '../../validators';
-import { filterOnPassengerAndDriver, pendingReturnEmptyValue } from '../../presentation/fare.presenter';
+import { filterOnPassengerAndDriverAndDatetime, pendingReturnEmptyValue } from '../../presentation/fare.presenter';
 import { FORM_CONTROL_ERROR_MESSAGES_TOKEN } from '@features/common/form-validation';
 import { PendingReturnValues } from '../../definitions';
 import { toIdentity } from '@features/common/regular';
@@ -61,7 +61,7 @@ export class PendingReturnFieldComponent {
   public query$ = (_searchTerm: string): Observable<PendingReturnValues[]> => of([]);
 
   // eslint-disable-next-line @typescript-eslint/typedef
-  public resultFilter = filterOnPassengerAndDriver;
+  public resultFilter = filterOnPassengerAndDriverAndDatetime;
 
   public passengerIdentity(passenger: Entity & Passenger): string {
     return toIdentity(passenger);

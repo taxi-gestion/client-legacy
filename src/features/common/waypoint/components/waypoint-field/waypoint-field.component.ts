@@ -4,9 +4,10 @@ import { WAYPOINT_FORM_CONTROL_ERROR_MESSAGES } from '../../errors/form-errors-m
 import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { filterOnWaypointValuesProperties } from './waypoint-field.presenter';
 import { emptyWaypointValue } from '../../waypoint.presenter';
-import { WaypointValues } from '../../definitions/waypoint.definition';
 import { selectedWaypointValidator } from '../../validators';
 import { Observable, of } from 'rxjs';
+
+import { WaypointValues } from '../../definitions';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

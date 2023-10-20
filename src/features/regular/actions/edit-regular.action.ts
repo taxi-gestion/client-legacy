@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { pipe as fpipe } from 'fp-ts/function';
 import { fold } from 'fp-ts/Either';
-import { Entity, RegularEdited, Regular } from '@definitions';
+import { Entity, EditRegular, Regular } from '@definitions';
 import { externalTypeCheckFor, regularEntityCodec, regularEditedCodec } from '@codecs';
 import { EditRegularAction } from '../providers';
 import { ValidationFailedAfterApiCallError, ValidationFailedBeforeApiCallError } from '@features/common/form-validation';
@@ -11,42 +11,42 @@ const editRegularUrl = (): string => `/api/regular/edit`;
 
 export const validatedEditRegularAction$ =
   (http: HttpClient): EditRegularAction =>
-  (regularToEdit: Entity & Regular): Observable<RegularEdited> =>
+  (regularToEdit: Entity & Regular): Observable<EditRegular> =>
     fpipe(
       regularEntityCodec.decode(regularToEdit),
       fold(
         (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCallError()),
-        (validatedTransfer: Entity & Regular): Observable<RegularEdited> =>
+        (validatedTransfer: Entity & Regular): Observable<EditRegular> =>
           http.post<unknown>(editRegularUrl(), validatedTransfer).pipe(
             map(editedRegularAndReturnValidation),
             catchError(
-              (error: Error | HttpErrorResponse, caught: Observable<RegularEdited>): Observable<never> =>
+              (error: Error | HttpErrorResponse, caught: Observable<EditRegular>): Observable<never> =>
                 handleEditedRegularAndReturnError$(error, caught)
             )
           )
       )
     );
 
-const editedRegularAndReturnValidation = (transfer: unknown): RegularEdited =>
+const editedRegularAndReturnValidation = (transfer: unknown): EditRegular =>
   fpipe(
     transfer,
-    externalTypeCheckFor<RegularEdited>(regularEditedCodec),
+    externalTypeCheckFor<EditRegular>(regularEditedCodec),
     fold(
       (): never => {
         throw new ValidationFailedAfterApiCallError(`Faudrait mettre le HttpReporter...`);
       },
-      (validatedTransfer: RegularEdited): RegularEdited => validatedTransfer
+      (validatedTransfer: EditRegular): EditRegular => validatedTransfer
     )
   );
 
 const handleEditedRegularAndReturnError$ = (
   error: Error | HttpErrorResponse,
-  caught: Observable<RegularEdited>
+  caught: Observable<EditRegular>
 ): Observable<never> => {
   if (error instanceof ValidationFailedAfterApiCallError) return throwError((): Error => error);
 
   switch ((error as HttpErrorResponse).error.__type) {
     default:
-      return throwError((): Observable<RegularEdited> => caught);
+      return throwError((): Observable<EditRegular> => caught);
   }
 };

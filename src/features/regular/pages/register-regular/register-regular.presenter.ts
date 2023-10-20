@@ -1,5 +1,5 @@
 import { VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME } from '@features/common/form-validation';
-import { Regular, RegularRegistered } from '@definitions';
+import { Regular, RegisterRegular } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { pipe as fpipe } from 'fp-ts/function';
 import { registerRegularFormCodec } from './register-regular.form';
@@ -12,7 +12,7 @@ export const toRegisterRegular = (rawFormValues: unknown): Regular =>
     eitherFold(throwDecodeError('registerRegularFormCodec', rawFormValues), toRegular)
   );
 
-export const toRegisterRegularSuccessToast = (regular: RegularRegistered): Toast => ({
+export const toRegisterRegularSuccessToast = (regular: RegisterRegular): Toast => ({
   content: `Nouveau passager enregistré: ${passengerIdentity(regular.regularRegistered)}`,
   status: 'success',
   title: `Un passager a été enregistré`

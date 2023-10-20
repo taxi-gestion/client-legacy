@@ -7,8 +7,15 @@ import {
   Type,
   type as ioType
 } from 'io-ts';
-import { FareFields, fareFormControls, FareValues } from '../presentation/fares.presentation';
-import { Entity } from '@definitions';
+import {
+  FareFields,
+  fareFormControls,
+  ScheduledToEditValues,
+  FareToScheduleValues,
+  FareValues,
+  ReturnToScheduleValues,
+  UnassignedToAllocateValues
+} from '../presentation/fares.presentation';
 import { entityCodec } from '@codecs';
 import {
   VALIDATION_FAILED_AFTER_API_CALL_ERROR_NAME,
@@ -16,23 +23,12 @@ import {
 } from '@features/common/form-validation';
 import { regularValuesEntityCodec } from '@features/common/regular';
 import { phoneValuesCodec } from '@features/common/phone';
-import { DriverValues, driverValuesCodec } from '@features/common/driver';
-import { WaypointValues, waypointValuesCodec } from '@features/common/waypoint';
-
-export type FareToScheduleValues = FareValues;
-export type FareToEditValues = Entity & FareValues;
-export type ReturnToScheduleValues = Entity & {
-  id: string;
-  departureDatetime: string;
-  departurePlace: WaypointValues;
-  arrivalPlace: WaypointValues;
-  driveDuration: number;
-  driveDistance: number;
-  driver: DriverValues;
-};
+import { driverValuesCodec } from '@features/common/driver';
+import { waypointValuesCodec } from '@features/common/waypoint';
+import { Entity } from '@definitions';
 
 export type ScheduleFareFields = FareFields;
-export type EditFareFields = FareFields;
+export type EditScheduledFields = FareFields;
 export type SchedulePendingFields = FareFields;
 
 export const pendingFormCodec: Type<ReturnToScheduleValues> = ioType({
@@ -58,8 +54,23 @@ export const fareFormCodec: Type<FareValues> = ioType({
   isMedicalDrive: ioBoolean
 });
 
+export const unassignedToAllocateFormCodec: Type<UnassignedToAllocateValues> = ioType({
+  passenger: regularValuesEntityCodec,
+  phoneToCall: phoneValuesCodec,
+  departureDatetime: ioString,
+  departurePlace: waypointValuesCodec,
+  driveDuration: ioNumber,
+  driveDistance: ioNumber,
+  arrivalPlace: waypointValuesCodec,
+  isTwoWayDrive: ioBoolean,
+  isMedicalDrive: ioBoolean
+});
+
 export const scheduleFareFormCodec: Type<FareToScheduleValues> = fareFormCodec;
-export const editFareFormCodec: Type<FareToEditValues> = ioIntersection([entityCodec, fareFormCodec]);
+
+export const unassignedToSchedule: Type<Entity & FareToScheduleValues> = ioIntersection([entityCodec, scheduleFareFormCodec]);
+
+export const editScheduledFormCodec: Type<ScheduledToEditValues> = ioIntersection([entityCodec, fareFormCodec]);
 
 export const FARE_FORM: FormGroup<FareFields> = new FormGroup<FareFields>({
   ...fareFormControls()

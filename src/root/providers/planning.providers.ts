@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { FactoryProvider, ValueProvider } from '@angular/core';
 
-import { listDriversQuery$ } from '../../features/common/driver/queries/list-drivers';
 import { estimateJourneyQuery$, estimateJourneyQueryProvider } from '@features/common/journey';
 import {
+  listDriversQuery$,
   listDriversQueryProvider,
   listDriversWithOrderQuery$,
   listDriversWithOrderQueryProvider
@@ -26,14 +26,14 @@ import {
 } from '@features/regular';
 import {
   deleteFareActionProvider,
-  editFareActionProvider,
+  editScheduledActionProvider,
   pendingReturnsForDateQueryProvider,
   scheduledFaresForDateQueryProvider,
   scheduleFareActionProvider,
   schedulePendingActionProvider,
   subcontractFareActionProvider,
   validatedDeleteFareAction$,
-  validatedEditFareAction$,
+  validatedEditScheduledAction$,
   validatedPendingReturnsForDateQuery$,
   validatedScheduledFaresForDateQuery$,
   validatedScheduleFareAction$,
@@ -46,7 +46,7 @@ export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   deleteFareActionProvider(validatedDeleteFareAction$, [HttpClient]),
   deleteRegularActionProvider(validatedDeleteRegularAction$, [HttpClient]),
   driverAgendaForDateQueryProvider(validatedDriverAgendaForDateQuery$, [HttpClient]),
-  editFareActionProvider(validatedEditFareAction$, [HttpClient]),
+  editScheduledActionProvider(validatedEditScheduledAction$, [HttpClient]),
   editRegularActionProvider(validatedEditRegularAction$, [HttpClient]),
   estimateJourneyQueryProvider(estimateJourneyQuery$, [HttpClient]),
   listDriversQueryProvider(listDriversQuery$, [HttpClient]),

@@ -23,14 +23,15 @@
     <ng-container *ngIf="(initialFareValues$ | async) as fare">
       <ng-container *ngIf="(validFare$ | async)">
         <app-fare-form
-          mode="edit"
-          [fareForm]="editFareForm"
-          [action$]="editFare$"
+          mode="edit-scheduled"
+          [fareForm]="editScheduledForm"
+          [action$]="editScheduled$"
           [drivers]="(drivers$ | async) ?? []"
           [regular]="regular"
           [initialValues]="fare"
-          (actionSuccess)="onEditFareActionSuccess($event)"
-          (actionError)="onEditFareActionError($event)"></app-fare-form>
+          (actionSuccess)="onEditScheduledActionSuccess($event)"
+          (actionError)="onEditScheduledActionError($event)"></app-fare-form>
+        <hr />
         <app-delete-fare
           [action$]="deleteFare$$(fare.id!)"
           (actionSuccess)="onDeleteFareActionSuccess($event)"

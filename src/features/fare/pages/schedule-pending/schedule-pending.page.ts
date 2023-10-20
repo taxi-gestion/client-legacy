@@ -2,13 +2,15 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, of, switchMap } from 'rxjs';
 import {
+  DELETE_FARE_ACTION,
+  DeleteFareAction,
   PENDING_RETURNS_FOR_DATE_QUERY,
   PendingReturnsForDateQuery,
   SCHEDULE_PENDING_ACTION,
   SchedulePendingAction
 } from '../../providers';
-import { Entity, Pending, PendingScheduled, Regular } from '@definitions';
-import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
+import { DeleteFare, Entity, Pending, Regular, SchedulePending } from '@definitions';
+import { Toast, ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import {
   FareValues,
@@ -26,6 +28,7 @@ import { toLongDateFormat, toStandardDateFormat } from '@features/common/angular
 import { DateService } from '../../../common/date/services';
 import { DriverValues, LIST_DRIVERS_QUERY, ListDriversQuery, toDriversValues } from '@features/common/driver';
 import { ActivatedRoute, Router } from '@angular/router';
+import { toDeleteFareSuccessToasts } from '../edit-scheduled/edit-scheduled.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,7 +41,7 @@ export class SchedulePendingPage {
   @Output() public schedulePendingSuccess: EventEmitter<void> = new EventEmitter<void>();
   @Output() public schedulePendingError: EventEmitter<Error> = new EventEmitter<Error>();
 
-  public readonly schedulePending$ = (): Observable<PendingScheduled> =>
+  public readonly schedulePending$ = (): Observable<SchedulePending> =>
     this._schedulePendingAction$(
       toReturnToSchedule(
         nullToUndefined({
@@ -98,7 +101,7 @@ export class SchedulePendingPage {
 
   public drivers$: Observable<DriverValues[]> = this._listDriversQuery$().pipe(map(toDriversValues));
 
-  public onSchedulePendingActionSuccess = async (fares: PendingScheduled): Promise<void> => {
+  public onSchedulePendingActionSuccess = async (fares: SchedulePending): Promise<void> => {
     this.fareControl.reset();
     this.schedulePendingForm.reset();
     this._toaster.toast(toSchedulePendingSuccessToast(fares));
@@ -114,13 +117,29 @@ export class SchedulePendingPage {
   };
 
   public constructor(
-    private readonly _toaster: ToasterPresenter,
-    private readonly _router: Router,
-    private readonly _route: ActivatedRoute,
     private readonly _date: DateService,
+    private readonly _route: ActivatedRoute,
+    private readonly _router: Router,
+    private readonly _toaster: ToasterPresenter,
+    @Inject(DELETE_FARE_ACTION) private readonly _deleteFareAction$: DeleteFareAction,
+    @Inject(LIST_DRIVERS_QUERY) private readonly _listDriversQuery$: ListDriversQuery,
     @Inject(PENDING_RETURNS_FOR_DATE_QUERY) private readonly _pendingReturnsForDateQuery: PendingReturnsForDateQuery,
     @Inject(REGULAR_BY_ID_QUERY) private readonly _regularByIdQuery$: RegularByIdQuery,
-    @Inject(SCHEDULE_PENDING_ACTION) private readonly _schedulePendingAction$: SchedulePendingAction,
-    @Inject(LIST_DRIVERS_QUERY) private readonly _listDriversQuery$: ListDriversQuery
+    @Inject(SCHEDULE_PENDING_ACTION) private readonly _schedulePendingAction$: SchedulePendingAction
   ) {}
+
+  //region delete
+  public readonly deleteFare$$ = (id: string) => (): Observable<DeleteFare> => this._deleteFareAction$(id);
+
+  public onDeleteFareActionSuccess = async (payload: DeleteFare): Promise<void> => {
+    toDeleteFareSuccessToasts(payload).forEach((toast: Toast): void => {
+      this._toaster.toast(toast);
+    });
+    await this._router.navigate(['../../'], { relativeTo: this._route });
+  };
+
+  public onDeleteFareActionError = (_error: Error): void => {
+    this._toaster.toast({ content: 'Échec de la suppression', status: 'danger', title: 'Opération échouée' });
+  };
+  //endregion
 }
