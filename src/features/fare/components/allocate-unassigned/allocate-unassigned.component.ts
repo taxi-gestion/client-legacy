@@ -8,7 +8,7 @@ import { ALLOCATE_UNASSIGNED_ACTION, AllocateUnassignedAction } from '../../prov
 import { nullToUndefined } from '@features/common/form-validation';
 import { AllocateUnassigned, Entity } from '../../../../definitions';
 import { toUnassignedFareSuccessToast, toUnassignedToAllocate } from './allocate-unassigned.presenter';
-import { RegularValues } from '../../../common/regular';
+import { RegularValues } from '@features/regular';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

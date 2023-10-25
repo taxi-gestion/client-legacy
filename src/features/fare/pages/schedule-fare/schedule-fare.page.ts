@@ -9,7 +9,7 @@ import { ToasterPresenter } from '../../../../root/components/toaster/toaster.pr
 
 import { nullToUndefined } from '@features/common/form-validation';
 import { DriverValues, LIST_DRIVERS_QUERY, ListDriversQuery, toDriversValues } from '@features/common/driver';
-import { isValidRegular, regularEmptyValue, RegularValues } from '@features/common/regular';
+import { isValidRegular, regularEmptyValue, RegularValues } from '@features/regular';
 import { FareValues, initialFareValuesFromRegular } from '@features/fare';
 import { DateService } from '@features/common/date';
 import { toLongDateFormat } from '@features/common/angular';

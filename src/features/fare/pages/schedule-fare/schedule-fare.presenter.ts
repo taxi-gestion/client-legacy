@@ -4,7 +4,7 @@ import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { pipe as fpipe } from 'fp-ts/function';
 import { fold as eitherFold } from 'fp-ts/Either';
 import { toDriver } from '@features/common/driver';
-import { toIdentity } from '@features/common/regular';
+import { toIdentity } from '@features/regular';
 import { throwDecodeError } from '@features/common/form-validation';
 import {
   datetimeLocalToIso8601UTCString,

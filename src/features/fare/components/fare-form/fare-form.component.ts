@@ -9,7 +9,7 @@ import {
 } from '@features/common/form-validation';
 import { formatFareError, setFareErrorToForm } from '../../pages/fare.form';
 import { DriverValues } from '@features/common/driver';
-import { RegularValues } from '@features/common/regular';
+import { RegularValues } from '@features/regular';
 import { metersToKilometers, secondsToMinutes, toValidLocalDatetimeInputValue } from '@features/common/presentation';
 import { WaypointValues } from '@features/common/waypoint';
 

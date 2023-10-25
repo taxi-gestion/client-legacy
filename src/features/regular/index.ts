@@ -1,4 +1,13 @@
 export * from './actions';
 export * from './modules/regular.feature.module';
 export * from './providers';
-//export * from './queries';
+export * from './queries';
+export * from './validators';
+export * from './definitions';
+export * from './components';
+export * from './codecs';
+export { toIdentity } from './common/regular.presenter';
+export { toRegularValues } from './common/regular.presenter';
+export { toRegularsValues } from './common/regular.presenter';
+export { firstnameOrEmpty } from './common/regular.presenter';
+export { regularEmptyValue } from './common/regular.presenter';

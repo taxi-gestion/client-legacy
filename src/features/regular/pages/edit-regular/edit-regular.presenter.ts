@@ -5,7 +5,7 @@ import { editRegularFormCodec, EditRegularValues } from './edit-regular.form';
 import { fold as eitherFold } from 'fp-ts/Either';
 import { pipe as fpipe } from 'fp-ts/function';
 import { entityCodec } from '@codecs';
-import { RegularValues } from '@features/common/regular';
+import { RegularValues } from '@features/regular';
 import { passengerIdentity, throwDecodeError, toRegular } from '../../common/regular.presenter';
 
 export const toEditRegular = (rawFormValues: unknown): Entity & Regular =>
@@ -33,7 +33,6 @@ export const toEditRegularSuccessToast = (regular: EditRegular): Toast => ({
 });
 
 export const toEditRegularPresentation = (regular: Entity & RegularValues): EditRegularValues => ({
-  regular,
   civility: regular.civility,
   firstname: regular.firstname,
   lastname: regular.lastname,
@@ -43,8 +42,8 @@ export const toEditRegularPresentation = (regular: Entity & RegularValues): Edit
   subcontractedClient: regular.subcontractedClient
 });
 
-const toDomain = (formValues: EditRegularValues): Entity & Regular => ({
-  id: formValues.regular.id,
+const toDomain = (formValues: EditRegularValues & Entity): Entity & Regular => ({
+  id: formValues.id,
   ...toRegular(formValues)
 });
 

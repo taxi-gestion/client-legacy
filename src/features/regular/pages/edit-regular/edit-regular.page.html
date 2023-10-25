@@ -10,7 +10,7 @@
   <div class="mb-3 h-100">
     <label class="form-label">Sélectionner un passager pour modification</label>
     <app-regular-field
-      [regularFieldControl]="editRegularForm.controls.regular"
+      [regularFieldControl]="regularControl"
       (selectedValue)="onSelectRegularChange($event)"></app-regular-field>
   </div>
   <ng-container *ngIf="(regular$ | async) as regular">

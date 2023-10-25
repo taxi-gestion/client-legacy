@@ -8,12 +8,7 @@ import {
   listDriversWithOrderQuery$,
   listDriversWithOrderQueryProvider
 } from '@features/common/driver';
-import {
-  regularByIdQuery$,
-  regularByIdQueryProvider,
-  searchRegularQueryProvider,
-  searchRegularsQuery$
-} from '@features/common/regular';
+
 import { searchPlaceQuery$, searchPlaceQueryProvider } from '@features/common/place';
 import { predictRecurrenceQuery$, predictRecurrenceQueryProvider } from '@features/common/recurrence';
 import {
@@ -22,7 +17,11 @@ import {
   registerRegularActionProvider,
   validatedDeleteRegularAction$,
   validatedEditRegularAction$,
-  validatedRegisterRegularAction$
+  validatedRegisterRegularAction$,
+  regularByIdQuery$,
+  regularByIdQueryProvider,
+  searchRegularQueryProvider,
+  searchRegularsQuery$
 } from '@features/regular';
 import {
   deleteFareActionProvider,

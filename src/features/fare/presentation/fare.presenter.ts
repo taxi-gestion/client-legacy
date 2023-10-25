@@ -8,7 +8,7 @@ import {
 import { Civility, Entity, Passenger, Pending, Scheduled, Unassigned, WithKind, WithNature } from '@definitions';
 import { driverEmptyValue, DriverValues, toDriverValues } from '@features/common/driver';
 import { emptyPhoneValue, PhoneValues, toPhone, toPhoneValues } from '@features/common/phone';
-import { regularEmptyValue, RegularValues, toIdentity } from '@features/common/regular';
+import { regularEmptyValue, RegularValues, toIdentity } from '@features/regular';
 import { FareValues } from './fares.presentation';
 import { emptyWaypointValue, toWaypointValues, WaypointValues } from '@features/common/waypoint';
 import { sort } from 'fp-ts/Array';

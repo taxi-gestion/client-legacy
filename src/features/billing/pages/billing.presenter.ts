@@ -7,7 +7,7 @@ import { sort } from 'fp-ts/Array';
 import { contramap, Ord } from 'fp-ts/Ord';
 import { Ord as ordDate } from 'fp-ts/Date';
 import { toWaypointValues } from '../../common/waypoint';
-import { toIdentity } from '../../common/regular';
+import { toIdentity } from '@features/regular';
 import { metersToKilometers } from '../../common/presentation';
 
 import * as XLSX from 'xlsx';

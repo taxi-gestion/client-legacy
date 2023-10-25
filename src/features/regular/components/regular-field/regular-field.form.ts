@@ -1,7 +1,7 @@
 import { FormControl, Validators } from '@angular/forms';
 import { RegularValues } from '../../definitions/regular.definition';
-import { regularEmptyValue } from '../../regular.presenter';
 import { Entity } from '@definitions';
+import { regularEmptyValue } from '../../common/regular.presenter';
 
 export type RegularField<T extends string> = {
   [K in T]: FormControl<Entity & RegularValues>;
