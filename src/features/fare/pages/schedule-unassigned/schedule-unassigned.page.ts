@@ -20,7 +20,7 @@ import {
   UnassignedFareValues
 } from '@features/fare';
 import { bootstrapValidationClasses, BootstrapValidationClasses, nullToUndefined } from '@features/common/form-validation';
-import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/common/regular';
+import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/regular';
 import { FARE_FORM } from '../fare.form';
 import { toScheduleUnassignedSuccessToast, toUnassignedToSchedule } from './schedule-unassigned.presenter';
 import { toLongDateFormat, toStandardDateFormat } from '@features/common/angular';

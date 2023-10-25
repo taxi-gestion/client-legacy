@@ -14,12 +14,12 @@ import { PLANNING_FORM_CONTROL_ERROR_MESSAGES } from '../errors/form-errors-mess
 import { PhoneComponentModule } from '@features/common/phone';
 import { RecurrenceServiceModule } from '@features/common/recurrence';
 import { DriverComponentModule } from '@features/common/driver';
-import { RegularComponentModule } from '@features/common/regular';
 import { PlaceComponentModule } from '@features/common/place';
 import { LoadUiModule } from '@features/common/load';
 import { FareFeatureModule } from '@features/fare';
 import { JourneyComponentModule } from '@features/common/journey';
 import { WaypointModule } from '@features/common/waypoint';
+import { RegularFeatureModule } from '@features/regular';
 
 @NgModule({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -34,11 +34,10 @@ import { WaypointModule } from '@features/common/waypoint';
     PlanningFeatureRoutingModule,
     RecurrenceServiceModule,
     DriverComponentModule,
-    RegularComponentModule,
     NavbarUiModule,
     FormValidationComponentModule,
     PhoneComponentModule,
-    RegularComponentModule,
+    RegularFeatureModule,
     FareFeatureModule,
     JourneyComponentModule,
     WaypointModule

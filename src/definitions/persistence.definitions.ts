@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Pending, Regular, Scheduled, Subcontracted, Unassigned } from './index';
+import { Entity, Pending, Regular, Scheduled, Subcontracted, Unassigned } from './index';
 
 export type DriverPersistence = {
   id: string;
@@ -31,3 +31,10 @@ export type RegularPersistence = Omit<Regular, 'subcontractedClient'> & {
 };
 
 export type FaresCountForDatePersistence = { scheduled: string; pending: string; subcontracted: string; unassigned: string };
+
+export type RegularHistoryPersistence = {
+  scheduled: (Entity & ScheduledPersistence)[];
+  pending: (Entity & PendingPersistence)[];
+  subcontracted: (Entity & SubcontractedPersistence)[];
+  unassigned: (Entity & UnassignedPersistence)[];
+};

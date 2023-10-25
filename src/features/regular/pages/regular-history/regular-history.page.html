@@ -1,0 +1,24 @@
+<div class="d-flex h-100 flex-column overflow-auto p-3">
+  <div class="d-flex">
+    <h1 class="text-primary d-flex align-items-center">Historique passager</h1>
+    <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
+      <i class="ri-close-line ri-2x" aria-hidden="true"></i>
+      <span class="visually-hidden">Fermer</span>
+    </a>
+  </div>
+  <hr />
+  <div class="mb-3">
+    <label class="form-label">Sélectionner un passager pour voir l'historique</label>
+    <app-regular-field
+      [regularFieldControl]="regularControl"
+      (selectedValue)="onSelectRegularChange($event)"></app-regular-field>
+  </div>
+  <ng-container *ngIf="(regular$ | async) as regular">
+    <ng-container *ngIf="(validRegular$ | async)">
+      <h3 class="mb-2 text-primary h5">Historique des courses planifiées</h3>
+      <ng-container *ngIf="(regularHistory$ | async) as history">
+        <app-regular-history-scheduled [entries]="history.scheduled"></app-regular-history-scheduled>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</div>

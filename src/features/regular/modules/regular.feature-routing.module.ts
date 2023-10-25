@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { EditRegularPage, RegisterRegularPage } from '../pages';
+import { EditRegularPage, RegisterRegularPage, RegularHistoryPage } from '../pages';
 import { ManageRegularLayout } from '../layouts';
 
 const ROUTES: Routes = [
@@ -15,6 +15,10 @@ const ROUTES: Routes = [
   {
     path: 'register',
     component: RegisterRegularPage
+  },
+  {
+    path: 'history',
+    component: RegularHistoryPage
   }
 ];
 

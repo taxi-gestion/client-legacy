@@ -1,4 +1,4 @@
-import { toIdentity } from '@features/common/regular';
+import { toIdentity } from '@features/regular';
 import { DailyDriverPlanning, ScheduledPlanningSession, sortByDatetime } from '../../common/agenda.presenter';
 
 export type DailyDriverPlanningListPresentation = {

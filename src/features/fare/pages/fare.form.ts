@@ -21,7 +21,7 @@ import {
   VALIDATION_FAILED_AFTER_API_CALL_ERROR_NAME,
   VALIDATION_FAILED_BEFORE_API_CALL_ERROR_NAME
 } from '@features/common/form-validation';
-import { regularValuesEntityCodec } from '@features/common/regular';
+import { regularValuesEntityCodec } from '@features/regular';
 import { phoneValuesCodec } from '@features/common/phone';
 import { driverValuesCodec } from '@features/common/driver';
 import { waypointValuesCodec } from '@features/common/waypoint';

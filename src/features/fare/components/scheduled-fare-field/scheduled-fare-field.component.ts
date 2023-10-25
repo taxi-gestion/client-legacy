@@ -5,7 +5,7 @@ import { selectedFareValidator } from '../../validators';
 import { filterOnPassengerAndDriverAndDatetime, scheduledFareEmptyValue } from '../../presentation/fare.presenter';
 import { FORM_CONTROL_ERROR_MESSAGES_TOKEN } from '@features/common/form-validation';
 import { ScheduledFareValues } from '../../definitions';
-import { toIdentity } from '@features/common/regular';
+import { toIdentity } from '@features/regular';
 import { Entity, Passenger } from '@definitions';
 import { FARE_FORM_CONTROL_ERROR_MESSAGES } from '../../errors/form-errors-messages.token';
 import { toTime } from '@features/common/presentation';

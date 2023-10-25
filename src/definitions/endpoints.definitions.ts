@@ -27,7 +27,7 @@ type CommandMappings = {
   'subcontract-fare': SubcontractFare;
 };
 
-export type CommandResult<T extends Commands> = CommandMappings[T];
+export type CommandsResult<T extends Commands> = CommandMappings[T];
 
 export type ScheduleScheduled = {
   scheduledCreated: Entity & Scheduled;
@@ -77,4 +77,19 @@ export type ScheduleUnassigned = {
 
 export type RegisterRegular = {
   regularRegistered: Entity & Regular;
+};
+
+type Queries = 'regular-history';
+
+type QueriesMappings = {
+  'regular-history': RegularHistory;
+};
+
+export type QueriesResult<T extends Queries> = QueriesMappings[T];
+
+export type RegularHistory = {
+  scheduled: (Entity & Scheduled)[];
+  pending: (Entity & Pending)[];
+  unassigned: (Entity & Unassigned)[];
+  subcontracted: (Entity & Subcontracted)[];
 };

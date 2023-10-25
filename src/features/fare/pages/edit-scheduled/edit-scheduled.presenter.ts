@@ -1,6 +1,6 @@
 import { DeleteFare, EditScheduled, Entity, Pending, Scheduled, ToScheduledEdited, Unassigned } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
-import { toIdentity } from '@features/common/regular';
+import { toIdentity } from '@features/regular';
 import {
   datetimeLocalToIso8601UTCString,
   kilometersToMeters,

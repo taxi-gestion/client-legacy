@@ -21,7 +21,7 @@ import {
   toPendingReturnsValues
 } from '@features/fare';
 import { bootstrapValidationClasses, BootstrapValidationClasses, nullToUndefined } from '@features/common/form-validation';
-import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/common/regular';
+import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/regular';
 import { FARE_FORM, SchedulePendingFields } from '../fare.form';
 import { toReturnToSchedule, toSchedulePendingSuccessToast } from './schedule-pending.presenter';
 import { toLongDateFormat, toStandardDateFormat } from '@features/common/angular';

@@ -7,7 +7,6 @@ import { FormValidationComponentModule } from '../../common/form-validation/modu
 import { FORM_CONTROL_ERROR_MESSAGES_TOKEN } from '../../common/form-validation/providers/error-messages.token';
 import { PhoneComponentModule } from '@features/common/phone';
 import { RecurrenceServiceModule } from '@features/common/recurrence';
-import { RegularComponentModule } from '@features/common/regular';
 import { PlaceComponentModule } from '@features/common/place';
 import { LoadUiModule } from '@features/common/load';
 import { FareFeatureRoutingModule } from './fare.feature-routing.module';
@@ -19,6 +18,7 @@ import { DriverComponentModule } from '@features/common/driver';
 import { DateModule } from '@features/common/date';
 import { JourneyComponentModule } from '@features/common/journey';
 import { WaypointModule } from '@features/common/waypoint';
+import { RegularFeatureModule } from '@features/regular';
 
 @NgModule({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -39,9 +39,8 @@ import { WaypointModule } from '@features/common/waypoint';
     PlaceComponentModule,
     ReactiveFormsModule,
     RecurrenceServiceModule,
-    RegularComponentModule,
-    RegularComponentModule,
-    WaypointModule
+    WaypointModule,
+    RegularFeatureModule
   ],
   providers: [
     {

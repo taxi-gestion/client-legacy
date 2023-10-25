@@ -28,7 +28,7 @@ import {
   regularByIdQueryProvider,
   searchRegularQueryProvider,
   searchRegularsQuery$
-} from '@features/common/regular';
+} from '@features/regular';
 import { searchPlaceQuery$, searchPlaceQueryProvider } from '@features/common/place';
 import { estimateJourneyQuery$, estimateJourneyQueryProvider } from '@features/common/journey';
 

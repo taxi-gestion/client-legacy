@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { DELETE_REGULAR_ACTION, DeleteRegularAction, EDIT_REGULAR_ACTION, EditRegularAction } from '../../providers';
 import { EDIT_REGULAR_FORM, EditRegularFields, EditRegularValues, setEditRegularErrorToForm } from './edit-regular.form';
@@ -20,7 +20,7 @@ import {
   forceControlRevalidation,
   nullToUndefined
 } from '@features/common/form-validation';
-import { regularEmptyValue, regularHasId, RegularValues } from '@features/common/regular';
+import { regularEmptyValue, regularHasId, RegularValues } from '@features/regular';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,6 +36,9 @@ export class EditRegularPage {
   @Output() public editRegularError: EventEmitter<Error> = new EventEmitter<Error>();
 
   public readonly editRegularForm: FormGroup<EditRegularFields> = EDIT_REGULAR_FORM;
+  public readonly regularControl: FormControl<Entity & RegularValues> = new FormControl(regularEmptyValue, {
+    nonNullable: true
+  });
 
   public constructor(
     private readonly _toaster: ToasterPresenter,
@@ -70,7 +73,14 @@ export class EditRegularPage {
 
   //region action edit regular
   public readonly editRegular$ = (): Observable<EditRegular> =>
-    this._editRegularAction$(toEditRegular(nullToUndefined(EDIT_REGULAR_FORM.value)));
+    this._editRegularAction$(
+      toEditRegular(
+        nullToUndefined({
+          id: this.regularControl.value.id,
+          ...EDIT_REGULAR_FORM.value
+        })
+      )
+    );
 
   public onSubmitEditRegular = (triggerAction: () => void): void => {
     this.editRegularForm.markAllAsTouched();

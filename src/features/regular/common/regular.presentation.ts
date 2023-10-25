@@ -3,7 +3,7 @@ import { array as ioArray, string as ioString, type as ioType, Type, undefined a
 import { civilityCodec } from '@codecs';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { PhonesFields, phonesFormControls, phoneValuesCodec } from '@features/common/phone';
-import { RegularValues } from '@features/common/regular';
+import { RegularValues } from '@features/regular';
 import {
   WaypointsArrayElementFields,
   WaypointsArrayField,
@@ -46,3 +46,18 @@ export const regularFormControls = (): RegularFields => ({
     validators: []
   })
 });
+
+export type RegularHistoryScheduledItem = {
+  driver: string;
+  datetime: string;
+  isMedicalDrive: boolean;
+  isTwoWayDrive: boolean;
+  departure: string;
+  arrival: string;
+  duration: number;
+  distance: number;
+};
+
+export type RegularHistoryValues = {
+  scheduled: RegularHistoryScheduledItem[];
+};

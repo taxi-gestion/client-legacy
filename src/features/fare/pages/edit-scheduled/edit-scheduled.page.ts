@@ -21,7 +21,7 @@ import {
   toScheduledFaresValues
 } from '@features/fare';
 import { bootstrapValidationClasses, BootstrapValidationClasses, nullToUndefined } from '@features/common/form-validation';
-import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/common/regular';
+import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/regular';
 import { EditScheduledFields, FARE_FORM } from '../fare.form';
 import { toDeleteFareSuccessToasts, toEditScheduledSuccessToast, toScheduledToEdit } from './edit-scheduled.presenter';
 import { toLongDateFormat, toStandardDateFormat } from '@features/common/angular';

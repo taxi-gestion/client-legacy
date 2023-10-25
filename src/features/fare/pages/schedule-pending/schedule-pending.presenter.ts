@@ -1,6 +1,6 @@
 import { Entity, SchedulePending, PendingToScheduled } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
-import { toIdentity } from '@features/common/regular';
+import { toIdentity } from '@features/regular';
 import { datetimeLocalToIso8601UTCString, kilometersToMeters, minutesToSeconds, toTime } from '@features/common/presentation';
 import { throwDecodeError } from '@features/common/form-validation';
 import { pipe as fpipe } from 'fp-ts/function';

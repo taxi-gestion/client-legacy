@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, Output } from '@angular/core';
-import { firstnameOrEmpty, SEARCH_REGULAR_QUERY, SearchRegularQuery, toRegularsValues } from '@features/common/regular';
+import { firstnameOrEmpty, SEARCH_REGULAR_QUERY, SearchRegularQuery, toRegularsValues } from '@features/regular';
 import { REGULAR_FORM_CONTROL_ERROR_MESSAGES } from '../../errors/form-errors-messages.token';
 import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { map, Observable } from 'rxjs';
 import { selectedRegularValidator } from '../../validators';
-import { regularEmptyValue } from '../../regular.presenter';
 import { RegularValues } from '../../definitions/regular.definition';
 import { FORM_CONTROL_ERROR_MESSAGES_TOKEN } from '@features/common/form-validation';
 import { Entity } from '@definitions';
+import { regularEmptyValue } from '../../common/regular.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

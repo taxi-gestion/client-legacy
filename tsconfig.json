@@ -22,7 +22,6 @@
       "@features/common/phone": ["src/features/common/phone"],
       "@features/common/place": ["src/features/common/place"],
       "@features/common/recurrence": ["src/features/common/recurrence"],
-      "@features/common/regular": ["src/features/common/regular"],
       "@features/common/validation": ["src/features/common/validation"],
       "@features/common/fare": ["src/features/common/fare"],
       "@features/common/angular": ["src/features/common/angular"],

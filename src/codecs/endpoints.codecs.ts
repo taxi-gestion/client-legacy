@@ -10,6 +10,7 @@ import {
   Pending,
   RegisterRegular,
   Regular,
+  RegularHistory,
   Scheduled,
   SchedulePending,
   ScheduleScheduled,
@@ -122,4 +123,11 @@ export const faresCountCodec: Type<FaresCount> = ioType({
   pending: ioNumber,
   subcontracted: ioNumber,
   unassigned: ioNumber
+});
+
+export const regularHistoryCodec: Type<RegularHistory> = ioType({
+  scheduled: scheduledFaresCodec,
+  pending: pendingReturnsCodec,
+  subcontracted: subcontractedFaresCodec,
+  unassigned: unassignedFaresCodec
 });
