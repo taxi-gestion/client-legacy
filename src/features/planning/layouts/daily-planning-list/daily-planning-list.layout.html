@@ -1,14 +1,13 @@
 <div class="d-flex flex-column h-100 overflow-hidden">
-  <div class="p-3 sticky-top shadow-sm start-0">
-    <h1 class="h3">
+  <div class="d-flex flex-row">
+    <h1 class="p-3 text-primary d-flex">
       Planning du
-      <input
-        #planningField
-        type="date"
-        [value]="planningDay$ | async"
-        class="form-control form-control-lg w-auto d-inline align-bottom"
-        (change)="onPlanningDateChange(planningField.value)" />
+      <app-date></app-date>
     </h1>
+    <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
+      <i class="ri-close-line ri-2x" aria-hidden="true"></i>
+      <span class="visually-hidden">Fermer</span>
+    </a>
   </div>
   <div class="flex-grow-1 pt-2 overflow-auto d-flex flex-nowrap w-100" *ngIf="plannings$ | async as plannings">
     <app-planning-list-column

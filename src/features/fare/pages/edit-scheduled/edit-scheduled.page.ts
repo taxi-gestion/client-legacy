@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
-import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, of, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import {
   DELETE_FARE_ACTION,
   DeleteFareAction,
@@ -23,11 +23,17 @@ import {
 import { bootstrapValidationClasses, BootstrapValidationClasses, nullToUndefined } from '@features/common/form-validation';
 import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/regular';
 import { EditScheduledFields, FARE_FORM } from '../fare.form';
-import { toDeleteFareSuccessToasts, toEditScheduledSuccessToast, toScheduledToEdit } from './edit-scheduled.presenter';
+import {
+  findMatchingFare,
+  routeParamToFareId,
+  toDeleteFareSuccessToasts,
+  toEditScheduledSuccessToast,
+  toScheduledToEdit
+} from './edit-scheduled.presenter';
 import { toLongDateFormat, toStandardDateFormat } from '@features/common/angular';
 import { DateService } from '../../../common/date/services';
 import { DriverValues, LIST_DRIVERS_QUERY, ListDriversQuery, toDriversValues } from '@features/common/driver';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -54,6 +60,7 @@ export class EditScheduledPage {
   public readonly editScheduledForm: FormGroup<EditScheduledFields> = FARE_FORM;
 
   public selectedDate$: Observable<Date> = this._date.date$();
+
   public userFriendlyDate$: Observable<string> = this.selectedDate$.pipe(map(toLongDateFormat));
 
   public readonly scheduledFares$: Observable<ScheduledFareValues[]> = this.selectedDate$.pipe(
@@ -66,6 +73,28 @@ export class EditScheduledPage {
         title: 'Opération échouée'
       });
       return of([]);
+    })
+  );
+
+  public fareId$: Observable<string> = this._route.params.pipe(
+    switchMap((params: Params): Observable<string | undefined> => of(routeParamToFareId('id', params))),
+    filter(Boolean)
+  );
+
+  public fareFromUrl$: Observable<ScheduledFareValues> = combineLatest([this.scheduledFares$, this.fareId$]).pipe(
+    switchMap(findMatchingFare),
+    tap((fare: ScheduledFareValues): void => {
+      this._selectedScheduledFare$.next(fare);
+    }),
+    catchError((error: Error): Observable<ScheduledFareValues> => {
+      this._toaster.toast({
+        content: `La course demandée est invalide : ${error.name} | ${error.message}`,
+        status: 'danger',
+        title: 'Opération échouée'
+      });
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this._router.navigate(['../../'], { relativeTo: this._route });
+      return of({} as unknown as ScheduledFareValues);
     })
   );
 
