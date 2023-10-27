@@ -11,7 +11,7 @@
   </div>
   <h2 class="h5 text-primary">{{ userFriendlyDate$ | async }}</h2>
   <hr />
-  <div class="mb-3">
+  <div class="mb-3" *ngIf="(fareFromUrl$ | async) === null">
     <label class="form-label">Course</label>
     <app-scheduled-field
       [fareFieldControl]="fareControl"

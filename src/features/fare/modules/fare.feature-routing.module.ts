@@ -40,6 +40,11 @@ const ROUTES: Routes = [
     component: EditScheduledPage
   },
   {
+    path: 'edit/:date/:id',
+    canActivate: [setDate],
+    component: EditScheduledPage
+  },
+  {
     path: 'pendings/:date',
     canActivate: [setDate],
     component: SchedulePendingPage

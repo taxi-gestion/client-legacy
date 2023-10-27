@@ -20,6 +20,7 @@ import { FareFeatureModule } from '@features/fare';
 import { JourneyComponentModule } from '@features/common/journey';
 import { WaypointModule } from '@features/common/waypoint';
 import { RegularFeatureModule } from '@features/regular';
+import { DateModule } from '@features/common/date';
 
 @NgModule({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -40,7 +41,8 @@ import { RegularFeatureModule } from '@features/regular';
     RegularFeatureModule,
     FareFeatureModule,
     JourneyComponentModule,
-    WaypointModule
+    WaypointModule,
+    DateModule
   ],
   providers: [
     {

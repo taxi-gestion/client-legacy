@@ -7,6 +7,7 @@ export type DailyDriverPlanningListPresentation = {
 };
 
 export type FareListItem = {
+  id: string;
   passenger: string;
   time: string;
   datetime: string;
@@ -26,6 +27,7 @@ const toListPresentation = (dailyDriverPlanning: DailyDriverPlanning): DailyDriv
 const toFareListItems = (fares: ScheduledPlanningSession[]): FareListItem[] => fares.map(toFareListItem);
 
 const toFareListItem = (fare: ScheduledPlanningSession): FareListItem => ({
+  id: fare.id,
   passenger: toIdentity(fare.passenger),
   time: fare.localTime,
   datetime: fare.datetime,
