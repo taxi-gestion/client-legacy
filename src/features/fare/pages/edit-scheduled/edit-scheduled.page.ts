@@ -28,6 +28,7 @@ import {
   routeParamToFareId,
   toDeleteFareSuccessToasts,
   toEditScheduledSuccessToast,
+  toFareSummary,
   toScheduledToEdit
 } from './edit-scheduled.presenter';
 import { toLongDateFormat, toStandardDateFormat } from '@features/common/angular';
@@ -86,12 +87,7 @@ export class EditScheduledPage {
     tap((fare: ScheduledFareValues): void => {
       this._selectedScheduledFare$.next(fare);
     }),
-    catchError((error: Error): Observable<ScheduledFareValues> => {
-      this._toaster.toast({
-        content: `La course demandée est invalide : ${error.name} | ${error.message}`,
-        status: 'danger',
-        title: 'Opération échouée'
-      });
+    catchError((): Observable<ScheduledFareValues> => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._router.navigate(['../../'], { relativeTo: this._route });
       return of({} as unknown as ScheduledFareValues);
@@ -170,4 +166,7 @@ export class EditScheduledPage {
     this._toaster.toast({ content: 'Échec de la suppression', status: 'danger', title: 'Opération échouée' });
   };
   //endregion
+  public fareSummary(fare: ScheduledFareValues): string {
+    return toFareSummary(fare);
+  }
 }
