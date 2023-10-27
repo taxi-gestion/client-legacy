@@ -5,6 +5,18 @@ export type Entity = { id: string };
 export type EntityOrUndefined = { id: string | undefined };
 
 export type Civility = 'Child' | 'Company' | 'Couple' | 'Mr' | 'Mrs' | 'Other';
+
+/* eslint-disable @typescript-eslint/naming-convention */
+export const civilityTranslations: Record<Civility, string> = {
+  Child: 'Enfant',
+  Company: 'Société',
+  Couple: 'Couple',
+  Mr: 'Monsieur',
+  Mrs: 'Madame',
+  Other: 'Autre'
+};
+/* eslint-enable @typescript-eslint/naming-convention */
+
 export type Drive = {
   departure: Waypoint;
   arrival: Waypoint;

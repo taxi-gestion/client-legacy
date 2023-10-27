@@ -1,0 +1,6 @@
+<div class="d-flex flex-column h-100 overflow-auto">
+  <h2 class="h4 p-3">Pilotage</h2>
+  <div *ngIf="(regulars$ | async) as regulars">
+    <button class="btn btn-primary m-3" (click)="downloadAsExcel(regulars)">Exporter base passagers sur Excel</button>
+  </div>
+</div>
