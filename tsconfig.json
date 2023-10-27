@@ -30,6 +30,7 @@
       "@features/planning": ["src/features/planning"],
       "@features/public": ["src/features/public"],
       "@features/regular": ["src/features/regular"],
+      "@features/supervision": ["src/features/supervision"],
       "@features/fare": ["src/features/fare"]
     },
     "baseUrl": "./",

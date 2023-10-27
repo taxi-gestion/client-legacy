@@ -17,6 +17,8 @@ import { BillingFeatureModule } from '@features/billing';
 import { FareFeatureModule } from '../../features/fare';
 import { FARE_PROVIDERS } from '../providers/fare.providers';
 import { PlanningFeatureModule } from '@features/planning';
+import { SupervisionFeatureModule } from '../../features/supervision';
+import { SUPERVISION_PROVIDERS } from '../providers/supervision.providers';
 
 const ROUTES: Routes = [
   {
@@ -56,6 +58,15 @@ const ROUTES: Routes = [
     canMatch: [CanMatchOneUserGroupGuard],
     data: { allowedGroups: ['developer', 'manager', 'billing'] },
     providers: [...BILLING_PROVIDERS]
+  },
+  {
+    loadChildren: async (): Promise<typeof SupervisionFeatureModule> =>
+      (await import('@features/supervision')).SupervisionFeatureModule,
+    component: MainLayout,
+    path: 'supervision',
+    canMatch: [CanMatchRefreshTokenGuard, CanMatchLoggedInGuard, CanMatchOneUserGroupGuard],
+    data: { allowedGroups: ['manager'] },
+    providers: [...SUPERVISION_PROVIDERS]
   },
   {
     loadChildren: async (): Promise<typeof PublicFeatureModule> => (await import('@features/public')).PublicFeatureModule,
