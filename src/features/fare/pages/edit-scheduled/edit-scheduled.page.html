@@ -11,13 +11,16 @@
   </div>
   <h2 class="h5 text-primary">{{ userFriendlyDate$ | async }}</h2>
   <hr />
-  <div class="mb-3" *ngIf="(fareFromUrl$ | async) === null">
+  <ng-container *ngIf="fareFromUrl$ | async as fare; else selectFare">
+    <div class="mb-2"><strong>Course: {{ fareSummary(fare) }}</strong></div>
+  </ng-container>
+  <ng-template #selectFare>
     <label class="form-label">Course</label>
     <app-scheduled-field
       [fareFieldControl]="fareControl"
       [prefilled]="(scheduledFares$ | async) ?? []"
       (selectedValue)="onSelectScheduledFareChange($event)"></app-scheduled-field>
-  </div>
+  </ng-template>
   <ng-container *ngIf="(regular$ | async) as regular">
     <!-- TODO refactor and invert container once place as destinations is done -->
     <ng-container *ngIf="(initialFareValues$ | async) as fare">

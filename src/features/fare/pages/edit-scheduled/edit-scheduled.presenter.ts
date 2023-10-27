@@ -94,3 +94,6 @@ export const findMatchingFare = ([fares, id]: [ScheduledFareValues[], string]): 
       (fare: ScheduledFareValues): Observable<ScheduledFareValues> => of(fare)
     )
   );
+
+export const toFareSummary = (fare: ScheduledFareValues): string => ` ${toTime(fare.datetime)} - ${toIdentity(fare.passenger)} -
+        ${fare.arrival.place.label}`;
