@@ -2,9 +2,11 @@
 import type { Type } from 'io-ts';
 import {
   intersection as ioIntersection,
+  union as ioUnion,
   keyof as ioKeyOf,
   literal as ioLiteral,
   string as ioString,
+  undefined as ioUndefined,
   type as ioType
 } from 'io-ts';
 import {
@@ -18,12 +20,15 @@ import {
   ToScheduled,
   ToSubcontracted,
   Unassigned,
-  ToUnassigned
+  ToUnassigned,
+  ToRecurring,
+  Recurring
 } from '../../definitions';
 import { driveCodec, durationDistanceCodec, entityCodec, passengerEntityCodec } from './traits.codecs';
 import { driverEntityCodec } from './driver.codecs';
+import { waypointCodec } from './waypointCodec';
 
-export const toScheduleCodec: Type<ToScheduled> = ioIntersection(
+export const toScheduledCodec: Type<ToScheduled> = ioIntersection(
   [
     driveCodec,
     durationDistanceCodec,
@@ -36,7 +41,27 @@ export const toScheduleCodec: Type<ToScheduled> = ioIntersection(
       nature: ioKeyOf({ medical: null, standard: null })
     })
   ],
-  'toScheduleCodec'
+  'toScheduledCodec'
+);
+
+export const toRecurringCodec: Type<ToRecurring> = ioIntersection(
+  [
+    durationDistanceCodec,
+    ioType({
+      departureTime: ioString,
+      returnTime: ioUnion([ioString, ioUndefined]),
+      departure: waypointCodec,
+      arrival: waypointCodec,
+      driver: ioUnion([driverEntityCodec, ioUndefined]),
+      passenger: passengerEntityCodec,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      kind: ioKeyOf({ 'one-way': null, 'two-way': null }),
+      status: ioLiteral('to-recurring'),
+      nature: ioKeyOf({ medical: null, standard: null }),
+      recurrence: ioString
+    })
+  ],
+  'toRecurringCodec'
 );
 
 export const toUnassignedCodec: Type<ToUnassigned> = ioIntersection(
@@ -54,7 +79,7 @@ export const toUnassignedCodec: Type<ToUnassigned> = ioIntersection(
   'toUnassignedCodec'
 );
 
-export const unassignedToScheduleCodec: Type<Entity & ToScheduled> = ioIntersection(
+export const unassignedToScheduledCodec: Type<Entity & ToScheduled> = ioIntersection(
   [
     entityCodec,
     driveCodec,
@@ -68,7 +93,7 @@ export const unassignedToScheduleCodec: Type<Entity & ToScheduled> = ioIntersect
       nature: ioKeyOf({ medical: null, standard: null })
     })
   ],
-  'toScheduleCodec'
+  'toScheduledCodec'
 );
 
 export const returnDriveCodec: Type<PendingToScheduled> = ioIntersection(
@@ -134,6 +159,27 @@ export const scheduledFareCodec: Type<Entity & Scheduled> = ioIntersection(
     })
   ],
   'scheduledFareCodec'
+);
+
+export const recurringFareCodec: Type<Entity & Recurring> = ioIntersection(
+  [
+    entityCodec,
+    durationDistanceCodec,
+    ioType({
+      departureTime: ioString,
+      returnTime: ioUnion([ioString, ioUndefined]),
+      departure: waypointCodec,
+      arrival: waypointCodec,
+      driver: ioUnion([driverEntityCodec, ioUndefined]),
+      passenger: passengerEntityCodec,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      kind: ioKeyOf({ 'one-way': null, 'two-way': null }),
+      status: ioLiteral('recurring'),
+      nature: ioKeyOf({ medical: null, standard: null }),
+      recurrence: ioString
+    })
+  ],
+  'recurringFareCodec'
 );
 
 export const unassignedFareCodec: Type<Entity & Unassigned> = ioIntersection(

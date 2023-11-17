@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from
 import { FormControl, FormGroup } from '@angular/forms';
 import { BehaviorSubject, filter, map, Observable } from 'rxjs';
 import { SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../providers';
-import { FARE_FORM, ScheduleFareFields } from '../fare.form';
+import { FARE_FORM } from '../fare.form';
 import { toFareToSchedule, toScheduleFareSuccessToast } from './schedule-fare.presenter';
 import { Entity, ScheduleScheduled } from '@definitions';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
@@ -10,7 +10,7 @@ import { ToasterPresenter } from '../../../../root/components/toaster/toaster.pr
 import { nullToUndefined } from '@features/common/form-validation';
 import { DriverValues, LIST_DRIVERS_QUERY, ListDriversQuery, toDriversValues } from '@features/common/driver';
 import { isValidRegular, regularEmptyValue, RegularValues } from '@features/regular';
-import { FareValues, initialFareValuesFromRegular } from '@features/fare';
+import { FareValues, initialFareValuesFromRegular, ScheduleScheduledFields } from '@features/fare';
 import { DateService } from '@features/common/date';
 import { toLongDateFormat } from '@features/common/angular';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -36,7 +36,7 @@ export class ScheduleFarePage {
       )
     );
 
-  public readonly scheduleFareForm: FormGroup<ScheduleFareFields> = FARE_FORM;
+  public readonly scheduleFareForm: FormGroup<ScheduleScheduledFields> = FARE_FORM;
   public regularControl: FormControl<Entity & RegularValues> = new FormControl(regularEmptyValue, { nonNullable: true });
 
   public selectedDate$: Observable<Date> = this._date.date$();

@@ -1,0 +1,20 @@
+<div class="d-flex flex-column h-100 overflow-auto">
+  <div class="d-flex flex-row">
+    <h1 class="p-3 text-primary d-flex">Gérer les courses récurrentes</h1>
+    <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../../">
+      <i class="ri-close-line ri-2x" aria-hidden="true"></i>
+      <span class="visually-hidden">Fermer</span>
+    </a>
+  </div>
+  <hr />
+  <div class="pe-2 ps-2">
+    <div class="d-flex gap-2 mb-2" role="group" aria-label="First group of options">
+      <button type="button" class="btn btn-primary btn-square" [routerLink]="['/fare/recurring/add']">
+        Ajouter une nouvelle règle
+      </button>
+      <button type="button" class="btn btn-primary btn-square" [disabled]="true" [routerLink]="['/fare/recurring/edit']">
+        Editer une règle existante
+      </button>
+    </div>
+  </div>
+</div>

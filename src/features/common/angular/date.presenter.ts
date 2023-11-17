@@ -4,6 +4,7 @@ import { format } from 'date-fns-tz';
 import { fr } from 'date-fns/locale';
 
 export const toStandardDateFormat = (date: Date): string => format(date, 'yyyy-MM-dd');
+export const toNonDevelopersDateFormat = (date: Date): string => format(date, 'dd-MM-yyyy');
 
 export const isValidDate = (dateString: string): boolean => {
   try {

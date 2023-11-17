@@ -20,7 +20,8 @@ import {
   scheduleUnassignedAction$,
   validatedEditScheduledAction$,
   unassignedFaresForDateQueryProvider,
-  unassignedFaresForDateQuery$
+  unassignedFaresForDateQuery$,
+  addRecurringActionProvider
 } from '@features/fare';
 import { listDriversQuery$, listDriversQueryProvider } from '@features/common/driver';
 import {
@@ -31,6 +32,7 @@ import {
 } from '@features/regular';
 import { searchPlaceQuery$, searchPlaceQueryProvider } from '@features/common/place';
 import { estimateJourneyQuery$, estimateJourneyQueryProvider } from '@features/common/journey';
+import { validatedAddRecurringAction$ } from '../../features/fare/actions/add-recurring.action';
 
 export const FARE_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   allocateUnassignedActionProvider(allocateUnassignedAction$, [HttpClient]),
@@ -47,5 +49,6 @@ export const FARE_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   scheduleUnassignedActionProvider(scheduleUnassignedAction$, [HttpClient]),
   searchPlaceQueryProvider(searchPlaceQuery$, [HttpClient]),
   searchRegularQueryProvider(searchRegularsQuery$, [HttpClient]),
-  unassignedFaresForDateQueryProvider(unassignedFaresForDateQuery$, [HttpClient])
+  unassignedFaresForDateQueryProvider(unassignedFaresForDateQuery$, [HttpClient]),
+  addRecurringActionProvider(validatedAddRecurringAction$, [HttpClient])
 ];

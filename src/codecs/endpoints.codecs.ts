@@ -1,5 +1,6 @@
 import { array as ioArray, number as ioNumber, Type, type as ioType, undefined as ioUndefined, union as ioUnion } from 'io-ts';
 import {
+  AddRecurring,
   AllocateUnassigned,
   DeleteFare,
   DeleteRegular,
@@ -21,6 +22,7 @@ import {
 } from '../definitions';
 import {
   pendingReturnCodec,
+  recurringFareCodec,
   regularEntityCodec,
   scheduledFareCodec,
   subcontractedFareCodec,
@@ -35,6 +37,12 @@ export const scheduleScheduledCodec: Type<ScheduleScheduled> = ioType(
   'scheduleScheduledCodec'
 );
 
+export const addRecurringCodec: Type<AddRecurring> = ioType(
+  {
+    recurringCreated: recurringFareCodec
+  },
+  'addRecurringCodec'
+);
 export const faresDeletedCodec: Type<DeleteFare> = ioType(
   {
     scheduledDeleted: ioUnion([scheduledFareCodec, ioUndefined]),

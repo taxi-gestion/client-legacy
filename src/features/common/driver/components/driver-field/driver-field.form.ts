@@ -26,3 +26,15 @@ const notEmptyDriverValidator = (control: AbstractControl): ValidationErrors | n
 
 const notEmptyDriver = (value: Partial<DriverValues & Entity>): boolean =>
   value.id !== undefined && value.id.length === UUID_LENGTH;
+
+export const optionalDriverFieldFormControl = <T extends string>(
+  formControlName: T,
+  value?: DriverValues | undefined
+): DriverField<T> =>
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  ({
+    [formControlName]: new FormControl<DriverValues>(value === undefined ? driverEmptyValue : value, {
+      nonNullable: true,
+      validators: [Validators.required]
+    })
+  } as DriverField<T>);

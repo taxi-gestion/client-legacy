@@ -31,6 +31,20 @@ export type UnassignedFareValues = {
   status: 'unassigned';
 };
 
+export type RecurringFareValues = {
+  time: string;
+  departure: WaypointValues;
+  arrival: WaypointValues;
+  distance: number;
+  driver: DriverValues | undefined;
+  duration: number;
+  id: string;
+  isTwoWayDrive: boolean;
+  isMedicalDrive: boolean;
+  passenger: PassengerValues;
+  status: 'recurring';
+};
+
 export type PassengerValues = Entity & {
   civility: Civility;
   lastname: string;
