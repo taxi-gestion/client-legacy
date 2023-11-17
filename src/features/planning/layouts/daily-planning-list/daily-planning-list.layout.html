@@ -14,5 +14,8 @@
       *ngFor="let planning of plannings"
       [driver]="planning.driver"
       [fares]="planning.fares"></app-planning-list-column>
+    <div class="p-2" *ngIf="plannings.length === 0">
+      <strong>Aucune course n'a été assignée à un chauffeur pour ce jour.</strong>
+    </div>
   </div>
 </div>
