@@ -59,7 +59,7 @@ export const toActionsSummary = (formValues: Partial<RecurringToAddValues>): str
   if (formValues.returnTime !== undefined && formValues.returnTime.length > 0)
     actions.push(`Le retour sera affecté à ${formValues.driver?.username} à ${formValues.returnTime}`);
 
-  if (formValues.returnTime !== undefined) actions.push('Le retour sera ajouté aux retours en attente');
+  if (formValues.returnTime === '') actions.push('Le retour sera ajouté aux retours en attente');
 
   return actions;
 };
