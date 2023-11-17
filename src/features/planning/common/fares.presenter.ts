@@ -21,6 +21,9 @@ export const toDailyDriverPlanning = (drivers: (Driver & Entity)[], fares: (Enti
     };
   });
 
+export const hideEmptyPlannings = (plannings: DailyDriverPlanning[]): DailyDriverPlanning[] =>
+  plannings.filter((planning: DailyDriverPlanning): boolean => planning.fares.length > 0);
+
 export const toScheduledFaresPresentation = (fares: (Entity & Scheduled)[]): ScheduledPresentation[] =>
   fares.map(toScheduledFarePresentation);
 

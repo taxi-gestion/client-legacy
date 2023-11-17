@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, combineLatest, map, Observable, of, switchMap, take } from 'rxjs';
-import { toDailyDriverPlanning } from '../../common/fares.presenter';
+import { hideEmptyPlannings, toDailyDriverPlanning } from '../../common/fares.presenter';
 import { Driver, DriverWithOrder, Entity, Scheduled } from '@definitions';
 import { LIST_DRIVERS_WITH_ORDER_QUERY, ListDriversWithOrderQuery, sortDriversByDisplayOrder } from '@features/common/driver';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
@@ -43,6 +43,7 @@ export class DailyPlanningListLayout {
     map(([drivers, fares]: [(Driver & Entity)[], (Entity & Scheduled)[]]): DailyDriverPlanning[] =>
       toDailyDriverPlanning(drivers, fares)
     ),
+    map(hideEmptyPlannings),
     map((plannings: DailyDriverPlanning[]): DailyDriverPlanningListPresentation[] =>
       toDailyDriverPlanningListPresentation(plannings)
     )
