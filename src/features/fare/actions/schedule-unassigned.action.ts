@@ -3,7 +3,7 @@ import { catchError, map, Observable, throwError } from 'rxjs';
 import { Entity, ScheduleUnassigned, ToScheduled } from '@definitions';
 import { pipe as fpipe } from 'fp-ts/function';
 import { fold } from 'fp-ts/Either';
-import { externalTypeCheckFor, unassignedScheduledCodec, unassignedToScheduleCodec } from '@codecs';
+import { externalTypeCheckFor, unassignedScheduledCodec, unassignedToScheduledCodec } from '@codecs';
 import { ValidationFailedAfterApiCallError, ValidationFailedBeforeApiCallError } from '@features/common/form-validation';
 import { ScheduleUnassignedAction } from '../providers';
 
@@ -13,7 +13,7 @@ export const scheduleUnassignedAction$ =
   (http: HttpClient): ScheduleUnassignedAction =>
   (unassignedToSchedule: Entity & ToScheduled): Observable<ScheduleUnassigned> =>
     fpipe(
-      unassignedToScheduleCodec.decode(unassignedToSchedule),
+      unassignedToScheduledCodec.decode(unassignedToSchedule),
       fold(
         (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCallError()),
         (validatedTransfer: Entity & ToScheduled): Observable<ScheduleUnassigned> =>

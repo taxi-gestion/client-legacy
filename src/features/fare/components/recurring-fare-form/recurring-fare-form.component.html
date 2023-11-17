@@ -1,0 +1,129 @@
+<form
+  [formGroup]="recurringFareForm"
+  [appLoadAction]="action$"
+  #loadAction="loadAction"
+  (actionSuccess)="onActionSuccess($event)"
+  (actionError)="onActionError($event)"
+  (ngSubmit)="onSubmit(loadAction.start)">
+  <div class="mb-3">
+    <label class="form-label">Téléphone à appeler</label>
+    <app-phone-field
+      [phoneFieldControl]="recurringFareForm.controls.phoneToCall"
+      [phone]="initialValues.phoneToCall"
+      [prefilled]="regular.phones ?? []"></app-phone-field>
+  </div>
+  <div class="mb-3" formControlErrors="departureTime">
+    <label for="departureTime" class="form-label">Heure de départ</label>
+    <input
+      id="departureTime"
+      type="time"
+      class="form-control"
+      name="departureTime"
+      formControlName="departureTime"
+      [ngClass]="validation(recurringFareForm.controls.departureTime)" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Lieu de départ</label>
+    <app-waypoint-field
+      [waypointFieldControl]="recurringFareForm.controls.departurePlace"
+      [waypoint]="initialValues.departurePlace"
+      [prefilled]="regular.waypoints ?? []"></app-waypoint-field>
+  </div>
+  <div class="mb-3" formControlErrors="arrivalPlace">
+    <label class="form-label">Destination</label>
+    <app-waypoint-field
+      [waypointFieldControl]="recurringFareForm.controls.arrivalPlace"
+      [waypoint]="initialValues.arrivalPlace"
+      [prefilled]="regular.waypoints ?? []"
+      (selectedValue)="onArrivalSelected($event)"></app-waypoint-field>
+  </div>
+  <app-estimate-journey-field
+    [durationFieldControl]="recurringFareForm.controls.driveDuration"
+    [distanceFieldControl]="recurringFareForm.controls.driveDistance"
+    [origin]="recurringFareForm.controls.departurePlace.valueChanges | async"
+    [destination]="recurringFareForm.controls.arrivalPlace.valueChanges | async"
+    [date]="nowDateString"></app-estimate-journey-field>
+  <div class="mb-3">
+    <label class="form-label">
+      <i>Optionnel -</i>
+      Chauffeur
+    </label>
+    <app-driver-field
+      [driverFieldControl]="recurringFareForm.controls.driver"
+      [driver]="initialValues.driver"
+      [prefilled]="drivers"></app-driver-field>
+  </div>
+  <div class="mb-3">
+    <div class="form-check form-switch">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        id="isTwoWayDrive"
+        name="isTwoWayDrive"
+        formControlName="isTwoWayDrive"
+        [checked]="this.initialValues.isTwoWayDrive" />
+      <label class="form-check-label" for="isTwoWayDrive">Créer un retour en attente</label>
+    </div>
+  </div>
+  <div class="mb-3" formControlErrors="returnTime" *ngIf="displayReturnTime">
+    <label for="returnTime" class="form-label">
+      <i>Optionel -</i>
+      Heure du retour
+    </label>
+    <input
+      id="returnTime"
+      type="time"
+      class="form-control"
+      name="returnTime"
+      formControlName="returnTime"
+      [ngClass]="validation(recurringFareForm.controls.returnTime)" />
+  </div>
+  <div class="mb-3">
+    <div class="form-check form-switch">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        id="isMedicalDrive"
+        name="isMedicalDrive"
+        formControlName="isMedicalDrive"
+        [checked]="this.initialValues.isMedicalDrive" />
+      <label class="form-check-label" for="isMedicalDrive">Ce trajet est de nature médicale</label>
+    </div>
+  </div>
+  <div>
+    <label class="form-check-label">Récurrence</label>
+    <app-recurrence-rule (selectedValue)="onRecurrenceRuleChange($event)" [occurenceNumber]="5"></app-recurrence-rule>
+    <div *ngIf="occurrences$ | async as occurrences" class="p-1">
+      <strong>0-5 prochaines occurrences sur un an:</strong>
+      <ul>
+        <li *ngFor="let occurrence of occurrences">
+          {{ occurrence | date : 'fullDate' }}
+          <!-- Adjust date format as needed -->
+        </li>
+      </ul>
+    </div>
+  </div>
+  <hr />
+  <!--  [disabled]="loadActionDisplay.isLoading"-->
+  <button
+    [appLoadActionDisplay]="loadAction.isLoading$ | async"
+    #loadActionDisplay
+    type="submit"
+    class="btn mt-3 btn-primary w-100"
+    [disabled]="true">
+    <ng-container slot="loadActionDisplayIdle">Créer la règle de course récurrente</ng-container>
+    <ng-container slot="loadActionDisplayLoading">
+      <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+      Création en cours...
+    </ng-container>
+  </button>
+  <div class="text-danger mt-2" *ngIf="recurringFareForm.errors?.['validationFailedBeforeApiCallError']">
+    La structure des données de la requête ne respecte pas le contrat de transfer. La requête ne peut pas être effectuée.
+    Prévenir Romain qu'il va faire des heures supp'.
+  </div>
+  <div class="text-danger mt-2" *ngIf="recurringFareForm.errors">
+    Une erreur est survenue lors de l'appel au service distant.
+  </div>
+</form>

@@ -1,5 +1,5 @@
 import { Driver } from './drivers.definitions';
-import { Drive, DurationDistance, Entity, Kind, Nature, Passenger } from './domain.definitions';
+import { Drive, DurationDistance, Entity, Kind, Nature, Passenger, Waypoint } from './domain.definitions';
 
 /** transformations
  * ToScheduled => Scheduled & Pending?
@@ -16,12 +16,13 @@ import { Drive, DurationDistance, Entity, Kind, Nature, Passenger } from './doma
 
 type FareTransformStatus =
   | 'pending-to-scheduled'
+  | 'to-recurring'
   | 'to-scheduled-edited'
   | 'to-scheduled'
   | 'to-subcontracted'
   | 'to-unassigned';
 
-type FareStableStatus = 'pending' | 'scheduled' | 'subcontracted' | 'unassigned';
+type FareStableStatus = 'pending' | 'recurring' | 'scheduled' | 'subcontracted' | 'unassigned';
 
 type WithStatus<T extends FareStableStatus | FareTransformStatus> = {
   status: T;
@@ -57,6 +58,21 @@ export type ToSubcontracted = WithStatus<'to-subcontracted'> & WithSubcontractor
 export type Subcontractor = {
   identity: string;
 };
+
+// Recurring
+type FareRecurring = DurationDistance &
+  WithKind &
+  WithNature &
+  WithPassenger & {
+    departure: Waypoint;
+    arrival: Waypoint;
+    departureTime: string;
+    returnTime: string | undefined;
+    driver: (Driver & Entity) | undefined;
+    recurrence: string;
+  };
+export type Recurring = FareRecurring & WithStatus<'recurring'>;
+export type ToRecurring = FareRecurring & WithStatus<'to-recurring'>;
 
 export type FaresCount = {
   scheduled: number;

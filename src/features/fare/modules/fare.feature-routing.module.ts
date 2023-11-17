@@ -1,18 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { EditScheduledPage, ScheduleFarePage, SchedulePendingPage } from '../pages';
-import { CanMatchOneUserGroupGuard } from '@features/authentication';
+import { AddRecurringPage, EditScheduledPage, ScheduleFarePage, SchedulePendingPage } from '../pages';
 import { ManageFareLayout } from '../layouts';
 import { redirectWithDate } from '../guards/redirect-with-date.guard';
 import { setDate } from '../guards/set-date.guard';
 import { ScheduleUnassignedPage } from '../pages/schedule-unassigned/schedule-unassigned.page';
+import { ManageRecurrenceLayout } from '../layouts/manage-recurrence/manage-recurrence.layout';
 
 const ROUTES: Routes = [
   {
     path: '',
-    component: ManageFareLayout,
-    canMatch: [CanMatchOneUserGroupGuard],
-    data: { allowedGroups: ['developer', 'manager'] }
+    component: ManageFareLayout
   },
   {
     path: 'edit',
@@ -58,6 +56,14 @@ const ROUTES: Routes = [
     path: 'unassigned/:date',
     canActivate: [setDate],
     component: ScheduleUnassignedPage
+  },
+  {
+    path: 'recurring',
+    component: ManageRecurrenceLayout
+  },
+  {
+    path: 'recurring/add',
+    component: AddRecurringPage
   }
 ];
 

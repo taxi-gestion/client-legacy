@@ -13,6 +13,7 @@ import { DeleteFare, EditScheduled, Entity, Regular, Scheduled } from '@definiti
 import { Toast, ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import {
+  EditScheduledFields,
   FareValues,
   initialFareValuesFromScheduledAndRegular,
   isValidFare,
@@ -22,7 +23,7 @@ import {
 } from '@features/fare';
 import { bootstrapValidationClasses, BootstrapValidationClasses, nullToUndefined } from '@features/common/form-validation';
 import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/regular';
-import { EditScheduledFields, FARE_FORM } from '../fare.form';
+import { FARE_FORM } from '../fare.form';
 import {
   findMatchingFare,
   routeParamToFareId,

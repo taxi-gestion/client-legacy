@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Pending, Scheduled, Subcontracted, Unassigned } from './fares.definitions';
+import { Pending, Recurring, Scheduled, Subcontracted, Unassigned } from './fares.definitions';
 import { Entity, Regular } from './domain.definitions';
 
 type Commands =
+  | 'add-recurring'
   | 'allocate-unassigned'
   | 'delete-fare'
   | 'delete-regular'
@@ -15,6 +16,7 @@ type Commands =
   | 'subcontract-fare';
 
 type CommandMappings = {
+  'add-recurring': AddRecurring;
   'allocate-unassigned': AllocateUnassigned;
   'delete-fare': DeleteFare;
   'delete-regular': DeleteRegular;
@@ -32,6 +34,10 @@ export type CommandsResult<T extends Commands> = CommandMappings[T];
 export type ScheduleScheduled = {
   scheduledCreated: Entity & Scheduled;
   pendingCreated: (Entity & Pending) | undefined;
+};
+
+export type AddRecurring = {
+  recurringCreated: Entity & Recurring;
 };
 
 export type AllocateUnassigned = {

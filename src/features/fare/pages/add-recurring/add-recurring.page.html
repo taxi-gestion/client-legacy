@@ -1,0 +1,35 @@
+<div class="d-flex h-100 flex-column overflow-auto p-3">
+  <div class="d-flex">
+    <h1 class="text-primary d-flex align-items-center">Ajouter une règle de course récurrente</h1>
+    <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
+      <i class="ri-close-line ri-2x" aria-hidden="true"></i>
+      <span class="visually-hidden">Fermer</span>
+    </a>
+  </div>
+  <hr />
+  <div class="mb-4">
+    <label class="form-label">Passager</label>
+    <app-regular-field
+      [regularFieldControl]="regularControl"
+      (selectedValue)="onSelectRegularChange($event)"></app-regular-field>
+  </div>
+  <ng-container *ngIf="(regular$ | async) as regular">
+    <ng-container *ngIf="(validRegular$ | async)">
+      <app-recurring-fare-form
+        [recurringFareForm]="addRecurringForm"
+        [action$]="addRecurring$"
+        [drivers]="(drivers$ | async) ?? []"
+        [regular]="regular"
+        [initialValues]="(prefilledFare$ | async) ?? {}"
+        (actionSuccess)="onAddRecurringActionSuccess($event)"
+        (actionError)="onAddRecurringActionError($event)"
+        [displayReturnTime]="(displayReturnTime$ | async) ?? false"></app-recurring-fare-form>
+      <div *ngIf="actionsSummary$ | async as actionsSummary" class="p-1">
+        <strong>A l'application de la règle:</strong>
+        <ul>
+          <li *ngFor="let action of actionsSummary">{{ action }}</li>
+        </ul>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>
