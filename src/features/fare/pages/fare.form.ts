@@ -67,20 +67,24 @@ export const unassignedToAllocateFormCodec: Type<UnassignedToAllocateValues> = i
   isMedicalDrive: ioBoolean
 });
 
-export const recurringToAddFormCodec: Type<RecurringToAddValues> = ioType({
-  passenger: regularValuesEntityCodec,
-  phoneToCall: phoneValuesCodec,
-  departureTime: ioString,
-  returnTime: ioUnion([ioString, ioUndefined]),
-  departurePlace: waypointValuesCodec,
-  driveDuration: ioNumber,
-  driveDistance: ioNumber,
-  arrivalPlace: waypointValuesCodec,
-  driver: ioUnion([driverValuesCodec, ioUndefined]),
-  isTwoWayDrive: ioBoolean,
-  isMedicalDrive: ioBoolean,
-  recurrenceRule: ioString
-});
+// eslint-disable-next-line @typescript-eslint/typedef
+export const recurringToAddFormCodec: Type<RecurringToAddValues> = ioType(
+  {
+    passenger: regularValuesEntityCodec,
+    phoneToCall: phoneValuesCodec,
+    departureTime: ioString,
+    returnTime: ioUnion([ioString, ioUndefined]),
+    departurePlace: waypointValuesCodec,
+    driveDuration: ioNumber,
+    driveDistance: ioNumber,
+    arrivalPlace: waypointValuesCodec,
+    driver: ioUnion([driverValuesCodec, ioUndefined]),
+    isTwoWayDrive: ioBoolean,
+    isMedicalDrive: ioBoolean,
+    recurrenceRule: ioString
+  },
+  'recurringToAddFormRules'
+);
 
 export const scheduleFareFormCodec: Type<FareToScheduleValues> = fareFormCodec;
 

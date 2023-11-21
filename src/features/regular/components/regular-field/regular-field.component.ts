@@ -35,6 +35,8 @@ export class RegularFieldComponent {
 
   @Output() public readonly selectedValue: EventEmitter<Entity & RegularValues> = new EventEmitter<Entity & RegularValues>();
 
+  @Output() public actionError: EventEmitter<Error> = new EventEmitter<Error>();
+
   public onSelectedValueChange(regular: Entity & RegularValues): void {
     this.regularFieldControl.setValue(regular);
     this.selectedValue.emit(regular);

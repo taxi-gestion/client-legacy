@@ -2,17 +2,13 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { fareEmptyValue, isMedicalDrive, isTwoWayDrive, AddRecurringFields, RecurringToAddValues } from '../../presentation';
 import { BehaviorSubject, Observable } from 'rxjs';
-import {
-  bootstrapValidationClasses,
-  BootstrapValidationClasses,
-  forceControlRevalidation
-} from '@features/common/form-validation';
-import { formatFareError, setFareErrorToForm } from '../../pages/fare.form';
+import { bootstrapValidationClasses, BootstrapValidationClasses } from '@features/common/form-validation';
 import { DriverValues } from '@features/common/driver';
 import { RegularValues } from '@features/regular';
 import { WaypointValues } from '@features/common/waypoint';
 import { AddRecurring } from '../../../../definitions';
 import { toValidLocalDatetimeInputValue } from '../../../common/presentation';
+import { setErrorsToForm, toFormErrors } from '../../pages/common.form';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,7 +36,9 @@ export class RecurringFareFormComponent {
 
   public onSubmit = (triggerAction: () => void): void => {
     this.recurringFareForm.markAllAsTouched();
-    this.recurringFareForm.valid ? triggerAction() : forceControlRevalidation(this.recurringFareForm);
+
+    // TODO Testing to validate only through codecs
+    triggerAction();
     this.submitted.emit();
   };
 
@@ -50,7 +48,7 @@ export class RecurringFareFormComponent {
   };
 
   public onActionError = (error: Error): void => {
-    setFareErrorToForm(formatFareError(error));
+    setErrorsToForm(this.recurringFareForm)(toFormErrors(error));
     this.actionError.emit(error);
   };
 

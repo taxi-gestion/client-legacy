@@ -5,7 +5,7 @@ import { fold } from 'fp-ts/Either';
 import { Entity, EditScheduled, ToScheduledEdited } from '@definitions';
 import { externalTypeCheckFor, scheduledToEditCodec, scheduledEditedCodec } from '@codecs';
 import { EditScheduledAction } from '../providers';
-import { ValidationFailedAfterApiCallError, ValidationFailedBeforeApiCallError } from '@features/common/form-validation';
+import { ValidationFailedOnApiResult, ValidationFailedBeforeApiCall } from '@features/common/form-validation';
 
 const editScheduledUrl = (): string => `/api/fare/edit`;
 
@@ -15,7 +15,7 @@ export const validatedEditScheduledAction$ =
     fpipe(
       scheduledToEditCodec.decode(scheduledToEdit),
       fold(
-        (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCallError()),
+        (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCall()),
         (validatedTransfer: ToScheduledEdited): Observable<EditScheduled> =>
           http.post<unknown>(editScheduledUrl(), validatedTransfer).pipe(
             map(editedFareAndReturnValidation),
@@ -33,7 +33,7 @@ const editedFareAndReturnValidation = (transfer: unknown): EditScheduled =>
     externalTypeCheckFor<EditScheduled>(scheduledEditedCodec),
     fold(
       (): never => {
-        throw new ValidationFailedAfterApiCallError(`Faudrait mettre le HttpReporter...`);
+        throw new ValidationFailedOnApiResult(`Faudrait mettre le HttpReporter...`);
       },
       (validatedTransfer: EditScheduled): EditScheduled => validatedTransfer
     )
@@ -43,7 +43,7 @@ const handleEditedFareAndReturnError$ = (
   error: Error | HttpErrorResponse,
   caught: Observable<EditScheduled>
 ): Observable<never> => {
-  if (error instanceof ValidationFailedAfterApiCallError) return throwError((): Error => error);
+  if (error instanceof ValidationFailedOnApiResult) return throwError((): Error => error);
 
   switch ((error as HttpErrorResponse).error.__type) {
     default:

@@ -9,7 +9,7 @@ import {
 } from 'io-ts';
 import { Entity, Regular } from '../../definitions';
 import { civilityCodec, entityCodec, phoneCodec } from './traits.codecs';
-import { waypointCodec } from './waypointCodec';
+import { waypointCodec } from './waypoint.codec';
 
 export const regularCodec: Type<Regular> = ioType(
   {

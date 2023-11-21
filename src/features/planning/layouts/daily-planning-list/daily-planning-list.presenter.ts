@@ -13,6 +13,7 @@ export type FareListItem = {
   datetime: string;
   isMedicalDrive: boolean;
   isTwoWayDrive: boolean;
+  createdByRecurring: boolean;
 };
 
 export const toDailyDriverPlanningListPresentation = (
@@ -32,5 +33,6 @@ const toFareListItem = (fare: ScheduledPlanningSession): FareListItem => ({
   time: fare.localTime,
   datetime: fare.datetime,
   isMedicalDrive: fare.isMedicalDrive,
-  isTwoWayDrive: fare.isTwoWayDrive
+  isTwoWayDrive: fare.isTwoWayDrive,
+  createdByRecurring: fare.creator === 'recurrence'
 });

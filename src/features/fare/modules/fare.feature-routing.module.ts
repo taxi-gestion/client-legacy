@@ -6,6 +6,7 @@ import { redirectWithDate } from '../guards/redirect-with-date.guard';
 import { setDate } from '../guards/set-date.guard';
 import { ScheduleUnassignedPage } from '../pages/schedule-unassigned/schedule-unassigned.page';
 import { ManageRecurrenceLayout } from '../layouts/manage-recurrence/manage-recurrence.layout';
+import { EditRecurringPage } from '../pages/edit-recurring/edit-recurring.page';
 
 const ROUTES: Routes = [
   {
@@ -64,6 +65,10 @@ const ROUTES: Routes = [
   {
     path: 'recurring/add',
     component: AddRecurringPage
+  },
+  {
+    path: 'recurring/edit',
+    component: EditRecurringPage
   }
 ];
 

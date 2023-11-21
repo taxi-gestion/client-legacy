@@ -5,6 +5,7 @@ import { DeleteFareComponent } from './delete-fare/delete-fare.component';
 import { UnassignedFareFieldComponent } from './unassigned-fare-field/unassigned-fare-field.component';
 import { AllocateUnassignedComponent } from './allocate-unassigned/allocate-unassigned.component';
 import { RecurringFareFormComponent } from './recurring-fare-form/recurring-fare-form.component';
+import { ApplyRecurrenceComponent } from './apply-recurring-fares/apply-recurring-fares.component';
 
 export * from './scheduled-fare-field/scheduled-fare-field.component';
 export * from './scheduled-fare-field/scheduled-fare-field.form';
@@ -24,5 +25,6 @@ export const COMPONENTS = [
   DeleteFareComponent,
   AllocateUnassignedComponent,
   UnassignedFareFieldComponent,
-  RecurringFareFormComponent
+  RecurringFareFormComponent,
+  ApplyRecurrenceComponent
 ];

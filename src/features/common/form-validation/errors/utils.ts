@@ -1,7 +1,5 @@
-import { ValidationFailedBeforeApiCallError } from './validation-failed-before-call.error';
+import { ValidationFailedBeforeApiCall } from './validation-failed-before-call.error';
 
-export const throwDecodeError = (codecName: string, rawFormValues: unknown) => (): never => {
-  throw new ValidationFailedBeforeApiCallError(
-    `${codecName} decode error with payload ${JSON.stringify(rawFormValues, null, 2)}`
-  );
+export const throwDecodeError = (codec: string, rawFormValues: unknown) => (): never => {
+  throw new ValidationFailedBeforeApiCall(`${codec} Decode error with payload ${JSON.stringify(rawFormValues, null, 2)}`);
 };

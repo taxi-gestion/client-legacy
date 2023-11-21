@@ -11,7 +11,7 @@ import {
 } from 'io-ts';
 import { Civility, Drive, DurationDistance, Entity, WithKind, WithNature, Passenger, Phone } from '../../definitions';
 
-import { waypointCodec } from './waypointCodec';
+import { waypointCodec } from './waypoint.codec';
 
 export const entityCodec: Type<Entity> = ioType(
   {

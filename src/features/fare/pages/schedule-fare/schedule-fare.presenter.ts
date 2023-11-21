@@ -42,5 +42,6 @@ export const toDomain = (formValues: FareToScheduleValues): ToScheduled => ({
   kind: toKind(formValues.isTwoWayDrive),
   nature: toNature(formValues.isMedicalDrive),
   passenger: toPassenger(formValues),
-  status: 'to-scheduled'
+  status: 'to-scheduled',
+  creator: 'manager'
 });

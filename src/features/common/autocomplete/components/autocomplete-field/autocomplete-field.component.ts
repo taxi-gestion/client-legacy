@@ -11,9 +11,11 @@ import {
 import { AbstractControl, FormControl, FormControlStatus, FormGroup, ValidatorFn } from '@angular/forms';
 import {
   BehaviorSubject,
+  catchError,
   combineLatest,
   debounceTime,
   distinctUntilChanged,
+  EMPTY,
   filter,
   map,
   Observable,
@@ -79,6 +81,8 @@ export class AutocompleteFieldComponent<TValue> {
 
   @Output() public readonly selectedValue: EventEmitter<TValue> = new EventEmitter<TValue>();
 
+  @Output() public actionError: EventEmitter<Error> = new EventEmitter<Error>();
+
   private readonly _searchTerm$: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   private readonly _selected$: BehaviorSubject<TValue> = new BehaviorSubject<TValue>(this.emptyValue);
@@ -95,7 +99,15 @@ export class AutocompleteFieldComponent<TValue> {
     filter((searchTerm: string): boolean => searchTerm.length >= this.minSearchTermLength),
     debounceTime(this.searchDebounceTime),
     distinctUntilChanged(),
-    switchMap((searchTerm: string): Observable<TValue[]> => this.query$(searchTerm)),
+    switchMap(
+      (searchTerm: string): Observable<TValue[]> =>
+        this.query$(searchTerm).pipe(
+          catchError((error: Error): Observable<never> => {
+            this.actionError.emit(error);
+            return EMPTY;
+          })
+        )
+    ),
     startWith([])
   );
 

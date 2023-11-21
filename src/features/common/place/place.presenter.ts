@@ -1,5 +1,7 @@
 import { PlaceValues } from './definitions/place.definition';
 import { Place } from '@definitions';
+import { isRight } from 'fp-ts/Either';
+import { placeRules } from '../../../codecs/domain-rules/place.rules';
 
 export const emptyPlaceValue: PlaceValues = {
   context: '',
@@ -24,3 +26,5 @@ export const toPlacesValues = (places: Place | Place[] | PlaceValues | PlaceValu
 };
 
 export const toPlaceValues = (place: Place): PlaceValues => place;
+
+export const isValidPlaceValues = (place: PlaceValues | undefined): boolean => isRight(placeRules.decode(place));

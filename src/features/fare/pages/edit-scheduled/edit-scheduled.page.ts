@@ -19,6 +19,7 @@ import {
   isValidFare,
   scheduledFareEmptyValue,
   ScheduledFareValues,
+  toDeleteFareSuccessToasts,
   toScheduledFaresValues
 } from '@features/fare';
 import { bootstrapValidationClasses, BootstrapValidationClasses, nullToUndefined } from '@features/common/form-validation';
@@ -27,7 +28,6 @@ import { FARE_FORM } from '../fare.form';
 import {
   findMatchingFare,
   routeParamToFareId,
-  toDeleteFareSuccessToasts,
   toEditScheduledSuccessToast,
   toFareSummary,
   toScheduledToEdit

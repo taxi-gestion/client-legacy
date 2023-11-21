@@ -4,7 +4,6 @@ import {
   deleteFareActionProvider,
   editScheduledActionProvider,
   scheduleFareActionProvider,
-  validatedDeleteFareAction$,
   validatedScheduleFareAction$,
   scheduledFaresForDateQueryProvider,
   validatedScheduledFaresForDateQuery$,
@@ -21,7 +20,8 @@ import {
   validatedEditScheduledAction$,
   unassignedFaresForDateQueryProvider,
   unassignedFaresForDateQuery$,
-  addRecurringActionProvider
+  addRecurringActionProvider,
+  deleteFareAction$
 } from '@features/fare';
 import { listDriversQuery$, listDriversQueryProvider } from '@features/common/driver';
 import {
@@ -32,11 +32,15 @@ import {
 } from '@features/regular';
 import { searchPlaceQuery$, searchPlaceQueryProvider } from '@features/common/place';
 import { estimateJourneyQuery$, estimateJourneyQueryProvider } from '@features/common/journey';
-import { validatedAddRecurringAction$ } from '../../features/fare/actions/add-recurring.action';
+import { addRecurringAction$ } from '../../features/fare';
+import { recurringFaresQueryProvider } from '../../features/fare/providers/queries/recurring-fares.query.provider';
+import { recurringFaresQuery$ } from '../../features/fare/queries/recurring-fares.query';
+import { applyRecurringActionProvider } from '../../features/fare/providers/actions/apply-recurring.action.provider';
+import { applyRecurringAction$ } from '../../features/fare/actions/apply-recurring.action';
 
 export const FARE_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   allocateUnassignedActionProvider(allocateUnassignedAction$, [HttpClient]),
-  deleteFareActionProvider(validatedDeleteFareAction$, [HttpClient]),
+  deleteFareActionProvider(deleteFareAction$, [HttpClient]),
   editScheduledActionProvider(validatedEditScheduledAction$, [HttpClient]),
   estimateJourneyQueryProvider(estimateJourneyQuery$, [HttpClient]),
   faresCountForDateQueryProvider(faresCountForDateQuery$, [HttpClient]),
@@ -50,5 +54,7 @@ export const FARE_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   searchPlaceQueryProvider(searchPlaceQuery$, [HttpClient]),
   searchRegularQueryProvider(searchRegularsQuery$, [HttpClient]),
   unassignedFaresForDateQueryProvider(unassignedFaresForDateQuery$, [HttpClient]),
-  addRecurringActionProvider(validatedAddRecurringAction$, [HttpClient])
+  addRecurringActionProvider(addRecurringAction$, [HttpClient]),
+  recurringFaresQueryProvider(recurringFaresQuery$, [HttpClient]),
+  applyRecurringActionProvider(applyRecurringAction$, [HttpClient])
 ];

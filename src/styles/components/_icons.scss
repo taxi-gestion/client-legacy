@@ -165,3 +165,11 @@ $font-family-icons-lower: string.to-lower-case($font-family-icons);
 .ri-navigation-line::before {
   content: '\ef89';
 }
+
+.ri-loop-left-line::before {
+  content: '\f33d';
+}
+
+.ri-delete-bin-line::before {
+  content: '\ec2a';
+}

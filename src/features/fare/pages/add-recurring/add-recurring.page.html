@@ -11,6 +11,7 @@
     <label class="form-label">Passager</label>
     <app-regular-field
       [regularFieldControl]="regularControl"
+      (actionError)="onSearchRegularActionError($event)"
       (selectedValue)="onSelectRegularChange($event)"></app-regular-field>
   </div>
   <ng-container *ngIf="(regular$ | async) as regular">

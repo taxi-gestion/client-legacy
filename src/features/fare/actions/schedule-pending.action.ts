@@ -5,7 +5,7 @@ import { Entity, SchedulePending, PendingToScheduled } from '@definitions';
 import { pipe as fpipe } from 'fp-ts/function';
 import { fold } from 'fp-ts/Either';
 import { externalTypeCheckFor, pendingScheduledCodec, returnDriveCodec } from '@codecs';
-import { ValidationFailedAfterApiCallError, ValidationFailedBeforeApiCallError } from '@features/common/form-validation';
+import { ValidationFailedOnApiResult, ValidationFailedBeforeApiCall } from '@features/common/form-validation';
 
 const schedulePendingUrl = (): string => `/api/pending/schedule`;
 
@@ -15,7 +15,7 @@ export const validatedSchedulePendingAction$ =
     fpipe(
       returnDriveCodec.decode(pendingReturn),
       fold(
-        (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCallError()),
+        (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCall()),
         (validatedTransfer: PendingToScheduled): Observable<SchedulePending> =>
           http.post<unknown>(schedulePendingUrl(), validatedTransfer).pipe(
             map(editedFareAndReturnValidation),
@@ -33,7 +33,7 @@ const editedFareAndReturnValidation = (transfer: unknown): SchedulePending =>
     externalTypeCheckFor<SchedulePending>(pendingScheduledCodec),
     fold(
       (): never => {
-        throw new ValidationFailedAfterApiCallError(`Faudrait mettre le HttpReporter...`);
+        throw new ValidationFailedOnApiResult(`Faudrait mettre le HttpReporter...`);
       },
       (validatedTransfer: SchedulePending): SchedulePending => validatedTransfer
     )
@@ -43,7 +43,7 @@ const handleEditedFareAndReturnError$ = (
   error: Error | HttpErrorResponse,
   caught: Observable<SchedulePending>
 ): Observable<never> => {
-  if (error instanceof ValidationFailedAfterApiCallError) return throwError((): Error => error);
+  if (error instanceof ValidationFailedOnApiResult) return throwError((): Error => error);
 
   switch ((error as HttpErrorResponse).error.__type) {
     default:

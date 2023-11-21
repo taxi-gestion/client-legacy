@@ -3,7 +3,7 @@ import { catchError, map, Observable, throwError } from 'rxjs';
 import { pipe as fpipe } from 'fp-ts/function';
 import { externalTypeCheckFor, faresCountCodec } from '@codecs';
 import { fold } from 'fp-ts/Either';
-import { ValidationFailedAfterApiCallError } from '@features/common/form-validation';
+import { ValidationFailedOnApiResult } from '@features/common/form-validation';
 import { FaresCountForDateQuery } from '../providers';
 import { FaresCount } from '../../../definitions';
 
@@ -19,7 +19,7 @@ export const faresCountForDateQuery$ =
     );
 
 const handleFaresCountForDateError$ = (error: Error | HttpErrorResponse, caught: Observable<FaresCount>): Observable<never> => {
-  if (error instanceof ValidationFailedAfterApiCallError) return throwError((): Error => error);
+  if (error instanceof ValidationFailedOnApiResult) return throwError((): Error => error);
 
   switch ((error as HttpErrorResponse).error.__type) {
     default:
@@ -34,7 +34,7 @@ const faresCountValidation = (transfer: unknown): FaresCount =>
     fold(
       // TODO Share error reporter between projects
       (): never => {
-        throw new ValidationFailedAfterApiCallError(`Faudrait mettre le HttpReporter...`);
+        throw new ValidationFailedOnApiResult(`Faudrait mettre le HttpReporter...`);
       },
       (validatedTransfer: FaresCount): FaresCount => validatedTransfer
     )

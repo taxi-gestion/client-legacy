@@ -2,13 +2,11 @@ import { Civility, Entity, Passenger, Regular } from '@definitions';
 import { toPhone, toPhonesValues } from '@features/common/phone';
 import { RegularValues } from '@features/regular';
 import { toWaypoint, toWaypointsValues } from '@features/common/waypoint';
-import { ValidationFailedBeforeApiCallError } from '@features/common/form-validation';
+import { ValidationFailedBeforeApiCall } from '@features/common/form-validation';
 import { PassengerValues } from '../../fare';
 
 export const throwDecodeError = (codecName: string, rawFormValues: unknown) => (): never => {
-  throw new ValidationFailedBeforeApiCallError(
-    `${codecName} decode error with payload ${JSON.stringify(rawFormValues, null, 2)}`
-  );
+  throw new ValidationFailedBeforeApiCall(`${codecName} decode error with payload ${JSON.stringify(rawFormValues, null, 2)}`);
 };
 
 export const isEmptyOrWhitespace = (str: string): boolean => str === '' || str.trim() === '';

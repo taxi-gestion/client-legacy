@@ -5,7 +5,18 @@ import {
   ScheduledFareValues,
   UnassignedFareValues
 } from '../definitions/fare.definition';
-import { Civility, Entity, Passenger, Pending, Scheduled, Unassigned, WithKind, WithNature } from '@definitions';
+import {
+  Civility,
+  DeleteFare,
+  Entity,
+  Passenger,
+  Pending,
+  Recurring,
+  Scheduled,
+  Unassigned,
+  WithKind,
+  WithNature
+} from '@definitions';
 import { driverEmptyValue, DriverValues, toDriverValues } from '@features/common/driver';
 import { emptyPhoneValue, PhoneValues, toPhone, toPhoneValues } from '@features/common/phone';
 import { regularEmptyValue, RegularValues, toIdentity } from '@features/regular';
@@ -17,6 +28,8 @@ import { Ord as ordString } from 'fp-ts/string';
 import { Ord as ordDate } from 'fp-ts/Date';
 import { Monoid } from 'fp-ts/Monoid';
 import { pipe as fpipe } from 'fp-ts/function';
+import { Toast } from '../../../root/components/toaster/toaster.presenter';
+import { toTime } from '../../common/presentation';
 
 export const toScheduledFaresValues = (
   fares: (Entity & Scheduled)[] | (Entity & Scheduled) | undefined
@@ -51,7 +64,8 @@ export const toScheduledFareValues = (fare: Entity & Scheduled): ScheduledFareVa
   isMedicalDrive: isMedicalDrive(fare.nature),
   isTwoWayDrive: isTwoWayDrive(fare.kind),
   passenger: toPassengerValues(fare.passenger),
-  status: 'scheduled'
+  status: 'scheduled',
+  creator: fare.creator
 });
 
 export const toUnassignedFareValues = (fare: Entity & Unassigned): UnassignedFareValues => ({
@@ -180,7 +194,8 @@ export const scheduledFareEmptyValue: ScheduledFareValues = {
   isMedicalDrive: true,
   isTwoWayDrive: true,
   passenger: passengerEmptyValue,
-  status: 'scheduled'
+  status: 'scheduled',
+  creator: 'manager'
 };
 
 export const unassignedFareEmptyValue: UnassignedFareValues = {
@@ -268,3 +283,33 @@ const filterByPassengerProperties =
 export const sortFaresByDatetime = <T extends WithDatetimeValues>(fares: T[]): T[] => sort(byDatetime)(fares);
 
 const byDatetime: Ord<WithDatetimeValues> = contramap((fare: { datetime: string }): Date => new Date(fare.datetime))(ordDate);
+
+export const toDeleteFareSuccessToasts = (fares: DeleteFare): Toast[] => [
+  ...(fares.scheduledDeleted === undefined ? [] : [toDeleteScheduledSuccessToast(fares.scheduledDeleted)]),
+  ...(fares.unassignedDeleted === undefined ? [] : [toDeleteUnassignedSuccessToast(fares.unassignedDeleted)]),
+  ...(fares.pendingDeleted === undefined ? [] : [toDeletePendingSuccessToast(fares.pendingDeleted)]),
+  ...(fares.recurringDeleted === undefined ? [] : [toDeleteRecurringSuccessToast(fares.recurringDeleted)])
+];
+const toDeleteScheduledSuccessToast = (scheduled: Scheduled): Toast => ({
+  content: `Course pour ${toIdentity(scheduled.passenger)} par ${scheduled.driver.username} à ${toTime(
+    scheduled.datetime
+  )} supprimée`,
+  status: 'success',
+  title: 'Une course a été supprimée'
+});
+const toDeleteUnassignedSuccessToast = (unassigned: Unassigned): Toast => ({
+  content: `Course non assignée pour ${toIdentity(unassigned.passenger)} à ${toTime(unassigned.datetime)} supprimée`,
+  status: 'success',
+  title: 'Une course a été supprimée'
+});
+const toDeletePendingSuccessToast = (pending: Pending): Toast => ({
+  content: `Retour pour ${toIdentity(pending.passenger)} par ${pending.driver.username} supprimé`,
+  status: 'success',
+  title: 'Un retour a été supprimé'
+});
+
+const toDeleteRecurringSuccessToast = (recurring: Recurring): Toast => ({
+  content: `Règle de récurrence pour ${toIdentity(recurring.passenger)} supprimée`,
+  status: 'success',
+  title: 'Une règle de récurrence a été supprimée'
+});

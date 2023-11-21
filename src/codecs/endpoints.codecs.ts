@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { array as ioArray, number as ioNumber, Type, type as ioType, undefined as ioUndefined, union as ioUnion } from 'io-ts';
 import {
   AddRecurring,
@@ -9,10 +10,13 @@ import {
   Entity,
   FaresCount,
   Pending,
+  Recurring,
+  RecurringApplied,
   RegisterRegular,
   Regular,
   RegularHistory,
   Scheduled,
+  ScheduledAndReturnScheduled,
   SchedulePending,
   ScheduleScheduled,
   ScheduleUnassigned,
@@ -37,6 +41,14 @@ export const scheduleScheduledCodec: Type<ScheduleScheduled> = ioType(
   'scheduleScheduledCodec'
 );
 
+export const scheduleAndReturnScheduledCodec: Type<ScheduledAndReturnScheduled> = ioType(
+  {
+    scheduledCreated: scheduledFareCodec,
+    scheduledReturnCreated: scheduledFareCodec
+  },
+  'scheduleAndReturnScheduledCodec'
+);
+
 export const addRecurringCodec: Type<AddRecurring> = ioType(
   {
     recurringCreated: recurringFareCodec
@@ -47,7 +59,8 @@ export const faresDeletedCodec: Type<DeleteFare> = ioType(
   {
     scheduledDeleted: ioUnion([scheduledFareCodec, ioUndefined]),
     pendingDeleted: ioUnion([pendingReturnCodec, ioUndefined]),
-    unassignedDeleted: ioUnion([unassignedFareCodec, ioUndefined])
+    unassignedDeleted: ioUnion([unassignedFareCodec, ioUndefined]),
+    recurringDeleted: ioUnion([recurringFareCodec, ioUndefined])
   },
   'faresDeletedCodec'
 );
@@ -59,6 +72,13 @@ export const faresSubcontractedCodec: Type<SubcontractFare> = ioType(
     pendingDeleted: ioUnion([pendingReturnCodec, ioUndefined])
   },
   'faresSubcontractedCodec'
+);
+
+export const recurringAddedCodec: Type<AddRecurring> = ioType(
+  {
+    recurringCreated: recurringFareCodec
+  },
+  'recurringAddedCodec'
 );
 
 export const scheduledEditedCodec: Type<EditScheduled> = ioType(
@@ -75,6 +95,11 @@ export const unassignedAllocatedCodec: Type<AllocateUnassigned> = ioType(
     unassignedCreated: unassignedFareCodec
   },
   'unassignedAllocatedCodec'
+);
+
+export const recurringsAppliedCodec: Type<RecurringApplied[]> = ioArray(
+  ioUnion([unassignedAllocatedCodec, scheduleScheduledCodec, scheduleAndReturnScheduledCodec]),
+  'recurringsAppliedCodec'
 );
 
 export const regularRegisteredCodec: Type<RegisterRegular> = ioType(
@@ -123,6 +148,8 @@ export const subcontractedFaresCodec: Type<(Entity & Subcontracted)[]> = ioArray
   subcontractedFareCodec,
   'subcontractedFaresCodec'
 );
+
+export const recurringFaresCodec: Type<(Entity & Recurring)[]> = ioArray(recurringFareCodec, 'recurringFaresCodec');
 
 export const driversWithOrderCodec: Type<(Entity & Scheduled)[]> = ioArray(scheduledFareCodec, 'scheduledFaresCodec');
 
