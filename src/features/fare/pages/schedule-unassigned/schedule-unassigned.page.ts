@@ -13,6 +13,7 @@ import {
   isValidFare,
   SCHEDULE_UNASSIGNED_ACTION,
   ScheduleUnassignedAction,
+  toDeleteFareSuccessToasts,
   toUnassignedFaresValues,
   UNASSIGNED_FARES_FOR_DATE_QUERY,
   unassignedFareEmptyValue,
@@ -27,7 +28,6 @@ import { toLongDateFormat, toStandardDateFormat } from '@features/common/angular
 import { DateService } from '../../../common/date/services';
 import { DriverValues, LIST_DRIVERS_QUERY, ListDriversQuery, toDriversValues } from '@features/common/driver';
 import { ActivatedRoute, Router } from '@angular/router';
-import { toDeleteFareSuccessToasts } from '../edit-scheduled/edit-scheduled.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -42,7 +42,8 @@ export const toScheduledFarePresentation = (fare: Entity & Scheduled): Scheduled
   driver: toDriverValues(fare.driver),
   status: 'scheduled',
   datetime: fare.datetime,
-  localTime: timeInTimezone(fare.datetime, 'Europe/Paris')
+  localTime: timeInTimezone(fare.datetime, 'Europe/Paris'),
+  creator: fare.creator
 });
 
 const timeInTimezone = (isoUtcDate: string, timeZone: string): string => {
@@ -63,7 +64,8 @@ export const toScheduledPlanningSession = (fare: ScheduledPresentation): Schedul
   status: fare.status,
   datetime: fare.datetime,
   localTime: fare.localTime,
-  startTimeInMinutes: minutesSinceStartOfDayInTimezone(fare.datetime, 'Europe/Paris')
+  startTimeInMinutes: minutesSinceStartOfDayInTimezone(fare.datetime, 'Europe/Paris'),
+  creator: fare.creator
 });
 
 const minutesSinceStartOfDayInTimezone = (isoUtcDate: string, timeZone: string): number => {

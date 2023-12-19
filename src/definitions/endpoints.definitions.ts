@@ -5,6 +5,7 @@ import { Entity, Regular } from './domain.definitions';
 type Commands =
   | 'add-recurring'
   | 'allocate-unassigned'
+  | 'apply-recurring'
   | 'delete-fare'
   | 'delete-regular'
   | 'edit-regular'
@@ -27,13 +28,32 @@ type CommandMappings = {
   'schedule-scheduled': ScheduleScheduled;
   'schedule-unassigned': ScheduleUnassigned;
   'subcontract-fare': SubcontractFare;
+  'apply-recurring': RecurringApplied[];
 };
 
 export type CommandsResult<T extends Commands> = CommandMappings[T];
 
-export type ScheduleScheduled = {
+export type RecurringApplied =
+  | AllocateUnassigned
+  | ScheduleAndPendingScheduled
+  | ScheduledAndReturnScheduled
+  | ScheduleOnlyScheduled;
+
+export type ScheduleScheduled = ScheduleAndPendingScheduled | ScheduleOnlyScheduled;
+
+export type ScheduleOnlyScheduled = {
   scheduledCreated: Entity & Scheduled;
-  pendingCreated: (Entity & Pending) | undefined;
+  pendingCreated: undefined;
+};
+
+export type ScheduleAndPendingScheduled = {
+  scheduledCreated: Entity & Scheduled;
+  pendingCreated: Entity & Pending;
+};
+
+export type ScheduledAndReturnScheduled = {
+  scheduledCreated: Entity & Scheduled;
+  scheduledReturnCreated: Entity & Scheduled;
 };
 
 export type AddRecurring = {
@@ -60,6 +80,7 @@ export type DeleteFare = {
   scheduledDeleted: (Entity & Scheduled) | undefined;
   pendingDeleted: (Entity & Pending) | undefined;
   unassignedDeleted: (Entity & Unassigned) | undefined;
+  recurringDeleted: (Entity & Recurring) | undefined;
 };
 
 export type EditRegular = {
@@ -85,10 +106,11 @@ export type RegisterRegular = {
   regularRegistered: Entity & Regular;
 };
 
-type Queries = 'regular-history';
+type Queries = 'recurring-fares' | 'regular-history';
 
 type QueriesMappings = {
   'regular-history': RegularHistory;
+  'recurring-fares': (Entity & Recurring)[];
 };
 
 export type QueriesResult<T extends Queries> = QueriesMappings[T];

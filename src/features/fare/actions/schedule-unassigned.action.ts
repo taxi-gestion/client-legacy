@@ -4,7 +4,7 @@ import { Entity, ScheduleUnassigned, ToScheduled } from '@definitions';
 import { pipe as fpipe } from 'fp-ts/function';
 import { fold } from 'fp-ts/Either';
 import { externalTypeCheckFor, unassignedScheduledCodec, unassignedToScheduledCodec } from '@codecs';
-import { ValidationFailedAfterApiCallError, ValidationFailedBeforeApiCallError } from '@features/common/form-validation';
+import { ValidationFailedOnApiResult, ValidationFailedBeforeApiCall } from '@features/common/form-validation';
 import { ScheduleUnassignedAction } from '../providers';
 
 const schedulePendingUrl = (): string => `/api/unassigned/schedule`;
@@ -15,7 +15,7 @@ export const scheduleUnassignedAction$ =
     fpipe(
       unassignedToScheduledCodec.decode(unassignedToSchedule),
       fold(
-        (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCallError()),
+        (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCall()),
         (validatedTransfer: Entity & ToScheduled): Observable<ScheduleUnassigned> =>
           http.post<unknown>(schedulePendingUrl(), validatedTransfer).pipe(
             map(editedFareAndReturnValidation),
@@ -33,7 +33,7 @@ const editedFareAndReturnValidation = (transfer: unknown): ScheduleUnassigned =>
     externalTypeCheckFor<ScheduleUnassigned>(unassignedScheduledCodec),
     fold(
       (): never => {
-        throw new ValidationFailedAfterApiCallError(`Faudrait mettre le HttpReporter...`);
+        throw new ValidationFailedOnApiResult(`Faudrait mettre le HttpReporter...`);
       },
       (validatedTransfer: ScheduleUnassigned): ScheduleUnassigned => validatedTransfer
     )
@@ -43,7 +43,7 @@ const handleEditedFareAndReturnError$ = (
   error: Error | HttpErrorResponse,
   caught: Observable<ScheduleUnassigned>
 ): Observable<never> => {
-  if (error instanceof ValidationFailedAfterApiCallError) return throwError((): Error => error);
+  if (error instanceof ValidationFailedOnApiResult) return throwError((): Error => error);
 
   switch ((error as HttpErrorResponse).error.__type) {
     default:

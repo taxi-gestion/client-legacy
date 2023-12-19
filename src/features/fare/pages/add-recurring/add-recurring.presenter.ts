@@ -1,41 +1,47 @@
-import { AddRecurring, ToRecurring } from '@definitions';
+import { AddRecurring, Driver, Entity, ToRecurring } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
-import { pipe as fpipe } from 'fp-ts/function';
-import { fold as eitherFold } from 'fp-ts/Either';
-import { driverEmptyValue, toDriver } from '@features/common/driver';
+import { driverEmptyValue, DriverValues, toDriver } from '@features/common/driver';
 import { toIdentity } from '@features/regular';
-import { throwDecodeError } from '@features/common/form-validation';
 import { kilometersToMeters, minutesToSeconds, toKind, toNature } from '@features/common/presentation';
 
 import { toWaypoint } from '@features/common/waypoint';
 import { RecurringToAddValues, toPassenger } from '../../presentation';
 import { recurringToAddFormCodec } from '../fare.form';
+import { Decode, Encode, Validation } from 'io-ts';
+import { toRecurringRules } from '../../../../codecs/domain-rules/fares.rules';
 
-export const toAddRecurringSuccessToast = (fares: AddRecurring): Toast => ({
-  content: `Règle de récurrence pour ${toIdentity(fares.recurringCreated.passenger)} ajoutée`,
-  status: 'success',
-  title: 'Une règle de récurrence à été ajoutée'
-});
+export const recurringToAddFormDecode: Decode<unknown, RecurringToAddValues> = (
+  input: unknown
+): Validation<RecurringToAddValues> => recurringToAddFormCodec.decode(input);
 
-export const toRecurringToAdd = (rawFormValues: unknown): ToRecurring =>
-  fpipe(
-    recurringToAddFormCodec.decode(rawFormValues),
-    eitherFold(throwDecodeError('addRecurringFormCodec', rawFormValues), toDomain)
-  );
+export const toRecurringDecode: Decode<ToRecurring, ToRecurring> = (input: unknown): Validation<ToRecurring> =>
+  toRecurringRules.decode(input) as Validation<ToRecurring>;
 
-export const toDomain = (formValues: RecurringToAddValues): ToRecurring => ({
+export const toRecurringEncode: Encode<RecurringToAddValues, ToRecurring> = (
+  formValues: RecurringToAddValues
+): ToRecurring => ({
   arrival: toWaypoint(formValues.arrivalPlace),
   departureTime: formValues.departureTime,
   returnTime: formValues.returnTime,
   departure: toWaypoint(formValues.departurePlace),
   distance: kilometersToMeters(formValues.driveDistance),
-  driver: formValues.driver === undefined ? undefined : toDriver(formValues.driver),
+  driver: optionalDriverEncode(formValues.driver),
   duration: minutesToSeconds(formValues.driveDuration),
   kind: toKind(formValues.isTwoWayDrive),
   nature: toNature(formValues.isMedicalDrive),
   passenger: toPassenger(formValues),
   recurrence: formValues.recurrenceRule,
   status: 'to-recurring'
+});
+
+export const optionalDriverEncode: Encode<DriverValues | undefined, (Driver & Entity) | undefined> = (
+  values: DriverValues | undefined
+): (Driver & Entity) | undefined => (values?.id === '' || values === undefined ? undefined : toDriver(values));
+
+export const toAddRecurringSuccessToast = (fares: AddRecurring): Toast => ({
+  content: `Règle de récurrence pour ${toIdentity(fares.recurringCreated.passenger)} ajoutée`,
+  status: 'success',
+  title: 'Une règle de récurrence à été ajoutée'
 });
 
 // eslint-disable-next-line complexity
@@ -56,7 +62,7 @@ export const toActionsSummary = (formValues: Partial<RecurringToAddValues>): str
   )
     actions.push(`La course sera affectée à ${formValues.driver.username} à ${formValues.departureTime}`);
 
-  if (formValues.returnTime !== undefined && formValues.returnTime.length > 0)
+  if (formValues.returnTime != null && formValues.returnTime.length > 0)
     actions.push(`Le retour sera affecté à ${formValues.driver?.username} à ${formValues.returnTime}`);
 
   if (formValues.returnTime === '') actions.push('Le retour sera ajouté aux retours en attente');

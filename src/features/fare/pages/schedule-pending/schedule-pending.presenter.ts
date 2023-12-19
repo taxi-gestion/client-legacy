@@ -32,5 +32,6 @@ export const toDomain = (values: ReturnToScheduleValues): Entity & PendingToSche
   distance: kilometersToMeters(values.driveDistance),
   driver: toDriver(values.driver),
   duration: minutesToSeconds(values.driveDuration),
-  status: 'pending-to-scheduled'
+  status: 'pending-to-scheduled',
+  creator: 'manager'
 });

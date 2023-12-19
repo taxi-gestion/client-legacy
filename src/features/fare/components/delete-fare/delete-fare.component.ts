@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class DeleteFareComponent<T> {
   @Input({ required: true }) public action$!: () => Observable<T>;
+  @Input({ required: true }) public mode!: 'compact' | 'fullsize';
 
   @Output() public clicked: EventEmitter<void> = new EventEmitter<void>();
 

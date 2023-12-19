@@ -24,7 +24,7 @@
           <span class="badge bg-danger m-2">{{ count.pending}}</span>
         </button>
       </div>
-      <div class="d-flex gap-2 mb-2" role="group" aria-label="First group of options">
+      <div class="d-flex gap-2 mb-2" role="group" aria-label="Second group of options">
         <button
           type="button"
           class="btn btn-primary btn-square"
@@ -41,7 +41,9 @@
           Courses sous-traitées
           <span class="badge bg-danger m-2">{{ count.subcontracted }}</span>
         </button>
-        <button type="button" class="btn btn-primary btn-square" [disabled]="true">Créer les courses récurrentes</button>
+      </div>
+      <div class="d-flex gap-2 mb-2 bg-success" role="group" aria-label="Third group of options">
+        <app-apply-recurrence class="w-100" [date]="(selectedDate$ | async)"></app-apply-recurrence>
       </div>
     </div>
   </ng-container>

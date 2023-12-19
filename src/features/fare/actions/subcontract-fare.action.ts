@@ -5,7 +5,7 @@ import { fold } from 'fp-ts/Either';
 import { Entity, SubcontractFare, ToSubcontracted } from '@definitions';
 import { externalTypeCheckFor, faresSubcontractedCodec, fareToSubcontractCodec } from '@codecs';
 import { SubcontractFareAction } from '../providers';
-import { ValidationFailedAfterApiCallError, ValidationFailedBeforeApiCallError } from '@features/common/form-validation';
+import { ValidationFailedOnApiResult, ValidationFailedBeforeApiCall } from '@features/common/form-validation';
 
 const subcontractFareUrl = (): string => `/api/fare/subcontract`;
 
@@ -15,7 +15,7 @@ export const validatedSubcontractFareAction$ =
     fpipe(
       fareToSubcontractCodec.decode(fareToSubcontract),
       fold(
-        (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCallError()),
+        (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCall()),
         (validatedTransfer: ToSubcontracted): Observable<SubcontractFare> =>
           http.post<unknown>(subcontractFareUrl(), validatedTransfer).pipe(
             map(subcontractedFareAndReturnValidation),
@@ -33,7 +33,7 @@ const subcontractedFareAndReturnValidation = (transfer: unknown): SubcontractFar
     externalTypeCheckFor<SubcontractFare>(faresSubcontractedCodec),
     fold(
       (): never => {
-        throw new ValidationFailedAfterApiCallError(`Faudrait mettre le HttpReporter...`);
+        throw new ValidationFailedOnApiResult(`Faudrait mettre le HttpReporter...`);
       },
       (validatedTransfer: SubcontractFare): SubcontractFare => validatedTransfer
     )
@@ -43,7 +43,7 @@ const handleSubcontractedFareAndReturnError$ = (
   error: Error | HttpErrorResponse,
   caught: Observable<SubcontractFare>
 ): Observable<never> => {
-  if (error instanceof ValidationFailedAfterApiCallError) return throwError((): Error => error);
+  if (error instanceof ValidationFailedOnApiResult) return throwError((): Error => error);
 
   switch ((error as HttpErrorResponse).error.__type) {
     default:

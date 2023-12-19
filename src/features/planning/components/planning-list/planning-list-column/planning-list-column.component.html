@@ -9,6 +9,10 @@
       <div class="d-flex justify-content-between">
         <div>{{ fare.time }} - {{ fare.passenger }}</div>
         <div class="d-flex">
+          <ng-container *ngIf="fare.createdByRecurring">
+            <span class="visually-hidden">Trajet récurrent</span>
+            <i class="ri-loop-left-line text-secondary pe-1 ps-1" style="font-size: 20px" aria-hidden="true"></i>
+          </ng-container>
           <ng-container *ngIf="fare.isMedicalDrive; else nonMedicalDrive">
             <span class="visually-hidden">Trajet médical</span>
             <i class="ri-hospital-line text-success pe-1 ps-1" style="font-size: 20px" aria-hidden="true"></i>

@@ -33,6 +33,7 @@
           (actionError)="onSchedulePendingActionError($event)"></app-fare-form>
         <hr />
         <app-delete-fare
+          mode="fullsize"
           [action$]="deleteFare$$(fare.id!)"
           (actionSuccess)="onDeleteFareActionSuccess($event)"
           (actionError)="onDeleteFareActionError($event)"></app-delete-fare>

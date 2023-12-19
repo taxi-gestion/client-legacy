@@ -1,0 +1,17 @@
+<button
+  [appLoadAction]="applyRecurring$"
+  #loadAction="loadAction"
+  (actionSuccess)="onActionSuccess($event)"
+  (actionError)="onActionError($event)"
+  (click)="onClick(loadAction.start)"
+  [appLoadActionDisplay]="loadAction.isLoading$ | async"
+  #deleteLoadActionDisplay
+  type="button"
+  class="btn btn-primary btn-square w-100"
+  [disabled]="deleteLoadActionDisplay.isLoading">
+  <ng-container slot="loadActionDisplayIdle">Créer les courses récurrentes</ng-container>
+  <ng-container slot="loadActionDisplayLoading">
+    <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+    Création en cours...
+  </ng-container>
+</button>

@@ -21,6 +21,9 @@
       name="departureTime"
       formControlName="departureTime"
       [ngClass]="validation(recurringFareForm.controls.departureTime)" />
+    <div class="invalid-feedback" *ngIf="recurringFareForm.controls.departureTime.errors as errorMessages">
+      {{ errorMessages | json }}
+    </div>
   </div>
   <div class="mb-3">
     <label class="form-label">Lieu de départ</label>
@@ -106,24 +109,19 @@
     </div>
   </div>
   <hr />
-  <!--  [disabled]="loadActionDisplay.isLoading"-->
   <button
     [appLoadActionDisplay]="loadAction.isLoading$ | async"
     #loadActionDisplay
     type="submit"
     class="btn mt-3 btn-primary w-100"
-    [disabled]="true">
+    [disabled]="loadActionDisplay.isLoading">
     <ng-container slot="loadActionDisplayIdle">Créer la règle de course récurrente</ng-container>
     <ng-container slot="loadActionDisplayLoading">
       <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
       Création en cours...
     </ng-container>
   </button>
-  <div class="text-danger mt-2" *ngIf="recurringFareForm.errors?.['validationFailedBeforeApiCallError']">
-    La structure des données de la requête ne respecte pas le contrat de transfer. La requête ne peut pas être effectuée.
-    Prévenir Romain qu'il va faire des heures supp'.
-  </div>
   <div class="text-danger mt-2" *ngIf="recurringFareForm.errors">
-    Une erreur est survenue lors de l'appel au service distant.
+    <pre>{{ recurringFareForm.errors | json }}</pre>
   </div>
 </form>

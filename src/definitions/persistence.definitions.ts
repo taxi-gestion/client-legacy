@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Entity, Pending, Regular, Scheduled, Subcontracted, Unassigned } from './index';
+import { Entity, Pending, Recurring, Regular, Scheduled, Subcontracted, Unassigned } from './index';
 
 export type DriverPersistence = {
   id: string;
@@ -24,6 +24,11 @@ export type PendingPersistence = Omit<Pending, 'datetime' | 'status'> & {
   datetime: Date;
 } & {
   outwardFareId: string;
+};
+
+export type RecurringPersistence = Omit<Recurring, 'departureTime' | 'returnTime' | 'status'> & {
+  departure_time: string;
+  return_time: string | undefined;
 };
 
 export type RegularPersistence = Omit<Regular, 'subcontractedClient'> & {

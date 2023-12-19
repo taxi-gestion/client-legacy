@@ -43,5 +43,6 @@ export const toDomain = (values: Entity & FareToScheduleValues): Entity & ToSche
   kind: toKind(values.isTwoWayDrive),
   nature: toNature(values.isMedicalDrive),
   passenger: toPassenger(values),
-  status: 'to-scheduled'
+  status: 'to-scheduled',
+  creator: 'manager'
 });

@@ -10,6 +10,7 @@
   [revalidate]="{ status: regularFieldControl.statusChanges | async, touched: regularFieldControl.touched }"
   [prefilled]="prefilled"
   [setDefaultSelectedValue]="defaultValue"
+  (actionError)="actionError.emit($event)"
   (selectedValue)="onSelectedValueChange($event)">
   <ng-template #resultTemplate let-templatedValue>
     <b>{{ templatedValue.lastname }} {{ templatedValue.firstname }}</b>

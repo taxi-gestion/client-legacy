@@ -5,7 +5,7 @@ import { Entity, Scheduled } from '@definitions';
 import { pipe as fpipe } from 'fp-ts/function';
 import { externalTypeCheckFor, scheduledFaresCodec } from '@codecs';
 import { fold } from 'fp-ts/Either';
-import { ValidationFailedAfterApiCallError } from '@features/common/form-validation';
+import { ValidationFailedOnApiResult } from '@features/common/form-validation';
 
 export const validatedDriverAgendaForDateQuery$ =
   (httpClient: HttpClient): DriverAgendaForDateQuery =>
@@ -22,7 +22,7 @@ const handleDriverAgendaForDateError$ = (
   error: Error | HttpErrorResponse,
   caught: Observable<(Entity & Scheduled)[]>
 ): Observable<never> => {
-  if (error instanceof ValidationFailedAfterApiCallError) return throwError((): Error => error);
+  if (error instanceof ValidationFailedOnApiResult) return throwError((): Error => error);
 
   switch ((error as HttpErrorResponse).error.__type) {
     default:
@@ -37,7 +37,7 @@ const scheduledFaresValidation = (transfer: unknown): (Entity & Scheduled)[] =>
     fold(
       // TODO Share error reporter between projects
       (): never => {
-        throw new ValidationFailedAfterApiCallError(`Faudrait mettre le HttpReporter...`);
+        throw new ValidationFailedOnApiResult(`Faudrait mettre le HttpReporter...`);
       },
       (validatedTransfer: (Entity & Scheduled)[]): (Entity & Scheduled)[] => validatedTransfer
     )

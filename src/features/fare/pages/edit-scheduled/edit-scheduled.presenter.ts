@@ -1,4 +1,4 @@
-import { DeleteFare, EditScheduled, Entity, Pending, Scheduled, ToScheduledEdited, Unassigned } from '@definitions';
+import { EditScheduled, Entity, ToScheduledEdited } from '@definitions';
 import { Toast } from '../../../../root/components/toaster/toaster.presenter';
 import { toIdentity } from '@features/regular';
 import {
@@ -46,7 +46,8 @@ export const toDomain = (values: ScheduledToEditValues): Entity & ToScheduledEdi
   kind: toKind(values.isTwoWayDrive),
   nature: toNature(values.isMedicalDrive),
   passenger: toPassenger(values),
-  status: 'to-scheduled-edited'
+  status: 'to-scheduled-edited',
+  creator: 'manager'
 });
 
 const UUID_LENGTH: 36 = 36 as const;
@@ -56,34 +57,6 @@ export const routeParamToFareId = (keyInParams: string, params: Params): string 
   const uuid: unknown = params[keyInParams];
   return isValidUuid(uuid) ? uuid : undefined;
 };
-
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-export const toDeleteFareSuccessToasts = (fares: DeleteFare): Toast[] => [
-  ...(fares.scheduledDeleted === undefined ? [] : [toDeleteScheduledSuccessToast(fares.scheduledDeleted)]),
-  ...(fares.unassignedDeleted === undefined ? [] : [toDeleteUnassignedSuccessToast(fares.unassignedDeleted)]),
-  ...(fares.pendingDeleted === undefined ? [] : [toDeletePendingSuccessToast(fares.pendingDeleted)])
-];
-/* eslint-enable @typescript-eslint/no-non-null-assertion */
-
-const toDeleteScheduledSuccessToast = (scheduled: Scheduled): Toast => ({
-  content: `Course pour ${toIdentity(scheduled.passenger)} par ${scheduled.driver.username} à ${toTime(
-    scheduled.datetime
-  )} supprimée`,
-  status: 'success',
-  title: 'Une course a été supprimée'
-});
-
-const toDeleteUnassignedSuccessToast = (unassigned: Unassigned): Toast => ({
-  content: `Course non assignée pour ${toIdentity(unassigned.passenger)} à ${toTime(unassigned.datetime)} supprimée`,
-  status: 'success',
-  title: 'Une course a été supprimée'
-});
-
-const toDeletePendingSuccessToast = (pending: Pending): Toast => ({
-  content: `Retour pour ${toIdentity(pending.passenger)} par ${pending.driver.username} supprimé`,
-  status: 'success',
-  title: 'Un retour a été supprimé'
-});
 
 export const findMatchingFare = ([fares, id]: [ScheduledFareValues[], string]): Observable<ScheduledFareValues> =>
   fpipe(

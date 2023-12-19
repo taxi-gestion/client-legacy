@@ -39,5 +39,6 @@ export const toDomain = (formValues: UnassignedToAllocateValues): ToUnassigned =
   kind: toKind(formValues.isTwoWayDrive),
   nature: toNature(formValues.isMedicalDrive),
   passenger: toPassenger(formValues),
-  status: 'to-unassigned'
+  status: 'to-unassigned',
+  creator: 'manager'
 });

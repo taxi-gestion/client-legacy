@@ -2,8 +2,14 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from
 import { FormControl, FormGroup } from '@angular/forms';
 import { BehaviorSubject, filter, map, Observable } from 'rxjs';
 import { RECURRING_FARE_FORM } from '../fare.form';
-import { toRecurringToAdd, toAddRecurringSuccessToast, toActionsSummary } from './add-recurring.presenter';
-import { AddRecurring, Entity } from '@definitions';
+import {
+  recurringToAddFormDecode,
+  toActionsSummary,
+  toAddRecurringSuccessToast,
+  toRecurringDecode,
+  toRecurringEncode
+} from './add-recurring.presenter';
+import { AddRecurring, Entity, ToRecurring } from '@definitions';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { nullToUndefined } from '@features/common/form-validation';
 import { driverEmptyValue, DriverValues, LIST_DRIVERS_QUERY, ListDriversQuery, toDriversValues } from '@features/common/driver';
@@ -11,6 +17,11 @@ import { isValidRegular, regularEmptyValue, RegularValues } from '@features/regu
 import { AddRecurringFields, FareValues, initialFareValuesFromRegular, RecurringToAddValues } from '@features/fare';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ADD_RECURRING_ACTION, AddRecurringAction } from '../../providers/actions/add-recurring.action.provider';
+import { fold } from 'fp-ts/Either';
+import { pipe as fpipe } from 'fp-ts/lib/function';
+import { Errors } from '../../../../codecs';
+import { toDomainGateway } from '../../../../codecs/gateway';
+import { DecodeError } from '../../../common/form-validation/errors/decode.error';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,13 +35,15 @@ export class AddRecurringPage {
   @Output() public addRecurringError: EventEmitter<Error> = new EventEmitter<Error>();
 
   public readonly addRecurring$ = (): Observable<AddRecurring> =>
-    this._addRecurringAction$(
-      toRecurringToAdd(
-        nullToUndefined({
-          ...this.addRecurringForm.value,
-          passenger: { ...this.regularControl.value }
-        })
-      )
+    fpipe(
+      nullToUndefined({
+        ...this.addRecurringForm.value,
+        passenger: { ...this.regularControl.value }
+      }),
+      toDomainGateway<RecurringToAddValues, ToRecurring>(recurringToAddFormDecode, toRecurringEncode, toRecurringDecode),
+      fold((errors: Errors): never => {
+        throw new DecodeError('Error in domain gateway', { cause: errors });
+      }, this._addRecurringAction$)
     );
 
   public readonly addRecurringForm: FormGroup<AddRecurringFields> = RECURRING_FARE_FORM;
@@ -42,9 +55,7 @@ export class AddRecurringPage {
     private readonly _route: ActivatedRoute,
     @Inject(ADD_RECURRING_ACTION) private readonly _addRecurringAction$: AddRecurringAction,
     @Inject(LIST_DRIVERS_QUERY) private readonly _listDriversQuery$: ListDriversQuery
-  ) {
-    this.addRecurringForm.controls.departureTime.setValue('12:00');
-  }
+  ) {}
 
   private readonly _regular$: BehaviorSubject<Entity & RegularValues> = new BehaviorSubject<Entity & RegularValues>(
     regularEmptyValue
@@ -75,12 +86,20 @@ export class AddRecurringPage {
     this.regularControl.reset();
     this.addRecurringForm.reset();
     this._toaster.toast(toAddRecurringSuccessToast(fares));
-    await this._router.navigate(['../../'], { relativeTo: this._route });
+    await this._router.navigate(['../'], { relativeTo: this._route });
   };
 
   public onAddRecurringActionError = (error: Error): void => {
     this._toaster.toast({
       content: `Échec de l'ajout de la règle: ${error.name} | ${error.message}`,
+      status: 'danger',
+      title: 'Opération échouée'
+    });
+  };
+
+  public onSearchRegularActionError = (error: Error): void => {
+    this._toaster.toast({
+      content: `Échec de la recherche: ${error.name} | ${error.message}`,
       status: 'danger',
       title: 'Opération échouée'
     });

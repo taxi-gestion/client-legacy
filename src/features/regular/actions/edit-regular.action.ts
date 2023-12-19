@@ -5,7 +5,7 @@ import { fold } from 'fp-ts/Either';
 import { Entity, EditRegular, Regular } from '@definitions';
 import { externalTypeCheckFor, regularEntityCodec, regularEditedCodec } from '@codecs';
 import { EditRegularAction } from '../providers';
-import { ValidationFailedAfterApiCallError, ValidationFailedBeforeApiCallError } from '@features/common/form-validation';
+import { ValidationFailedOnApiResult, ValidationFailedBeforeApiCall } from '@features/common/form-validation';
 
 const editRegularUrl = (): string => `/api/regular/edit`;
 
@@ -15,7 +15,7 @@ export const validatedEditRegularAction$ =
     fpipe(
       regularEntityCodec.decode(regularToEdit),
       fold(
-        (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCallError()),
+        (): Observable<never> => throwError((): Error => new ValidationFailedBeforeApiCall()),
         (validatedTransfer: Entity & Regular): Observable<EditRegular> =>
           http.post<unknown>(editRegularUrl(), validatedTransfer).pipe(
             map(editedRegularAndReturnValidation),
@@ -33,7 +33,7 @@ const editedRegularAndReturnValidation = (transfer: unknown): EditRegular =>
     externalTypeCheckFor<EditRegular>(regularEditedCodec),
     fold(
       (): never => {
-        throw new ValidationFailedAfterApiCallError(`Faudrait mettre le HttpReporter...`);
+        throw new ValidationFailedOnApiResult(`Faudrait mettre le HttpReporter...`);
       },
       (validatedTransfer: EditRegular): EditRegular => validatedTransfer
     )
@@ -43,7 +43,7 @@ const handleEditedRegularAndReturnError$ = (
   error: Error | HttpErrorResponse,
   caught: Observable<EditRegular>
 ): Observable<never> => {
-  if (error instanceof ValidationFailedAfterApiCallError) return throwError((): Error => error);
+  if (error instanceof ValidationFailedOnApiResult) return throwError((): Error => error);
 
   switch ((error as HttpErrorResponse).error.__type) {
     default:

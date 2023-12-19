@@ -42,7 +42,7 @@ export class RecurrenceRuleComponent implements OnInit {
 
   public constructor() {
     this.form = this.fb.group({
-      dayOfWeek: ['MO'],
+      dayOfWeek: [[]],
       periodicity: ['1'],
       startDate: format(this.startDate, 'yyyy-MM-dd')
     });
@@ -55,15 +55,31 @@ export class RecurrenceRuleComponent implements OnInit {
     this.generateRRule(this.form.value);
   }
 
+  public onDayOfWeekChanged(dayValue: string, element: EventTarget | null): void {
+    const dayOfWeekControl = this.form.get('dayOfWeek')!;
+
+    if ((element as HTMLInputElement).checked) {
+      // If the checkbox is checked, add the value to the array
+      const selectedDays = [...dayOfWeekControl.value, dayValue];
+      dayOfWeekControl.setValue(selectedDays);
+    } else {
+      // If the checkbox is unchecked, remove the value from the array
+      const updatedDays = dayOfWeekControl.value.filter((day: string): boolean => day !== dayValue);
+      dayOfWeekControl.setValue(updatedDays);
+    }
+  }
+
   public generateRRule(values: any): void {
     const { dayOfWeek, periodicity, startDate } = values;
 
-    if (dayOfWeek && periodicity && startDate) {
+    if (dayOfWeek.length > 0 && periodicity && startDate) {
       const start: Date = new Date(startDate);
+      const byweekday = dayOfWeek.map((day: string) => RRule[day as RRuleDay]);
+
       const rrule: RRule = new RRule({
         freq: RRule.WEEKLY,
         interval: parseInt(periodicity, 10),
-        byweekday: [RRule[dayOfWeek as RRuleDay]],
+        byweekday: byweekday,
         dtstart: start
       });
 

@@ -1,0 +1,102 @@
+<div class="d-flex h-100 flex-column overflow-auto p-3">
+  <div class="d-flex">
+    <h1 class="text-primary d-flex align-items-center">Règles de récurrence</h1>
+    <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../">
+      <i class="ri-close-line ri-2x" aria-hidden="true"></i>
+      <span class="visually-hidden">Fermer</span>
+    </a>
+  </div>
+  <hr />
+  <input type="text" (input)="onFilterChange($any($event))" placeholder="Filtrer..." />
+  <div class="d-flex h-100 flex-column overflow-auto p-3">
+    <ng-container *ngIf="(recurringFares$ | async) as fares">
+      <div *ngFor="let fare of fares; let i = index" class="d-flex mb-3 p-3 border rounded position-relative">
+        <div class="flex-grow-1">
+          <div class="d-flex">
+            <div class="me-auto">
+              <i class="ri-user-line"></i>
+              <span class="fw-bold d-block">{{ fare.passenger.civility }} {{ fare.passenger.lastname }}</span>
+              <span class="text-primary d-block">{{ fare.recurrenceDisplay }}</span>
+            </div>
+          </div>
+          <div class="d-flex flex-column justify-content-between mt-2">
+            <span class="text-muted pe-1">{{ fare.departureTime }} {{ fare.departure.name }} - {{ fare.arrival.name }}</span>
+            <small class="text-muted">
+              <span *ngIf="fare.driver && fare.departureTime" class="d-block">
+                1 aller planifié - {{ fare.nature }} - {{ fare.driver?.username }}
+              </span>
+              <span *ngIf="fare.returnTime" class="d-block">
+                1 retour planifié - {{ fare.returnTime }} - {{ fare.nature }} - {{ fare.driver?.username }}
+              </span>
+              <span *ngIf="fare.driver && !fare.returnTime" class="d-block">1 retour en attente - {{ fare.nature }}</span>
+              <span *ngIf="!fare.driver && fare.kind === 'one-way'" class="d-block">
+                1 aller à assigner - {{ fare.nature }}
+              </span>
+              <span *ngIf="!fare.driver && fare.kind === 'two-way'" class="d-block">
+                1 aller à assigner avec retour - {{ fare.nature }}
+              </span>
+            </small>
+          </div>
+        </div>
+        <app-delete-fare
+          class="d-flex align-items-start ms-2"
+          mode="compact"
+          [action$]="deleteFare$$(fare.id!)"
+          (actionSuccess)="onDeleteFareActionSuccess($event)"
+          (actionError)="onDeleteFareActionError($event)"></app-delete-fare>
+        <!-- Positioned at the bottom right -->
+        <span class="badge bg-info position-absolute end-0 bottom-0 mb-3 me-3">{{ fare.startLater }}</span>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<!--<div class="d-flex h-100 flex-column overflow-auto p-3">
+  <ng-container *ngIf="(recurringFares$ | async) as fares">
+    <div *ngFor="let fare of fares; let i = index" class="fare-accordion">
+      <div class="fare-header">
+        <i class="ri-user-line"></i> &lt;!&ndash; Passenger Icon &ndash;&gt;
+        <span>{{ fare.passenger.lastname }}</span>
+        <span class="ms-auto">{{ fare.departureTime }}</span>
+        <i class="ri-arrow-down-s-line"></i> &lt;!&ndash; Expand Icon &ndash;&gt;
+      </div>
+      <div class="fare-body">
+        <div class="d-flex justify-content-between">
+          <i class="ri-map-pin-line"></i> &lt;!&ndash; Departure Icon &ndash;&gt;
+          <span>{{ fare.departure.name }}</span>
+          <i class="ri-hospital-line"></i> &lt;!&ndash; Type Icon &ndash;&gt;
+          <span>{{ fare.kind }}</span>
+          <i class="ri-calendar-event-line"></i> &lt;!&ndash; Recurrence Icon &ndash;&gt;
+          <span>{{ fare.recurrenceDisplay }}</span>
+          <button class="btn-delete"><i class="ri-delete-bin-line"></i></button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>-->
+
+<ng-container *ngIf="(recurringFares$ | async) as fares">
+  <div *ngFor="let fare of fares; let i = index">
+    <div>
+      <div class="d-flex justify-content-between">
+        <i class="ri-user-line"></i>
+        <span>{{ fare.passenger.civility }} {{ fare.passenger.lastname }}</span>
+        <span class="ps-2 ms-auto">{{ fare.departureTime }}</span>
+        <span class="ms-1">{{ fare.recurrenceDisplay }}</span>
+        <small class="ps-2 pe-2 ms-auto">{{ fare.departure.name }} - {{ fare.arrival.name }}</small>
+        <small *ngIf="fare.driver && fare.departureTime">
+          1 aller planifié - {{ fare.nature }} - {{ fare.driver?.username }}
+        </small>
+        <small *ngIf="fare.returnTime">1 retour planifié - {{ fare.nature }} - {{ fare.driver?.username }}</small>
+        <small *ngIf="fare.driver && !fare.returnTime">1 retour en attente - {{ fare.nature }}</small>
+        <small *ngIf="!fare.driver && fare.kind === 'one-way'">1 aller à assigner - {{ fare.nature }}</small>
+        <small *ngIf="!fare.driver && fare.kind === 'two-way'">1 aller à assigner avec retour - {{ fare.nature }}</small>
+      </div>
+      <app-delete-fare
+        mode="compact"
+        [action$]="deleteFare$$(fare.id!)"
+        (actionSuccess)="onDeleteFareActionSuccess($event)"
+        (actionError)="onDeleteFareActionError($event)"></app-delete-fare>
+    </div>
+  </div>
+</ng-container>

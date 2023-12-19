@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, Inject, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { DurationDistance, isValidPlace, JourneyEstimate } from '@definitions';
+import { DurationDistance, JourneyEstimate } from '@definitions';
 import { combineLatest, debounceTime, map, Observable, startWith, Subject, switchMap, tap } from 'rxjs';
 import { toDisplayDurationDistance, toJourney } from './estimate-journey-fields.presenter';
 import { ESTIMATE_JOURNEY_QUERY, EstimateJourneyQuery } from '@features/common/journey';
 import { isValidDate } from '@features/common/angular';
 
 import { WaypointValues } from '@features/common/waypoint';
+import { isValidPlaceValues } from '../../place';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,12 +19,12 @@ export class EstimateJourneyFields2Component {
   @Input({ required: true }) public distanceFieldControl!: FormControl<number>;
   // eslint-disable-next-line @typescript-eslint/no-shadow
   @Input({ required: true }) public set origin(origin: WaypointValues | null) {
-    if (origin === null || !isValidPlace(origin.place)) return;
+    if (origin === null || !isValidPlaceValues(origin.place)) return;
 
     this._origin$.next(origin);
   }
   @Input({ required: true }) public set destination(destination: WaypointValues | null) {
-    if (destination === null || !isValidPlace(destination.place)) return;
+    if (destination === null || !isValidPlaceValues(destination.place)) return;
 
     this._destination$.next(destination);
   }

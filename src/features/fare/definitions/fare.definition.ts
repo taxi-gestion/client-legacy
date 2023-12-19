@@ -16,6 +16,7 @@ export type ScheduledFareValues = {
   isMedicalDrive: boolean;
   passenger: PassengerValues;
   status: 'scheduled';
+  creator: 'manager' | 'recurrence';
 };
 
 export type UnassignedFareValues = {

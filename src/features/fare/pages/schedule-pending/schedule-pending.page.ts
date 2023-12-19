@@ -19,6 +19,7 @@ import {
   pendingReturnEmptyValue,
   PendingReturnValues,
   SchedulePendingFields,
+  toDeleteFareSuccessToasts,
   toPendingReturnsValues
 } from '@features/fare';
 import { bootstrapValidationClasses, BootstrapValidationClasses, nullToUndefined } from '@features/common/form-validation';
@@ -29,7 +30,6 @@ import { toLongDateFormat, toStandardDateFormat } from '@features/common/angular
 import { DateService } from '../../../common/date/services';
 import { DriverValues, LIST_DRIVERS_QUERY, ListDriversQuery, toDriversValues } from '@features/common/driver';
 import { ActivatedRoute, Router } from '@angular/router';
-import { toDeleteFareSuccessToasts } from '../edit-scheduled/edit-scheduled.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

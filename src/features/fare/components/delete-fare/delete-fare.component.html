@@ -1,18 +1,41 @@
-<h3 class="mb-3 text-primary h5">Supprimer la course (irréversible)</h3>
-<button
-  [appLoadAction]="action$"
-  #loadAction="loadAction"
-  (actionSuccess)="onActionSuccess($event)"
-  (actionError)="onActionError($event)"
-  (click)="onClick(loadAction.start)"
-  [appLoadActionDisplay]="loadAction.isLoading$ | async"
-  #deleteLoadActionDisplay
-  type="button"
-  class="btn btn-danger mt-2 w-100"
-  [disabled]="deleteLoadActionDisplay.isLoading">
-  <ng-container slot="loadActionDisplayIdle">Supprimer la course</ng-container>
-  <ng-container slot="loadActionDisplayLoading">
-    <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
-    Suppression en cours...
-  </ng-container>
-</button>
+<ng-container *ngIf="mode === 'fullsize'; else compact">
+  <h3 class="mb-3 text-primary h5">Supprimer la course (irréversible)</h3>
+  <button
+    [appLoadAction]="action$"
+    #loadAction="loadAction"
+    (actionSuccess)="onActionSuccess($event)"
+    (actionError)="onActionError($event)"
+    (click)="onClick(loadAction.start)"
+    [appLoadActionDisplay]="loadAction.isLoading$ | async"
+    #deleteLoadActionDisplay
+    type="button"
+    class="btn btn-danger mt-2 w-100"
+    [disabled]="deleteLoadActionDisplay.isLoading">
+    <ng-container slot="loadActionDisplayIdle">Supprimer la course</ng-container>
+    <ng-container slot="loadActionDisplayLoading">
+      <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+      Suppression en cours...
+    </ng-container>
+  </button>
+</ng-container>
+<ng-template #compact>
+  <button
+    [appLoadAction]="action$"
+    #loadAction="loadAction"
+    (actionSuccess)="onActionSuccess($event)"
+    (actionError)="onActionError($event)"
+    (click)="onClick(loadAction.start)"
+    [appLoadActionDisplay]="loadAction.isLoading$ | async"
+    #deleteLoadActionDisplay
+    type="button"
+    class="btn btn-danger mt-2"
+    [disabled]="deleteLoadActionDisplay.isLoading">
+    <ng-container slot="loadActionDisplayIdle">
+      <i class="ri-delete-bin-line text-white pe-1 ps-1" style="font-size: 20px" aria-hidden="true"></i>
+    </ng-container>
+    <ng-container slot="loadActionDisplayLoading">
+      <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+      ...
+    </ng-container>
+  </button>
+</ng-template>

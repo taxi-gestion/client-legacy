@@ -5,7 +5,7 @@ import { pipe as fpipe } from 'fp-ts/function';
 import { externalTypeCheckFor, pendingReturnsCodec } from '@codecs';
 import { fold } from 'fp-ts/Either';
 import { PendingReturnsForDateQuery } from '../providers';
-import { ValidationFailedAfterApiCallError } from '@features/common/form-validation';
+import { ValidationFailedOnApiResult } from '@features/common/form-validation';
 
 export const validatedPendingReturnsForDateQuery$ =
   (httpClient: HttpClient): PendingReturnsForDateQuery =>
@@ -22,7 +22,7 @@ const handlePendingReturnsForDateError$ = (
   error: Error | HttpErrorResponse,
   caught: Observable<(Entity & Pending)[]>
 ): Observable<never> => {
-  if (error instanceof ValidationFailedAfterApiCallError) return throwError((): Error => error);
+  if (error instanceof ValidationFailedOnApiResult) return throwError((): Error => error);
 
   switch ((error as HttpErrorResponse).error.__type) {
     default:
@@ -37,7 +37,7 @@ const pendingReturnsValidation = (transfer: unknown): (Entity & Pending)[] =>
     fold(
       // TODO Share error reporter between projects
       (): never => {
-        throw new ValidationFailedAfterApiCallError(`Faudrait mettre le HttpReporter...`);
+        throw new ValidationFailedOnApiResult(`Faudrait mettre le HttpReporter...`);
       },
       (validatedTransfer: (Entity & Pending)[]): (Entity & Pending)[] => validatedTransfer
     )

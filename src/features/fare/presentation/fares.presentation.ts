@@ -10,6 +10,9 @@ import { DriverValues } from '@features/common/driver';
 import { RegularField, regularFieldFormControl, RegularValues } from '@features/regular';
 import { EstimateJourneyFields, estimateJourneyFieldsFormControl } from '@features/common/journey';
 import { WaypointField, waypointFieldFormControl, WaypointValues } from '@features/common/waypoint';
+import { codecControlValidator, timeValidator } from '@features/common/form-validation';
+import { isTimeISO8601String, TimeISO8601 } from '../../../codecs/rules/timeISO8601.rule';
+import { null as ioNull, undefined as ioUndefined, union as ioUnion } from 'io-ts';
 
 export type FareValues = {
   passenger: Entity & RegularValues;
@@ -62,7 +65,6 @@ export type SchedulePendingFields = FareFields;
 export type AddRecurringFields = DriverField<'driver'> &
   EstimateJourneyFields<'driveDuration', 'driveDistance'> &
   PhoneField<'phoneToCall'> &
-  RegularField<'passenger'> &
   WaypointField<'arrivalPlace'> &
   WaypointField<'departurePlace'> & {
     departureTime: FormControl<RecurringToAddValues['departureTime']>;
@@ -98,13 +100,13 @@ export const fareFormControls = (): FareFields => ({
 export const recurringFareFormControls = (): AddRecurringFields => ({
   ...regularFieldFormControl('passenger'),
   ...phoneFieldFormControl('phoneToCall'),
-  departureTime: new FormControl<RecurringToAddValues['departureTime']>('', {
+  departureTime: new FormControl<RecurringToAddValues['departureTime']>('' as TimeISO8601, {
     nonNullable: true,
-    validators: [Validators.required]
+    validators: [timeValidator]
   }),
-  returnTime: new FormControl<RecurringToAddValues['returnTime']>('', {
+  returnTime: new FormControl<RecurringToAddValues['returnTime']>(undefined, {
     nonNullable: true,
-    validators: [Validators.required]
+    validators: [codecControlValidator(ioUnion([isTimeISO8601String, ioUndefined, ioNull]), 'invalidTime')]
   }),
   ...estimateJourneyFieldsFormControl('driveDuration', 'driveDistance'),
   ...optionalDriverFieldFormControl('driver'),

@@ -24,6 +24,7 @@ import {
   searchRegularsQuery$
 } from '@features/regular';
 import {
+  deleteFareAction$,
   deleteFareActionProvider,
   editScheduledActionProvider,
   pendingReturnsForDateQueryProvider,
@@ -31,7 +32,6 @@ import {
   scheduleFareActionProvider,
   schedulePendingActionProvider,
   subcontractFareActionProvider,
-  validatedDeleteFareAction$,
   validatedEditScheduledAction$,
   validatedPendingReturnsForDateQuery$,
   validatedScheduledFaresForDateQuery$,
@@ -42,7 +42,7 @@ import {
 import { driverAgendaForDateQueryProvider, validatedDriverAgendaForDateQuery$ } from '@features/planning';
 
 export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
-  deleteFareActionProvider(validatedDeleteFareAction$, [HttpClient]),
+  deleteFareActionProvider(deleteFareAction$, [HttpClient]),
   deleteRegularActionProvider(validatedDeleteRegularAction$, [HttpClient]),
   driverAgendaForDateQueryProvider(validatedDriverAgendaForDateQuery$, [HttpClient]),
   editScheduledActionProvider(validatedEditScheduledAction$, [HttpClient]),

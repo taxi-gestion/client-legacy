@@ -5,7 +5,7 @@ import { fold } from 'fp-ts/Either';
 import { AllocateUnassigned, ToUnassigned } from '@definitions';
 import { externalTypeCheckFor, unassignedAllocatedCodec } from '@codecs';
 import { AllocateUnassignedAction } from '../providers';
-import { ValidationFailedAfterApiCallError } from '@features/common/form-validation';
+import { ValidationFailedOnApiResult } from '@features/common/form-validation';
 
 const allocateUnassignedUrl = (): string => `/api/fare/allocate-unassigned`;
 
@@ -26,7 +26,7 @@ const unassignedFareAndReturnValidation = (transfer: unknown): AllocateUnassigne
     externalTypeCheckFor<AllocateUnassigned>(unassignedAllocatedCodec),
     fold(
       (): never => {
-        throw new ValidationFailedAfterApiCallError(`Faudrait mettre le HttpReporter...`);
+        throw new ValidationFailedOnApiResult(`Faudrait mettre le HttpReporter...`);
       },
       (validatedTransfer: AllocateUnassigned): AllocateUnassigned => validatedTransfer
     )
@@ -36,7 +36,7 @@ const handleUnassignedFareAndReturnError$ = (
   error: Error | HttpErrorResponse,
   caught: Observable<AllocateUnassigned>
 ): Observable<never> => {
-  if (error instanceof ValidationFailedAfterApiCallError) return throwError((): Error => error);
+  if (error instanceof ValidationFailedOnApiResult) return throwError((): Error => error);
 
   switch ((error as HttpErrorResponse).error.__type) {
     default:

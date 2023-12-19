@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { DeleteRegularAction } from '../providers';
 import { Entity, DeleteRegular } from '@definitions';
-import { ValidationFailedAfterApiCallError } from '@features/common/form-validation';
+import { ValidationFailedOnApiResult } from '@features/common/form-validation';
 import { pipe as fpipe } from 'fp-ts/function';
 import { externalTypeCheckFor, regularDeletedCodec } from '@codecs';
 import { fold } from 'fp-ts/Either';
@@ -24,7 +24,7 @@ const handleDeletedRegularAndReturnError$ = (
   error: Error | HttpErrorResponse,
   caught: Observable<DeleteRegular>
 ): Observable<never> => {
-  if (error instanceof ValidationFailedAfterApiCallError) return throwError((): Error => error);
+  if (error instanceof ValidationFailedOnApiResult) return throwError((): Error => error);
 
   switch ((error as HttpErrorResponse).error.__type) {
     default:
@@ -38,7 +38,7 @@ const deletedRegularAndReturnValidation = (transfer: unknown): DeleteRegular =>
     externalTypeCheckFor<DeleteRegular>(regularDeletedCodec),
     fold(
       (): never => {
-        throw new ValidationFailedAfterApiCallError(`Faudrait mettre le HttpReporter...`);
+        throw new ValidationFailedOnApiResult(`Faudrait mettre le HttpReporter...`);
       },
       (validatedTransfer: DeleteRegular): DeleteRegular => validatedTransfer
     )
