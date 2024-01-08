@@ -53,8 +53,8 @@ export class EditScheduledPage {
       toScheduledToEdit(
         nullToUndefined({
           ...this.editScheduledForm.value,
-          passenger: { ...this.fareControl.value.passenger },
-          id: this.fareControl.value.id
+          passenger: { ...this._selectedScheduledFare$.getValue().passenger },
+          id: this._selectedScheduledFare$.getValue().id
         })
       )
     );
