@@ -127,7 +127,10 @@ export class SchedulePendingPage {
     @Inject(PENDING_RETURNS_FOR_DATE_QUERY) private readonly _pendingReturnsForDateQuery: PendingReturnsForDateQuery,
     @Inject(REGULAR_BY_ID_QUERY) private readonly _regularByIdQuery$: RegularByIdQuery,
     @Inject(SCHEDULE_PENDING_ACTION) private readonly _schedulePendingAction$: SchedulePendingAction
-  ) {}
+  ) {
+    // TODO There is an unwanted binding because of the const
+    this.schedulePendingForm.reset();
+  }
 
   //region delete
   public readonly deleteFare$$ = (id: string) => (): Observable<DeleteFare> => this._deleteFareAction$(id);

@@ -49,7 +49,10 @@ export class ScheduleFarePage {
     private readonly _route: ActivatedRoute,
     @Inject(SCHEDULE_FARE_ACTION) private readonly _scheduleFareAction$: ScheduleFareAction,
     @Inject(LIST_DRIVERS_QUERY) private readonly _listDriversQuery$: ListDriversQuery
-  ) {}
+  ) {
+    // TODO There is an unwanted binding because of the const
+    this.scheduleFareForm.reset();
+  }
 
   private readonly _regular$: BehaviorSubject<Entity & RegularValues> = new BehaviorSubject<Entity & RegularValues>(
     regularEmptyValue
