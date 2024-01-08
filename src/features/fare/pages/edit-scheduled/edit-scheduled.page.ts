@@ -151,7 +151,10 @@ export class EditScheduledPage {
     @Inject(EDIT_SCHEDULED_ACTION) private readonly _editScheduledAction$: EditScheduledAction,
     @Inject(DELETE_FARE_ACTION) private readonly _deleteFareAction$: DeleteFareAction,
     @Inject(LIST_DRIVERS_QUERY) private readonly _listDriversQuery$: ListDriversQuery //@Inject(SUBCONTRACT_FARE_ACTION) private readonly _subcontractFareAction$: SubcontractFareAction,
-  ) {}
+  ) {
+    // TODO There is an unwanted binding because of the const
+    this.editScheduledForm.reset();
+  }
 
   //region delete
   public readonly deleteFare$$ = (id: string) => (): Observable<DeleteFare> => this._deleteFareAction$(id);

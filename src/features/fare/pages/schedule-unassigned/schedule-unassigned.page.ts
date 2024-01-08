@@ -127,7 +127,10 @@ export class ScheduleUnassignedPage {
     @Inject(REGULAR_BY_ID_QUERY) private readonly _regularByIdQuery$: RegularByIdQuery,
     @Inject(SCHEDULE_UNASSIGNED_ACTION) private readonly _scheduleUnassignedAction$: ScheduleUnassignedAction,
     @Inject(UNASSIGNED_FARES_FOR_DATE_QUERY) private readonly _unassignedFaresForDateQuery: UnassignedFaresForDateQuery
-  ) {}
+  ) {
+    // TODO There is an unwanted binding because of the const
+    this.scheduleUnassignedForm.reset();
+  }
 
   //region delete
   public readonly deleteFare$$ = (id: string) => (): Observable<DeleteFare> => this._deleteFareAction$(id);
