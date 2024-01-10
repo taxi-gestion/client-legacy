@@ -7,11 +7,16 @@ import { setDate } from '../guards/set-date.guard';
 import { ScheduleUnassignedPage } from '../pages/schedule-unassigned/schedule-unassigned.page';
 import { ManageRecurrenceLayout } from '../layouts/manage-recurrence/manage-recurrence.layout';
 import { EditRecurringPage } from '../pages/edit-recurring/edit-recurring.page';
+import { PlanWithContextPage } from '../pages/plan-with-context/plan-with-context.page';
 
 const ROUTES: Routes = [
   {
     path: '',
     component: ManageFareLayout
+  },
+  {
+    path: 'plan',
+    component: PlanWithContextPage
   },
   {
     path: 'edit',
@@ -39,11 +44,6 @@ const ROUTES: Routes = [
     component: EditScheduledPage
   },
   {
-    path: 'edit/:date/:id',
-    canActivate: [setDate],
-    component: EditScheduledPage
-  },
-  {
     path: 'pendings/:date',
     canActivate: [setDate],
     component: SchedulePendingPage
@@ -55,6 +55,21 @@ const ROUTES: Routes = [
   },
   {
     path: 'unassigned/:date',
+    canActivate: [setDate],
+    component: ScheduleUnassignedPage
+  },
+  {
+    path: 'edit/:date/:id',
+    canActivate: [setDate],
+    component: EditScheduledPage
+  },
+  {
+    path: 'pendings/:date/:id',
+    canActivate: [setDate],
+    component: SchedulePendingPage
+  },
+  {
+    path: 'unassigned/:date/:id',
     canActivate: [setDate],
     component: ScheduleUnassignedPage
   },

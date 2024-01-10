@@ -1,7 +1,7 @@
 import { Entity, Recurring } from '../../../../definitions';
-import { RecurringPresentation } from './edit-recurring.page';
 import { filterByProperties } from '../../../../core/filters.core';
 import { pipe as fpipe } from 'fp-ts/lib/function';
+import { RecurringPresentation } from '../../presentation';
 
 /* eslint-disable */
 

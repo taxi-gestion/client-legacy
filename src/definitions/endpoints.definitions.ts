@@ -120,4 +120,5 @@ export type RegularHistory = {
   pending: (Entity & Pending)[];
   unassigned: (Entity & Unassigned)[];
   subcontracted: (Entity & Subcontracted)[];
+  recurring: (Entity & Recurring)[];
 };

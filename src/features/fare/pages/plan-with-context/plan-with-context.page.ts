@@ -1,25 +1,35 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { BehaviorSubject, filter, map, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, Observable, switchMap } from 'rxjs';
 import { SCHEDULE_FARE_ACTION, ScheduleFareAction } from '../../providers';
 import { fareForm } from '../fare.form';
-import { toFareToSchedule, toScheduleFareSuccessToast } from './schedule-fare.presenter';
-import { Entity, ScheduleScheduled } from '@definitions';
+import {
+  RegularFaresContext,
+  toFareToSchedule,
+  toRegularFaresContext,
+  toScheduleFareSuccessToast
+} from './plan-with-context.presenter';
+import { Entity, RegularHistory, ScheduleScheduled } from '@definitions';
 import { ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 
 import { nullToUndefined } from '@features/common/form-validation';
 import { DriverValues, LIST_DRIVERS_QUERY, ListDriversQuery, toDriversValues } from '@features/common/driver';
-import { isValidRegular, regularEmptyValue, RegularValues } from '@features/regular';
+import {
+  isValidRegular,
+  REGULAR_HISTORY_QUERY,
+  regularEmptyValue,
+  RegularHistoryQuery,
+  RegularValues
+} from '@features/regular';
 import { FareValues, initialFareValuesFromRegular, ScheduleScheduledFields } from '@features/fare';
 import { DateService } from '@features/common/date';
 import { toLongDateFormat } from '@features/common/angular';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './schedule-fare.page.html'
+  templateUrl: './plan-with-context.page.html'
 })
-export class ScheduleFarePage {
+export class PlanWithContextPage {
   @Output() public scheduleFareSubmitted: EventEmitter<void> = new EventEmitter<void>();
 
   @Output() public scheduleFareSuccess: EventEmitter<void> = new EventEmitter<void>();
@@ -45,10 +55,9 @@ export class ScheduleFarePage {
   public constructor(
     private readonly _toaster: ToasterPresenter,
     private readonly _date: DateService,
-    private readonly _router: Router,
-    private readonly _route: ActivatedRoute,
     @Inject(SCHEDULE_FARE_ACTION) private readonly _scheduleFareAction$: ScheduleFareAction,
-    @Inject(LIST_DRIVERS_QUERY) private readonly _listDriversQuery$: ListDriversQuery
+    @Inject(LIST_DRIVERS_QUERY) private readonly _listDriversQuery$: ListDriversQuery,
+    @Inject(REGULAR_HISTORY_QUERY) private readonly _regularHistoryQuery$: RegularHistoryQuery
   ) {}
 
   private readonly _regular$: BehaviorSubject<Entity & RegularValues> = new BehaviorSubject<Entity & RegularValues>(
@@ -63,6 +72,18 @@ export class ScheduleFarePage {
 
   public validRegular$: Observable<boolean> = this._regular$.asObservable().pipe(map(isValidRegular));
 
+  public readonly regularFaresContext$: Observable<RegularFaresContext> = combineLatest([
+    this.regular$,
+    this.validRegular$
+  ]).pipe(
+    filter(([_, isValid]: [_: Entity & RegularValues, isValid: boolean]): boolean => isValid),
+    switchMap(
+      ([regular]: [regular: Entity & RegularValues, _: boolean]): Observable<RegularHistory> =>
+        this._regularHistoryQuery$(regular.id)
+    ),
+    map(toRegularFaresContext)
+  );
+
   public prefilledFare$: Observable<Partial<FareValues>> = this.regular$.pipe(
     filter(isValidRegular),
     map(initialFareValuesFromRegular)
@@ -70,11 +91,10 @@ export class ScheduleFarePage {
 
   public drivers$: Observable<DriverValues[]> = this._listDriversQuery$().pipe(map(toDriversValues));
 
-  public onScheduleFareActionSuccess = async (fares: ScheduleScheduled): Promise<void> => {
-    this.regularControl.reset();
+  public onScheduleFareActionSuccess = (fares: ScheduleScheduled): void => {
     this.scheduleFareForm.reset();
     this._toaster.toast(toScheduleFareSuccessToast(fares));
-    await this._router.navigate(['../../'], { relativeTo: this._route });
+    this.onSelectRegularChange(this._regular$.getValue());
   };
 
   public onScheduleFareActionError = (error: Error): void => {

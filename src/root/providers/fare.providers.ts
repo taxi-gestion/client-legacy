@@ -27,6 +27,7 @@ import { listDriversQuery$, listDriversQueryProvider } from '@features/common/dr
 import {
   regularByIdQuery$,
   regularByIdQueryProvider,
+  regularHistoryQueryProvider,
   searchRegularQueryProvider,
   searchRegularsQuery$
 } from '@features/regular';
@@ -37,6 +38,7 @@ import { recurringFaresQueryProvider } from '../../features/fare/providers/queri
 import { recurringFaresQuery$ } from '../../features/fare/queries/recurring-fares.query';
 import { applyRecurringActionProvider } from '../../features/fare/providers/actions/apply-recurring.action.provider';
 import { applyRecurringAction$ } from '../../features/fare/actions/apply-recurring.action';
+import { regularHistoryQuery$ } from '../../features/regular/queries/regular-history';
 
 export const FARE_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   allocateUnassignedActionProvider(allocateUnassignedAction$, [HttpClient]),
@@ -56,5 +58,6 @@ export const FARE_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   unassignedFaresForDateQueryProvider(unassignedFaresForDateQuery$, [HttpClient]),
   addRecurringActionProvider(addRecurringAction$, [HttpClient]),
   recurringFaresQueryProvider(recurringFaresQuery$, [HttpClient]),
-  applyRecurringActionProvider(applyRecurringAction$, [HttpClient])
+  applyRecurringActionProvider(applyRecurringAction$, [HttpClient]),
+  regularHistoryQueryProvider(regularHistoryQuery$, [HttpClient])
 ];

@@ -15,23 +15,20 @@ import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import {
   EditScheduledFields,
   FareValues,
+  findMatchingFare,
   initialFareValuesFromScheduledAndRegular,
   isValidFare,
+  routeParamToFareId,
   scheduledFareEmptyValue,
   ScheduledFareValues,
   toDeleteFareSuccessToasts,
+  toFareSummary,
   toScheduledFaresValues
 } from '@features/fare';
 import { bootstrapValidationClasses, BootstrapValidationClasses, nullToUndefined } from '@features/common/form-validation';
 import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/regular';
-import { FARE_FORM } from '../fare.form';
-import {
-  findMatchingFare,
-  routeParamToFareId,
-  toEditScheduledSuccessToast,
-  toFareSummary,
-  toScheduledToEdit
-} from './edit-scheduled.presenter';
+import { fareForm } from '../fare.form';
+import { toEditScheduledSuccessToast, toScheduledToEdit } from './edit-scheduled.presenter';
 import { toLongDateFormat, toStandardDateFormat } from '@features/common/angular';
 import { DateService } from '../../../common/date/services';
 import { DriverValues, LIST_DRIVERS_QUERY, ListDriversQuery, toDriversValues } from '@features/common/driver';
@@ -59,7 +56,7 @@ export class EditScheduledPage {
       )
     );
 
-  public readonly editScheduledForm: FormGroup<EditScheduledFields> = FARE_FORM;
+  public readonly editScheduledForm: FormGroup<EditScheduledFields> = fareForm();
 
   public selectedDate$: Observable<Date> = this._date.date$();
 
@@ -151,10 +148,7 @@ export class EditScheduledPage {
     @Inject(EDIT_SCHEDULED_ACTION) private readonly _editScheduledAction$: EditScheduledAction,
     @Inject(DELETE_FARE_ACTION) private readonly _deleteFareAction$: DeleteFareAction,
     @Inject(LIST_DRIVERS_QUERY) private readonly _listDriversQuery$: ListDriversQuery //@Inject(SUBCONTRACT_FARE_ACTION) private readonly _subcontractFareAction$: SubcontractFareAction,
-  ) {
-    // TODO There is an unwanted binding because of the const
-    this.editScheduledForm.reset();
-  }
+  ) {}
 
   //region delete
   public readonly deleteFare$$ = (id: string) => (): Observable<DeleteFare> => this._deleteFareAction$(id);

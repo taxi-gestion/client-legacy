@@ -7,18 +7,16 @@
     </a>
   </div>
   <hr />
-  <div class="mb-3">
+  <div class="mb-3" *ngIf="!((regularId$ | async)?.length === 36)">
     <label class="form-label">Sélectionner un passager pour voir l'historique</label>
     <app-regular-field
       [regularFieldControl]="regularControl"
       (selectedValue)="onSelectRegularChange($event)"></app-regular-field>
   </div>
-  <ng-container *ngIf="(regular$ | async) as regular">
-    <ng-container *ngIf="(validRegular$ | async)">
-      <h3 class="mb-2 text-primary h5">Historique des courses planifiées</h3>
-      <ng-container *ngIf="(regularHistory$ | async) as history">
-        <app-regular-history-scheduled [entries]="history.scheduled"></app-regular-history-scheduled>
-      </ng-container>
-    </ng-container>
+  <ng-container *ngIf="(regular$ | async) as regular"></ng-container>
+  <ng-container *ngIf="(validRegular$ | async)"></ng-container>
+  <ng-container *ngIf="(regularHistory$ | async) as history">
+    <h3 class="mb-2 text-primary h5">Historique des courses planifiées</h3>
+    <app-regular-history-scheduled [entries]="history.scheduled"></app-regular-history-scheduled>
   </ng-container>
 </div>

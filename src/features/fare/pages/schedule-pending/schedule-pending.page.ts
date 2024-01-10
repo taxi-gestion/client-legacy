@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
-import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, of, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import {
   DELETE_FARE_ACTION,
   DeleteFareAction,
@@ -14,22 +14,25 @@ import { Toast, ToasterPresenter } from '../../../../root/components/toaster/toa
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import {
   FareValues,
+  findMatchingFare,
   initialValuesFromPendingAndRegular,
   isValidFare,
   pendingReturnEmptyValue,
   PendingReturnValues,
+  routeParamToFareId,
   SchedulePendingFields,
   toDeleteFareSuccessToasts,
+  toFareSummary,
   toPendingReturnsValues
 } from '@features/fare';
 import { bootstrapValidationClasses, BootstrapValidationClasses, nullToUndefined } from '@features/common/form-validation';
 import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/regular';
-import { FARE_FORM } from '../fare.form';
+import { fareForm } from '../fare.form';
 import { toReturnToSchedule, toSchedulePendingSuccessToast } from './schedule-pending.presenter';
 import { toLongDateFormat, toStandardDateFormat } from '@features/common/angular';
 import { DateService } from '../../../common/date/services';
 import { DriverValues, LIST_DRIVERS_QUERY, ListDriversQuery, toDriversValues } from '@features/common/driver';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,7 +55,7 @@ export class SchedulePendingPage {
       )
     );
 
-  public readonly schedulePendingForm: FormGroup<SchedulePendingFields> = FARE_FORM;
+  public readonly schedulePendingForm: FormGroup<SchedulePendingFields> = fareForm();
 
   public selectedDate$: Observable<Date> = this._date.date$();
   public userFriendlyDate$: Observable<string> = this.selectedDate$.pipe(map(toLongDateFormat));
@@ -67,6 +70,23 @@ export class SchedulePendingPage {
         title: 'Opération échouée'
       });
       return of([]);
+    })
+  );
+
+  public fareId$: Observable<string> = this._route.params.pipe(
+    switchMap((params: Params): Observable<string | undefined> => of(routeParamToFareId('id', params))),
+    filter(Boolean)
+  );
+
+  public fareFromUrl$: Observable<PendingReturnValues> = combineLatest([this.pendingReturns$, this.fareId$]).pipe(
+    switchMap(findMatchingFare),
+    tap((fare: PendingReturnValues): void => {
+      this._selectedPendingReturn$.next(fare);
+    }),
+    catchError((): Observable<PendingReturnValues> => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this._router.navigate(['../../'], { relativeTo: this._route });
+      return of({} as unknown as PendingReturnValues);
     })
   );
 
@@ -127,9 +147,10 @@ export class SchedulePendingPage {
     @Inject(PENDING_RETURNS_FOR_DATE_QUERY) private readonly _pendingReturnsForDateQuery: PendingReturnsForDateQuery,
     @Inject(REGULAR_BY_ID_QUERY) private readonly _regularByIdQuery$: RegularByIdQuery,
     @Inject(SCHEDULE_PENDING_ACTION) private readonly _schedulePendingAction$: SchedulePendingAction
-  ) {
-    // TODO There is an unwanted binding because of the const
-    this.schedulePendingForm.reset();
+  ) {}
+
+  public fareSummary(fare: PendingReturnValues): string {
+    return toFareSummary(fare);
   }
 
   //region delete

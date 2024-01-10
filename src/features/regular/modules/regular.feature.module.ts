@@ -15,11 +15,12 @@ import { LAYOUTS } from '../layouts';
 import { WaypointModule } from '@features/common/waypoint';
 import { COMPONENTS, RegularFieldComponent } from '../components';
 import { AutocompleteComponentModule } from '../../common/autocomplete';
+import { RegularHistoryScheduledComponent } from '../components/regular-history/regular-history-scheduled.component';
 
 @NgModule({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   declarations: [...LAYOUTS, ...PAGES, ...COMPONENTS],
-  exports: [RegularFieldComponent],
+  exports: [RegularFieldComponent, RegularHistoryScheduledComponent],
   imports: [
     CommonModule,
     FormsModule,

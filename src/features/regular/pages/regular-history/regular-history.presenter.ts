@@ -1,6 +1,7 @@
 import { RegularHistory, Scheduled } from '../../../../definitions';
 import { RegularHistoryScheduledItem, RegularHistoryValues } from '../../common/regular.presentation';
 import { format } from 'date-fns';
+import { Params } from '@angular/router';
 
 // eslint-disable-next-line @typescript-eslint/no-shadow
 export const toRegularHistoryValues = (history: RegularHistory): RegularHistoryValues => ({
@@ -17,3 +18,11 @@ const toRegularHistoryScheduledItem = (fare: Scheduled): RegularHistoryScheduled
   departure: fare.departure.name,
   arrival: fare.arrival.name
 });
+
+const UUID_LENGTH: 36 = 36 as const;
+const isValidUuid = (uuid: unknown): uuid is string =>
+  uuid === null || typeof uuid !== 'string' ? false : uuid.length === UUID_LENGTH;
+export const routeParamToRegularId = (keyInParams: string, params: Params): string | undefined => {
+  const uuid: unknown = params[keyInParams];
+  return isValidUuid(uuid) ? uuid : undefined;
+};

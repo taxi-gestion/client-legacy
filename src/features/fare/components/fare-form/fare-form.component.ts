@@ -52,7 +52,7 @@ export class FareFormComponent<T> implements OnInit {
   };
 
   public onActionError = (error: Error): void => {
-    setFareErrorToForm(formatFareError(error));
+    setFareErrorToForm(this.fareForm)(formatFareError(error));
     this.actionError.emit(error);
   };
 
