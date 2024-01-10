@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
-import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, of, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import { DeleteFare, Entity, Regular, ScheduleUnassigned, Unassigned } from '@definitions';
 import { Toast, ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
@@ -9,11 +9,14 @@ import {
   DeleteFareAction,
   FareFields,
   FareValues,
+  findMatchingFare,
   initialFareValuesFromUnassignedAndRegular,
   isValidFare,
+  routeParamToFareId,
   SCHEDULE_UNASSIGNED_ACTION,
   ScheduleUnassignedAction,
   toDeleteFareSuccessToasts,
+  toFareSummary,
   toUnassignedFaresValues,
   UNASSIGNED_FARES_FOR_DATE_QUERY,
   unassignedFareEmptyValue,
@@ -22,12 +25,12 @@ import {
 } from '@features/fare';
 import { bootstrapValidationClasses, BootstrapValidationClasses, nullToUndefined } from '@features/common/form-validation';
 import { REGULAR_BY_ID_QUERY, RegularByIdQuery, RegularValues, toRegularValues } from '@features/regular';
-import { FARE_FORM } from '../fare.form';
+import { fareForm } from '../fare.form';
 import { toScheduleUnassignedSuccessToast, toUnassignedToSchedule } from './schedule-unassigned.presenter';
 import { toLongDateFormat, toStandardDateFormat } from '@features/common/angular';
 import { DateService } from '../../../common/date/services';
 import { DriverValues, LIST_DRIVERS_QUERY, ListDriversQuery, toDriversValues } from '@features/common/driver';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -51,7 +54,7 @@ export class ScheduleUnassignedPage {
       )
     );
 
-  public readonly scheduleUnassignedForm: FormGroup<FareFields> = FARE_FORM;
+  public readonly scheduleUnassignedForm: FormGroup<FareFields> = fareForm();
 
   public selectedDate$: Observable<Date> = this._date.date$();
   public userFriendlyDate$: Observable<string> = this.selectedDate$.pipe(map(toLongDateFormat));
@@ -71,21 +74,39 @@ export class ScheduleUnassignedPage {
     })
   );
 
+  public fareId$: Observable<string> = this._route.params.pipe(
+    switchMap((params: Params): Observable<string | undefined> => of(routeParamToFareId('id', params))),
+    filter(Boolean)
+  );
+
+  public fareFromUrl$: Observable<UnassignedFareValues> = combineLatest([this.unassignedFares$, this.fareId$]).pipe(
+    switchMap(findMatchingFare),
+    tap((fare: UnassignedFareValues): void => {
+      this._selectedUnassignedFare$.next(fare);
+    }),
+    catchError((): Observable<UnassignedFareValues> => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this._router.navigate(['../../'], { relativeTo: this._route });
+      return of({} as unknown as UnassignedFareValues);
+    })
+  );
+
   public fareControl: FormControl<UnassignedFareValues> = new FormControl(unassignedFareEmptyValue, {
     nonNullable: true
   });
 
-  private readonly _selectedUnassignedReturn$: BehaviorSubject<UnassignedFareValues> =
-    new BehaviorSubject<UnassignedFareValues>(unassignedFareEmptyValue);
+  private readonly _selectedUnassignedFare$: BehaviorSubject<UnassignedFareValues> = new BehaviorSubject<UnassignedFareValues>(
+    unassignedFareEmptyValue
+  );
 
-  public regular$: Observable<Entity & RegularValues> = this._selectedUnassignedReturn$.pipe(
+  public regular$: Observable<Entity & RegularValues> = this._selectedUnassignedFare$.pipe(
     filter((unassigned: UnassignedFareValues): boolean => isValidFare(unassigned)),
     switchMap((fare: UnassignedFareValues): Observable<Entity & Regular> => this._regularByIdQuery$(fare.passenger.id)),
     map(toRegularValues)
   );
 
   public initialUnassignedValues$: Observable<Partial<Entity & FareValues>> = combineLatest([
-    this._selectedUnassignedReturn$.asObservable(),
+    this._selectedUnassignedFare$.asObservable(),
     this.regular$
   ]).pipe(
     map(
@@ -95,10 +116,10 @@ export class ScheduleUnassignedPage {
   );
 
   public onSelectUnassignedFareChange(scheduled: UnassignedFareValues): void {
-    this._selectedUnassignedReturn$.next(scheduled);
+    this._selectedUnassignedFare$.next(scheduled);
   }
 
-  public validFare$: Observable<boolean> = this._selectedUnassignedReturn$.asObservable().pipe(map(isValidFare));
+  public validFare$: Observable<boolean> = this._selectedUnassignedFare$.asObservable().pipe(map(isValidFare));
 
   public drivers$: Observable<DriverValues[]> = this._listDriversQuery$().pipe(map(toDriversValues));
 
@@ -127,10 +148,7 @@ export class ScheduleUnassignedPage {
     @Inject(REGULAR_BY_ID_QUERY) private readonly _regularByIdQuery$: RegularByIdQuery,
     @Inject(SCHEDULE_UNASSIGNED_ACTION) private readonly _scheduleUnassignedAction$: ScheduleUnassignedAction,
     @Inject(UNASSIGNED_FARES_FOR_DATE_QUERY) private readonly _unassignedFaresForDateQuery: UnassignedFaresForDateQuery
-  ) {
-    // TODO There is an unwanted binding because of the const
-    this.scheduleUnassignedForm.reset();
-  }
+  ) {}
 
   //region delete
   public readonly deleteFare$$ = (id: string) => (): Observable<DeleteFare> => this._deleteFareAction$(id);
@@ -145,5 +163,9 @@ export class ScheduleUnassignedPage {
   public onDeleteFareActionError = (_error: Error): void => {
     this._toaster.toast({ content: 'Échec de la suppression', status: 'danger', title: 'Opération échouée' });
   };
+
+  public fareSummary(fare: UnassignedFareValues): string {
+    return toFareSummary(fare);
+  }
   //endregion
 }

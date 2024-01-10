@@ -2,20 +2,15 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { catchError, combineLatest, debounceTime, distinctUntilChanged, map, Observable, of, startWith, Subject } from 'rxjs';
 import { DELETE_FARE_ACTION, DeleteFareAction } from '../../providers';
-import { DeleteFare, Entity, Recurring } from '@definitions';
+import { DeleteFare } from '@definitions';
 import { Toast, ToasterPresenter } from '../../../../root/components/toaster/toaster.presenter';
 import { AbstractControl } from '@angular/forms';
 import { bootstrapValidationClasses, BootstrapValidationClasses } from '@features/common/form-validation';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RECURRING_FARES_QUERY, RecurringFaresQuery } from '../../providers/queries/recurring-fares.query.provider';
 
-import { toDeleteFareSuccessToasts } from '../../presentation';
+import { RecurringPresentation, toDeleteFareSuccessToasts } from '../../presentation';
 import { toFilteredRecurringPresentation } from './edit-recurring.presenter';
-
-export type RecurringPresentation = Omit<Entity & Recurring, 'recurrence'> & {
-  recurrenceDisplay: string;
-  startLater: string;
-};
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

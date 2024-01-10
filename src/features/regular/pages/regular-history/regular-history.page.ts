@@ -4,11 +4,12 @@ import { bootstrapValidationClasses, BootstrapValidationClasses } from '@feature
 import { Entity, RegularHistory } from '../../../../definitions';
 import { RegularValues } from '../../definitions';
 import { regularEmptyValue } from '../../common/regular.presenter';
-import { BehaviorSubject, combineLatest, filter, map, Observable, switchMap } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, merge, Observable, of, switchMap } from 'rxjs';
 import { regularHasId } from '../../validators';
 import { REGULAR_HISTORY_QUERY, RegularHistoryQuery } from '../../providers';
 import { RegularHistoryValues } from '../../common/regular.presentation';
-import { toRegularHistoryValues } from './regular-history.presenter';
+import { routeParamToRegularId, toRegularHistoryValues } from './regular-history.presenter';
+import { ActivatedRoute, Params } from '@angular/router';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,7 +28,10 @@ export class RegularHistoryPage {
     nonNullable: true
   });
 
-  public constructor(@Inject(REGULAR_HISTORY_QUERY) private readonly _regularHistoryQuery$: RegularHistoryQuery) {}
+  public constructor(
+    private readonly _route: ActivatedRoute,
+    @Inject(REGULAR_HISTORY_QUERY) private readonly _regularHistoryQuery$: RegularHistoryQuery
+  ) {}
 
   private readonly _regular$: BehaviorSubject<Entity & RegularValues> = new BehaviorSubject<Entity & RegularValues>(
     regularEmptyValue
@@ -37,18 +41,24 @@ export class RegularHistoryPage {
     this._regular$.next(regular);
   }
 
+  public regularId$: Observable<string> = this._route.params.pipe(
+    switchMap((params: Params): Observable<string | undefined> => of(routeParamToRegularId('id', params))),
+    filter(Boolean)
+  );
+
   public regular$: Observable<Entity & RegularValues> = this._regular$.asObservable();
 
   public validRegular$: Observable<boolean> = this._regular$
     .asObservable()
     .pipe(map((regular: Entity & RegularValues): boolean => regularHasId(regular)));
 
-  public readonly regularHistory$: Observable<RegularHistoryValues> = combineLatest([this.regular$, this.validRegular$]).pipe(
+  public readonly triggerFromControl$: Observable<string> = combineLatest([this.regular$, this.validRegular$]).pipe(
     filter(([_, isValid]: [_: Entity & RegularValues, isValid: boolean]): boolean => isValid),
-    switchMap(
-      ([regular]: [regular: Entity & RegularValues, _: boolean]): Observable<RegularHistory> =>
-        this._regularHistoryQuery$(regular.id)
-    ),
+    map(([regular]: [regular: Entity & RegularValues, _: boolean]): string => regular.id)
+  );
+
+  public readonly regularHistory$: Observable<RegularHistoryValues> = merge(this.regularId$, this.triggerFromControl$).pipe(
+    switchMap((regularId: string): Observable<RegularHistory> => this._regularHistoryQuery$(regularId)),
     map(toRegularHistoryValues)
   );
 }

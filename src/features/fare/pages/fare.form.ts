@@ -92,18 +92,21 @@ export const unassignedToSchedule: Type<Entity & FareToScheduleValues> = ioInter
 
 export const editScheduledFormCodec: Type<ScheduledToEditValues> = ioIntersection([entityCodec, fareFormCodec]);
 
-export const FARE_FORM: FormGroup<FareFields> = new FormGroup<FareFields>({
-  ...fareFormControls()
-});
+export const fareForm = (): FormGroup<FareFields> =>
+  new FormGroup<FareFields>({
+    ...fareFormControls()
+  });
 
 export const RECURRING_FARE_FORM: FormGroup<AddRecurringFields> = new FormGroup<AddRecurringFields>({
   ...recurringFareFormControls()
 });
 
-export const setFareErrorToForm = (handledError: { field?: string; errors: Record<string, unknown> }): void =>
-  handledError.field == null
-    ? FARE_FORM.setErrors(handledError.errors)
-    : FARE_FORM.get(handledError.field)?.setErrors(handledError.errors);
+export const setFareErrorToForm =
+  (form: FormGroup<FareFields>) =>
+  (handledError: { field?: string; errors: Record<string, unknown> }): void =>
+    handledError.field == null
+      ? form.setErrors(handledError.errors)
+      : form.get(handledError.field)?.setErrors(handledError.errors);
 
 export type FormattedFareError = { field?: string; errors: Record<string, unknown> };
 export const formatFareError = (error: Error): FormattedFareError =>

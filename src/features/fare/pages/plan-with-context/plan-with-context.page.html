@@ -1,0 +1,49 @@
+<div class="d-flex h-100 flex-column overflow-auto p-3">
+  <div class="d-flex">
+    <h1 class="text-primary d-flex align-items-center">Saisir une course</h1>
+    <a class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" routerLink="../../">
+      <i class="ri-close-line ri-2x" aria-hidden="true"></i>
+      <span class="visually-hidden">Fermer</span>
+    </a>
+  </div>
+  <hr />
+  <div class="mb-4">
+    <label class="form-label">Passager</label>
+    <app-regular-field
+      [regularFieldControl]="regularControl"
+      (selectedValue)="onSelectRegularChange($event)"></app-regular-field>
+  </div>
+  <ng-container *ngIf="(regular$ | async) as regular">
+    <ng-container *ngIf="(validRegular$ | async)">
+      <div class="row">
+        <div class="col-4">
+          <app-fare-form
+            mode="scheduled"
+            [fareForm]="scheduleFareForm"
+            [action$]="scheduleFare$"
+            [drivers]="(drivers$ | async) ?? []"
+            [regular]="regular"
+            [selectedDate]="selectedDate$ | async"
+            [initialValues]="(prefilledFare$ | async) ?? {}"
+            (actionSuccess)="onScheduleFareActionSuccess($event)"
+            (actionError)="onScheduleFareActionError($event)"></app-fare-form>
+          <hr />
+          <app-allocate-unassigned
+            mode="create"
+            [fareForm]="scheduleFareForm"
+            [regularControl]="regularControl"></app-allocate-unassigned>
+        </div>
+        <div class="col-8">
+          <h3 class="mb-2 text-primary h5">Courses</h3>
+          <ng-container *ngIf="(regularFaresContext$ | async) as faresByContext">
+            <app-fares-tabular-overview
+              [forthcoming]="faresByContext.forthcoming"
+              [past]="faresByContext.past"
+              [recurring]="faresByContext.recurring"
+              [regularId]="regular.id"></app-fares-tabular-overview>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>

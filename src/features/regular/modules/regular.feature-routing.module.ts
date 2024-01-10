@@ -19,6 +19,10 @@ const ROUTES: Routes = [
   {
     path: 'history',
     component: RegularHistoryPage
+  },
+  {
+    path: 'history/:id',
+    component: RegularHistoryPage
   }
 ];
 

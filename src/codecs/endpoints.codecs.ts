@@ -164,5 +164,6 @@ export const regularHistoryCodec: Type<RegularHistory> = ioType({
   scheduled: scheduledFaresCodec,
   pending: pendingReturnsCodec,
   subcontracted: subcontractedFaresCodec,
-  unassigned: unassignedFaresCodec
+  unassigned: unassignedFaresCodec,
+  recurring: recurringFaresCodec
 });

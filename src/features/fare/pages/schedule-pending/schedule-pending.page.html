@@ -11,13 +11,16 @@
   </div>
   <h2 class="h5 text-primary">{{ userFriendlyDate$ | async }}</h2>
   <hr />
-  <div class="mb-3">
+  <ng-container *ngIf="fareFromUrl$ | async as fare; else selectFare">
+    <div class="mb-2"><strong>Retour: {{ fareSummary(fare) }}</strong></div>
+  </ng-container>
+  <ng-template #selectFare>
     <label class="form-label">Retour</label>
     <app-pending-field
       [fareFieldControl]="fareControl"
       [prefilled]="(pendingReturns$ | async) ?? []"
       (selectedValue)="onSelectPendingReturnChange($event)"></app-pending-field>
-  </div>
+  </ng-template>
   <ng-container *ngIf="(regular$ | async) as regular">
     <!-- TODO refactor and invert container once place as destinations is done -->
     <ng-container *ngIf="(initialPendingValues$ | async) as fare">

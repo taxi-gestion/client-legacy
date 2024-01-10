@@ -22,7 +22,7 @@ import { emptyPhoneValue, PhoneValues, toPhone, toPhoneValues } from '@features/
 import { regularEmptyValue, RegularValues, toIdentity } from '@features/regular';
 import { FareValues } from './fares.presentation';
 import { emptyWaypointValue, toWaypointValues, WaypointValues } from '@features/common/waypoint';
-import { sort } from 'fp-ts/Array';
+import { findFirst, sort } from 'fp-ts/Array';
 import { contramap, getMonoid, Ord } from 'fp-ts/Ord';
 import { Ord as ordString } from 'fp-ts/string';
 import { Ord as ordDate } from 'fp-ts/Date';
@@ -30,6 +30,9 @@ import { Monoid } from 'fp-ts/Monoid';
 import { pipe as fpipe } from 'fp-ts/function';
 import { Toast } from '../../../root/components/toaster/toaster.presenter';
 import { toTime } from '../../common/presentation';
+import { Observable, of, throwError } from 'rxjs';
+import { fold as optionFold } from 'fp-ts/Option';
+import { Params } from '@angular/router';
 
 export const toScheduledFaresValues = (
   fares: (Entity & Scheduled)[] | (Entity & Scheduled) | undefined
@@ -313,3 +316,30 @@ const toDeleteRecurringSuccessToast = (recurring: Recurring): Toast => ({
   status: 'success',
   title: 'Une règle de récurrence a été supprimée'
 });
+
+type WithId = { id: string };
+export const findMatchingFare = <T extends WithId>([fares, id]: [T[], string]): Observable<T> =>
+  fpipe(
+    fares,
+    findFirst((fare: T): boolean => fare.id === id),
+    optionFold(
+      (): Observable<never> => throwError((): Error => new Error('Fare not found')),
+      (fare: T): Observable<T> => of(fare)
+    )
+  );
+
+const UUID_LENGTH: 36 = 36 as const;
+const isValidUuid = (uuid: unknown): uuid is string =>
+  uuid === null || typeof uuid !== 'string' ? false : uuid.length === UUID_LENGTH;
+export const routeParamToFareId = (keyInParams: string, params: Params): string | undefined => {
+  const uuid: unknown = params[keyInParams];
+  return isValidUuid(uuid) ? uuid : undefined;
+};
+
+type WithSummaryProperties = {
+  datetime: string;
+  passenger: PassengerValues;
+  arrival: WaypointValues;
+};
+export const toFareSummary = <T extends WithSummaryProperties>(fare: T): string =>
+  ` ${toTime(fare.datetime)} - ${toIdentity(fare.passenger)} - ${fare.arrival.place.label}`;

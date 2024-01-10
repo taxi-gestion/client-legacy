@@ -6,6 +6,8 @@ import { UnassignedFareFieldComponent } from './unassigned-fare-field/unassigned
 import { AllocateUnassignedComponent } from './allocate-unassigned/allocate-unassigned.component';
 import { RecurringFareFormComponent } from './recurring-fare-form/recurring-fare-form.component';
 import { ApplyRecurrenceComponent } from './apply-recurring-fares/apply-recurring-fares.component';
+import { FaresTabularViewComponent } from './visualisation/fares-tabular-view/fares-tabular-view.component';
+import { RegularFaresOverviewComponent } from './visualisation/fares-tabular-overview/regular-fares-overview.component';
 
 export * from './scheduled-fare-field/scheduled-fare-field.component';
 export * from './scheduled-fare-field/scheduled-fare-field.form';
@@ -26,5 +28,7 @@ export const COMPONENTS = [
   AllocateUnassignedComponent,
   UnassignedFareFieldComponent,
   RecurringFareFormComponent,
-  ApplyRecurrenceComponent
+  ApplyRecurrenceComponent,
+  FaresTabularViewComponent,
+  RegularFaresOverviewComponent
 ];
