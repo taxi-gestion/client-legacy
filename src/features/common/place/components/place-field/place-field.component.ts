@@ -52,7 +52,7 @@ export class PlaceFieldComponent {
   public toSearchTerm = (placeValues: PlaceValues): string => placeValues.label;
 
   public toTrackBy: (index: number, placeValues: PlaceValues) => string = (_: number, placeValues: PlaceValues): string =>
-    `${placeValues.context}${placeValues.location.latitude}${placeValues.location.longitude}`;
+    `${placeValues.context}`;
 
   public placeValuesValidator: (placeValues: PlaceValues | undefined) => ValidatorFn = selectedPlaceValidator;
 

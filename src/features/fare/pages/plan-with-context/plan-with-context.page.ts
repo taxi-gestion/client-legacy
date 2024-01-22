@@ -97,6 +97,10 @@ export class PlanWithContextPage {
     this.onSelectRegularChange(this._regular$.getValue());
   };
 
+  public onRegularUpdated = (regular: Entity & RegularValues): void => {
+    this._regular$.next(regular);
+  };
+
   public onScheduleFareActionError = (error: Error): void => {
     this._toaster.toast({
       content: `Échec de la planification de la course: ${error.name} | ${error.message}`,

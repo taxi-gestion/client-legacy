@@ -1,0 +1,108 @@
+<div class="mb-3">
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="nameLabel">Nom:</span>
+    </div>
+    <input
+      id="waypointName"
+      placeholder="clinique, dialyse ..."
+      type="text"
+      class="form-control"
+      [ngClass]="validation(parentForm.controls.waypointName)"
+      aria-describedby="waypointNameLabel"
+      name="waypointName"
+      [formControl]="parentForm.controls.waypointName" />
+  </div>
+</div>
+<div class="mb-3">
+  <label class="form-label d-block">Adresse:</label>
+  <app-place-field [placeFieldControl]="parentForm.controls.place" [place]="parentForm.controls.place.value"></app-place-field>
+</div>
+<div class="mb-3">
+  <label for="nature-action">Action à la sélection comme destination:</label>
+  <div class="d-flex flex-column p-2">
+    <label for="nature-action">Nature:</label>
+    <div class="btn-group p-2" role="group" id="nature-action" aria-label="Nature action options">
+      <input
+        type="radio"
+        class="btn-check"
+        [name]="'nature-button'"
+        [id]="'no-nature-action-button'"
+        autocomplete="off"
+        [checked]="parentForm.controls.setNature.value === 'none'"
+        [formControl]="parentForm.controls.setNature"
+        value="none" />
+      <label class="btn btn-outline-secondary" [for]="'no-nature-action-button'">Rien</label>
+
+      <input
+        type="radio"
+        class="btn-check"
+        [name]="'nature-button'"
+        [id]="'set-medical-drive-button'"
+        autocomplete="off"
+        [checked]="parentForm.controls.setNature.value === 'medical'"
+        [formControl]="parentForm.controls.setNature"
+        value="medical" />
+      <label class="btn btn-outline-success" [for]="'set-medical-drive-button'">Trajet Médical</label>
+
+      <input
+        type="radio"
+        class="btn-check"
+        [name]="'nature-button'"
+        [id]="'set-standard-drive-button'"
+        autocomplete="off"
+        [checked]="parentForm.controls.setNature.value === 'standard'"
+        [formControl]="parentForm.controls.setNature"
+        value="standard" />
+      <label class="btn btn-outline-danger" [for]="'set-standard-drive-button'">Trajet Payant</label>
+    </div>
+    <label for="nature-action">Type:</label>
+    <div class="btn-group p-2" role="group" id="kind-action" aria-label="Kind action options">
+      <input
+        type="radio"
+        class="btn-check"
+        [name]="'kind-button'"
+        [id]="'no-kind-action-button'"
+        autocomplete="off"
+        [checked]="parentForm.controls.setKind.value === 'none'"
+        [formControl]="parentForm.controls.setKind"
+        value="none" />
+      <label class="btn btn-outline-secondary" [for]="'no-kind-action-button'">Rien</label>
+
+      <input
+        type="radio"
+        class="btn-check"
+        [name]="'kind-button'"
+        [id]="'set-two-way-drive-button'"
+        autocomplete="off"
+        [checked]="parentForm.controls.setKind.value === 'two-way'"
+        [formControl]="parentForm.controls.setKind"
+        value="two-way" />
+      <label class="btn btn-outline-success" [for]="'set-two-way-drive-button'">Aller & Retour</label>
+
+      <input
+        type="radio"
+        class="btn-check"
+        [name]="'kind-button'"
+        [id]="'set-one-way-drive-button'"
+        autocomplete="off"
+        [checked]="parentForm.controls.setKind.value === 'one-way'"
+        [formControl]="parentForm.controls.setKind"
+        value="one-way" />
+      <label class="btn btn-outline-danger" [for]="'set-one-way-drive-button'">Aller simple</label>
+    </div>
+  </div>
+</div>
+<div class="mb-3">
+  <div class="input-group">
+    <textarea
+      id="comment"
+      placeholder="Commentaire trajet..."
+      class="form-control"
+      aria-describedby="commentLabel"
+      name="comment"
+      cols="30"
+      rows="2"
+      [formControl]="parentForm.controls.comment"></textarea>
+  </div>
+</div>

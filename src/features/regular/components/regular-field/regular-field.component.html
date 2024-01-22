@@ -24,10 +24,10 @@
     <ng-container *ngIf="templatedValue.phones?.length === 0"><small>Pas de téléphone enregistré</small></ng-container>
     <br />
     <ng-container *ngIf="templatedValue.waypoints && templatedValue.waypoints[0]">
-      <small>Domicile: {{ templatedValue.waypoints[0].place.context }}</small>
+      <small class="text-wrap">Domicile: {{ templatedValue.waypoints[0].place.context }}</small>
       <ng-container *ngIf="templatedValue.waypoints[0]?.comment?.length > 0">
         <br />
-        <small>Commentaire domicile: {{ templatedValue.waypoints[0].comment }}</small>
+        <small class="text-wrap">Commentaire domicile: {{ templatedValue.waypoints[0].comment }}</small>
       </ng-container>
     </ng-container>
     <ng-container *ngIf="templatedValue.waypoints?.length === 0"><small>Pas de domicile enregistré</small></ng-container>
@@ -35,10 +35,12 @@
   <ng-template #selectedValueTemplate let-selectedValue>
     <ng-container *ngIf="selectedValue.id === ''"><small>Pas de passager sélectionné</small></ng-container>
     <ng-container *ngIf="selectedValue.id !== ''">
-      <small>Passager: {{ selectedValue.civility }} {{ selectedValue.lastname }} {{ selectedValue.firstname }}</small>
+      <small class="text-wrap">
+        Passager: {{ selectedValue.civility }} {{ selectedValue.lastname }} {{ selectedValue.firstname }}
+      </small>
       <ng-container *ngIf="selectedValue.comment?.length > 0">
         <br />
-        <small>Commentaire passager: {{ selectedValue.comment }}</small>
+        <small class="text-wrap">Commentaire passager: {{ selectedValue.comment }}</small>
       </ng-container>
     </ng-container>
   </ng-template>

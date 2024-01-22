@@ -1,0 +1,28 @@
+<form
+  [formGroup]="patchRegularForm"
+  [appLoadAction]="patchRegular$"
+  #loadAction="loadAction"
+  (actionSuccess)="onPatchRegularActionSuccess($event)"
+  (actionError)="onPatchRegularActionError($event)"
+  (ngSubmit)="onSubmit(loadAction.start)">
+  <div class="p-1">
+    <ng-container *ngIf="property === 'phones'">
+      <app-phone [parentForm]="getPhoneControl()"></app-phone>
+    </ng-container>
+    <ng-container *ngIf="property === 'waypoints'">
+      <app-waypoint [parentForm]="getWaypointControl()"></app-waypoint>
+    </ng-container>
+    <button
+      [appLoadActionDisplay]="loadAction.isLoading$ | async"
+      #loadActionDisplay
+      type="submit"
+      class="btn mt-1 p-1 btn-primary w-100"
+      [disabled]="loadActionDisplay.isLoading">
+      <ng-container slot="loadActionDisplayIdle">Ajouter</ng-container>
+      <ng-container slot="loadActionDisplayLoading">
+        <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+        Ajout en cours...
+      </ng-container>
+    </button>
+  </div>
+</form>

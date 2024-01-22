@@ -1,5 +1,5 @@
 <form [formGroup]="formGroup">
-  <div formControlErrors="search">
+  <div formControlErrors="search" *ngIf="(found$ | async) ?? [] as entries">
     <!-- TODO This should be visible and use the given parent input identifier -->
     <label for="search" class="visually-hidden"><ng-content></ng-content></label>
     <div class="input-group">
@@ -28,10 +28,13 @@
       #resultsDropdown="autocompleteResultsDropdown"
       appAutocompleteResultsDropdown
       [dropdownControl]="templatedInput"
+      [addEntryTemplate]="addEntryTemplate"
+      [hasResults]="entries.length !== 0"
       [class.show]="resultsDropdown.expanded$ | async"
       class="dropdown-menu position-sticky mt-1"
-      aria-labelledby="place">
-      <li #results *ngFor="let templatedValue of (found$ | async) ?? []; index as placeIndex; trackBy: toTrackBy">
+      aria-labelledby="place"
+      (clear)="onClear()">
+      <li #results *ngFor="let templatedValue of entries; index as placeIndex; trackBy: toTrackBy">
         <button
           type="button"
           class="dropdown-item"

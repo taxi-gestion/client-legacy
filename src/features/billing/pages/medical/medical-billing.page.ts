@@ -8,9 +8,11 @@ import { toLongDateFormat, toStandardDateFormat } from '@features/common/angular
 import { DateService } from '../../../common/date/services';
 import {
   FaresByNature,
-  generateExcelFromData,
+  generateExcelFromDataByDriver,
+  generateExcelFromDataByPassenger,
   groupByDriver,
   groupByNature,
+  groupByPassenger,
   sortByDatetime,
   toBillingItem
 } from '../billing.presenter';
@@ -37,11 +39,12 @@ export class MedicalBillingPage {
     map(groupByNature)
   );
 
-  public readonly medicalBilling$: Observable<BillingItemsByDriver> = this.billingItemsByNature$.pipe(
+  public readonly items$: Observable<BillingItem[]> = this.billingItemsByNature$.pipe(
     map((fares: FaresByNature): BillingItem[] => fares.medical.map(toBillingItem)),
-    map(sortByDatetime<BillingItem>),
-    map(groupByDriver)
+    map(sortByDatetime<BillingItem>)
   );
+
+  public readonly medicalBilling$: Observable<BillingItemsByDriver> = this.items$.pipe(map(groupByDriver));
 
   public constructor(
     private readonly _toaster: ToasterPresenter,
@@ -49,7 +52,11 @@ export class MedicalBillingPage {
     @Inject(SCHEDULED_FARES_FOR_DATE_QUERY) private readonly _faresForDateQuery: ScheduledFaresForDateQuery
   ) {}
 
-  public downloadAsExcel(data: BillingItemsByDriver): void {
-    generateExcelFromData(data);
+  public downloadAsExcelByDriver(data: BillingItem[]): void {
+    generateExcelFromDataByDriver(groupByDriver(data));
+  }
+
+  public downloadAsExcelByPassenger(data: BillingItem[]): void {
+    generateExcelFromDataByPassenger(groupByPassenger(data));
   }
 }

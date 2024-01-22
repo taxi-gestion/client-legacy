@@ -6,9 +6,9 @@ export const emptyPhoneValue: PhoneValues = {
   phoneType: ''
 };
 
-export const toPhone = (phoneNumberValue: PhoneValues): Phone => ({
-  type: phoneNumberValue.phoneType,
-  number: phoneNumberValue.phoneNumber
+export const toPhone = (phoneValues: PhoneValues): Phone => ({
+  type: phoneValues.phoneType,
+  number: phoneValues.phoneNumber
 });
 
 export const toPhoneValues = (phone: Phone): PhoneValues => ({

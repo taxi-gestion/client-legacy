@@ -16,11 +16,12 @@ import { WaypointModule } from '@features/common/waypoint';
 import { COMPONENTS, RegularFieldComponent } from '../components';
 import { AutocompleteComponentModule } from '../../common/autocomplete';
 import { RegularHistoryScheduledComponent } from '../components/regular-history/regular-history-scheduled.component';
+import { RegularPatchComponent } from '../components/regular-patch/regular-patch.component';
 
 @NgModule({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   declarations: [...LAYOUTS, ...PAGES, ...COMPONENTS],
-  exports: [RegularFieldComponent, RegularHistoryScheduledComponent],
+  exports: [RegularFieldComponent, RegularHistoryScheduledComponent, RegularPatchComponent],
   imports: [
     CommonModule,
     FormsModule,
