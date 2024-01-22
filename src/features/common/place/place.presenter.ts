@@ -5,11 +5,7 @@ import { placeRules } from '../../../codecs/domain-rules/place.rules';
 
 export const emptyPlaceValue: PlaceValues = {
   context: '',
-  label: '',
-  location: {
-    latitude: NaN,
-    longitude: NaN
-  }
+  label: ''
 };
 
 export const toPlace = (placeValue: PlaceValues): Place => ({
