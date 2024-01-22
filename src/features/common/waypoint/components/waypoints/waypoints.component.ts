@@ -2,9 +2,9 @@ import { Component, Input } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BootstrapValidationClasses, bootstrapValidationClasses } from '@features/common/form-validation';
 import { placeFieldFormControl } from '../../../place/components/place-field/place-field.form';
-import { WaypointsArrayElementFields } from './waypoints.form';
 
 import { WaypointValues } from '../../definitions';
+import { WaypointFields } from '../fields.form';
 
 @Component({
   selector: 'app-waypoints',
@@ -13,7 +13,7 @@ import { WaypointValues } from '../../definitions';
 export class WaypointsComponent {
   public validation: (control: AbstractControl) => BootstrapValidationClasses = bootstrapValidationClasses;
 
-  @Input({ required: true }) public parentArray!: FormArray<FormGroup<WaypointsArrayElementFields>>;
+  @Input({ required: true }) public parentArray!: FormArray<FormGroup<WaypointFields>>;
 
   @Input() public set waypoints(waypoints: (WaypointValues[] | undefined) | null) {
     waypoints != null && this.onWaypointsReceived(waypoints);
@@ -27,8 +27,8 @@ export class WaypointsComponent {
   }
 
   // eslint-disable-next-line max-lines-per-function
-  public createWaypointGroup(waypoint: WaypointValues | undefined): FormGroup<WaypointsArrayElementFields> {
-    return new FormGroup<WaypointsArrayElementFields>({
+  public createWaypointGroup(waypoint: WaypointValues | undefined): FormGroup<WaypointFields> {
+    return new FormGroup<WaypointFields>({
       waypointName: new FormControl<WaypointValues['waypointName']>(waypoint?.waypointName ?? '', {
         nonNullable: true,
         validators: [Validators.required]

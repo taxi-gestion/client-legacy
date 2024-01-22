@@ -4,10 +4,10 @@ import {
   ContentChildren,
   ElementRef,
   EventEmitter,
-  HostListener,
   Input,
   Output,
-  QueryList
+  QueryList,
+  TemplateRef
 } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -33,6 +33,10 @@ export class AutocompleteResultsDropdownComponent {
 
   @Input() public dropdownControl: HTMLElement | null = null;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @Input() public addEntryTemplate: TemplateRef<any> | null = null;
+  @Input() public hasResults: boolean = false;
+
   @Output() public readonly indexChange: EventEmitter<number> = new EventEmitter<number>();
 
   @Input() public set expanded(expanded: boolean) {
@@ -40,9 +44,7 @@ export class AutocompleteResultsDropdownComponent {
     this._expanded = expanded;
   }
 
-  private clickOnMenuControl(clickEvent: Event): boolean {
-    return clickEvent.target === this.dropdownControl;
-  }
+  @Output() public clear: EventEmitter<void> = new EventEmitter<void>();
 
   public expand(): void {
     this._expanded$.next(true);
@@ -55,6 +57,11 @@ export class AutocompleteResultsDropdownComponent {
     this._expanded = false;
   }
 
+  public clearSearch(): void {
+    this.reduce();
+    this.clear.emit();
+  }
+
   public setIndex(index: number): void {
     this.activeIndex = index;
     this.indexChange.next(this.activeIndex);
@@ -64,14 +71,5 @@ export class AutocompleteResultsDropdownComponent {
     if (this.results?.first == null) return;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     this.results.first.nativeElement.firstChild.focus();
-  }
-
-  @HostListener('document:click', ['$event']) public onClickOutside(clickEvent: Event): void {
-    if (!this._expanded || this.clickOnMenuControl(clickEvent)) return;
-    this._expanded$.next(false);
-  }
-
-  @HostListener('keydown.escape') public onEscape(): void {
-    this.reduce();
   }
 }

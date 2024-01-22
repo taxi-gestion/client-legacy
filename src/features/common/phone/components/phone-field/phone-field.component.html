@@ -11,7 +11,8 @@
   [prefilled]="prefilled"
   [resultFilter]="resultsFilter"
   [setDefaultSelectedValue]="defaultValue"
-  (selectedValue)="onSelectedValueChange($event)">
+  (selectedValue)="onSelectedValueChange($event)"
+  [addEntryTemplate]="addEntryTemplate">
   <ng-template #resultTemplate let-templatedValue>
     <b>{{ templatedValue.phoneType }}</b>
     -

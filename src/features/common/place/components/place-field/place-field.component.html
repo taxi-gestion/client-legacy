@@ -12,14 +12,14 @@
   [setDefaultSelectedValue]="defaultValue"
   (selectedValue)="onSelectedValueChange($event)">
   <ng-template #resultTemplate let-templatedValue>
-    <b>{{ templatedValue.label }}</b>
+    <b class="text-wrap">{{ templatedValue.label }}</b>
     <br />
-    <small>{{ templatedValue.context }}</small>
+    <small class="text-wrap">{{ templatedValue.context }}</small>
   </ng-template>
   <ng-template #selectedValueTemplate let-selectedValue>
     <ng-container *ngIf="selectedValue.context === ''"><small>Pas d'adresse sélectionnée</small></ng-container>
     <ng-container *ngIf="selectedValue.context !== ''">
-      <small>Adresse: {{ selectedValue.context }}</small>
+      <small class="text-wrap">Adresse: {{ selectedValue.context }}</small>
     </ng-container>
   </ng-template>
 </app-autocomplete-field>

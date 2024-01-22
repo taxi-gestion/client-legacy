@@ -25,6 +25,8 @@ import {
 } from '@features/fare';
 import { listDriversQuery$, listDriversQueryProvider } from '@features/common/driver';
 import {
+  patchRegularAction$,
+  patchRegularActionProvider,
   regularByIdQuery$,
   regularByIdQueryProvider,
   regularHistoryQueryProvider,
@@ -59,5 +61,6 @@ export const FARE_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   addRecurringActionProvider(addRecurringAction$, [HttpClient]),
   recurringFaresQueryProvider(recurringFaresQuery$, [HttpClient]),
   applyRecurringActionProvider(applyRecurringAction$, [HttpClient]),
-  regularHistoryQueryProvider(regularHistoryQuery$, [HttpClient])
+  regularHistoryQueryProvider(regularHistoryQuery$, [HttpClient]),
+  patchRegularActionProvider(patchRegularAction$, [HttpClient])
 ];

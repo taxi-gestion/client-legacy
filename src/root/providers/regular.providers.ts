@@ -3,20 +3,23 @@ import { FactoryProvider, ValueProvider } from '@angular/core';
 import {
   deleteRegularActionProvider,
   editRegularActionProvider,
+  patchRegularActionProvider,
   registerRegularActionProvider,
   regularHistoryQueryProvider,
   searchRegularQueryProvider,
   searchRegularsQuery$,
   validatedDeleteRegularAction$,
   validatedEditRegularAction$,
-  validatedRegisterRegularAction$
+  validatedRegisterRegularAction$,
+  regularHistoryQuery$,
+  patchRegularAction$
 } from '@features/regular';
 import { searchPlaceQuery$, searchPlaceQueryProvider } from '@features/common/place';
-import { regularHistoryQuery$ } from '../../features/regular/queries/regular-history';
 
 export const REGULAR_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   deleteRegularActionProvider(validatedDeleteRegularAction$, [HttpClient]),
   editRegularActionProvider(validatedEditRegularAction$, [HttpClient]),
+  patchRegularActionProvider(patchRegularAction$, [HttpClient]),
   registerRegularActionProvider(validatedRegisterRegularAction$, [HttpClient]),
   searchRegularQueryProvider(searchRegularsQuery$, [HttpClient]),
   searchPlaceQueryProvider(searchPlaceQuery$, [HttpClient]),

@@ -60,5 +60,7 @@ export type Regular = {
   subcontractedClient: string | undefined;
 };
 
+export type RegularPatchableProperties = Pick<Regular, 'phones'> | Pick<Regular, 'waypoints'>;
+
 export type Nature = 'medical' | 'standard';
 export type Kind = 'one-way' | 'two-way';

@@ -1,3 +1,17 @@
-<ng-container *ngIf="expanded$ | async">
-  <ng-content></ng-content>
-</ng-container>
+<div>
+  <ng-container *ngIf="expanded$ | async">
+    <div class="d-flex">
+      <small class="ps-1">Résultats :</small>
+      <button class="btn btn-link link-dark text-decoration-none ms-auto" title="Fermer" (click)="clearSearch()">
+        <i class="ri-close-line ri" aria-hidden="true"></i>
+        <span class="visually-hidden">Fermer</span>
+      </button>
+    </div>
+    <ng-content></ng-content>
+    <ng-container *ngIf="!hasResults">
+      <div>Aucune entrée</div>
+      <hr />
+    </ng-container>
+    <ng-container *ngTemplateOutlet="addEntryTemplate"></ng-container>
+  </ng-container>
+</div>

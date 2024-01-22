@@ -9,6 +9,7 @@ import {
   EditScheduled,
   Entity,
   FaresCount,
+  PatchRegular,
   Pending,
   Recurring,
   RecurringApplied,
@@ -121,6 +122,13 @@ export const regularEditedCodec: Type<EditRegular> = ioType(
     regularEdited: regularEntityCodec
   },
   'regularEditedCodec'
+);
+
+export const regularPatchedCodec: Type<PatchRegular> = ioType(
+  {
+    regularPatched: regularEntityCodec
+  },
+  'regularPatchedCodec'
 );
 
 export const pendingScheduledCodec: Type<SchedulePending> = ioType(

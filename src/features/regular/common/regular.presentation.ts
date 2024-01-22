@@ -1,15 +1,11 @@
 import { Civility } from '@definitions';
 import { array as ioArray, string as ioString, type as ioType, Type, undefined as ioUndefined, union as ioUnion } from 'io-ts';
 import { civilityCodec } from '@codecs';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { PhonesFields, phonesFormControls, phoneValuesCodec } from '@features/common/phone';
+import { FormControl, Validators } from '@angular/forms';
+import { AddPhoneFields, AddPhonesFields, phonesFormControls, phoneValuesCodec } from '@features/common/phone';
 import { RegularValues } from '@features/regular';
-import {
-  WaypointsArrayElementFields,
-  WaypointsArrayField,
-  waypointsArrayFormControl,
-  waypointValuesCodec
-} from '@features/common/waypoint';
+import { waypointsArrayFormControl, waypointValuesCodec } from '@features/common/waypoint';
+import { AddWaypointFields, AddWaypointsFields } from '../../common/waypoint/components/fields.form';
 
 export const DEFAULT_CIVILITY: Civility = 'Mr';
 
@@ -23,13 +19,16 @@ export const regularFormCodec: Type<RegularValues> = ioType({
   subcontractedClient: ioUnion([ioString, ioUndefined])
 });
 
-export type RegularFields = WaypointsArrayField<'waypoints'> & {
-  civility: FormControl<RegularValues['civility']>;
-  firstname: FormControl<RegularValues['firstname']>;
-  lastname: FormControl<RegularValues['lastname']>;
-  comment: FormControl<RegularValues['comment']>;
-  subcontractedClient: FormControl<RegularValues['subcontractedClient']>;
-} & { phones: PhonesFields } & { waypoints: FormArray<FormGroup<WaypointsArrayElementFields>> };
+export type RegularFields = AddPhonesFields<'phones'> &
+  AddWaypointsFields<'waypoints'> & {
+    civility: FormControl<RegularValues['civility']>;
+    firstname: FormControl<RegularValues['firstname']>;
+    lastname: FormControl<RegularValues['lastname']>;
+    comment: FormControl<RegularValues['comment']>;
+    subcontractedClient: FormControl<RegularValues['subcontractedClient']>;
+  };
+
+export type PatchRegularFields = AddPhoneFields<'phone'> | AddWaypointFields<'waypoint'>;
 
 export const regularFormControls = (): RegularFields => ({
   civility: new FormControl<RegularValues['civility']>(DEFAULT_CIVILITY, {
@@ -38,7 +37,7 @@ export const regularFormControls = (): RegularFields => ({
   }),
   firstname: new FormControl<RegularValues['firstname']>(undefined, { nonNullable: true, validators: [] }),
   lastname: new FormControl<RegularValues['lastname']>('', { nonNullable: true, validators: [Validators.required] }),
-  ...phonesFormControls(),
+  ...phonesFormControls('phones'),
   ...waypointsArrayFormControl('waypoints'),
   comment: new FormControl<RegularValues['comment']>(undefined, { nonNullable: true, validators: [] }),
   subcontractedClient: new FormControl<RegularValues['subcontractedClient']>(undefined, {

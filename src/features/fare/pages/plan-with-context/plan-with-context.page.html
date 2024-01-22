@@ -26,6 +26,7 @@
             [selectedDate]="selectedDate$ | async"
             [initialValues]="(prefilledFare$ | async) ?? {}"
             (actionSuccess)="onScheduleFareActionSuccess($event)"
+            (regularUpdated)="onRegularUpdated($event)"
             (actionError)="onScheduleFareActionError($event)"></app-fare-form>
           <hr />
           <app-allocate-unassigned

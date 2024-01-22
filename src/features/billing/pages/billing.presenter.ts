@@ -1,5 +1,5 @@
 import { Entity, WithNature, Scheduled } from '@definitions';
-import { BillingItem, BillingItemsByDriver } from '../definitions/billing.presentation';
+import { BillingItem, BillingItemsByDriver, BillingItemsByPassenger } from '../definitions/billing.presentation';
 import { isMedicalDrive, isTwoWayDrive } from '@features/fare';
 import { groupBy as arrayGroupBy } from 'fp-ts/NonEmptyArray';
 import { format } from 'date-fns';
@@ -35,7 +35,10 @@ export const toBillingItem = (fare: Entity & Scheduled): BillingItem => ({
 });
 
 const driver = (billingItem: BillingItem): string => billingItem.driver;
+const passenger = (billingItem: BillingItem): string => billingItem.passenger;
 export const groupByDriver = (billingItems: BillingItem[]): Record<string, BillingItem[]> => arrayGroupBy(driver)(billingItems);
+export const groupByPassenger = (billingItems: BillingItem[]): Record<string, BillingItem[]> =>
+  arrayGroupBy(passenger)(billingItems);
 
 export type FaresByNature = Record<WithNature['nature'], (Entity & Scheduled)[]>;
 
@@ -49,8 +52,8 @@ export const groupByNature = (fares: (Entity & Scheduled)[]): FaresByNature =>
   );
 
 /* eslint-disable */
-export const generateExcelFromData = (rawData: BillingItemsByDriver): void => {
-  const data = toExcelReadyData(rawData);
+export const generateExcelFromDataByDriver = (rawData: BillingItemsByDriver): void => {
+  const data = toExcelByDriverReadyData(rawData);
 
   const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
   const wb: XLSX.WorkBook = XLSX.utils.book_new();
@@ -59,7 +62,17 @@ export const generateExcelFromData = (rawData: BillingItemsByDriver): void => {
   XLSX.writeFile(wb, 'export.xlsx');
 };
 
-const flattenBillingItem = (item: BillingItem): Record<string, any> => {
+export const generateExcelFromDataByPassenger = (rawData: BillingItemsByPassenger): void => {
+  const data = toExcelByPassengerReadyData(rawData);
+
+  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+  XLSX.writeFile(wb, 'export.xlsx');
+};
+
+const flattenBillingItemForDriverFirst = (item: BillingItem): Record<string, any> => {
   const translatedItem = {
     driver: item.driver,
     passenger: item.passenger,
@@ -82,12 +95,47 @@ const flattenBillingItem = (item: BillingItem): Record<string, any> => {
   return translatedKeysItem;
 };
 
-const toExcelReadyData = (billingItems: BillingItemsByDriver): any[] => {
+const flattenBillingItemForPassengerFirst = (item: BillingItem): Record<string, any> => {
+  const translatedItem = {
+    passenger: item.passenger,
+    driver: item.driver,
+    departureWaypointName: item.departure.waypointName,
+    arrivalWaypointName: item.arrival.waypointName,
+    departurePlaceContext: item.departure.place.context,
+    arrivalPlaceContext: item.arrival.place.context,
+    time: item.time,
+    distance: item.distance,
+    isTwoWayDrive: item.isTwoWayDrive,
+    contactPhone: item.contactPhone
+  };
+
+  // Convert keys using the translation mapping
+  const translatedKeysItem: Record<string, any> = {};
+  for (const key in translatedItem) {
+    translatedKeysItem[columnTranslations[key as keyof typeof translatedItem] || key] =
+      translatedItem[key as keyof typeof translatedItem];
+  }
+  return translatedKeysItem;
+};
+
+const toExcelByDriverReadyData = (billingItems: BillingItemsByDriver): any[] => {
   const allItems: any[] = [];
 
   Object.values(billingItems).forEach((itemsArray) => {
     itemsArray.forEach((item) => {
-      allItems.push(flattenBillingItem(item));
+      allItems.push(flattenBillingItemForDriverFirst(item));
+    });
+  });
+
+  return allItems;
+};
+
+const toExcelByPassengerReadyData = (billingItems: BillingItemsByPassenger): any[] => {
+  const allItems: any[] = [];
+
+  Object.values(billingItems).forEach((itemsArray) => {
+    itemsArray.forEach((item) => {
+      allItems.push(flattenBillingItemForPassengerFirst(item));
     });
   });
 

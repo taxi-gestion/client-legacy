@@ -8,9 +8,18 @@
   <div class="mb-3">
     <label class="form-label">Téléphone à appeler</label>
     <app-phone-field
+      [addEntryTemplate]="regularAddPhone"
       [phoneFieldControl]="fareForm.controls.phoneToCall"
       [phone]="initialValues.phoneToCall"
       [prefilled]="regular.phones ?? []"></app-phone-field>
+    <ng-template #regularAddPhone>
+      <hr />
+      <small class="ps-1">Ajouter un téléphone :</small>
+      <app-regular-patch
+        [id]="regular.id"
+        [property]="'phones'"
+        (regularUpdated)="onRegularUpdated($event)"></app-regular-patch>
+    </ng-template>
   </div>
   <div class="mb-3" formControlErrors="departureDatetime">
     <label for="departureDatetime" class="form-label">Date et heure du départ</label>
@@ -25,6 +34,7 @@
   <div class="mb-3">
     <label class="form-label">Lieu de départ</label>
     <app-waypoint-field
+      [addEntryTemplate]="regularAddWaypoint"
       [waypointFieldControl]="fareForm.controls.departurePlace"
       [waypoint]="initialValues.departurePlace"
       [prefilled]="regular.waypoints ?? []"></app-waypoint-field>
@@ -32,11 +42,20 @@
   <div class="mb-3" formControlErrors="arrivalPlace">
     <label class="form-label">Destination</label>
     <app-waypoint-field
+      [addEntryTemplate]="regularAddWaypoint"
       [waypointFieldControl]="fareForm.controls.arrivalPlace"
       [waypoint]="initialValues.arrivalPlace"
       [prefilled]="regular.waypoints ?? []"
       (selectedValue)="onArrivalSelected($event)"></app-waypoint-field>
   </div>
+  <ng-template #regularAddWaypoint>
+    <hr />
+    <small class="ps-1">Ajouter une destination :</small>
+    <app-regular-patch
+      [id]="regular.id"
+      [property]="'waypoints'"
+      (regularUpdated)="onRegularUpdated($event)"></app-regular-patch>
+  </ng-template>
   <app-estimate-journey-field
     [durationFieldControl]="fareForm.controls.driveDuration"
     [distanceFieldControl]="fareForm.controls.driveDistance"

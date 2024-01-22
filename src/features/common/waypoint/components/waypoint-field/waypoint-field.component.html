@@ -11,14 +11,15 @@
   [prefilled]="prefilled"
   [resultFilter]="resultsFilter"
   [setDefaultSelectedValue]="defaultValue"
-  (selectedValue)="onSelectedValueChange($event)">
+  (selectedValue)="onSelectedValueChange($event)"
+  [addEntryTemplate]="addEntryTemplate">
   <ng-template #resultTemplate let-templatedValue>
     <b>{{ templatedValue.waypointName }}</b>
     <br />
-    <small>Adresse: {{ templatedValue.place.label }} - {{ templatedValue.place.context }}</small>
+    <small class="text-wrap">Adresse: {{ templatedValue.place.label }} - {{ templatedValue.place.context }}</small>
     <ng-container *ngIf="templatedValue.comment !== undefined">
       <br />
-      <small>Commentaire: {{ templatedValue.comment }}</small>
+      <small class="text-wrap">Commentaire: {{ templatedValue.comment }}</small>
     </ng-container>
     <i
       *ngIf="templatedValue.setNature === 'medical'"
@@ -44,10 +45,10 @@
   <ng-template #selectedValueTemplate let-selectedValue>
     <ng-container *ngIf="selectedValue.waypointName === ''"><small>Pas de destination</small></ng-container>
     <ng-container *ngIf="selectedValue.waypointName !== ''">
-      <small>Adresse: {{ selectedValue.place.context }}</small>
+      <small class="text-wrap">Adresse: {{ selectedValue.place.context }}</small>
       <ng-container *ngIf="selectedValue.comment !== undefined">
         <br />
-        <small>Commentaire: {{ selectedValue.comment }}</small>
+        <small class="text-wrap">Commentaire: {{ selectedValue.comment }}</small>
       </ng-container>
       <i
         *ngIf="selectedValue.setNature === 'medical'"

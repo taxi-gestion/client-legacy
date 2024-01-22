@@ -12,6 +12,7 @@ import { DriverValues } from '@features/common/driver';
 import { RegularValues } from '@features/regular';
 import { metersToKilometers, secondsToMinutes, toValidLocalDatetimeInputValue } from '@features/common/presentation';
 import { WaypointValues } from '@features/common/waypoint';
+import { Entity } from '../../../../definitions';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,7 +26,7 @@ export class FareFormComponent<T> implements OnInit {
   @Input({ required: true }) public action$!: () => Observable<T>;
   @Input({ required: true }) public drivers!: DriverValues[];
   @Input({ required: true }) public initialValues: Partial<FareValues> = fareEmptyValue;
-  @Input({ required: true }) public regular!: RegularValues;
+  @Input({ required: true }) public regular!: Entity & RegularValues;
   @Input({ required: true }) public mode!: 'edit-scheduled' | 'pending' | 'scheduled' | 'unassigned';
 
   @Input() public set selectedDate(date: Date | null) {
@@ -39,6 +40,9 @@ export class FareFormComponent<T> implements OnInit {
   @Output() public actionSuccess: EventEmitter<T> = new EventEmitter<T>();
 
   @Output() public actionError: EventEmitter<Error> = new EventEmitter<Error>();
+
+  // TODO I do not like this
+  @Output() public regularUpdated: EventEmitter<Entity & RegularValues> = new EventEmitter<Entity & RegularValues>();
 
   public onSubmit = (triggerAction: () => void): void => {
     this.fareForm.markAllAsTouched();
@@ -84,4 +88,8 @@ export class FareFormComponent<T> implements OnInit {
       this.fareForm.controls.isMedicalDrive.setValue(isMedicalDrive(arrival.setNature));
     }
   }
+
+  public onRegularUpdated = (regular: Entity & RegularValues): void => {
+    this.regularUpdated.emit(regular);
+  };
 }

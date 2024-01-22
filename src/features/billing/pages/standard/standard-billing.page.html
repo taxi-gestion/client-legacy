@@ -1,7 +1,10 @@
 <div class="d-flex flex-column h-100 overflow-auto">
   <h2 class="h4 p-3">Facturation standard - {{ userFriendlyDate$ | async }}</h2>
+  <ng-container *ngIf="(items$ | async) as items">
+    <button class="btn btn-primary m-3" (click)="downloadAsExcelByDriver(items)">Exporter sur Excel - par chauffeur</button>
+    <button class="btn btn-primary m-3" (click)="downloadAsExcelByPassenger(items)">Exporter sur Excel - par passager</button>
+  </ng-container>
   <div *ngIf="(standardBilling$ | async) as plannings">
-    <button class="btn btn-primary m-3" (click)="downloadAsExcel(plannings)">Exporter sur Excel</button>
     <div class="flex-grow-1 pt-2 d-flex flex-nowrap overflow-auto h-100 w-100 pe-3 ps-3">
       <app-billing-column
         *ngFor="let planning of plannings | keyvalue"

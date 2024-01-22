@@ -10,10 +10,10 @@ export class FareCardComponent {
   @Input({ required: true }) public fare!: FareDriverCardPresentation;
 
   public getGoogleMapsLink(place: PlaceValues): string {
-    return `https://www.google.com/maps/dir/?api=1&destination=${place.context}&travelmode=driving`;
+    return `https://www.google.com/maps/dir/?api=1&destination=${encodeURI(place.context)}&travelmode=driving`;
   }
 
   public getWazeLink(place: PlaceValues): string {
-    return `https://www.waze.com/ul?ll=${place.location.latitude},${place.location.longitude}&navigate=yes`;
+    return `https://www.waze.com/ul?q=${encodeURI(place.context)}&navigate=yes`;
   }
 }

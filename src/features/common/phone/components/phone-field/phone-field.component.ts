@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { FORM_CONTROL_ERROR_MESSAGES_TOKEN } from '@features/common/form-validation';
 import { PHONE_FORM_CONTROL_ERROR_MESSAGES } from '../../errors/form-errors-messages.token';
 import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
@@ -31,6 +31,9 @@ export class PhoneFieldComponent {
   @Input() public set phone(phone: (PhoneValues | undefined) | null) {
     phone !== null && this.onPhoneReceived(phone ?? emptyPhoneValue);
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @Input() public addEntryTemplate: TemplateRef<any> | null = null;
 
   @Output() public readonly selectedValue: EventEmitter<PhoneValues> = new EventEmitter<PhoneValues>();
 

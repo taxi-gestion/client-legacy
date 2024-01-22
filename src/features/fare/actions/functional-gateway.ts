@@ -30,6 +30,16 @@ export const apiGetWithValidation =
   (input: RequestParameters): Observable<Result> =>
     fpipe(http.get<unknown>(url(input)), withValidation<Result>(decode));
 
+export const apiPatchWithValidation =
+  <Domain, Transfer, Result>(
+    httpClient: HttpClient,
+    encode: Encode<Domain, Transfer>,
+    decode: Decode<unknown, Result>,
+    url: (input: Domain) => string
+  ) =>
+  (input: Domain): Observable<Result> =>
+    fpipe(httpClient.patch<unknown>(url(input), encode(input)), withValidation<Result>(decode));
+
 export const apiDeleteWithValidation =
   <RequestParameters, Result>(http: HttpClient, decode: Decode<unknown, Result>, url: (input: RequestParameters) => string) =>
   (input: RequestParameters): Observable<Result> =>

@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BootstrapValidationClasses, bootstrapValidationClasses } from '@features/common/form-validation';
 import { PhoneValues } from '../../definitions/phone.definition';
-import { PhoneFields, PhonesFields } from './phones.form';
 import { phoneNumberValidator } from '../../validators';
+import { PhoneFields } from '../fields.form';
 
 @Component({
   selector: 'app-phones',
@@ -12,7 +12,7 @@ import { phoneNumberValidator } from '../../validators';
 export class PhonesComponent {
   public validation: (control: AbstractControl) => BootstrapValidationClasses = bootstrapValidationClasses;
 
-  @Input({ required: true }) public parentArray!: PhonesFields;
+  @Input({ required: true }) public parentArray!: FormArray<FormGroup<PhoneFields>>;
 
   @Input() public set phones(phones: (PhoneValues[] | undefined) | null) {
     phones != null && this.onPhonesReceived(phones);

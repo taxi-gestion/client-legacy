@@ -1,6 +1,7 @@
 import { WaypointValues } from '../../common/waypoint';
 
 export type BillingItemsByDriver = Record<string, BillingItem[]>;
+export type BillingItemsByPassenger = Record<string, BillingItem[]>;
 
 export type BillingItem = {
   passenger: string;

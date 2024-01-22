@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   ContentChild,
+  ElementRef,
   EventEmitter,
   Input,
   Output,
@@ -37,6 +38,8 @@ export class AutocompleteFieldComponent<TValue> {
 
   @ViewChild('resultsDropdown') public resultsDropdown!: AutocompleteResultsDropdownComponent;
 
+  @ViewChild('templatedInput') public searchInput!: ElementRef;
+
   public validation: (control: AbstractControl) => BootstrapValidationClasses = bootstrapValidationClasses;
 
   @Input() public minSearchTermLength: number = 3;
@@ -50,6 +53,9 @@ export class AutocompleteFieldComponent<TValue> {
   @Input({ required: true }) public formGroup!: FormGroup<{ search: FormControl<string> }>;
 
   @Input({ required: true }) public query$!: (search: string) => Observable<TValue[]>;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @Input() public addEntryTemplate: TemplateRef<any> | null = null;
 
   @Input() public resultFilter: (searchTerm: string) => (combinedResults: TValue[]) => TValue[] =
     (_search: string) =>
@@ -116,7 +122,9 @@ export class AutocompleteFieldComponent<TValue> {
       this.resultFilter(this._searchTerm$.getValue())([...prefilled, ...foundFromSearch])
     ),
     tap((values: TValue[]): void => {
-      if (values.length >= 1) this.resultsDropdown.expand();
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (this.resultsDropdown !== undefined && (values.length >= 1 || this.addEntryTemplate !== null))
+        this.resultsDropdown.expand();
     })
   );
 
@@ -130,5 +138,13 @@ export class AutocompleteFieldComponent<TValue> {
     this.formGroup.controls.search.setValue(this.toSearchTerm(value));
     this._selected$.next(value);
     this.selectedValue.emit(value);
+  }
+
+  public onClear(): void {
+    this._searchTerm$.next('');
+    this._selected$.next(this.emptyValue);
+    this.formGroup.controls.search.reset();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    this.searchInput.nativeElement.blur();
   }
 }

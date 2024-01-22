@@ -7,7 +7,7 @@ import {
   undefined as ioUndefined,
   union as ioUnion
 } from 'io-ts';
-import { Entity, Regular } from '../../definitions';
+import { Entity, Regular, RegularPatchableProperties } from '../../definitions';
 import { civilityCodec, entityCodec, phoneCodec } from './traits.codecs';
 import { waypointCodec } from './waypoint.codec';
 
@@ -22,6 +22,20 @@ export const regularCodec: Type<Regular> = ioType(
     subcontractedClient: ioUnion([ioString, ioUndefined])
   },
   'regularCodec'
+);
+
+export const regularPatchablePropertiesCodec: Type<Entity & RegularPatchableProperties> = ioUnion(
+  [
+    ioType({
+      id: ioString,
+      phones: ioUnion([ioArray(phoneCodec), ioUndefined])
+    }),
+    ioType({
+      id: ioString,
+      waypoints: ioUnion([ioArray(waypointCodec), ioUndefined])
+    })
+  ],
+  'RegularPatchableProperties'
 );
 
 export const regularEntityCodec: Type<Entity & Regular> = ioIntersection([entityCodec, regularCodec], 'regularEntityCodec');

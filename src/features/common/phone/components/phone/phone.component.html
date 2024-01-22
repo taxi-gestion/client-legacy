@@ -1,0 +1,34 @@
+<div class="mb-3">
+  <div class="mb-1">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="phoneTypeLabel">Type:</span>
+      </div>
+      <input
+        id="phoneType"
+        placeholder="portable, travail..."
+        type="text"
+        class="form-control"
+        [ngClass]="validation(parentForm.controls.phoneType)"
+        aria-describedby="phoneTypeLabel"
+        name="phoneType"
+        [formControl]="parentForm.controls.phoneType" />
+    </div>
+  </div>
+  <div class="mb-1">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="phoneNumberLabel">Numéro:</span>
+      </div>
+      <input
+        id="phoneNumber"
+        type="text"
+        placeholder="(+33)/(0) 6 XX XX XX XX"
+        class="form-control"
+        [ngClass]="validation(parentForm.controls.phoneNumber)"
+        aria-describedby="phoneNumberLabel"
+        name="phoneNumber"
+        [formControl]="parentForm.controls.phoneNumber" />
+    </div>
+  </div>
+</div>

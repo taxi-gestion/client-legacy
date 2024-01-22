@@ -1,6 +1,6 @@
 import { Entity } from '@definitions';
 import { FormControl, Validators } from '@angular/forms';
-import { PhoneField, phoneFieldFormControl, PhoneValues } from '@features/common/phone';
+import { phoneFieldFormControl, PhoneValues, SelectPhoneField } from '@features/common/phone';
 import {
   DriverField,
   driverFieldFormControl,
@@ -9,7 +9,7 @@ import {
 import { DriverValues } from '@features/common/driver';
 import { RegularField, regularFieldFormControl, RegularValues } from '@features/regular';
 import { EstimateJourneyFields, estimateJourneyFieldsFormControl } from '@features/common/journey';
-import { WaypointField, waypointFieldFormControl, WaypointValues } from '@features/common/waypoint';
+import { SelectWaypointField, waypointFieldFormControl, WaypointValues } from '@features/common/waypoint';
 import { codecControlValidator, timeValidator } from '@features/common/form-validation';
 import { isTimeISO8601String, TimeISO8601 } from '../../../codecs/rules/timeISO8601.rule';
 import { null as ioNull, undefined as ioUndefined, union as ioUnion } from 'io-ts';
@@ -50,10 +50,10 @@ export type UnassignedToAllocateValues = Omit<FareValues, 'driver'>;
 
 export type FareFields = DriverField<'driver'> &
   EstimateJourneyFields<'driveDuration', 'driveDistance'> &
-  PhoneField<'phoneToCall'> &
   RegularField<'passenger'> &
-  WaypointField<'arrivalPlace'> &
-  WaypointField<'departurePlace'> & {
+  SelectPhoneField<'phoneToCall'> &
+  SelectWaypointField<'arrivalPlace'> &
+  SelectWaypointField<'departurePlace'> & {
     departureDatetime: FormControl<FareValues['departureDatetime']>;
     isTwoWayDrive: FormControl<FareValues['isTwoWayDrive']>;
     isMedicalDrive: FormControl<FareValues['isMedicalDrive']>;
@@ -64,9 +64,9 @@ export type EditScheduledFields = FareFields;
 export type SchedulePendingFields = FareFields;
 export type AddRecurringFields = DriverField<'driver'> &
   EstimateJourneyFields<'driveDuration', 'driveDistance'> &
-  PhoneField<'phoneToCall'> &
-  WaypointField<'arrivalPlace'> &
-  WaypointField<'departurePlace'> & {
+  SelectPhoneField<'phoneToCall'> &
+  SelectWaypointField<'arrivalPlace'> &
+  SelectWaypointField<'departurePlace'> & {
     departureTime: FormControl<RecurringToAddValues['departureTime']>;
     returnTime: FormControl<RecurringToAddValues['returnTime']>;
     isTwoWayDrive: FormControl<RecurringToAddValues['isTwoWayDrive']>;

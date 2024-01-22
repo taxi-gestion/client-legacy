@@ -10,6 +10,7 @@ type Commands =
   | 'delete-regular'
   | 'edit-regular'
   | 'edit-scheduled'
+  | 'patch-regular'
   | 'register-regular'
   | 'schedule-pending'
   | 'schedule-scheduled'
@@ -23,6 +24,7 @@ type CommandMappings = {
   'delete-regular': DeleteRegular;
   'edit-regular': EditRegular;
   'edit-scheduled': EditScheduled;
+  'patch-regular': PatchRegular;
   'register-regular': RegisterRegular;
   'schedule-pending': SchedulePending;
   'schedule-scheduled': ScheduleScheduled;
@@ -85,6 +87,10 @@ export type DeleteFare = {
 
 export type EditRegular = {
   regularEdited: Entity & Regular;
+};
+
+export type PatchRegular = {
+  regularPatched: Entity & Regular;
 };
 
 export type DeleteRegular = {

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { FORM_CONTROL_ERROR_MESSAGES_TOKEN } from '@features/common/form-validation';
 import { WAYPOINT_FORM_CONTROL_ERROR_MESSAGES } from '../../errors/form-errors-messages.token';
 import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
@@ -29,6 +29,9 @@ export class WaypointFieldComponent {
     waypoint !== null && this.onWaypointReceived(waypoint ?? emptyWaypointValue);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @Input() public addEntryTemplate: TemplateRef<any> | null = null;
+
   @Output() public readonly selectedValue: EventEmitter<WaypointValues> = new EventEmitter<WaypointValues>();
 
   public searchFormGroup: FormGroup<{ search: FormControl<string> }> = new FormGroup<{ search: FormControl<string> }>({
@@ -48,8 +51,7 @@ export class WaypointFieldComponent {
   public toTrackBy: (index: number, waypointValues: WaypointValues) => string = (
     _: number,
     waypointValues: WaypointValues
-  ): string =>
-    `${waypointValues.waypointName}${waypointValues.place.location.latitude}${waypointValues.place.location.longitude}`;
+  ): string => `${waypointValues.waypointName}${waypointValues.place.context}`;
 
   public waypointValuesValidator: (waypointValues: WaypointValues | undefined) => ValidatorFn = selectedWaypointValidator;
 
