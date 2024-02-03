@@ -18,7 +18,7 @@
       {{ templatedValue.arrival.place.label }}
     </b>
     <br />
-    <small>{{ templatedValue.driver.username }}</small>
+    <small>{{ templatedValue.driver?.username }}</small>
   </ng-template>
   <ng-template #selectedValueTemplate let-selectedValue>
     <ng-container *ngIf="selectedValue.id === ''"><small>Pas de course sélectionnée</small></ng-container>

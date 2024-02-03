@@ -72,7 +72,7 @@ export class RegularPatchComponent implements OnInit {
 
   public onPatchRegularActionError = (error: Error): void => {
     this._toaster.toast({
-      content: `Échec de l'ajout du téléphone: ${error.name} | ${error.message}`,
+      content: `Échec de l'ajout: ${error.name} | ${error.message}`,
       status: 'danger',
       title: 'Opération échouée'
     });

@@ -69,7 +69,9 @@ export const faresDeletedCodec: Type<DeleteFare> = ioType(
 export const faresSubcontractedCodec: Type<SubcontractFare> = ioType(
   {
     subcontracted: subcontractedFareCodec,
+    pendingCreated: ioUnion([pendingReturnCodec, ioUndefined]),
     scheduledDeleted: ioUnion([scheduledFareCodec, ioUndefined]),
+    unassignedDeleted: ioUnion([unassignedFareCodec, ioUndefined]),
     pendingDeleted: ioUnion([pendingReturnCodec, ioUndefined])
   },
   'faresSubcontractedCodec'

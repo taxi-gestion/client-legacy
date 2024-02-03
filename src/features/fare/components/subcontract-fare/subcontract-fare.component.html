@@ -1,0 +1,33 @@
+<h3 class="mb-3 text-primary h5">Sous-traiter la course</h3>
+
+<form
+  [formGroup]="subcontractFareForm"
+  [appLoadAction]="subcontractFare$"
+  #loadAction="loadAction"
+  (actionSuccess)="onSubcontractFareActionSuccess($event)"
+  (actionError)="onSubcontractFareActionError($event)"
+  (ngSubmit)="onSubmit(loadAction.start)">
+  <div class="p-1">
+    <div class="mb-3">
+      <label for="subcontractor" class="form-label">Sous-traitant</label>
+      <input
+        id="subcontractor"
+        class="form-control"
+        name="subcontractor"
+        formControlName="subcontractor"
+        [ngClass]="validation(subcontractFareForm.controls.subcontractor)" />
+    </div>
+    <button
+      [appLoadActionDisplay]="loadAction.isLoading$ | async"
+      #loadActionDisplay
+      type="submit"
+      class="btn btn-warning mt-2 w-100"
+      [disabled]="loadActionDisplay.isLoading">
+      <ng-container slot="loadActionDisplayIdle">Sous-traiter la course</ng-container>
+      <ng-container slot="loadActionDisplayLoading">
+        <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+        Sous-traitance en cours...
+      </ng-container>
+    </button>
+  </div>
+</form>

@@ -58,7 +58,7 @@ export type PendingReturnValues = {
   datetime: string;
   departure: WaypointValues;
   arrival: WaypointValues;
-  driver: DriverValues;
+  driver: DriverValues | undefined;
   id: string;
   isTwoWayDrive: boolean;
   isMedicalDrive: boolean;

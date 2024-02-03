@@ -122,7 +122,7 @@ export const pendingReturnCodec: Type<Entity & Pending> = ioIntersection(
     driveCodec,
     ioType({
       passenger: passengerEntityCodec,
-      driver: driverEntityCodec,
+      driver: ioUnion([driverEntityCodec, ioUndefined]),
       kind: ioLiteral('two-way'),
       status: ioLiteral('pending'),
       nature: ioKeyOf({ medical: null, standard: null }),
@@ -130,6 +130,21 @@ export const pendingReturnCodec: Type<Entity & Pending> = ioIntersection(
     })
   ],
   'pendingReturnCodec'
+);
+
+export const pendingReturnValuesCodec: Type<Pending> = ioIntersection(
+  [
+    driveCodec,
+    ioType({
+      passenger: passengerEntityCodec,
+      driver: ioUnion([driverEntityCodec, ioUndefined]),
+      kind: ioLiteral('two-way'),
+      status: ioLiteral('pending'),
+      nature: ioKeyOf({ medical: null, standard: null }),
+      creator: ioKeyOf({ manager: null, recurrence: null })
+    })
+  ],
+  'pendingReturnValuesCodec'
 );
 
 export const scheduledFareCodec: Type<Entity & Scheduled> = ioIntersection(
@@ -207,7 +222,6 @@ export const subcontractedFareCodec: Type<Entity & Subcontracted> = ioIntersecti
   [
     entityCodec,
     driveCodec,
-    durationDistanceCodec,
     ioType({
       passenger: passengerEntityCodec,
       subcontractor: subcontractorCodec,

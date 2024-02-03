@@ -1,22 +1,13 @@
-import { Entity, WithNature, Scheduled } from '@definitions';
+import { Entity, Scheduled, WithNature } from '@definitions';
 import { BillingItem, BillingItemsByDriver, BillingItemsByPassenger } from '../definitions/billing.presentation';
 import { isMedicalDrive, isTwoWayDrive } from '@features/fare';
 import { groupBy as arrayGroupBy } from 'fp-ts/NonEmptyArray';
 import { format } from 'date-fns';
-import { sort } from 'fp-ts/Array';
-import { contramap, Ord } from 'fp-ts/Ord';
-import { Ord as ordDate } from 'fp-ts/Date';
 import { toWaypointValues } from '../../common/waypoint';
 import { toIdentity } from '@features/regular';
 import { metersToKilometers } from '../../common/presentation';
 
 import * as XLSX from 'xlsx';
-
-type WithDatetimeValues = { datetime: string };
-
-export const sortByDatetime = <T extends WithDatetimeValues>(fares: T[]): T[] => sort(byDatetime)(fares);
-
-const byDatetime: Ord<WithDatetimeValues> = contramap((fare: { datetime: string }): Date => new Date(fare.datetime))(ordDate);
 
 // TODO Common time presenter
 const toLocalTime = (datetime: string): string => format(new Date(datetime), "HH'h'mm");

@@ -87,3 +87,14 @@ export const toUnassignedRules = ioType(
   },
   'toUnassignedRules'
 );
+
+export const toSubcontractedRules = ioType(
+  {
+    id: isNotEmptyString,
+    subcontractor: ioType({
+      identity: isNotEmptyString
+    }),
+    status: ioLiteral('to-subcontracted')
+  },
+  'toSubcontractedRules'
+);

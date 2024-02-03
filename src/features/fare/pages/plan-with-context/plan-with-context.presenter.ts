@@ -21,6 +21,7 @@ import { toRecurringFaresPresentation } from '../edit-recurring/edit-recurring.p
 import { partition } from 'fp-ts/Array';
 import { format, isBefore, startOfDay } from 'date-fns';
 import { Separated } from 'fp-ts/Separated';
+import { sortByDatetime } from '../../../common/presentation/sort.presenter';
 
 export type MixedFaresPresentation = {
   link: string;
@@ -82,16 +83,16 @@ const partitionByDate =
 // Example Usage
 export const toRegularFaresContext = (regularHistory: RegularHistory): RegularFaresContext => {
   const separated: Separated<MixedFares[], MixedFares[]> = partitionByDate(new Date())([
+    ...regularHistory.subcontracted,
     ...regularHistory.scheduled,
     ...regularHistory.pending,
     ...regularHistory.unassigned
-    // TODO Add subcontracted fares
-    //...regularHistory.subcontracted
   ]) as Separated<MixedFares[], MixedFares[]>;
+
   return {
     recurring: toRecurringFaresPresentation(regularHistory.recurring),
-    forthcoming: toMixedFaresPresentation(separated.left),
-    past: toMixedFaresPresentation(separated.right)
+    forthcoming: toMixedFaresPresentation(sortByDatetime(separated.left, true)),
+    past: toMixedFaresPresentation(sortByDatetime(separated.right, true))
   };
 };
 

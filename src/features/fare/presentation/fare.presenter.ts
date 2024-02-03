@@ -88,7 +88,7 @@ export const toPendingReturnValues = (fare: Entity & Pending): PendingReturnValu
   datetime: fare.datetime,
   departure: toWaypointValues(fare.departure),
   arrival: toWaypointValues(fare.arrival),
-  driver: toDriverValues(fare.driver),
+  driver: fare.driver === undefined ? undefined : toDriverValues(fare.driver),
   id: fare.id,
   isMedicalDrive: isMedicalDrive(fare.nature),
   isTwoWayDrive: true,
@@ -160,16 +160,18 @@ export const initialFareValuesFromUnassignedAndRegular = (
 export const initialValuesFromPendingAndRegular = (
   fare: PendingReturnValues,
   regular: Entity & RegularValues
-): Partial<Entity & FareValues> => ({
-  id: fare.id,
-  departurePlace: arrivalFromWaypoints(fare.departure, regular.waypoints) ?? emptyWaypointValue,
-  arrivalPlace: arrivalFromWaypoints(fare.arrival, regular.waypoints) ?? emptyWaypointValue,
-  phoneToCall: fare.passenger.phone,
-  driver: fare.driver,
-  isMedicalDrive: fare.isMedicalDrive,
-  isTwoWayDrive: fare.isTwoWayDrive,
-  departureDatetime: fare.datetime
-});
+): Partial<Entity & FareValues> =>
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  ({
+    id: fare.id,
+    departurePlace: arrivalFromWaypoints(fare.departure, regular.waypoints) ?? emptyWaypointValue,
+    arrivalPlace: arrivalFromWaypoints(fare.arrival, regular.waypoints) ?? emptyWaypointValue,
+    phoneToCall: fare.passenger.phone,
+    driver: fare.driver,
+    isMedicalDrive: fare.isMedicalDrive,
+    isTwoWayDrive: fare.isTwoWayDrive,
+    departureDatetime: fare.datetime
+  } as Partial<Entity & FareValues>);
 
 const arrivalFromWaypoints = (
   waypoint: WaypointValues | undefined,
@@ -239,7 +241,7 @@ export const pendingReturnEmptyValue: PendingReturnValues = {
   status: 'pending-return'
 };
 
-type WithDriverAndDatetimeValues = { driver: DriverValues; datetime: string };
+type WithDriverAndDatetimeValues = { driver: DriverValues | undefined; datetime: string };
 type WithPassengerValues = { passenger: PassengerValues };
 
 export const filterOnPassengerAndDriverAndDatetime =
@@ -251,14 +253,14 @@ export const filterByProperties =
   (searchTerm: string) =>
   <T extends WithDriverAndDatetimeValues & WithPassengerValues>(results: T[]): T[] =>
     results.filter((fareValue: T): boolean =>
-      `${toIdentity(fareValue.passenger)}${fareValue.driver.username}`.toLowerCase().includes(searchTerm.toLowerCase())
+      `${toIdentity(fareValue.passenger)}${fareValue.driver?.username}`.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
 export const sortFaresByDriverAndDatetime = <T extends WithDriverAndDatetimeValues>(fares: T[]): T[] =>
   sort(byDriverNameThenDatetime)(fares);
 
 const byDriverName: Ord<WithDriverAndDatetimeValues> = contramap(
-  (fare: { driver: DriverValues }): string => fare.driver.username
+  (fare: { driver: DriverValues | undefined }): string => fare.driver?.username ?? ''
 )(ordString);
 
 const byDriverAndDatetime: Ord<WithDriverAndDatetimeValues> = contramap(
@@ -306,7 +308,7 @@ const toDeleteUnassignedSuccessToast = (unassigned: Unassigned): Toast => ({
   title: 'Une course a été supprimée'
 });
 const toDeletePendingSuccessToast = (pending: Pending): Toast => ({
-  content: `Retour pour ${toIdentity(pending.passenger)} par ${pending.driver.username} supprimé`,
+  content: `Retour pour ${toIdentity(pending.passenger)} supprimé`,
   status: 'success',
   title: 'Un retour a été supprimé'
 });

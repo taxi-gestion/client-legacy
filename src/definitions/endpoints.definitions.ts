@@ -74,8 +74,10 @@ export type EditScheduled = {
 
 export type SubcontractFare = {
   subcontracted: Entity & Subcontracted;
+  pendingCreated: (Entity & Pending) | undefined;
   scheduledDeleted: (Entity & Scheduled) | undefined;
   pendingDeleted: (Entity & Pending) | undefined;
+  unassignedDeleted: (Entity & Unassigned) | undefined;
 };
 
 export type DeleteFare = {

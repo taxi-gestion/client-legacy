@@ -22,7 +22,7 @@ type FareTransformStatus =
   | 'to-subcontracted'
   | 'to-unassigned';
 
-type FareStableStatus = 'pending' | 'recurring' | 'scheduled' | 'subcontracted' | 'unassigned';
+export type FareStableStatus = 'pending' | 'recurring' | 'scheduled' | 'subcontracted' | 'unassigned';
 
 type WithStatus<T extends FareStableStatus | FareTransformStatus> = {
   status: T;
@@ -54,16 +54,16 @@ export type ToUnassigned = Drive &
   WithStatus<'to-unassigned'>;
 
 // Pending
-export type Pending = Drive & WithCreator & WithDriver & WithNature & WithPassenger & WithStatus<'pending'> & WithTwoWay;
+export type Pending = Drive &
+  WithCreator &
+  WithNature &
+  WithOptionalDriver &
+  WithPassenger &
+  WithStatus<'pending'> &
+  WithTwoWay;
 
 // Subcontracted
-export type Subcontracted = Drive &
-  DurationDistance &
-  WithKind &
-  WithNature &
-  WithPassenger &
-  WithStatus<'subcontracted'> &
-  WithSubcontractor;
+export type Subcontracted = Drive & WithKind & WithNature & WithPassenger & WithStatus<'subcontracted'> & WithSubcontractor;
 
 export type ToSubcontracted = WithStatus<'to-subcontracted'> & WithSubcontractor;
 
@@ -75,12 +75,12 @@ export type Subcontractor = {
 type FareRecurring = DurationDistance &
   WithKind &
   WithNature &
+  WithOptionalDriver &
   WithPassenger & {
     departure: Waypoint;
     arrival: Waypoint;
     departureTime: string;
     returnTime: string | undefined;
-    driver: (Driver & Entity) | undefined;
     recurrence: string;
   };
 export type Recurring = FareRecurring & WithStatus<'recurring'>;
@@ -94,6 +94,7 @@ export type FaresCount = {
 };
 
 type WithDriver = { driver: Driver & Entity };
+type WithOptionalDriver = { driver: (Driver & Entity) | undefined };
 type WithPassenger = { passenger: Entity & Passenger };
 type WithSubcontractor = { subcontractor: Subcontractor };
 export type WithNature = { nature: Nature };
