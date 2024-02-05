@@ -13,9 +13,9 @@ import {
   groupByDriver,
   groupByNature,
   groupByPassenger,
-  sortByDatetime,
   toBillingItem
 } from '../billing.presenter';
+import { sortByDatetime } from '../../../common/presentation/sort.presenter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,7 +41,7 @@ export class StandardBillingPage {
 
   public readonly items$: Observable<BillingItem[]> = this.billingItemsByNature$.pipe(
     map((fares: FaresByNature): BillingItem[] => fares.standard.map(toBillingItem)),
-    map(sortByDatetime<BillingItem>)
+    map((items: BillingItem[]): BillingItem[] => sortByDatetime<BillingItem>(items))
   );
 
   public readonly standardBilling$: Observable<BillingItemsByDriver> = this.items$.pipe(map(groupByDriver));

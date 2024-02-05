@@ -31,13 +31,11 @@ import {
   scheduledFaresForDateQueryProvider,
   scheduleFareActionProvider,
   schedulePendingActionProvider,
-  subcontractFareActionProvider,
   validatedEditScheduledAction$,
   validatedPendingReturnsForDateQuery$,
   validatedScheduledFaresForDateQuery$,
   validatedScheduleFareAction$,
-  validatedSchedulePendingAction$,
-  validatedSubcontractFareAction$
+  validatedSchedulePendingAction$
 } from '@features/fare';
 import { driverAgendaForDateQueryProvider, validatedDriverAgendaForDateQuery$ } from '@features/planning';
 
@@ -58,6 +56,5 @@ export const PLANNING_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   scheduleFareActionProvider(validatedScheduleFareAction$, [HttpClient]),
   schedulePendingActionProvider(validatedSchedulePendingAction$, [HttpClient]),
   searchPlaceQueryProvider(searchPlaceQuery$, [HttpClient]),
-  searchRegularQueryProvider(searchRegularsQuery$, [HttpClient]),
-  subcontractFareActionProvider(validatedSubcontractFareAction$, [HttpClient])
+  searchRegularQueryProvider(searchRegularsQuery$, [HttpClient])
 ];

@@ -5,6 +5,7 @@ export const placeCodec: Type<Place> = ioType(
   {
     context: ioString,
     label: ioString
+    //location: ioUnion([locationCodec, ioUndefined])
   },
   'placeCodec'
 );

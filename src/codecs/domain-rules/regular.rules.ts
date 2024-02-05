@@ -1,6 +1,6 @@
-import { array as ioArray, string as ioString, type as ioType, undefined as ioUndefined, union as ioUnion } from 'io-ts';
+import { array as ioArray, type as ioType, undefined as ioUndefined, union as ioUnion } from 'io-ts';
 import { civilityCodec } from '../domain';
-import { isNotEmptyString } from '../rules';
+import { isNotEmptyString, isUUIDString } from '../rules';
 import { phoneRules } from './phone.rules';
 import { waypointRules } from './waypoint.rules';
 
@@ -22,11 +22,11 @@ export const regularRules = ioType(
 export const regularPatchablePropertiesRules = ioUnion(
   [
     ioType({
-      id: ioString,
+      id: isUUIDString,
       phones: ioUnion([ioArray(phoneRules), ioUndefined])
     }),
     ioType({
-      id: ioString,
+      id: isUUIDString,
       waypoints: ioUnion([ioArray(waypointRules), ioUndefined])
     })
   ],

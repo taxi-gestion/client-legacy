@@ -35,6 +35,8 @@
           (actionSuccess)="onScheduleUnassignedActionSuccess($event)"
           (actionError)="onScheduleUnassignedActionError($event)"></app-fare-form>
         <hr />
+        <app-subcontract-fare [fareId]="fare.id!"></app-subcontract-fare>
+        <hr />
         <app-delete-fare
           mode="fullsize"
           [action$]="deleteFare$$(fare.id!)"

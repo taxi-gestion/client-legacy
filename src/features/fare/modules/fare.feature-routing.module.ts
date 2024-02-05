@@ -8,6 +8,7 @@ import { ScheduleUnassignedPage } from '../pages/schedule-unassigned/schedule-un
 import { ManageRecurrenceLayout } from '../layouts/manage-recurrence/manage-recurrence.layout';
 import { EditRecurringPage } from '../pages/edit-recurring/edit-recurring.page';
 import { PlanWithContextPage } from '../pages/plan-with-context/plan-with-context.page';
+import { SubcontractedPage } from '../pages/subcontracted-fares/subcontracted-fares.page';
 
 const ROUTES: Routes = [
   {
@@ -39,6 +40,11 @@ const ROUTES: Routes = [
     component: ScheduleUnassignedPage
   },
   {
+    path: 'subcontracted',
+    canActivate: [redirectWithDate],
+    component: SubcontractedPage
+  },
+  {
     path: 'edit/:date',
     canActivate: [setDate],
     component: EditScheduledPage
@@ -57,6 +63,11 @@ const ROUTES: Routes = [
     path: 'unassigned/:date',
     canActivate: [setDate],
     component: ScheduleUnassignedPage
+  },
+  {
+    path: 'subcontracted/:date',
+    canActivate: [setDate],
+    component: SubcontractedPage
   },
   {
     path: 'edit/:date/:id',

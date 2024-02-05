@@ -21,7 +21,9 @@ import {
   unassignedFaresForDateQueryProvider,
   unassignedFaresForDateQuery$,
   addRecurringActionProvider,
-  deleteFareAction$
+  deleteFareAction$,
+  subcontractFareActionProvider,
+  subcontractFareAction$
 } from '@features/fare';
 import { listDriversQuery$, listDriversQueryProvider } from '@features/common/driver';
 import {
@@ -41,6 +43,8 @@ import { recurringFaresQuery$ } from '../../features/fare/queries/recurring-fare
 import { applyRecurringActionProvider } from '../../features/fare/providers/actions/apply-recurring.action.provider';
 import { applyRecurringAction$ } from '../../features/fare/actions/apply-recurring.action';
 import { regularHistoryQuery$ } from '../../features/regular/queries/regular-history';
+import { subcontractedFaresForDateQueryProvider } from '../../features/fare/providers/queries/subcontracted-fares-for-date.query.provider';
+import { subcontractedFareForDateQuery$ } from '../../features/fare/queries/subcontracted-fares-for-date.query';
 
 export const FARE_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   allocateUnassignedActionProvider(allocateUnassignedAction$, [HttpClient]),
@@ -62,5 +66,7 @@ export const FARE_PROVIDERS: (FactoryProvider | ValueProvider)[] = [
   recurringFaresQueryProvider(recurringFaresQuery$, [HttpClient]),
   applyRecurringActionProvider(applyRecurringAction$, [HttpClient]),
   regularHistoryQueryProvider(regularHistoryQuery$, [HttpClient]),
-  patchRegularActionProvider(patchRegularAction$, [HttpClient])
+  patchRegularActionProvider(patchRegularAction$, [HttpClient]),
+  subcontractFareActionProvider(subcontractFareAction$, [HttpClient]),
+  subcontractedFaresForDateQueryProvider(subcontractedFareForDateQuery$, [HttpClient])
 ];

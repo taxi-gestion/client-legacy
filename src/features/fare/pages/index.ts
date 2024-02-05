@@ -5,6 +5,7 @@ import { ScheduleUnassignedPage } from './schedule-unassigned/schedule-unassigne
 import { AddRecurringPage } from './add-recurring/add-recurring.page';
 import { EditRecurringPage } from './edit-recurring/edit-recurring.page';
 import { PlanWithContextPage } from './plan-with-context/plan-with-context.page';
+import { SubcontractedPage } from './subcontracted-fares/subcontracted-fares.page';
 
 export * from './edit-scheduled/edit-scheduled.page';
 export * from './schedule-fare/schedule-fare.page';
@@ -20,5 +21,6 @@ export const PAGES = [
   ScheduleUnassignedPage,
   AddRecurringPage,
   EditRecurringPage,
-  PlanWithContextPage
+  PlanWithContextPage,
+  SubcontractedPage
 ];
