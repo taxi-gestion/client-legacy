@@ -1,5 +1,6 @@
-import { isMedicalDrive } from './fare.presenter';
+import { describe, it, expect } from 'vitest';
 import { WithNature } from '@definitions';
+import { isMedicalDrive } from './fare.presenter.pure';
 
 describe('fare presenter', (): void => {
   it.each([

@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { Session } from '../../providers';
 import { inMemoryLogoutAction } from './in-memory.logout.action';
 

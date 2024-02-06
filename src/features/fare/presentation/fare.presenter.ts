@@ -5,18 +5,7 @@ import {
   ScheduledFareValues,
   UnassignedFareValues
 } from '../definitions/fare.definition';
-import {
-  Civility,
-  DeleteFare,
-  Entity,
-  Passenger,
-  Pending,
-  Recurring,
-  Scheduled,
-  Unassigned,
-  WithKind,
-  WithNature
-} from '@definitions';
+import { Civility, DeleteFare, Entity, Passenger, Pending, Recurring, Scheduled, Unassigned, WithKind } from '@definitions';
 import { driverEmptyValue, DriverValues, toDriverValues } from '@features/common/driver';
 import { emptyPhoneValue, PhoneValues, toPhone, toPhoneValues } from '@features/common/phone';
 import { regularEmptyValue, RegularValues, toIdentity } from '@features/regular';
@@ -33,6 +22,7 @@ import { toTime } from '../../common/presentation';
 import { Observable, of, throwError } from 'rxjs';
 import { fold as optionFold } from 'fp-ts/Option';
 import { Params } from '@angular/router';
+import { isMedicalDrive } from './fare.presenter.pure';
 
 export const toScheduledFaresValues = (
   fares: (Entity & Scheduled)[] | (Entity & Scheduled) | undefined
@@ -117,7 +107,6 @@ export const toPassenger = (formValues: {
   comment: formValues.passenger.comment
 });
 
-export const isMedicalDrive = (nature: WithNature['nature']): boolean => nature === 'medical';
 export const isTwoWayDrive = (kind: WithKind['kind']): boolean => kind === 'two-way';
 
 export const initialFareValuesFromRegular = (regular: RegularValues): Partial<FareValues> => ({
@@ -171,7 +160,7 @@ export const initialValuesFromPendingAndRegular = (
     isMedicalDrive: fare.isMedicalDrive,
     isTwoWayDrive: fare.isTwoWayDrive,
     departureDatetime: fare.datetime
-  } as Partial<Entity & FareValues>);
+  }) as Partial<Entity & FareValues>;
 
 const arrivalFromWaypoints = (
   waypoint: WaypointValues | undefined,

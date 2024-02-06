@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { authorizedRouteMatchPattern, isValidToken } from './bearer-token.interceptor';
 
 describe('bearer token forward on regex match', (): void => {

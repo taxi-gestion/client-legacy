@@ -2,7 +2,7 @@ import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FaresCount } from '../../../../definitions';
 
-export const FARES_COUNT_FOR_DATE_QUERY: symbol = Symbol('fare.fares-count-for-date.query');
+export const FARES_COUNT_FOR_DATE_QUERY: { key: symbol } = { key: Symbol('fare.fares-count-for-date.query') };
 
 export type FaresCountForDateQuery = (date: string) => Observable<FaresCount>;
 

@@ -225,12 +225,6 @@ module.exports = {
   ],
   '@typescript-eslint/no-meaningless-void-operator': 'error',
   '@typescript-eslint/no-non-null-asserted-nullish-coalescing': 'error',
-  '@typescript-eslint/no-parameter-properties': [
-    'error',
-    {
-      allows: ['public readonly', 'protected readonly', 'private readonly']
-    }
-  ],
   '@typescript-eslint/no-require-imports': 'error',
   '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'error',
   '@typescript-eslint/no-unnecessary-condition': 'error',
@@ -260,8 +254,7 @@ module.exports = {
   '@typescript-eslint/prefer-ts-expect-error': 'error',
   '@typescript-eslint/promise-function-async': 'error',
   '@typescript-eslint/require-array-sort-compare': ['error', { ignoreStringArrays: true }],
-  '@typescript-eslint/restrict-plus-operands': ['error', { checkCompoundAssignments: true }],
-  '@typescript-eslint/sort-type-union-intersection-members': 'error',
+  '@typescript-eslint/restrict-plus-operands': 'error',
   '@typescript-eslint/strict-boolean-expressions': [
     'error',
     {
@@ -293,7 +286,6 @@ module.exports = {
   '@typescript-eslint/default-param-last': 'error',
   '@typescript-eslint/dot-notation': 'error',
   '@typescript-eslint/init-declarations': 'error',
-  '@typescript-eslint/no-duplicate-imports': 'error',
   '@typescript-eslint/no-implied-eval': 'error',
   '@typescript-eslint/no-invalid-this': 'error',
   '@typescript-eslint/no-loop-func': 'error',

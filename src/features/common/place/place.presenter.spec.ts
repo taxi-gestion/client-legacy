@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { toPlacesValues } from './place.presenter';
 import { PlaceValues } from '@features/common/place';
 

@@ -2,7 +2,7 @@ import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Entity, Pending } from '@definitions';
 
-export const PENDING_RETURNS_FOR_DATE_QUERY: symbol = Symbol('fare.pending-returns-for-date.query');
+export const PENDING_RETURNS_FOR_DATE_QUERY: { key: symbol } = { key: Symbol('fare.pending-returns-for-date.query') };
 
 export type PendingReturnsForDateQuery = (date: string) => Observable<(Entity & Pending)[]>;
 

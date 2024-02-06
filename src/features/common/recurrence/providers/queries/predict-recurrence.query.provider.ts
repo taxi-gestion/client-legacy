@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 
 export type PredictRecurrenceQuery = (query: string) => Observable<object>;
 
-export const PREDICT_RECURRENCE_QUERY: symbol = Symbol('planning.predict-recurrence.action');
+export const PREDICT_RECURRENCE_QUERY: { key: symbol } = { key: Symbol('planning.predict-recurrence.action') };
 
 export const predictRecurrenceQueryProvider = <TDependencies>(
   useFactory: (...providers: never[]) => PredictRecurrenceQuery,

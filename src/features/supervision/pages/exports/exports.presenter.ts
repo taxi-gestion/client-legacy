@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/naming-convention
 import * as XLSX from 'xlsx';
 import { civilityTranslations, Entity, Phone, Regular, Waypoint } from '../../../../definitions';
 import { pipe as fpipe } from 'fp-ts/lib/function';

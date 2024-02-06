@@ -12,8 +12,8 @@ export const scheduledFareFieldFormControl = <T extends string>(
 ): ScheduledFareField<T> =>
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   ({
-    [formControlName]: new FormControl<ScheduledFareValues>(value === undefined ? scheduledFareEmptyValue : value, {
+    [formControlName]: new FormControl<ScheduledFareValues>(value ?? scheduledFareEmptyValue, {
       nonNullable: true,
       validators: [Validators.required]
     })
-  } as ScheduledFareField<T>);
+  }) as ScheduledFareField<T>;
