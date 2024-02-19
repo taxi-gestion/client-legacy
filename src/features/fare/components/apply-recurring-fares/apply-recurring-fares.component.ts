@@ -13,7 +13,7 @@ import { toStandardDateFormat } from '../../../common/angular';
   selector: 'app-apply-recurrence'
 })
 export class ApplyRecurrenceComponent {
-  @Output() public clicked: EventEmitter<void> = new EventEmitter<void>();
+  @Output() public triggered: EventEmitter<void> = new EventEmitter<void>();
 
   @Output() public actionSuccess: EventEmitter<void> = new EventEmitter<void>();
 
@@ -31,10 +31,13 @@ export class ApplyRecurrenceComponent {
     @Inject(APPLY_RECURRING_ACTION) private readonly _applyRecurringAction$: ApplyRecurringAction
   ) {}
 
-  public onClick = (triggerAction: () => void): void => {
+  public onTrigger = (triggerAction: () => void): void => {
     triggerAction();
-    this.clicked.emit();
+    this.triggered.emit();
   };
+  /*  public onClick = (): void => {
+    console.log('plop');
+  };*/
 
   public onActionSuccess = async (fares: RecurringApplied[]): Promise<void> => {
     this._toaster.toast(toRecurringAppliedSuccessToast(fares));
