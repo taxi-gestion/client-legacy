@@ -1,0 +1,24 @@
+/* Keyframe animation for color change */
+@keyframes color-change {
+  0% {
+    background-color: $primary; /* Initial color */
+  }
+
+  100% {
+    background-color: $success; /* Final color */
+  }
+}
+
+/* Button basic styling */
+.btn-hold {
+  /* Basic button styling */
+  padding: 10px 20px;
+  outline: none; /* Remove outline for focus */
+  cursor: pointer; /* Cursor to pointer */
+  transition: background-color 0.5s ease; /* Smooth transition for color change */
+}
+
+/* Apply the animation on :active state */
+.btn-hold:active {
+  animation: color-change 1s forwards;
+}
