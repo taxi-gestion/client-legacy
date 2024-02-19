@@ -29,7 +29,9 @@ type WithStatus<T extends FareStableStatus | FareTransformStatus> = {
 };
 
 // Scheduled
-export type Scheduled = FareReady & WithStatus<'scheduled'>;
+export type Scheduled = FareReady & WithStatus<'scheduled'>; /*& {
+    state: 'waiting' | 'started' | 'finished';
+  };*/
 
 type FareReady = Drive & DurationDistance & WithCreator & WithDriver & WithKind & WithNature & WithPassenger;
 export type PendingToScheduled = Drive & DurationDistance & WithCreator & WithDriver & WithStatus<'pending-to-scheduled'>;

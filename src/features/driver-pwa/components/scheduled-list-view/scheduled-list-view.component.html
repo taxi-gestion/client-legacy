@@ -1,0 +1,25 @@
+<div class="flex-shrink-0">
+  <div class="entry card p-3" *ngFor="let entry of entries">
+    <button class="d-flex justify-content-between text-decoration-none text-black" (click)="onFocus(entry)">
+      {{ entry.time }} - {{ entry.departure.name }} => {{ entry.arrival.name }}
+      <!--      <div class="d-flex">
+        <ng-container *ngIf="entry?.isMedicalDrive; else nonMedicalDrive">
+          <span class="visually-hidden">Trajet médical</span>
+          <i class="ri-hospital-line text-success pe-1 ps-1" style="font-size: 20px" aria-hidden="true"></i>
+        </ng-container>
+        <ng-template #nonMedicalDrive>
+          <span class="visually-hidden">Trajet non médical</span>
+          <i class="ri-money-euro-box-line text-warning pe-1 ps-1" style="font-size: 20px" aria-hidden="true"></i>
+        </ng-template>
+        <ng-container *ngIf="entry?.isTwoWayDrive; else oneWayDrive">
+          <span class="visually-hidden">Trajet Aller retour</span>
+          <i class="ri-arrow-left-right-line text-primary pe-1 ps-1" style="font-size: 20px" aria-hidden="true"></i>
+        </ng-container>
+        <ng-template #oneWayDrive>
+          <span class="visually-hidden">Trajet simple</span>
+          <i class="ri-arrow-right-line text-info pe-1 ps-1" style="font-size: 20px" aria-hidden="true"></i>
+        </ng-template>
+      </div>-->
+    </button>
+  </div>
+</div>

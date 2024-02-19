@@ -1,0 +1,9 @@
+<div class="d-flex flex-grow-1 flex-column overflow-hidden h-100 mt-2 g-0 col">
+  <label>
+    <input type="checkbox" (change)="toggleFinishedFares($event)" />
+    Hide finished fares
+  </label>
+  <div class="flex-grow-1 pt-2 overflow-y-auto" *ngIf="agenda$ | async as fares">
+    <app-scheduled-list-view [entries]="fares"></app-scheduled-list-view>
+  </div>
+</div>

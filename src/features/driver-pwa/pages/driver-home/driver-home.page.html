@@ -1,0 +1,7 @@
+<div class="container-fluid">
+  <h1>Tableau de bord - {{ userFriendlyDate$ | async }}</h1>
+</div>
+<div class="p-1 container-fluid d-flex">
+  <button class="btn btn-primary p-3 m-2" [routerLink]="['driver/agenda']">Courses</button>
+  <button class="btn btn-primary p-3 m-2" [routerLink]="['/']">Notifications</button>
+</div>

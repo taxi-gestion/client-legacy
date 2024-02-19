@@ -5,7 +5,10 @@ import { from, Observable, of } from 'rxjs';
 
 @Injectable()
 export class RedirectUsersByGroupGuard {
-  public constructor(@Inject(SESSION_PERSISTENCE) private readonly _session: Session, private readonly _router: Router) {}
+  public constructor(
+    @Inject(SESSION_PERSISTENCE) private readonly _session: Session,
+    private readonly _router: Router
+  ) {}
 
   public canActivate = (route: ActivatedRouteSnapshot): Observable<boolean> => {
     const userGroups: string[] = this._session.groups();
@@ -17,7 +20,8 @@ export class RedirectUsersByGroupGuard {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     if (isManager(userGroups)) return of(true);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    if (isDriver(userGroups)) return navigateToAgenda(this._router)(route.params['date']);
+    if (isDriver(userGroups)) return navigateToPwa(this._router)(route.params['date']);
+    //if (isDriver(userGroups)) return navigateToAgenda(this._router)(route.params['date']);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     if (isBilling(userGroups)) return navigateToBilling(this._router)(route.params['date']);
 
@@ -34,10 +38,15 @@ const isBilling = (userGroups: string[]): boolean => userGroups.includes('billin
 const navigateToMissingAdminConfiguration = (router: Router): Observable<boolean> =>
   from(router.navigate(['/missing-user-group']));
 
-const navigateToAgenda =
+//const navigateToAgenda =
+//  (router: Router) =>
+//  (date: string | undefined): Observable<boolean> =>
+//    date == null ? from(router.navigate(['/planning/agenda/'])) : from(router.navigate(['/planning/agenda/', date]));
+
+const navigateToPwa =
   (router: Router) =>
   (date: string | undefined): Observable<boolean> =>
-    date == null ? from(router.navigate(['/planning/agenda/'])) : from(router.navigate(['/planning/agenda/', date]));
+    date == null ? from(router.navigate(['/driver/'])) : from(router.navigate(['/driver/', date]));
 
 const navigateToBilling =
   (router: Router) =>

@@ -19,6 +19,9 @@ import { FARE_PROVIDERS } from '../providers/fare.providers';
 import { PlanningFeatureModule } from '@features/planning';
 import { SupervisionFeatureModule } from '../../features/supervision';
 import { SUPERVISION_PROVIDERS } from '../providers/supervision.providers';
+import { DriverPwaFeatureModule } from '../../features/driver-pwa';
+import { DRIVER_PWA_PROVIDERS } from '../providers/driver-pwa.providers';
+import { MobileLayout } from '../layouts/mobile/mobile.layout';
 
 const ROUTES: Routes = [
   {
@@ -27,6 +30,14 @@ const ROUTES: Routes = [
     path: 'planning',
     canMatch: [CanMatchRefreshTokenGuard, CanMatchLoggedInGuard],
     providers: [...PLANNING_PROVIDERS]
+  },
+  {
+    loadChildren: async (): Promise<typeof DriverPwaFeatureModule> =>
+      (await import('@features/driver-pwa')).DriverPwaFeatureModule,
+    component: MobileLayout,
+    path: 'driver',
+    canMatch: [CanMatchRefreshTokenGuard, CanMatchLoggedInGuard],
+    providers: [...DRIVER_PWA_PROVIDERS]
   },
   {
     loadChildren: async (): Promise<typeof DashboardFeatureModule> =>
