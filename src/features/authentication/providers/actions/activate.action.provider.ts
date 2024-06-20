@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 
 export type ActivateAction = (username: string, code: string) => Observable<object>;
 
-export const ACTIVATE_ACTION: symbol = Symbol('authentication.activate.action');
+export const ACTIVATE_ACTION: { key: symbol } = { key: Symbol('authentication.activate.action') };
 
 export const activateActionProvider = <TDependencies>(
   useFactory: (...providers: never[]) => ActivateAction,

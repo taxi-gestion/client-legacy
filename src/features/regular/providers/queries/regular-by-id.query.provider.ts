@@ -4,7 +4,7 @@ import { Entity, Regular } from '@definitions';
 
 export type RegularByIdQuery = (id: string) => Observable<Entity & Regular>;
 
-export const REGULAR_BY_ID_QUERY: symbol = Symbol('regular.regular-by-id.queries');
+export const REGULAR_BY_ID_QUERY: { key: symbol } = { key: Symbol('regular.regular-by-id.queries') };
 
 export const regularByIdQueryProvider = <TDependencies>(
   useFactory: (...providers: never[]) => RegularByIdQuery,

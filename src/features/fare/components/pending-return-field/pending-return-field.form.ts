@@ -12,8 +12,8 @@ export const pendingReturnFieldFormControl = <T extends string>(
 ): PendingReturnField<T> =>
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   ({
-    [formControlName]: new FormControl<PendingReturnValues>(value === undefined ? pendingReturnEmptyValue : value, {
+    [formControlName]: new FormControl<PendingReturnValues>(value ?? pendingReturnEmptyValue, {
       nonNullable: true,
       validators: [Validators.required]
     })
-  } as PendingReturnField<T>);
+  }) as PendingReturnField<T>;

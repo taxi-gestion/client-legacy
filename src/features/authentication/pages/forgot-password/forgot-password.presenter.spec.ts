@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { LIMIT_EXCEEDED_ERROR_NAME, LimitExceededError, UNKNOWN_ACCOUNT_ERROR_NAME, UnknownAccountError } from '../../errors';
 import { formatForgotPasswordError, FormattedForgotPasswordError } from './forgot-password.presenter';
 

@@ -7,6 +7,7 @@ import { toWaypointValues } from '../../common/waypoint';
 import { toIdentity } from '@features/regular';
 import { metersToKilometers } from '../../common/presentation';
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 import * as XLSX from 'xlsx';
 
 // TODO Common time presenter
@@ -32,15 +33,6 @@ export const groupByPassenger = (billingItems: BillingItem[]): Record<string, Bi
   arrayGroupBy(passenger)(billingItems);
 
 export type FaresByNature = Record<WithNature['nature'], (Entity & Scheduled)[]>;
-
-export const groupByNature = (fares: (Entity & Scheduled)[]): FaresByNature =>
-  fares.reduce<FaresByNature>(
-    (acc: FaresByNature, fare: Entity & Scheduled): FaresByNature => ({
-      ...acc,
-      [fare.nature]: [...acc[fare.nature], fare]
-    }),
-    { medical: [], standard: [] }
-  );
 
 /* eslint-disable */
 export const generateExcelFromDataByDriver = (rawData: BillingItemsByDriver): void => {

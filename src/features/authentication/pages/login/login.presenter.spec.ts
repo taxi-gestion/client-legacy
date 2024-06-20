@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import {
   INVALID_USERNAME_OR_PASSWORD_ERROR_NAME,
   InvalidUsernameOrPasswordError,

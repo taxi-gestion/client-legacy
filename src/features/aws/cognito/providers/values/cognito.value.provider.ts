@@ -5,7 +5,7 @@ export type Cognito = {
   clientId: string;
 };
 
-export const COGNITO_PERSISTENCE: 'aws.cognito.persistence' = 'aws.cognito.persistence' as const;
+export const COGNITO_PERSISTENCE: { key: symbol } = { key: Symbol('aws.cognito.persistence') };
 
 export const cognitoValueProvider = (useValue: Cognito): ValueProvider => ({
   useValue,

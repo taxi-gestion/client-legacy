@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { ACCOUNT_ALREADY_EXIST_ERROR_NAME, AccountAlreadyExistError } from '../../errors';
 import { formatRegisterError, FormattedRegisterError } from './register.presenter';
 

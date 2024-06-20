@@ -4,7 +4,7 @@ import { Place } from '@definitions';
 
 export type SearchPlaceQuery = (search: string) => Observable<Place[]>;
 
-export const SEARCH_PLACE_QUERY: symbol = Symbol('place.search-place.queries');
+export const SEARCH_PLACE_QUERY: { key: symbol } = { key: Symbol('place.search-place.queries') };
 
 export const searchPlaceQueryProvider = <TDependencies>(
   useFactory: (...providers: never[]) => SearchPlaceQuery,

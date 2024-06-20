@@ -13,8 +13,8 @@ export const regularFieldFormControl = <T extends string>(
 ): RegularField<T> =>
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   ({
-    [formControlName]: new FormControl<Entity & RegularValues>(value === undefined ? regularEmptyValue : value, {
+    [formControlName]: new FormControl<Entity & RegularValues>(value ?? regularEmptyValue, {
       nonNullable: true,
       validators: [Validators.required]
     })
-  } as RegularField<T>);
+  }) as RegularField<T>;

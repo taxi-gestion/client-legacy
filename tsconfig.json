@@ -31,7 +31,8 @@
       "@features/public": ["src/features/public"],
       "@features/regular": ["src/features/regular"],
       "@features/supervision": ["src/features/supervision"],
-      "@features/fare": ["src/features/fare"]
+      "@features/fare": ["src/features/fare"],
+      "@features/driver-pwa": ["src/features/driver-pwa"]
     },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
@@ -41,7 +42,7 @@
     "sourceMap": true,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "es2022",
     "module": "es2022",

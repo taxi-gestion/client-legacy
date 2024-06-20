@@ -1,0 +1,37 @@
+<app-toaster></app-toaster>
+<div class="vh-100 d-flex flex-column">
+  <app-navbar class="shadow-sm z-3">
+    <a class="navbar-brand" routerLink="/" slot="brand">
+      <img class="d-inline-block align-text-top" alt="Taxi Gestion logo" height="24" src="/assets/logo/logo-brand.svg" />
+    </a>
+    <ul class="navbar-nav mb-2 ms-auto mb-lg-0">
+      <li class="nav-item dropdown">
+        <button
+          #dropdownControl
+          class="nav-link btn btn-link py-0 d-flex align-items-center"
+          [class.show]="dropdownPane.expanded$ | async"
+          [attr.aria-expanded]="dropdownPane.expanded$ | async"
+          (click)="dropdownPane.toggle()">
+          <i class="fs-3 ri-account-circle-fill" title="Mon compte" aria-hidden="true"></i>
+          <small class="ms-2 d-lg-none">Mon compte</small>
+        </button>
+        <ul
+          class="dropdown-menu dropdown-menu-start end-0 mt-2"
+          [class.show]="dropdownPane.expanded$ | async"
+          appDropdownPane
+          #dropdownPane="dropdownPane"
+          [dropdownControl]="dropdownControl">
+          <li>
+            <button class="dropdown-item z-3" type="button" (click)="onLogout()">
+              <i class="ri-logout-box-r-line me-1 align-bottom" aria-hidden="true"></i>
+              Déconnexion
+            </button>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </app-navbar>
+  <div class="flex-grow-1 bg-light overflow-hidden">
+    <router-outlet></router-outlet>
+  </div>
+</div>

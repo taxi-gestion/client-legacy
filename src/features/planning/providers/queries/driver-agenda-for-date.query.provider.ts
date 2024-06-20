@@ -1,9 +1,8 @@
 import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Entity, Scheduled } from '@definitions';
+import { Entity, Scheduled } from '../../../../definitions';
 
-export const DRIVER_AGENDA_FOR_DATE_QUERY: 'planning.driver-agenda-for-date.query' =
-  'planning.driver-agenda-for-date.query' as const;
+export const DRIVER_AGENDA_FOR_DATE_QUERY: { key: symbol } = { key: Symbol('planning.driver-agenda-for-date.query') };
 
 export type DriverAgendaForDateQuery = ({
   driver,

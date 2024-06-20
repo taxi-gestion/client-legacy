@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { firstValueFrom } from 'rxjs';
 import { UnknownAccountError } from '../../errors';
 import { Account } from '../../providers';

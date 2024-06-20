@@ -12,8 +12,7 @@ export type RedirectRoutesKeys =
 
 export type RedirectRoutes = Map<RedirectRoutesKeys, string>;
 
-export const REDIRECT_ROUTES_PERSISTENCE: 'authentication.redirect-routes.persistence' =
-  'authentication.redirect-routes.persistence' as const;
+export const REDIRECT_ROUTES_PERSISTENCE: { key: symbol } = { key: Symbol('authentication.redirect-routes.persistence') };
 
 export const redirectRoutesValueProvider = (useValue: RedirectRoutes): ValueProvider => ({
   useValue,

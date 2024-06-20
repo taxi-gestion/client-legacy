@@ -4,7 +4,7 @@ import { EditScheduled, Entity, ToScheduledEdited } from '@definitions';
 
 export type EditScheduledAction = (scheduledToEdit: Entity & ToScheduledEdited) => Observable<EditScheduled>;
 
-export const EDIT_SCHEDULED_ACTION: symbol = Symbol('fare.edit-scheduled.action');
+export const EDIT_SCHEDULED_ACTION: { key: symbol } = { key: Symbol('fare.edit-scheduled.action') };
 
 export const editScheduledActionProvider = <TDependencies>(
   useFactory: (...providers: never[]) => EditScheduledAction,

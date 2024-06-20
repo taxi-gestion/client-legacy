@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { WRONG_PASSWORD_ERROR_NAME, WrongPasswordError } from '../../../errors';
 import { fieldErrorMessagesPresentation } from '../field-error-messages.presentation';
 import { PASSWORD_ERROR_MESSAGES, PasswordError } from './password.error-message';

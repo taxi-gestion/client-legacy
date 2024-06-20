@@ -4,7 +4,7 @@ import { Entity, SubcontractFare, ToSubcontracted } from '@definitions';
 
 export type SubcontractFareAction = (fareToSubcontract: Entity & ToSubcontracted) => Observable<SubcontractFare>;
 
-export const SUBCONTRACT_FARE_ACTION: symbol = Symbol('fare.subcontract-fare.action');
+export const SUBCONTRACT_FARE_ACTION: { key: symbol } = { key: Symbol('fare.subcontract-fare.action') };
 
 export const subcontractFareActionProvider = <TDependencies>(
   useFactory: (...providers: never[]) => SubcontractFareAction,

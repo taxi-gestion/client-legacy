@@ -4,7 +4,7 @@ import { AllocateUnassigned, ToUnassigned } from '@definitions';
 
 export type AllocateUnassignedAction = (unassignedToAllocate: ToUnassigned) => Observable<AllocateUnassigned>;
 
-export const ALLOCATE_UNASSIGNED_ACTION: symbol = Symbol('fare.allocate-unassigned.action');
+export const ALLOCATE_UNASSIGNED_ACTION: { key: symbol } = { key: Symbol('fare.allocate-unassigned.action') };
 
 export const allocateUnassignedActionProvider = <TDependencies>(
   useFactory: (...providers: never[]) => AllocateUnassignedAction,

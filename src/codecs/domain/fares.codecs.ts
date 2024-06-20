@@ -158,6 +158,7 @@ export const scheduledFareCodec: Type<Entity & Scheduled> = ioIntersection(
       // eslint-disable-next-line @typescript-eslint/naming-convention
       kind: ioKeyOf({ 'one-way': null, 'two-way': null }),
       status: ioLiteral('scheduled'),
+      //state: ioKeyOf({ waiting: null, started: null, finished: null }),
       nature: ioKeyOf({ medical: null, standard: null }),
       creator: ioKeyOf({ manager: null, recurrence: null })
     })

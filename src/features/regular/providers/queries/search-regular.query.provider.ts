@@ -4,7 +4,7 @@ import { Entity, Regular } from '@definitions';
 
 export type SearchRegularQuery = (search: string) => Observable<(Entity & Regular)[]>;
 
-export const SEARCH_REGULAR_QUERY: symbol = Symbol('regular.search-regular.queries');
+export const SEARCH_REGULAR_QUERY: { key: symbol } = { key: Symbol('regular.search-regular.queries') };
 
 export const searchRegularQueryProvider = <TDependencies>(
   useFactory: (...providers: never[]) => SearchRegularQuery,

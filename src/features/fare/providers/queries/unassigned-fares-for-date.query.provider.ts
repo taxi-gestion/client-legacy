@@ -2,7 +2,7 @@ import { FactoryProvider } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Entity, Unassigned } from '@definitions';
 
-export const UNASSIGNED_FARES_FOR_DATE_QUERY: symbol = Symbol('fare.unassigned-fares-for-date.query');
+export const UNASSIGNED_FARES_FOR_DATE_QUERY: { key: symbol } = { key: Symbol('fare.unassigned-fares-for-date.query') };
 
 export type UnassignedFaresForDateQuery = (date: string) => Observable<(Entity & Unassigned)[]>;
 

@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { INVALID_CODE_ERROR_NAME, InvalidCodeError, NoUsernameError, UnknownAccountError } from '../../errors';
 import { activationCodeErrorMessageFrom, formatActivateError, FormattedActivateError } from './activate.presenter';
 

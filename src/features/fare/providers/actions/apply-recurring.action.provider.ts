@@ -4,7 +4,7 @@ import { RecurringApplied } from '@definitions';
 
 export type ApplyRecurringAction = (date: string) => Observable<RecurringApplied[]>;
 
-export const APPLY_RECURRING_ACTION: symbol = Symbol('recurrence.apply-recurring.action');
+export const APPLY_RECURRING_ACTION: { key: symbol } = { key: Symbol('recurrence.apply-recurring.action') };
 
 export const applyRecurringActionProvider = <TDependencies>(
   useFactory: (...providers: never[]) => ApplyRecurringAction,

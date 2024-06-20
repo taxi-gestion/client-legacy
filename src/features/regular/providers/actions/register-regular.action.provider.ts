@@ -4,7 +4,7 @@ import { RegisterRegular, Regular } from '@definitions';
 
 export type RegisterRegularAction = (regular: Regular) => Observable<RegisterRegular>;
 
-export const REGISTER_REGULAR_ACTION: symbol = Symbol('regular.register-regular.action');
+export const REGISTER_REGULAR_ACTION: { key: symbol } = { key: Symbol('regular.register-regular.action') };
 
 export const registerRegularActionProvider = <TDependencies>(
   useFactory: (...providers: never[]) => RegisterRegularAction,

@@ -4,7 +4,7 @@ import { EditRegular, Entity, Regular } from '@definitions';
 
 export type EditRegularAction = (regularToEdit: Entity & Regular) => Observable<EditRegular>;
 
-export const EDIT_REGULAR_ACTION: symbol = Symbol('regular.edit-regular.action');
+export const EDIT_REGULAR_ACTION: { key: symbol } = { key: Symbol('regular.edit-regular.action') };
 
 export const editRegularActionProvider = <TDependencies>(
   useFactory: (...providers: never[]) => EditRegularAction,

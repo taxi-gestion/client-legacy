@@ -18,7 +18,7 @@ export type Session = {
   groups: () => string[];
 };
 
-export const SESSION_PERSISTENCE: 'authentication.session.persistence' = 'authentication.session.persistence' as const;
+export const SESSION_PERSISTENCE: { key: symbol } = { key: Symbol('authentication.session.persistence') };
 
 export const sessionValueProvider = (useValue: Session): ValueProvider => ({
   useValue,

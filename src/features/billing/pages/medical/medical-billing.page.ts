@@ -11,11 +11,11 @@ import {
   generateExcelFromDataByDriver,
   generateExcelFromDataByPassenger,
   groupByDriver,
-  groupByNature,
   groupByPassenger,
   toBillingItem
 } from '../billing.presenter';
 import { sortByDatetime } from '../../../common/presentation/sort.presenter';
+import { groupByNature } from '../billing.presenter.pure';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

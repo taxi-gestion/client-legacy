@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { START_LOADING, STOP_LOADING, whileLoading } from './load.presentation';
 
@@ -21,7 +22,6 @@ describe('loading presentation', (): void => {
       STOP_LOADING
     );
 
-    // eslint-disable-next-line jest/prefer-strict-equal
     await expect(firstValueFrom(actionWhileLoading$)).rejects.toEqual(new Error('no elements in sequence'));
   });
 });
