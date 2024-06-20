@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 // Define some mock data to use in the tests
 import { filterByProperties, PropertySelectors } from './filters.core';
 

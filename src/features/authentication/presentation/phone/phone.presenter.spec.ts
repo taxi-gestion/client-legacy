@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { isPhone, toInternationalFormat } from './phone.presenter';
 
 describe('phone validator', (): void => {

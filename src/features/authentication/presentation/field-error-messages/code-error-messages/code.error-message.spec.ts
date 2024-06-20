@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { INVALID_CODE_ERROR_NAME, InvalidCodeError } from '../../../errors';
 import { fieldErrorMessagesPresentation } from '../field-error-messages.presentation';
 import { CODE_ERROR_MESSAGES, CodeError } from './code.error-message';

@@ -12,8 +12,7 @@ export const toPlace = (placeValue: PlaceValues): Place => ({
   ...placeValue
 });
 
-export const toPlaceValuesOrUndefined = (place: Place | PlaceValues | undefined): PlaceValues | undefined =>
-  place === undefined ? undefined : place;
+export const toPlaceValuesOrUndefined = (place: Place | PlaceValues | undefined): PlaceValues | undefined => place ?? undefined;
 
 export const toPlacesValues = (places: Place | Place[] | PlaceValues | PlaceValues[] | undefined): PlaceValues[] => {
   if (places === undefined) return [];

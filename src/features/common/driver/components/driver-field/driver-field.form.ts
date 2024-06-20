@@ -13,11 +13,11 @@ export const driverFieldFormControl = <T extends string>(
 ): DriverField<T> =>
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   ({
-    [formControlName]: new FormControl<DriverValues>(value === undefined ? driverEmptyValue : value, {
+    [formControlName]: new FormControl<DriverValues>(value ?? driverEmptyValue, {
       nonNullable: true,
       validators: [Validators.required, notEmptyDriverValidator]
     })
-  } as DriverField<T>);
+  }) as DriverField<T>;
 
 const UUID_LENGTH: 36 = 36 as const;
 const notEmptyDriverValidator = (control: AbstractControl): ValidationErrors | null =>
@@ -33,8 +33,8 @@ export const optionalDriverFieldFormControl = <T extends string>(
 ): DriverField<T> =>
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   ({
-    [formControlName]: new FormControl<DriverValues>(value === undefined ? driverEmptyValue : value, {
+    [formControlName]: new FormControl<DriverValues>(value ?? driverEmptyValue, {
       nonNullable: true,
       validators: [Validators.required]
     })
-  } as DriverField<T>);
+  }) as DriverField<T>;

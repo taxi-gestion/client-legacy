@@ -98,7 +98,7 @@ module.exports = {
     'evt',
     'func',
     'fun',
-    'obj',
+    //'obj',
     'object',
     'val'
     //'value',

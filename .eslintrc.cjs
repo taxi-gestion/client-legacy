@@ -53,9 +53,6 @@ const lintProjects = () => {
 const lintTests = () => {
   return [
     {
-      env: {
-        'jest/globals': true
-      },
       parser: '@typescript-eslint/parser',
       parserOptions: {
         tsconfigRootDir: __dirname,
@@ -64,14 +61,13 @@ const lintTests = () => {
         sourceType: 'module'
       },
       files: ['src/**/*.spec.ts'],
-      extends: ['plugin:jest/recommended', 'plugin:jest/style'],
-      plugins: ['jest', '@typescript-eslint'],
+      extends: [],
+      plugins: ['@typescript-eslint'],
       rules: {
         ...require('./.eslint-rules/eslint.rules.cjs'),
         ...require('./.eslint-rules/eslint.test.rules.cjs'),
         ...require('./.eslint-rules/typescript-eslint.rules.cjs'),
         ...require('./.eslint-rules/typescript-eslint.test.rules.cjs'),
-        ...require('./.eslint-rules/jest.rules.cjs')
       }
     }
   ];

@@ -4,7 +4,7 @@ import { DeleteFare } from '@definitions';
 
 export type DeleteFareAction = (fareIdToDelete: string) => Observable<DeleteFare>;
 
-export const DELETE_FARE_ACTION: symbol = Symbol('fare.delete-fare.action');
+export const DELETE_FARE_ACTION: { key: symbol } = { key: Symbol('fare.delete-fare.action') };
 
 export const deleteFareActionProvider = <TDependencies>(
   useFactory: (...providers: never[]) => DeleteFareAction,

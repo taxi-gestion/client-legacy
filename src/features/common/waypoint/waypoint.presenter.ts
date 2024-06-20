@@ -13,8 +13,8 @@ export const emptyWaypointValue: WaypointValues = {
 export const toWaypointValues = (waypoint: Waypoint): WaypointValues => ({
   waypointName: waypoint.name,
   place: waypoint.place,
-  setNature: waypoint.nature === undefined ? 'none' : waypoint.nature,
-  setKind: waypoint.kind === undefined ? 'none' : waypoint.kind,
+  setNature: waypoint.nature ?? 'none',
+  setKind: waypoint.kind ?? 'none',
   comment: waypoint.comment
 });
 

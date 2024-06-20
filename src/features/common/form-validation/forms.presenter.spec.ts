@@ -1,4 +1,6 @@
-import { nullToUndefined } from './forms.presenter';
+import { describe, it, expect } from 'vitest';
+
+import { nullToUndefined } from './forms.presenter.pure';
 
 describe('all forms presenter', (): void => {
   describe('nullToUndefined should convert recursively null values from forms to undefined', (): void => {

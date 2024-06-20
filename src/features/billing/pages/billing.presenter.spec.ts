@@ -1,5 +1,6 @@
+import { describe, it, expect } from 'vitest';
 import { Entity, Scheduled } from '@definitions';
-import { groupByNature } from './billing.presenter';
+import { groupByNature } from './billing.presenter.pure';
 
 describe('groupByNature', (): void => {
   const fare1: Entity & Scheduled = {

@@ -12,8 +12,8 @@ export const unassignedFareFieldFormControl = <T extends string>(
 ): UnassignedFareField<T> =>
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   ({
-    [formControlName]: new FormControl<UnassignedFareValues>(value === undefined ? unassignedFareEmptyValue : value, {
+    [formControlName]: new FormControl<UnassignedFareValues>(value ?? unassignedFareEmptyValue, {
       nonNullable: true,
       validators: [Validators.required]
     })
-  } as UnassignedFareField<T>);
+  }) as UnassignedFareField<T>;

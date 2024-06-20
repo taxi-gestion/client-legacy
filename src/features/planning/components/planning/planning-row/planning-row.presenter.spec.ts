@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { scaleForMinutesRelativeToOneHour } from './planning-row.presenter';
 
 describe('planning row presenter', (): void => {

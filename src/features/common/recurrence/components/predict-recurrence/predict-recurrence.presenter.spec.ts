@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { getNextOccurrences } from './predict-recurrence.presenter';
 
 describe('predict recurrence', (): void => {

@@ -4,7 +4,7 @@ import { RegularHistory } from '@definitions';
 
 export type RegularHistoryQuery = (id: string) => Observable<RegularHistory>;
 
-export const REGULAR_HISTORY_QUERY: symbol = Symbol('regular.regular-history.queries');
+export const REGULAR_HISTORY_QUERY: { key: symbol } = { key: Symbol('regular.regular-history.queries') };
 
 export const regularHistoryQueryProvider = <TDependencies>(
   useFactory: (...providers: never[]) => RegularHistoryQuery,
