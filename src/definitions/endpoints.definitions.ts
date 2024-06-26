@@ -85,6 +85,7 @@ export type DeleteFare = {
   pendingDeleted: (Entity & Pending) | undefined;
   unassignedDeleted: (Entity & Unassigned) | undefined;
   recurringDeleted: (Entity & Recurring) | undefined;
+  subcontractedDeleted: (Entity & Subcontracted) | undefined;
 };
 
 export type EditRegular = {

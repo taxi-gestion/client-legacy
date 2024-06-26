@@ -23,7 +23,7 @@ export class HoldTriggerDirective {
       switchMap((startEvent) =>
         merge(fromEvent<MouseEvent>(document, 'mouseup'), fromEvent<TouchEvent>(document, 'touchend')).pipe(
           timestamp(),
-          filter((endEvent) => endEvent.timestamp - startEvent.timestamp >= 1000),
+          filter((endEvent) => endEvent.timestamp - startEvent.timestamp >= 5000),
           takeUntil(this._unsubscribe$), // Use unsubscribe$ to manage unsubscription
           tap(() => this.trigger.emit()),
           map(() => {}) // Ensure the observable chain maps to void

@@ -12,17 +12,26 @@
     <ng-container *ngIf="(subcontractedFares$ | async) as fares">
       <div *ngFor="let fare of fares; let i = index" class="d-flex mb-3 p-3 border rounded position-relative">
         <div class="flex-grow-1">
-          <div class="d-flex">
-            <div class="me-auto">
-              <i class="ri-user-line"></i>
-              <span class="fw-bold d-block">
-                {{fare.departureTime}} - {{ fare.passenger.civility }} {{ fare.passenger.lastname }} => {{
-                fare.subcontractor.identity }}
-              </span>
+          <div class="d-flex flex-row justify-content-between">
+            <div>
+              <div class="d-flex">
+                <div class="me-auto">
+                  <i class="ri-user-line"></i>
+                  <span class="fw-bold d-block">
+                    {{fare.departureTime}} - {{ fare.passenger.civility }} {{ fare.passenger.lastname }} => {{
+                    fare.subcontractor.identity }}
+                  </span>
+                </div>
+              </div>
+              <div class="d-flex flex-column justify-content-between mt-2">
+                <span class="text-muted pe-1">{{ fare.departure.name }} - {{ fare.arrival.name }}</span>
+              </div>
             </div>
-          </div>
-          <div class="d-flex flex-column justify-content-between mt-2">
-            <span class="text-muted pe-1">{{ fare.departure.name }} - {{ fare.arrival.name }}</span>
+            <app-delete-fare
+              mode="compact"
+              [action$]="deleteFare$$(fare.id!)"
+              (actionSuccess)="onDeleteFareActionSuccess($event)"
+              (actionError)="onDeleteFareActionError($event)"></app-delete-fare>
           </div>
         </div>
       </div>

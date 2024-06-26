@@ -61,7 +61,8 @@ export const faresDeletedCodec: Type<DeleteFare> = ioType(
     scheduledDeleted: ioUnion([scheduledFareCodec, ioUndefined]),
     pendingDeleted: ioUnion([pendingReturnCodec, ioUndefined]),
     unassignedDeleted: ioUnion([unassignedFareCodec, ioUndefined]),
-    recurringDeleted: ioUnion([recurringFareCodec, ioUndefined])
+    recurringDeleted: ioUnion([recurringFareCodec, ioUndefined]),
+    subcontractedDeleted: ioUnion([subcontractedFareCodec, ioUndefined])
   },
   'faresDeletedCodec'
 );
