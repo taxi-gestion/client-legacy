@@ -1,5 +1,7 @@
 <div class="d-flex flex-column h-100 overflow-auto">
-  <h2 class="h4 p-3">Facturation médicale - {{ userFriendlyDate$ | async }}</h2>
+  <h2 class="h4 p-3">Export périodique médical</h2>
+  <app-period-action [action]="downloadPeriodAsExcelByPassengerAction"></app-period-action>
+  <h2 class="h4 p-3">Facturation médicale à la journée - {{ userFriendlyDate$ | async }}</h2>
   <ng-container *ngIf="(items$ | async) as items">
     <button class="btn btn-primary m-3" (click)="downloadAsExcelByDriver(items)">Exporter sur Excel - par chauffeur</button>
     <button class="btn btn-primary m-3" (click)="downloadAsExcelByPassenger(items)">Exporter sur Excel - par passager</button>
@@ -13,4 +15,3 @@
     </div>
   </div>
 </div>
-y
