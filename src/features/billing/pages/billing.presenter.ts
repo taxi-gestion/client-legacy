@@ -53,14 +53,14 @@ export const generateExcelFromDataByDriver = (rawData: BillingItemsByDriver): vo
   XLSX.writeFile(wb, 'export.xlsx');
 };
 
-export const generateExcelFromDataByPassenger = (rawData: BillingItemsByPassenger): void => {
+export const generateExcelFromDataByPassenger = (rawData: BillingItemsByPassenger, title?: string): void => {
   const data = toExcelByPassengerReadyData(rawData);
 
   const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
   const wb: XLSX.WorkBook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
-  XLSX.writeFile(wb, 'export.xlsx');
+  XLSX.writeFile(wb, title ?? 'export.xlsx');
 };
 
 const flattenBillingItemForDriverFirst = (item: BillingItem): Record<string, any> => {
@@ -89,6 +89,7 @@ const flattenBillingItemForDriverFirst = (item: BillingItem): Record<string, any
 const flattenBillingItemForPassengerFirst = (item: BillingItem): Record<string, any> => {
   const translatedItem = {
     passenger: item.passenger,
+    date: item.datetime.substring(0, 10),
     driver: item.driver,
     departureWaypointName: item.departure.waypointName,
     arrivalWaypointName: item.arrival.waypointName,
@@ -135,6 +136,7 @@ const toExcelByPassengerReadyData = (billingItems: BillingItemsByPassenger): any
 
 const columnTranslations: Record<string, string> = {
   driver: 'Chauffeur',
+  date: 'Date',
   passenger: 'Passager',
   departureWaypointName: 'Nom du point de départ',
   arrivalWaypointName: 'Nom du point d’arrivée',
