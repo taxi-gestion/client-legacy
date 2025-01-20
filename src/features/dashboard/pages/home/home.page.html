@@ -1,21 +1,38 @@
 <div class="px-3 py-5 container-fluid">
   <h1>Tableau de bord</h1>
 </div>
-<div class="p-5 container-fluid">
-  <div class="row mb-4">
-    <button class="btn btn-primary btn-square p-1 m-2" [routerLink]="['/planning/daily-list']">Planning journée</button>
-    <button class="btn btn-primary btn-square p-1 m-2" [routerLink]="['/fare']">Courses journée</button>
+<ng-container *ngIf="isManagerAndDriver()">
+  <div class="p-5 container-fluid">
+    <div class="row mb-4">
+      <button class="btn btn-primary btn-square p-1 m-2" [routerLink]="['/planning/daily-list']">Planning journée</button>
+      <button class="btn btn-primary btn-square p-1 m-2" [routerLink]="['/fare']">Courses journée</button>
+    </div>
+    <div class="row mb-4">
+      <button class="btn btn-primary btn-square p-1 m-2" [routerLink]="['/fare/plan']">Saisie course</button>
+      <button class="btn btn-primary btn-square p-1 m-2" [routerLink]="['/planning/agenda']">Agenda Personnel</button>
+    </div>
+    <div class="row mb-4">
+      <button class="btn btn-primary btn-square p-1 m-2" [routerLink]="['/regular']">Fiches passager</button>
+      <button class="btn btn-primary btn-square p-1 m-2" [routerLink]="['/fare/recurring']">Courses récurrentes</button>
+    </div>
+    <div class="row mb-4">
+      <button class="btn btn-primary btn-square p-1 m-2" [routerLink]="['/supervision']">Pilotage</button>
+      <button class="btn btn-primary btn-square p-1 m-2" [routerLink]="['/billing']">Facturation</button>
+    </div>
   </div>
-  <div class="row mb-4">
-    <button class="btn btn-primary btn-square p-1 m-2" [routerLink]="['/fare/plan']">Saisie course</button>
-    <button class="btn btn-primary btn-square p-1 m-2" [routerLink]="['/planning/agenda']">Agenda Personnel</button>
+</ng-container>
+<ng-container *ngIf="isManagerOnly()">
+  <div class="p-5 container-fluid">
+    <div class="row mb-4">
+      <button class="btn btn-primary btn-square p-1 m-2" [routerLink]="['/planning/daily-list']">Planning journée</button>
+      <button class="btn btn-primary btn-square p-1 m-2" [routerLink]="['/fare']">Courses journée</button>
+    </div>
+    <div class="row mb-4">
+      <button class="btn btn-primary btn-square p-1 m-2" [routerLink]="['/fare/plan']">Saisie course</button>
+      <button class="btn btn-primary btn-square p-1 m-2" [routerLink]="['/fare/recurring']">Courses récurrentes</button>
+    </div>
+    <div class="row mb-4">
+      <button class="btn btn-primary btn-square p-1 m-2" [routerLink]="['/regular']">Fiches passager</button>
+    </div>
   </div>
-  <div class="row mb-4">
-    <button class="btn btn-primary btn-square p-1 m-2" [routerLink]="['/regular']">Fiches passager</button>
-    <button class="btn btn-primary btn-square p-1 m-2" [routerLink]="['/fare/recurring']">Courses récurrentes</button>
-  </div>
-  <div class="row mb-4">
-    <button class="btn btn-primary btn-square p-1 m-2" [routerLink]="['/supervision']">Pilotage</button>
-    <button class="btn btn-primary btn-square p-1 m-2" [routerLink]="['/billing']">Facturation</button>
-  </div>
-</div>
+</ng-container>
